@@ -1,0 +1,19 @@
+{
+  "name": "juridico",
+  "main": "",
+  "license": "",
+  "moduleType": [],
+  "homepage": "",
+  "dependencies": {
+    "jquery": "2.2.2",
+    "jquery-ui": "1.11.4",
+    "bootstrap": "3.3.6",
+    "bootstrap-switch": "3.3.2",
+    "datatables-bootstrap": "1.0.0",
+    "jquery-validation": "jquery-validate#1.15.0",
+    "nprogress": "0.2.0",
+    "angular": "1.2.32",
+    "chart.js": "2.2.2",
+    "font-awesome": "4.7.0"
+  }
+}

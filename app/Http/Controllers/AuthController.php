@@ -18,6 +18,11 @@ class AuthController extends Controller
             'password' => $request->get('password')
         ]);
 
-        return response()->json([ 'auth' => $authenticated]);
+        return response()->json(['auth' => $authenticated]);
+    }
+
+    public function logout(Request $request) {
+        Auth::logout();
+        return response()->json(['auth' => false]);
     }
 }

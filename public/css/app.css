@@ -1291,3 +1291,21 @@ div.ajax-file-upload-container div.ajax-file-upload-statusbar div.ajax-file-uplo
   right: 15px;
 }
 
+.juridico.right-buttons {
+  position: relative;
+  width: 100px;
+  float: right;
+}
+
+.juridico.right-buttons > div {
+  position: absolute;
+  right: 0;
+  top: -55px;
+}
+
+.juridico .download-file-action {
+  height: 35px;
+  width: 35px;
+  padding: 5px;
+}
+

@@ -12,6 +12,9 @@ use App\Entities\Actuacion;
 use App\Entities\ActuacionDocumento;
 use App\Entities\ActuacionPlantillaDocumento;
 
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ActuacionExport;
+
 class ActuacionController extends Controller
 {
 
@@ -192,5 +195,16 @@ class ActuacionController extends Controller
         $actuacion->estado_actuacion = 1;
         $undeleted = $actuacion->save();
         return response()->json(['undeleted' => $undeleted]);
+    }
+
+    public function createExcel() {
+        return Excel::download(new ActuacionExport, 'actuaciones.xlsx');
+    }
+
+    public function createPDF() {
+        //    return Excel::download(new ActuacionExport, 'actuaciones.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
+        $actuaciones = Actuacion::where('estado_actuacion', 1)->get()->toHuman();
+        $pdf = \PDF::loadView('actuacion.pdf', ["actuaciones" => $actuaciones])->setPaper('a4', 'landscape');
+        return $pdf->download('archivo.pdf');
     }
 }

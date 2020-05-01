@@ -1,0 +1,19 @@
+.juridico {
+    &.right-buttons {
+        position: relative;
+        width: 100px;
+        float: right;
+
+        > div {
+            position: absolute;
+            right: 0;
+            top: -55px;
+        }
+    }
+
+    .download-file-action {
+        height:35px;
+        width: 35px;
+        padding: 5px;
+    }
+}

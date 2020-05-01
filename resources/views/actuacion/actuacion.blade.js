@@ -1,4 +1,13 @@
 class Actuacion {
+
+    pdf(){
+        window.open('/actuacion/pdf')
+    }
+
+    excel(){
+        window.open('/actuacion/excel')
+    }
+
     update(e) {
         e.preventDefault()
         e.stopPropagation()

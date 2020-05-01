@@ -21,8 +21,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/actuacion/update/{id}', 'ActuacionController@update');
     Route::post('/actuacion/delete/{id}', 'ActuacionController@delete');
     Route::post('/actuacion/restore/{id}', 'ActuacionController@restore');
+    Route::get('/actuacion/pdf', 'ActuacionController@createPDF');
+    Route::get('/actuacion/excel', 'ActuacionController@createExcel');
     Route::post('/actuacion', 'ActuacionController@index');
-
 
 });
 

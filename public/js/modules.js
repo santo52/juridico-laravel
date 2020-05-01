@@ -10,6 +10,16 @@ var Actuacion = /*#__PURE__*/function () {
   }
 
   _createClass(Actuacion, [{
+    key: "pdf",
+    value: function pdf() {
+      window.open('/actuacion/pdf');
+    }
+  }, {
+    key: "excel",
+    value: function excel() {
+      window.open('/actuacion/excel');
+    }
+  }, {
     key: "update",
     value: function update(e) {
       e.preventDefault();

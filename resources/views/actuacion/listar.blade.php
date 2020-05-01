@@ -1,27 +1,27 @@
 @section('content')
 
-<div class="pull-right row">
-    <div class="col-xs-12" style="padding-bottom: 15px;">
+<div class="juridico right-buttons" >
+    <div>
         <a href="#actuacion/crear" class="btn btn-default">
             Crear
         </a>
     </div>
 </div>
 <div class="row">
-    <div class="col-xs-12 flex" id="filter-form-container">
+    <div class="col-xs-12 flex juridico" id="filter-form-container">
         <div class="pull-left flex" style="padding-right:20px">
             <div>
-                <a href="#actuacion/crear" style="height:35px; width: 35px;padding: 5px;" class="btn">
+                <a href="javascript:void(0)" onClick="actuacion.pdf()" class="btn download-file-action">
                     <img style="width: 100%" src="{!! asset('images/pdf.svg') !!}" />
                 </a>
             </div>
             <div>
-                <a href="#actuacion/crear" style="height:35px; width: 35px;padding: 5px;" class="btn">
+                <a href="javascript:void(0)" onClick="actuacion.excel()" class="btn download-file-action">
                     <img style="width: 100%" src="{!! asset('images/xlsx.svg') !!}" />
                 </a>
             </div>
             <div>
-                <a href="#actuacion/crear" style="height:35px; width: 35px;padding: 5px;" class="btn">
+                <a href="javascript:void(0)" onClick="window.print()" class="btn download-file-action">
                     <img style="width: 100%" src="{!! asset('images/print.svg') !!}" />
                 </a>
             </div>
@@ -53,9 +53,8 @@
             <th data-breakpoints="all">¿Programar audiencia?</th>
             <th data-breakpoints="xs sm">Control de entrega de documentos</th>
             <th data-breakpoints="all">¿Generar documentos?</th>
-            <th data-breakpoints="xs">Estado</th>
-            <th ng-if="accion.modificar_actuacion">Modificar</th>
-            <th ng-if="accion.eliminar_recuperar_actuacion">Eliminar /<br />Recuperar</th>
+            {{-- <th data-breakpoints="xs">Estado</th> --}}
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -79,27 +78,25 @@
             <td>{{$actuacion['programar_audiencia']}}</td>
             <td>{{$actuacion['control_entrega_documentos']}}</td>
             <td>{{$actuacion['generar_documentos']}}</td>
-            <td>{{$actuacion['estado_actuacion']}}</td>
-            <td ng-if="accion.modificar_actuacion">
-                <button class="btn btn-default btn-xs" type="button"
-                    onclick="location.hash = '#actuacion/{{$actuacion['id_actuacion']}}'">
-                    <span class="glyphicon glyphicon-pencil"></span>
-                </button>
-            </td>
+            {{-- <td>{{$actuacion['estado_actuacion']}}</td> --}}
+            <td>
+                <div class="flex justify-center">
+                    <a href="#actuacion/{{$actuacion['id_actuacion']}}" class="btn text-primary" type="button">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </a>
+                    @if ($actuacion['estado_actuacion'] == 1)
+                    <a href="javascript:void(0)" class="btn text-danger" type="button"
+                        onclick="actuacion.openDelete('{{$actuacion['id_actuacion']}}', '{{$actuacion['nombre_actuacion']}}');">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </a>
 
-            <td ng-if="accion.eliminar_recuperar_actuacion">
-                @if ($actuacion['estado_actuacion'] == 1)
-                <button class="btn btn-default btn-xs" type="button"
-                    onclick="actuacion.openDelete('{{$actuacion['id_actuacion']}}', '{{$actuacion['nombre_actuacion']}}');">
-                    <span class="glyphicon glyphicon-remove"></span>
-                </button>
-
-                @else
-                <button class="btn btn-default btn-xs" type="button"
-                    onclick="actuacion.openDelete('{{$actuacion['id_actuacion']}}', '{{$actuacion['nombre_actuacion']}}');">
-                    <span class="glyphicon glyphicon-ok"></span>
-                </button>
-                @endif
+                    @else
+                    <a class="btn text-danger" type="button"
+                        onclick="actuacion.openDelete('{{$actuacion['id_actuacion']}}', '{{$actuacion['nombre_actuacion']}}');">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </a>
+                    @endif
+                </div>
             </td>
         </tr>
         @endforeach
@@ -107,7 +104,7 @@
     </tbody>
 </table>
 
-<div class="modal fade" tabindex="-1" role="dialog" id="deleteModal" >
+<div class="modal fade" tabindex="-1" role="dialog" id="deleteModal">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">

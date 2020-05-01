@@ -21,7 +21,6 @@ class ActuacionCollection extends Collection
             $item['programar_audiencia'] = $item['programar_audiencia'] == 1 ? 'Sí' : 'No';
             $item['control_entrega_documentos'] = $item['control_entrega_documentos'] == 1 ? 'Sí' : 'No';
             $item['generar_documentos'] = $item['generar_documentos'] == 1 ? 'Sí' : 'No';
-            $item['estado_actuacion'] = $item['estado_actuacion'] == 1 ? 'Será redireccionado a la pantalla de modificación de la actuación.' : 'Confirma que desea eliminar la actuación';
             $item['dias_vencimiento'] = number_format($item['dias_vencimiento'], 0, ',', '.');
             $item['valor_actuacion'] = '$ ' . number_format($item['valor_actuacion'], 0, ',', '.');
             return $item;

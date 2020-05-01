@@ -10,7 +10,7 @@ class ClaseTipo extends Model
 
     protected $primaryKey = 'id_clase_tipo';
 
-    protected $timestamps = false;
+    public $timestamps = false;
 
     protected $fillable = [
         "id_clase_tipo", "nombre_clase_tipo"

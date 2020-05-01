@@ -10,7 +10,7 @@ class ClaseEstado extends Model
 
     protected $primaryKey = 'id_clase_estado';
 
-    protected $timestamps = false;
+    public $timestamps = false;
 
     protected $fillable = [
         "id_clase_estado", "nombre_clase_estado"

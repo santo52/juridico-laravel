@@ -10,7 +10,7 @@ class Contacto extends Model
 
     protected $primaryKey = 'id_contacto';
 
-    protected $timestamps = false;
+    public $timestamps = false;
 
     protected $fillable = [
         "id_contacto", "numero_documento", "nombre_contacto", "parentesco", "direccion", "barrio", "nombre_municipio", "celular", "telefono", "correo_electronico"

@@ -10,7 +10,7 @@ class Pais extends Model
 
     protected $primaryKey = 'id_pais';
 
-    protected $timestamps = false;
+    public $timestamps = false;
 
     protected $fillable = [
         "id_pais", "nombre_pais"

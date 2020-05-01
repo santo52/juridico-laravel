@@ -10,7 +10,7 @@ class ActuacionEtapaProcesoDetalle extends Model
 
     protected $primaryKey = 'id_actuacion_etapa_proceso_detalle';
 
-    protected $timestamps = false;
+    public $timestamps = false;
 
     protected $fillable = [
         "id_actuacion_etapa_proceso_detalle", "id_actuacion_etapa_proceso_maestro", "id_actuacion_proxima", "tiempo_maximo_proxima_actuacion", "unidad_tiempo_proxima_actuacion"

@@ -10,7 +10,7 @@ class ClaseParametro extends Model
 
     protected $primaryKey = 'id_clase_parametro';
 
-    protected $timestamps = false;
+    public $timestamps = false;
 
     protected $fillable = [
         "id_clase_parametro", "nombre_clase_parametro"

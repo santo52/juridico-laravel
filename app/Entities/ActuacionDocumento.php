@@ -10,7 +10,7 @@ class ActuacionDocumento extends Model
 
     protected $primaryKey = 'id_actuacion_documento';
 
-    protected $timestamps = false;
+    public $timestamps = false;
 
     protected $fillable = [
         "id_actuacion_documento", "id_actuacion", "id_documento"

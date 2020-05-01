@@ -12,11 +12,39 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     protected function renderSection($template, $data = []) {
+
         $view = view($template, $data)->renderSections();
-        return response()->json([
-            'content' => !empty($view['content']) ? $view['content'] : '',
-            'title' => !empty($view['title']) ? $view['title'] : ''
-        ]);
+        $response['content'] = isset($view['content']) ? $view['content'] : '';
+        $response['javascript'] = isset($view['javascript']) ? $view['javascript'] : '';
+        $response['title'] = isset($view['title']) ? $view['title'] : '';
+        $response = array_merge($response, $data);
+        $response['breadcrumb'] = isset($data['breadcrumb']) ? $data['breadcrumb'] : $this->getBreadcrumb();
+        return response()->json($response);
+    }
+
+    private function getBreadcrumb() : array{
+        $uri = '';
+        $breadcrumb = [['name' => getenv('APP_NAME'), 'link' => '']];
+
+        if(isset($_SERVER['REQUEST_URI'])) {
+            $uri = $_SERVER['REQUEST_URI'];
+        } else if(isset($_SERVER['REDIRECT_URL'])) {
+            $uri = $_SERVER['REDIRECT_URL'];
+        }
+
+        $currentPosition = 0;
+        foreach(explode('/', $uri) as $key => $value ){
+            $value = trim($value);
+
+            if(!empty($value)){
+
+                $lastLink = str_replace(['#', '#/'], '', $breadcrumb[$currentPosition]['link']);
+                $breadcrumb[] = ['name' => $value, 'link' => "#{$lastLink}/{$value}"];
+                $currentPosition++;
+            }
+        }
+
+        return $breadcrumb;
     }
 
     protected function getHash($cadena)

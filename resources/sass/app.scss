@@ -1,16 +1,6 @@
-//
-.flex {
-    display: flex;
-}
-
-.justify-center {
-    justify-content: center;
-}
-
-.items-center {
-    align-items: center;
-}
-
-.h-100vh {
-    height: 100vh;
-}
+@import "constrants";
+@import "base";
+@import "bootstrap";
+@import "utils";
+@import "footable";
+@import "menu";

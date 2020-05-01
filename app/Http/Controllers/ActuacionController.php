@@ -2,270 +2,195 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+
+use App\Entities\Documento;
+use App\Entities\PlantillaDocumento;
+use App\Entities\Actuacion;
+use App\Entities\ActuacionDocumento;
+use App\Entities\ActuacionPlantillaDocumento;
 
 class ActuacionController extends Controller
 {
-    public function inicio()
-    {
-        $this->crear();
-    }
 
-    public function crear()
-    {
+    public function create() {
+
         /* @TODO Permisos para acceder a cada una de las opciones */
 
-        // if (!Number::validarInt($this->_post('crear'))) {
-        //     $this->_view->documentos = $this->_documentoModel->getAllDocumentos(true);
-        //     $this->_view->plantillasDocumento = $this->_plantillasDocumentoModel->getAllPlantillasDocumento(true);
-        //     $this->_view->validaciones = Message::getValidaciones();
-        //     $this->_view->render('crear', true);
-        //     $this->_view->cargarJs('crear');
+        $documentos = Documento::where('estado_documento', 1)->get();
+        $plantillasDocumento = PlantillaDocumento::where('estado_plantilla_documento', 1)->get();
 
-        // }
-        // else {
-        //     /* Inicio de la transacción */
-        //     Model::startTransaction();
-
-        //     $nombreActuacion = $this->_post('nombreActuacion');
-
-        //     /* Valida si la actuación ya existe */
-        //     if ($this->_actuacionModel->existsActuacion($nombreActuacion)) {
-        //         /* Error al existir la actuación */
-        //         Model::failTransaction(Message::get('ACTUACION_CREA_1', array($nombreActuacion)));
-
-        //     }
-        //     else {
-        //         /* Construye el dto de actuaciones */
-        //         $this->_actuacionDto = $this->_actuacionModel->buildActuacionDto($this->_actuacionDto, $this->_post());
-        //         /* Inserta la actuación */
-        //         $resultado = $this->_actuacionModel->insertActuacion($this->_actuacionDto);
-        //         if (!$resultado) {
-        //             /* Error al insertar la actuación */
-        //             Model::failTransaction();
-
-        //         }
-        //         else {
-        //             $idActuacion = $this->_actuacionModel->getUltimoIdInsertado();
-        //             if (!Number::validarInt($idActuacion)) {
-        //                 /* Error al obtener el id de la actuación insertada */
-        //                 Model::failTransaction();
-
-        //             }
-        //             else {
-        //                 $continuar = true;
-        //                 $explInfoDocumentosAsociados = explode('||', $this->_post('infoDocumentosAsociados'));
-        //                 foreach ($explInfoDocumentosAsociados as $documentoAsociado) {
-        //                     /* Construye el dto de cada documento asociado a la actuación */
-        //                     $this->_actuacionDocumentoDto = $this->_actuacionModel->buildActuacionDocumentoDto($this->_actuacionDocumentoDto, $idActuacion, $documentoAsociado);
-        //                     /* Inserta cada documento asociado a la actuación */
-        //                     $resultado = $this->_actuacionModel->insertDocumentoActuacion($this->_actuacionDocumentoDto);
-        //                     if (!$resultado) {
-        //                         /* Error al insertar cada documento asociado a la actuación */
-        //                         Model::failTransaction();
-        //                         $continuar = false;
-        //                         break;
-        //                     }
-        //                 }
-
-        //                 if ($continuar) {
-        //                     $explInfoPlantillasAsociadas = explode('||', $this->_post('infoPlantillasAsociadas'));
-        //                     foreach ($explInfoPlantillasAsociadas as $plantillaAsociada) {
-        //                         /* Construye el dto de cada plantilla de documento asociada a la actuación */
-        //                         $this->_actuacionPlantillaDocumentoDto = $this->_actuacionModel->buildActuacionPlantillaDocumentoDto($this->_actuacionPlantillaDocumentoDto, $idActuacion, $plantillaAsociada);
-        //                         /* Inserta cada plantilla de documento asociada a la actuación */
-        //                         $resultado = $this->_actuacionModel->insertPlantillaDocumentoActuacion($this->_actuacionPlantillaDocumentoDto);
-        //                         if (!$resultado) {
-        //                             /* Error al insertar cada plantilla de documento asociada a la actuación */
-        //                             Model::failTransaction();
-        //                             break;
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //     }
-
-        //     /* Fin de la transacción */
-        //     $transaccion = Model::completeTransaction();
-        //     if ($transaccion) {
-        //         echo Message::set(State::$SUCCESS_CODE, Message::get('ACTUACION_CREA_2') . ' <a href="' . $_SERVER['REQUEST_URI'] . '">Crear otra actuación</a>', true);
-
-        //     }
-        //     else {
-        //         echo Message::set(State::$ERROR_CODE, Message::get('ACTUACION_CREA_3'), true);
-        //     }
-        // }
+        return $this->renderSection('actuacion.detalle', [
+            'documentos' => $documentos,
+            'plantillasDocumento' => $plantillasDocumento
+        ]);
     }
 
-    public function listar()
-    {
-        /* @TODO Permisos para acceder a cada una de las opciones */
+    public function insert(Request $request) {
 
-        // if (!Number::validarInt($this->_post('listar'))) {
-        //     $this->_view->paso = 1;
-        //     $this->_view->actuaciones = $this->_actuacionModel->getAllActuaciones();
-        //     $this->_view->validaciones = Message::getValidaciones();
-        //     $this->_view->render('listar', true);
-        //     $this->_view->cargarJs('listar');
+        //@TODO verificar si existe con diferente ID
+        //consultar si existe en la base de datos ese nombre
 
-        // }
-        // else {
-        //     $this->_view->listaActuaciones = $this->_actuacionModel->getListadoActuaciones($this->_post('autoActuaciones'));
-        //     $this->_view->paso = 2;
-        //     $this->_view->render('listar');
-        // }
+        $nombreActuacion = $request->get('nombreActuacion');
+        $actuacion = Actuacion::where([
+            'estado_actuacion' => 1,
+            'nombre_actuacion' => trim(strtoupper($nombreActuacion))
+        ]);
+
+        if ($actuacion->exists()) {
+            return response()->json(['exists' => true]);
+        }
+
+        $saved = $this->upsert($request);
+        return response()->json(['saved' => $saved]);
     }
 
-    public function modificar($idActuacion)
-    {
-        // $infoActuacion = $this->_actuacionModel->getActuacionById($idActuacion);
-        // if (count($infoActuacion) == 0)
-        //     Uri::redireccionar();
+    private function upsert(Request $request, $id = false) {
 
-        // if (!Number::validarInt($this->_post('modificar'))) {
-        //     $this->_view->documentos = $this->_documentoModel->getAllDocumentos(true);
-        //     $this->_view->plantillasDocumento = $this->_plantillasDocumentoModel->getAllPlantillasDocumento(true);
-        //     $this->_view->infoDocumentosActuaciones = $this->_actuacionModel->getDocumentosActuacionById($idActuacion);
-        //     $this->_view->infoPlantillasDocumentoActuaciones = $this->_actuacionModel->getPlantillasDocumentoActuacionById($idActuacion);
-        //     $this->_view->infoActuacion = $infoActuacion;
-        //     $this->_view->validaciones = Message::getValidaciones();
-        //     $this->_view->render('modificar', true);
-        //     $this->_view->cargarJs('modificar');
+        //Guardar en Actuación
+        $actuacion = $this->prepareActuacion($request, $id);
+        $saved = $actuacion->save();
 
-        // }
-        // else {
-        //     /* Inicio de la transacción */
-        //     Model::startTransaction();
+        if (!$saved) {
+            return false;
+        }
 
-        //     $nombreActuacion = $this->_post('nombreActuacion');
+        $documents = explode(',', $request->get('documents'));
+        $templates = explode(',', $request->get('templates'));
 
-        //     /* Valida si la actuación ya existe */
-        //     if ($this->_actuacionModel->existsActuacion($nombreActuacion, $idActuacion)) {
-        //         /* Error al existir la actuación */
-        //         Model::failTransaction(Message::get('ACTUACION_CREA_1', array($nombreActuacion)));
+        if ($id) {
+            ActuacionDocumento::where('id_actuacion', $actuacion->id_actuacion)->delete();
+            ActuacionPlantillaDocumento::where('id_actuacion', $actuacion->id_actuacion)->delete();
+        }
 
-        //     }
-        //     else {
-        //         /* Construye el dto de actuaciones */
-        //         $this->_actuacionDto = $this->_actuacionModel->buildActuacionDto($this->_actuacionDto, $this->_post(), $idActuacion);
-        //         /* Modifica la actuación */
-        //         $resultado = $this->_actuacionModel->updateActuacion($this->_actuacionDto);
-        //         if (!$resultado) {
-        //             /* Error al insertar la actuación */
-        //             Model::failTransaction();
+        //Relacion con Actuacion documento
+        foreach ($documents as $document) {
+            ActuacionDocumento::create([
+                'id_actuacion' => $actuacion->id_actuacion,
+                'id_documento' => $document
+            ])->save();
+        }
 
-        //         }
-        //         else {
-        //             /* Elimina todos los documentos asociados a la actuación */
-        //             $resultado = $this->_actuacionModel->deleteRealDocumentosActuacion($idActuacion);
-        //             if (!$resultado) {
-        //                 /* Error al eliminar todos los documentos asociados a la actuación */
-        //                 Model::failTransaction();
+        //Relacion con Actuacion plantilla documento
+        foreach ($templates as $template) {
+            ActuacionPlantillaDocumento::create([
+                'id_actuacion' => $actuacion->id_actuacion,
+                'id_plantilla_documento' => $template
+            ])->save();
+        }
 
-        //             }
-        //             else {
-        //                 /* Elimina todas las plantillas de documento asociadas a la actuación */
-        //                 $resultado = $this->_actuacionModel->deleteRealPlantillasDocumentoActuacion($idActuacion);
-        //                 if (!$resultado) {
-        //                     /* Error al eliminar todas las plantillas de documento asociadas a la actuación */
-        //                     Model::failTransaction();
-
-        //                 }
-        //                 else {
-        //                     $continuar = true;
-        //                     $explInfoDocumentosAsociados = explode('||', $this->_post('infoDocumentosAsociados'));
-        //                     foreach ($explInfoDocumentosAsociados as $documentoAsociado) {
-        //                         /* Construye el dto de cada documento asociado a la actuación */
-        //                         $this->_actuacionDocumentoDto = $this->_actuacionModel->buildActuacionDocumentoDto($this->_actuacionDocumentoDto, $idActuacion, $documentoAsociado);
-        //                         /* Inserta cada documento asociado a la actuación */
-        //                         $resultado = $this->_actuacionModel->insertDocumentoActuacion($this->_actuacionDocumentoDto);
-        //                         if (!$resultado) {
-        //                             /* Error al insertar cada documento asociado a la actuación */
-        //                             Model::failTransaction();
-        //                             $continuar = false;
-        //                             break;
-        //                         }
-        //                     }
-
-        //                     if ($continuar) {
-        //                         $explInfoPlantillasAsociadas = explode('||', $this->_post('infoPlantillasAsociadas'));
-        //                         foreach ($explInfoPlantillasAsociadas as $plantillaAsociada) {
-        //                             /* Construye el dto de cada plantilla de documento asociada a la actuación */
-        //                             $this->_actuacionPlantillaDocumentoDto = $this->_actuacionModel->buildActuacionPlantillaDocumentoDto($this->_actuacionPlantillaDocumentoDto, $idActuacion, $plantillaAsociada);
-        //                             /* Inserta cada plantilla de documento asociada a la actuación */
-        //                             $resultado = $this->_actuacionModel->insertPlantillaDocumentoActuacion($this->_actuacionPlantillaDocumentoDto);
-        //                             if (!$resultado) {
-        //                                 /* Error al insertar cada plantilla de documento asociada a la actuación */
-        //                                 Model::failTransaction();
-        //                                 break;
-        //                             }
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //     }
-
-        //     /* Fin de la transacción */
-        //     $transaccion = Model::completeTransaction();
-        //     if ($transaccion) {
-        //         echo Message::set(State::$SUCCESS_CODE, Message::get('ACTUACION_MODI_1', array($nombreActuacion)), true);
-
-        //     }
-        //     else {
-        //         echo Message::set(State::$ERROR_CODE, Message::get('ACTUACION_MODI_2'), true);
-        //     }
-        // }
+        return true;
     }
 
-    public function eliminar()
-    {
-        // if (Number::validarInt($this->_post('eliminar'))) {
-        //     $infoActuacion = $this->_actuacionModel->getActuacionById($this->_post('idActuacion'));
-        //     $nombreActuacion = $infoActuacion[0]['nombre_actuacion'];
+    private function prepareActuacion(Request $request, $id = false) {
 
-        //     /* Inicio de la transacción */
-        //     Model::startTransaction();
+        $data = [
+            'nombre_actuacion' => trim(strtoupper($request->get('nombreActuacion'))),
+            'genera_alertas' => empty($request->get('generaAlertas')) ? 2 : 1,
+            'aplica_control_vencimiento' => empty($request->get('aplicaControlVencimiento')) ? 2 : 1,
+            'dias_vencimiento' => empty($request->get('diasVencimiento')) ? 2 : 1,
+            'requiere_estudio_favorabilidad' => empty($request->get('requiereEstudioFavorabilidad')) ? 2 : 1,
+            'actuacion_tiene_cobro' => empty($request->get('actuacionTieneCobro')) ? 2 : 1,
+            'valor_actuacion' => empty($request->get('valorActuacion')) ? 2 : 1,
+            'actuacion_creacion_cliente' => empty($request->get('actuacionCreacionCliente')) ? 2 : 1,
+            'mostrar_datos_radicado' => empty($request->get('mostrarDatosRadicado')) ? 2 : 1,
+            'mostrar_datos_juzgado' => empty($request->get('mostrarDatosJuzgado')) ? 2 : 1,
+            'mostrar_datos_respuesta' => empty($request->get('mostrarDatosRespuesta')) ? 2 : 1,
+            'mostrar_datos_apelacion' => empty($request->get('mostrarDatosApelacion')) ? 2 : 1,
+            'mostrar_datos_cobros' => empty($request->get('mostrarDatosCobros')) ? 2 : 1,
+            'programar_audiencia' => empty($request->get('programarAudiencia')) ? 2 : 1,
+            'control_entrega_documentos' => empty($request->get('controlEntregaDocumentos')) ? 2 : 1,
+            'generar_documentos' => empty($request->get('generarDocumentos')) ? 2 : 1,
+            'id_usuario_actualizacion' => Auth::id()
+        ];
 
-        //     /* Elimina la actuación */
-        //     $resultado = $this->_actuacionModel->deleteActuacion($this->_post('idActuacion'));
-        //     if (!$resultado) {
-        //         /* Error al eliminar la actuación */
-        //         Model::failTransaction();
-        //     }
+        if (!$id) {
+            $data['estado_actuacion'] = 1;
+            $data['id_usuario_creacion'] = Auth::id();
+        }
 
-        //     /* Fin y validación de la transacción */
-        //     $transaccion = Model::completeTransaction();
-        //     if ($transaccion)
-        //         echo Message::set(State::$SUCCESS_CODE, Message::get('ACTUACION_LIST_3', array($nombreActuacion)), true);
-        //     else
-        //         echo Message::set(State::$ERROR_CODE, Message::get('ACTUACION_LIST_4', array($nombreActuacion)), true);
-        // }
+        return Actuacion::updateOrCreate(['id_actuacion' => $id], $data);
+
     }
 
-    public function recuperar()
-    {
-    //     if (Number::validarInt($this->_post('recuperar'))) {
-    //         $infoActuacion = $this->_actuacionModel->getActuacionById($this->_post('idActuacion'));
-    //         $nombreActuacion = $infoActuacion[0]['nombre_actuacion'];
+    public function index() {
 
-    //         /* Inicio de la transacción */
-    //         Model::startTransaction();
+        $actuacion = new Actuacion;
+        $list = $actuacion
+            ->where('estado_actuacion', 1)
+            ->orderBy('id_actuacion', 'desc')
+            ->get()
+            ->toHuman();
 
-    //         /* Recupera la actuación */
-    //         $resultado = $this->_actuacionModel->undeleteActuacion($this->_post('idActuacion'));
-    //         if (!$resultado) {
-    //             /* Error al recuperar la actuación */
-    //             Model::failTransaction();
-    //         }
+        return $this->renderSection('actuacion.listar', [
+            'actuaciones' => $list,
+            'listaActuaciones' => $list,
+        ]);
+    }
 
-    //         /* Fin y validación de la transacción */
-    //         $transaccion = Model::completeTransaction();
-    //         if ($transaccion)
-    //             echo Message::set(State::$SUCCESS_CODE, Message::get('ACTUACION_LIST_5', array($nombreActuacion)), true);
-    //         else
-    //             echo Message::set(State::$ERROR_CODE, Message::get('ACTUACION_LIST_6', array($nombreActuacion)), true);
-    //     }
+
+    public function edit(Request $request, $id) {
+
+        $actuacion = Actuacion::find($id);
+        if (empty($actuacion)) {
+            return response()->json(['redirect' => 'actuacion/crear']);
+        }
+
+        $table = DB::Table('actuacion as a');
+        $documentos = Documento::where('estado_documento', 1)->get();
+        $plantillasDocumento = PlantillaDocumento::where('estado_plantilla_documento', 1)->get();
+
+        $actuacionDocumentos = $table->select('d.*')
+            ->leftJoin('actuacion_documento as ad', 'a.id_actuacion', '=', 'ad.id_actuacion')
+            ->leftJoin('documento as d', 'd.id_documento', '=', 'ad.id_documento')
+            ->where([['a.id_actuacion', $id], ['d.estado_documento', 1]])
+            ->get();
+
+        $actuacionPlantillasDocumento = $table->select('pd.*')
+            ->leftJoin('actuacion_plantilla_documento as apd', 'a.id_actuacion', '=', 'apd.id_actuacion')
+            ->leftJoin('plantilla_documento as pd', 'pd.id_plantilla_documento', '=', 'apd.id_plantilla_documento')
+            ->where([['a.id_actuacion', $id], ['pd.estado_plantilla_documento', 1]])
+            ->get();
+
+        return $this->renderSection('actuacion.detalle', [
+            'documentos' => $documentos,
+            'plantillasDocumento' => $plantillasDocumento,
+            'actuacion' => $actuacion,
+            'actuacionDocumentos' => $actuacionDocumentos,
+            'actuacionPlantillasDocumento' => $actuacionPlantillasDocumento,
+        ]);
+    }
+
+    public function update(Request $request, $id) {
+
+        $nombreActuacion = $request->get('nombreActuacion');
+        $actuacion = Actuacion::where([
+            ['estado_actuacion', 1],
+            ['nombre_actuacion', trim(strtoupper($nombreActuacion))],
+            ['id_actuacion', '<>', $id]
+        ]);
+
+        if ($actuacion->exists()) {
+            return response()->json(['exists' => true]);
+        }
+
+        $saved = $this->upsert($request, $id);
+        return response()->json(['saved' => $saved]);
+    }
+
+    public function delete($id) {
+        $actuacion = Actuacion::find($id);
+        $actuacion->estado_actuacion = 2;
+        $deleted = $actuacion->save();
+        return response()->json(['deleted' => $deleted]);
+    }
+
+    public function restore($id) {
+        $actuacion = Actuacion::find($id);
+        $actuacion->estado_actuacion = 1;
+        $undeleted = $actuacion->save();
+        return response()->json(['undeleted' => $undeleted]);
     }
 }

@@ -11,7 +11,7 @@ class Login {
             const arrayForm = new URLSearchParams(new FormData($form[0]));
 
             $.ajax({
-                url: "/logins",
+                url: "/login",
                 data: arrayForm,
                 success: ({ auth }) => {
                     if (auth) {

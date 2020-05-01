@@ -141,17 +141,18 @@ hr {
 div.navbar-app {
   border: none;
   border-radius: 0px;
-  background-image: -webkit-linear-gradient(left, #505050 0%, #505050 100%);
+  /* background-image: -webkit-linear-gradient(left, #505050 0%, #505050 100%);
   background-image: -moz-linear-gradient(left, #505050 0%, #505050 100%);
   background-image: -ms-linear-gradient(left, #505050 0%, #505050 100%);
   background-image: -o-linear-gradient(left, #505050 0%, #505050 100%);
   background-image: linear-gradient(to left, #505050 0%, #505050 100%);
-  filter: progid:DXImageTransform.Microsoft.Gradient(gradientType=0, startColorStr=#505050, endColorStr=#505050);
+  filter: progid:DXImageTransform.Microsoft.Gradient(gradientType=0, startColorStr=#505050, endColorStr=#505050); */
+  background-color: #3C4742;
 }
 
 div.navbar-app div.navbar-header .navbar-brand {
   height: 0px !important;
-  color: #0e8e03;
+  color: #4cae4c;
   font-family: 'Open Sans', sans-serif, Verdana;
   font-size: 20px !important;
   font-weight: normal;
@@ -182,7 +183,7 @@ div.navbar-app div.navbar-header div.logoCliente {
 
 div.navbar-app ul.navbar-nav>li>a {
   text-align: center;
-  color: #ffffff;
+  color: #c3c3c3;
   margin: 0 0.5px;
   font-family: 'Open Sans', sans-serif, Verdana;
   font-size: 13px;
@@ -192,7 +193,7 @@ div.navbar-app ul.navbar-nav>li>a {
 div.navbar-app ul.navbar-nav>li>a:hover,
 div.navbar-app ul.navbar-nav>li>a:focus {
   text-decoration: none;
-  background-color: #333333;
+  background-color: #2e3d36;
 }
 
 div.navbar-app ul.dropdown-menu {
@@ -364,20 +365,18 @@ ol.breadcrumb li.infoUsuario:before {
   }
 
   div.navbar-app ul.navbar-nav>li>a {
-    border-top: 1px solid #000000;
+    /* border-top: 1px solid #000000; */
     border-radius: 0px;
     margin: 0px;
   }
 
   div.navbar-app ul.navbar-nav>li>a:hover,
   div.navbar-app ul.navbar-nav>li>a:focus {
-    border-top: 1px solid #00ac6f;
     border-radius: 0px;
   }
 
   div.navbar-app ul.navbar-nav>li.open>a,
   div.navbar-app ul.navbar-nav>li.active>a {
-    border-top: 1px solid #00ac6f;
     border-radius: 0px;
   }
 
@@ -385,7 +384,6 @@ ol.breadcrumb li.infoUsuario:before {
   div.navbar-app ul.navbar-nav>li.active>a:hover,
   div.navbar-app ul.navbar-nav>li.open>a:focus,
   div.navbar-app ul.navbar-nav>li.active>a:focus {
-    border-top: 1px solid #00ac6f;
     border-radius: 0px;
   }
 

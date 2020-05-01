@@ -1,0 +1,64 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+    font-family: 'Open Sans', sans-serif, Verdana;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+body div.contenedor-ppal {
+    margin: 0 0 110px;
+}
+
+body div.contenedor-ppal .page-header {
+    color: #00ac6f;
+    margin: 0 0 20px;
+    border-bottom: none;
+}
+
+body div.contenedor-ppal .page-header a {
+    color: #195f30;
+    text-decoration: none;
+}
+
+body div.footer {
+    font-family: 'Open Sans', sans-serif, Verdana;
+    font-size: 12px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: auto;
+    padding: 6px 0;
+    background-color: #ffffff;
+    border-top: 1px solid #808080;
+}
+
+body div.footer>div.logoEmpresa {
+    height: 5em;
+}
+
+body div.footer>div.copyright>p {
+    margin-top: 5px;
+    text-align: center;
+}
+
+body div.footer>div.copyright>p>a {
+    color: #195f30;
+    text-decoration: none;
+}
+
+body #dvOpacidad {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #a9a9a9;
+    opacity: 0.3;
+    z-index: 10000;
+}

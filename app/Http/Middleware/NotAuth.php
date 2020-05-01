@@ -17,7 +17,6 @@ class NotAuth
      */
     public function handle($request, Closure $next)
     {
-        Auth::logout();
         if(Auth::check()){
             return redirect('/');
         }

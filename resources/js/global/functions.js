@@ -2,9 +2,37 @@
 function validateForm(e){
     e.preventDefault();
     e.stopPropagation();
-    $(e.target).find('.has-error').removeClass('has-error')
-    const requiredFields = $(e.target).find('.required').toArray()
+    const $form = $(e.target)
+    $form.find('.has-error').removeClass('has-error')
+    const required = validateRequired($form)
+    if(required){
+        const numeric = validateNumeric($form)
+        return numeric
+    }
 
+    return required
+}
+
+function validateNumeric($form) {
+    const numericFields = $form.find('.form-control.numeric, .form-control.money').toArray()
+    let completed = true
+    numericFields.map(item => {
+        const value = $(item).val()
+        if(isNaN(value)) {
+            if(completed){
+                $(item).focus();
+                completed = false
+            }
+            $(item).parents('.form-group').eq(0).addClass('has-error')
+            const message = $(item).hasClass('money') ? 'Debe ser un valor monetario válido.' : 'No es un número válido.'
+            showErrorPopover($(item), message, 'top')
+        }
+    })
+    return completed
+}
+
+function validateRequired($form){
+    const requiredFields = $form.find('.form-control.required').toArray()
     let completed = true
     requiredFields.map(item => {
         const value = $(item).val()
@@ -14,12 +42,12 @@ function validateForm(e){
                 completed = false
             }
             $(item).parents('.form-group').eq(0).addClass('has-error')
+            showErrorPopover($(item), 'Esta información es obligatoria.', 'top')
         }
     })
 
     return completed;
 }
-
 
 
 

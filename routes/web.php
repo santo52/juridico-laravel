@@ -15,6 +15,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
     Route::get('/', 'HomeController@index');
+    Route::post('/actuacion/crear', 'ActuacionController@create');
+    Route::post('/actuacion/insert', 'ActuacionController@insert');
+    Route::post('/actuacion/{id}', 'ActuacionController@edit');
+    Route::post('/actuacion/update/{id}', 'ActuacionController@update');
+    Route::post('/actuacion/delete/{id}', 'ActuacionController@delete');
+    Route::post('/actuacion/restore/{id}', 'ActuacionController@restore');
+    Route::post('/actuacion', 'ActuacionController@index');
+
+
 });
 
 Route::middleware('no-auth')->group(function () {

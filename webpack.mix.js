@@ -18,4 +18,5 @@ mix.babel([
         'resources/js/global/index.js',
         'resources/js/global/functions.js'
     ], 'public/js/app.js')
+    .babel('resources/views/**/*.blade.js', 'public/js/modules.js')
     .sass('resources/sass/app.scss', 'public/css');

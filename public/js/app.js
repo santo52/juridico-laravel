@@ -320,15 +320,26 @@ jQuery.ajaxSetup({
   },
   error: errorLog,
   complete: function complete(xhr, status) {
+    console.log(xhr);
     hideLoading();
   }
 });
+
+function compileLibraries() {
+  $('input[type=checkbox]').bootstrapToggle({
+    on: 'Sí',
+    off: 'No',
+    size: 'mini',
+    width: 60,
+    height: 32,
+    onstyle: 'success'
+  });
+  $('select').selectpicker();
+  $('.table').footable();
+}
+
 jQuery(function () {
-  jQuery.fn.bootstrapSwitch.defaults.size = 'mini';
-  jQuery.fn.bootstrapSwitch.defaults.onColor = 'success';
-  jQuery.fn.bootstrapSwitch.defaults.offColor = 'default';
-  jQuery.fn.bootstrapSwitch.defaults.onText = 'SÍ';
-  jQuery.fn.bootstrapSwitch.defaults.offText = 'NO';
+  compileLibraries();
 });
 
 function isMobile() {
@@ -696,6 +707,11 @@ function detectarAbandonoPagina() {
 }
 
 function errorLog(xhr, status, error) {
+  console.log({
+    xhr: xhr,
+    status: status,
+    error: error
+  });
   $.ajax({
     url: "/error/submit",
     data: new URLSearchParams({
@@ -703,7 +719,7 @@ function errorLog(xhr, status, error) {
       status: status,
       error: error
     }),
-    success: function success() {
+    success: function success(data) {
       alerta("ERROR - Ocurri\xF3 un problema con el servidor; por favor intenta de nuevo o comun\xEDcate con un agente de soporte t\xE9cnico.");
     },
     error: function error() {
@@ -712,11 +728,83 @@ function errorLog(xhr, status, error) {
   });
 }
 
+function getId() {
+  var split = location.hash.split('/');
+  var index = split.length - 1;
+  return split[index];
+}
+
+$.fn.footableAdd = function (html) {
+  $(this).find('tbody .footable-empty').remove();
+  $(this).find('tbody').append(html);
+  $(this).footable();
+};
+
+$.fn.asyncFootable = function (data) {
+  var orderItem = $(this).find('.fooicon');
+  orderItem.on('click', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    asyncFootableOnSort(e, function (type) {
+      data && data.onSort && data.onSort(e, type);
+    });
+  });
+};
+
+function asyncFootableOnSort(e, callback) {
+  var type = '';
+  var $sorting = $(e.target);
+  var sortClass = 'fooicon-sort';
+  $sorting.parents('th').siblings().children().removeClass("".concat(sortClass, "-asc ").concat(sortClass, "-desc")).addClass(sortClass);
+
+  if ($sorting.hasClass("".concat(sortClass, "-asc")) || $sorting.hasClass(sortClass)) {
+    type = 'desc';
+    $sorting.removeClass("".concat(sortClass, "-asc ").concat(sortClass)).addClass("".concat(sortClass, "-desc"));
+  } else if ($sorting.hasClass("".concat(sortClass, "-desc"))) {
+    type = 'asc';
+    $sorting.removeClass("".concat(sortClass, "-desc")).addClass("".concat(sortClass, "-asc"));
+  }
+
+  callback(type);
+}
+
 function validateForm(e) {
   e.preventDefault();
   e.stopPropagation();
-  $(e.target).find('.has-error').removeClass('has-error');
-  var requiredFields = $(e.target).find('.required').toArray();
+  var $form = $(e.target);
+  $form.find('.has-error').removeClass('has-error');
+  var required = validateRequired($form);
+
+  if (required) {
+    var numeric = validateNumeric($form);
+    return numeric;
+  }
+
+  return required;
+}
+
+function validateNumeric($form) {
+  var numericFields = $form.find('.form-control.numeric, .form-control.money').toArray();
+  var completed = true;
+  numericFields.map(function (item) {
+    var value = $(item).val();
+
+    if (isNaN(value)) {
+      if (completed) {
+        $(item).focus();
+        completed = false;
+      }
+
+      $(item).parents('.form-group').eq(0).addClass('has-error');
+      var message = $(item).hasClass('money') ? 'Debe ser un valor monetario válido.' : 'No es un número válido.';
+      showErrorPopover($(item), message, 'top');
+    }
+  });
+  return completed;
+}
+
+function validateRequired($form) {
+  var requiredFields = $form.find('.form-control.required').toArray();
   var completed = true;
   requiredFields.map(function (item) {
     var value = $(item).val();
@@ -728,6 +816,7 @@ function validateForm(e) {
       }
 
       $(item).parents('.form-group').eq(0).addClass('has-error');
+      showErrorPopover($(item), 'Esta información es obligatoria.', 'top');
     }
   });
   return completed;

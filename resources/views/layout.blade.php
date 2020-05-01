@@ -62,8 +62,10 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-right">
                             <li>
-                                <a><span
-                                        class="glyphicon glyphicon-user"></span>&nbsp;<?php echo Session::get('nombreUsuario');?></a>
+                                <a>
+                                    <span class="glyphicon glyphicon-user"></span>&nbsp;
+                                    {{Auth::user()->nombre_usuario}}
+                                </a>
                             </li><?php
                                     if (trim(Session::get('nombrePerfil')) != '') {?>
                             <li class="divider"></li>
@@ -108,36 +110,32 @@
             @if (Auth::check())
             <div id="menu" class="navbar-collapse collapse" ng-class="collapse">
                 <ul class="nav navbar-nav">
+
+                    @foreach ($menu as $item)
+
                     <li id="li_module" class="dropdown li_module_mobile" ng-repeat="modulo in modulos">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            Nombre modulo <span class="caret"></span>
+                            {{ $item->nombre_menu }} <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
+
                             <li>
                                 <div ng-repeat="fila_submodulo in modulo.filas_submodulos">
                                     <div ng-repeat="submodulo in fila_submodulo.submodulos">
                                         <ul class="multi-column-dropdown">
+                                            @foreach ($item->children as $child)
                                             <li class="dropdown-header">
-                                                <a href="#">submodulo nombre</a>
+                                                <a href="#{{$child->ruta_menu}}">{{ $child->nombre_menu }}</a>
                                             </li>
-                                            <li class="dropdown-header">
-                                                <a href="#">mod nombre</a>
-                                            </li>
-                                            <li class="dropdown-header">
-                                                <a href="#">Administracion de empresas y diseños</a>
-                                            </li>
-                                            <li class="dropdown-header">
-                                                <a href="#">submodulo nombre</a>
-                                            </li>
-                                            <li class="dropdown-header">
-                                                <a href="#">submodulo nombre</a>
-                                            </li>
+                                            @endforeach
                                         </ul>
                                     </div>
                                 </div>
                             </li>
+
                         </ul>
                     </li>
+                    @endforeach
                 </ul>
             </div>
             @endif

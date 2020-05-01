@@ -1106,10 +1106,6 @@ div.ajax-file-upload-container div.ajax-file-upload-statusbar div.ajax-file-uplo
   padding: 3px 20px;
 }
 
-.dropdown-menu.dropdown-menu-right {
-  right: 0px !important;
-}
-
 .flex {
   display: flex;
 }
@@ -1184,6 +1180,10 @@ div.ajax-file-upload-container div.ajax-file-upload-statusbar div.ajax-file-uplo
 .table.footable > tbody {
   border-left: 1px solid #eee;
   border-right: 1px solid #eee;
+}
+
+.table.footable > tbody .table-actions .btn {
+  padding: 0 5px;
 }
 
 .table.footable .footable-header {

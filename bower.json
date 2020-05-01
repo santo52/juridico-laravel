@@ -14,6 +14,9 @@
     "nprogress": "0.2.0",
     "angular": "1.2.32",
     "chart.js": "2.2.2",
-    "font-awesome": "4.7.0"
+    "font-awesome": "4.7.0",
+    "bootstrap-select": "^1.13.16",
+    "bootstrap-toggle": "^2.2.2",
+    "footable": "^3.1.6"
   }
 }

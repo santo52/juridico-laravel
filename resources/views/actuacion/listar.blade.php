@@ -80,7 +80,7 @@
             <td>{{$actuacion['generar_documentos']}}</td>
             {{-- <td>{{$actuacion['estado_actuacion']}}</td> --}}
             <td>
-                <div class="flex justify-center">
+                <div class="flex justify-center table-actions">
                     <a href="#actuacion/{{$actuacion['id_actuacion']}}" class="btn text-primary" type="button">
                         <span class="glyphicon glyphicon-pencil"></span>
                     </a>

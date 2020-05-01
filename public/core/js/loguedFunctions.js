@@ -1,5 +1,13 @@
 function render() {
-  const url = location.hash.replace('#', '')
+
+
+
+  if(!location.hash){
+    location.hash = 'actuacion/listar'
+    return
+  }
+
+  const url = location.hash.replace('#', '').toLowerCase()
   if (url) {
     $.ajax({
       url,

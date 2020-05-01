@@ -91,7 +91,7 @@ var Actuacion = /*#__PURE__*/function () {
             if (data.exists) {
               showErrorPopover($('#nombreActuacion'), 'Ya existe una actuación con este nombre', 'top');
             } else if (data.saved) {
-              location.hash = 'actuacion';
+              location.hash = 'actuacion/listar';
             }
           }
         });

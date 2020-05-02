@@ -40,11 +40,11 @@
             <td>{{$item['ruta_menu']}}</td>
             <td>
                 <div class="flex justify-center table-actions">
-                    <a href="javascript:void(0)" onclick="menu.createModal({{$item['id_menu']}})" class="btn text-primary" type="button">
+                    <a href="javascript:void(0)" onclick="menu.createModal({{$item['id_menu']}})"
+                        class="btn text-primary" type="button">
                         <span class="glyphicon glyphicon-pencil"></span>
                     </a>
-                    <a class="btn text-danger" type="button"
-                        onclick="actuacion.openDelete('{{$item['id_menu']}}');">
+                    <a class="btn text-danger" type="button" onclick="actuacion.openDelete('{{$item['id_menu']}}');">
                         <span class="glyphicon glyphicon-remove"></span>
                     </a>
                 </div>
@@ -61,11 +61,11 @@
             <td style="padding-left: 20px">{{$child['ruta_menu']}}</td>
             <td style="padding-left: 20px">
                 <div class="flex justify-center table-actions">
-                    <a href="javascript:void(0)" onclick="menu.createModal({{$child['id_menu']}})" class="btn text-primary" type="button">
+                    <a href="javascript:void(0)" onclick="menu.createModal({{$child['id_menu']}})"
+                        class="btn text-primary" type="button">
                         <span class="glyphicon glyphicon-pencil"></span>
                     </a>
-                    <a class="btn text-danger" type="button"
-                        onclick="actuacion.openDelete('{{$child['id_menu']}}');">
+                    <a class="btn text-danger" type="button" onclick="actuacion.openDelete('{{$child['id_menu']}}');">
                         <span class="glyphicon glyphicon-remove"></span>
                     </a>
                 </div>
@@ -102,6 +102,8 @@
 </div>
 
 
+
+
 <div class="modal fade" tabindex="-1" role="dialog" id="createModal">
     <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
@@ -115,20 +117,23 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="parentsMenu" class="control-label">* Padre</label>
-                        <select class="form-control" title="Seleccionar" name="parent_id" id="create_parent_id" onchange="menu.onChangeSelect(this)"></select>
+                        <select class="form-control" title="Seleccionar" name="parent_id" id="create_parent_id"
+                            onchange="menu.onChangeSelect(this)"></select>
                     </div>
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">* Nombre</label>
                         <input type="text" class="form-control required" id="create_nombre_menu" name="nombre_menu">
                     </div>
-                    <div class="form-group" style="display:none" >
+                    <div class="form-group" style="display:none">
                         <label for="recipient-name" class="control-label">* Ruta</label>
                         <input type="text" class="form-control required" id="create_ruta_menu" name="ruta_menu">
                     </div>
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">* Orden</label>
-                        <input type="text" class="form-control required numeric" id="create_orden_menu" name="orden_menu">
+                        <input type="text" class="form-control required numeric" id="create_orden_menu"
+                            name="orden_menu">
                     </div>
+
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">Estado</label>
                         <div class="checkbox-form">
@@ -136,7 +141,27 @@
                                 class="form-control" id="create_estado" name="estado" checked />
                         </div>
                     </div>
-
+                    <div class="form-group">
+                        <label for="recipient-name">
+                            Acciones del perfil
+                            <div style="color: gray; font-size:10px;">
+                                (diferentes a consultar, crear, editar, eliminar)
+                            </div>
+                        </label>
+                        <button type="button" class="pull-right btn-xs btn btn-success" onclick="menu.createActionModal()" >
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <table class="table" id="tableCreateModal" data-empty="Sin acciones de perfil">
+                            <thead>
+                                <tr>
+                                    <td>Nombre</td>
+                                    <td>Observación</td>
+                                    <td></td>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
                 </div>
                 <div class="modal-footer center">
                     <input type="hidden" id="idCreateElement" />
@@ -149,6 +174,53 @@
 </div>
 
 
+<div class="modal fade" tabindex="-1" role="dialog" id="createActionModal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Acción de perfil</h4>
+            </div>
+            <form onsubmit="menu.upsertAccion(event)">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">Nombre de la acción del perfil</label>
+                        <input type="text" class="form-control required" name="nombre_accion" id="accion_nombre_accion">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">Observación de la acción del perfil</label>
+                        <textarea id="accion_observacion" class="form-control" name="observacion"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer center">
+                    <input type="hidden" name="id_accion" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
+<div class="modal fade" tabindex="-1" role="dialog" id="deleteActionModal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Eliminar</h4>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro que desea eliminar esta acción?</p>
+            </div>
+            <div class="modal-footer center">
+                <input type="hidden" id="deleteActionID" />
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" onClick="menu.deleteAction()" class="btn btn-danger">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @endsection

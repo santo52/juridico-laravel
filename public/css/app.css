@@ -1189,6 +1189,10 @@ div.ajax-file-upload-container div.ajax-file-upload-statusbar div.ajax-file-uplo
   padding: 0 5px;
 }
 
+.table.footable > tbody > tr.footable-empty > td {
+  font-size: 12px;
+}
+
 .table.footable .footable-header {
   background: #14aa6b;
   color: #fff;

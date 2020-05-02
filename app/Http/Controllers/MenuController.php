@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Entities\Menu;
 use Illuminate\Support\Facades\Auth;
+use App\Entities\Accion;
 
 class MenuController extends Controller
 {
@@ -28,6 +29,11 @@ class MenuController extends Controller
 
     public function get($id) {
         $menu = Menu::find($id);
+        $acciones = Accion::where([
+            'id_menu' => $id,
+            'eliminado' => 0
+        ])->get();
+        $menu['acciones'] = $acciones;
         return response()->json($menu);
     }
 

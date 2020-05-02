@@ -35,6 +35,10 @@
         .table-actions .btn{
             padding: 0 5px;
         }
+
+        > tr.footable-empty > td {
+            font-size: 12px;
+        }
     }
 
     .footable-header {

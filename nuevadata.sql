@@ -88,6 +88,17 @@ ADD COLUMN `id_usuario_actualizacion` INT(11) NULL;
 ALTER TABLE `menu`
 ADD COLUMN `estado` TINYINT(1) NULL DEFAULT 1;
 
+ALTER TABLE `accion`
+DROP FOREIGN KEY `FK_accion_menu`;
+
+ALTER TABLE `accion`
+DROP INDEX `IX_accion_inactivo` ,
+DROP INDEX `UQ_accion` ;
+
+ALTER TABLE `accion`
+ADD COLUMN `eliminado` TINYINT(1) NULL DEFAULT 0;
+
+
 UPDATE `menu` SET `ruta_menu` = 'TipoProceso/listar' WHERE (`id_menu` = '2');
 UPDATE `menu` SET `ruta_menu` = 'Perfil/listar' WHERE (`id_menu` = '6');
 UPDATE `menu` SET `ruta_menu` = 'Usuario/listar' WHERE (`id_menu` = '8');

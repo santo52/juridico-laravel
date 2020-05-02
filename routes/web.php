@@ -19,8 +19,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/logout', 'AuthController@logout');
 
 
-    Route::post('/actuacion/crear', 'ActuacionController@create');
     Route::post('/actuacion/listar', 'ActuacionController@index');
+    Route::post('/actuacion/crear', 'ActuacionController@create');
     Route::post('/actuacion/insert', 'ActuacionController@insert');
     Route::post('/actuacion/{id}', 'ActuacionController@edit');
     Route::post('/actuacion/update/{id}', 'ActuacionController@update');
@@ -34,6 +34,25 @@ Route::middleware('auth')->group(function () {
     Route::post('/opciones/menu/parents', 'MenuController@getParents');
     Route::post('/opciones/menu/{id}', 'MenuController@get');
     Route::post('/opciones/menu/delete/{id}', 'MenuController@delete');
+
+    Route::post('/opciones/accion/delete/{id}', 'AccionController@delete');
+    Route::post('/opciones/accion/upsert', 'AccionController@upsert');
+    Route::post('/opciones/accion/{id}', 'AccionController@get');
+
+
+
+    Route::post('/perfil/listar', 'PerfilController@index');
+    Route::post('/perfil/crear', 'PerfilController@create');
+    Route::post('/perfil/{id}', 'PerfilController@edit');
+    Route::post('/perfil/upsert', 'PerfilController@upsert');
+    Route::post('/perfil/delete/{id}', 'PerfilController@delete');
+
+
+
+
+
+
+
 
 
 
@@ -49,7 +68,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/cliente/listar', 'ActuacionController@index');
 
 
-    Route::post('/perfil/listar', 'PerfilController@index');
+
     Route::post('/usuario/listar', 'ActuacionController@index');
 
 });

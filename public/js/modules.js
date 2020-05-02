@@ -225,6 +225,7 @@ var Menu = /*#__PURE__*/function () {
           url: '/opciones/menu/' + id,
           data: {},
           success: function success(data) {
+            console.log(data, 'sdsadsad');
             setTimeout(function () {
               _this.toggleRutaMenu(data.parent_id);
 
@@ -232,6 +233,11 @@ var Menu = /*#__PURE__*/function () {
               $('#create_ruta_menu').val(data.ruta_menu);
               $('#create_orden_menu').val(data.orden_menu);
               $('#create_parent_id').val(data.parent_id || 0).selectpicker('refresh');
+              var html = (data.acciones || []).map(function (accion) {
+                return _this.rowAccion(accion);
+              });
+              $('#tableCreateModal tbody').html(html.join(''));
+              $('#tableCreateModal').footable();
             }, 500);
           }
         });
@@ -274,13 +280,92 @@ var Menu = /*#__PURE__*/function () {
       var id = $('#deleteValue').val();
       $.ajax({
         url: '/opciones/menu/delete/' + id,
-        data: {
-          id: id
-        },
+        data: {},
         success: function success() {
           location.reload();
         }
       });
+    }
+  }, {
+    key: "createActionModal",
+    value: function createActionModal(id) {
+      $('#createActionModal').modal();
+      $('#id_accion').val('');
+      $('#accion_nombre_accion').val('');
+      $('#accion_observacion').val('');
+
+      if (id) {
+        $.ajax({
+          url: '/opciones/accion/' + id,
+          data: {},
+          success: function success(data) {
+            $('#id_accion').val(data.id_accion);
+            $('#accion_nombre_accion').val(data.nombre_accion);
+            $('#accion_observacion').val(data.observacion);
+          }
+        });
+      }
+    }
+  }, {
+    key: "rowAccion",
+    value: function rowAccion(_ref2) {
+      var id_accion = _ref2.id_accion,
+          nombre_accion = _ref2.nombre_accion,
+          observacion = _ref2.observacion;
+      return "\n            <tr id=\"accionRow".concat(id_accion, "\">\n                <td>").concat(nombre_accion, "</td>\n                <td>").concat(observacion || '', "</td>\n                <td width=\"30px\">\n                    <div class=\"flex justify-center table-actions\">\n                        <a href=\"javascript:void(0)\" onclick=\"menu.createActionModal(").concat(id_accion, ")\" class=\"btn text-primary\" type=\"button\">\n                            <span class=\"glyphicon glyphicon-pencil\"></span>\n                        </a>\n                        <a href=\"javascript:void(0)\" class=\"btn text-danger\" type=\"button\" onclick=\"menu.deleteActionModal(").concat(id_accion, ")\">\n                            <span class=\"glyphicon glyphicon-remove\"></span>\n                        </a>\n                    </div>\n                </td>\n            </tr>\n        ");
+    }
+  }, {
+    key: "deleteActionModal",
+    value: function deleteActionModal(id) {
+      $('#deleteActionModal').modal();
+      $('#deleteActionID').val(id);
+    }
+  }, {
+    key: "deleteAction",
+    value: function deleteAction() {
+      var id = $('#deleteActionID').val();
+      $.ajax({
+        url: '/opciones/accion/delete/' + id,
+        data: {},
+        success: function success(_ref3) {
+          var deleted = _ref3.deleted;
+
+          if (deleted) {
+            $('#accionRow' + id).remove();
+          }
+
+          $('#deleteActionModal').modal('hide');
+        }
+      });
+    }
+  }, {
+    key: "upsertAccion",
+    value: function upsertAccion(e) {
+      var _this2 = this;
+
+      e.preventDefault();
+      e.stopPropagation();
+      var formData = new FormData(e.target);
+      formData.append('id_menu', $('#idCreateElement').val());
+      $.ajax({
+        url: '/opciones/accion/upsert',
+        data: new URLSearchParams(formData),
+        success: function success(data) {
+          var html = _this2.rowAccion(data);
+
+          var $item = $('#accionRow' + data.id_accion);
+
+          if ($item.length) {
+            $item.replaceWith(html);
+          } else {
+            $('#tableCreateModal tbody').append(html);
+          }
+
+          $('#tableCreateModal').footable();
+          $('#createActionModal').modal('hide');
+        }
+      });
+      return false;
     }
   }]);
 

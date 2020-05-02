@@ -45,12 +45,19 @@ class Menu {
                 url: '/opciones/menu/' + id,
                 data: {},
                 success: data => {
+                    console.log(data, 'sdsadsad')
                     setTimeout(() => {
                         this.toggleRutaMenu(data.parent_id)
                         $('#create_nombre_menu').val(data.nombre_menu)
                         $('#create_ruta_menu').val(data.ruta_menu)
                         $('#create_orden_menu').val(data.orden_menu)
                         $('#create_parent_id').val(data.parent_id || 0).selectpicker('refresh')
+                        const html = (data.acciones || []).map(accion => {
+                            return this.rowAccion(accion);
+                        })
+
+                        $('#tableCreateModal tbody').html(html.join(''))
+                        $('#tableCreateModal').footable()
                     }, 500);
                 }
             })
@@ -94,11 +101,95 @@ class Menu {
         const id = $('#deleteValue').val()
         $.ajax({
             url: '/opciones/menu/delete/' + id,
-            data: { id },
+            data: {},
             success: () => {
                 location.reload()
             }
         })
+    }
+
+    createActionModal(id){
+        $('#createActionModal').modal()
+        $('#id_accion').val('')
+        $('#accion_nombre_accion').val('')
+        $('#accion_observacion').val('')
+
+        if(id) {
+            $.ajax({
+                url: '/opciones/accion/' + id,
+                data: {},
+                success: data => {
+                    $('#id_accion').val(data.id_accion)
+                    $('#accion_nombre_accion').val(data.nombre_accion)
+                    $('#accion_observacion').val(data.observacion)
+                }
+            })
+        }
+    }
+
+    rowAccion({id_accion, nombre_accion, observacion}){
+        return `
+            <tr id="accionRow${id_accion}">
+                <td>${nombre_accion}</td>
+                <td>${observacion || ''}</td>
+                <td width="30px">
+                    <div class="flex justify-center table-actions">
+                        <a href="javascript:void(0)" onclick="menu.createActionModal(${id_accion})" class="btn text-primary" type="button">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </a>
+                        <a href="javascript:void(0)" class="btn text-danger" type="button" onclick="menu.deleteActionModal(${id_accion})">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        `
+    }
+
+    deleteActionModal(id) {
+        $('#deleteActionModal').modal()
+        $('#deleteActionID').val(id)
+    }
+
+    deleteAction() {
+        const id = $('#deleteActionID').val()
+        $.ajax({
+            url: '/opciones/accion/delete/' + id,
+            data: {},
+            success: ({ deleted }) => {
+                if(deleted) {
+                    $('#accionRow' + id).remove()
+                }
+                $('#deleteActionModal').modal('hide')
+            }
+        })
+    }
+
+    upsertAccion(e){
+        e.preventDefault()
+        e.stopPropagation()
+
+        const formData = new FormData(e.target);
+        formData.append('id_menu', $('#idCreateElement').val())
+
+        $.ajax({
+            url: '/opciones/accion/upsert',
+            data: new URLSearchParams(formData),
+            success: data => {
+                const html = this.rowAccion(data)
+                const $item = $('#accionRow' + data.id_accion)
+                if($item.length){
+                    $item.replaceWith(html)
+                } else {
+                    $('#tableCreateModal tbody').append(html)
+                }
+
+                $('#tableCreateModal').footable()
+                $('#createActionModal').modal('hide')
+            }
+        })
+
+        return false
     }
 
 }

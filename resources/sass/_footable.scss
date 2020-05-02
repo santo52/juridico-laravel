@@ -28,6 +28,7 @@
 }
 
 .table.footable {
+
     >tbody {
         border-left: 1px solid #eee;
         border-right: 1px solid #eee;
@@ -92,5 +93,12 @@
                 }
             }
         }
+    }
+}
+
+
+.table {
+    .background-green {
+        background: $light-background-green;
     }
 }

@@ -320,7 +320,7 @@ jQuery.ajaxSetup({
   },
   error: errorLog,
   complete: function complete(xhr, status) {
-    console.log(xhr);
+    console.log(xhr.responseJSON);
     hideLoading();
   }
 });

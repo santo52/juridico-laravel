@@ -25,7 +25,7 @@
                                 <label class="lblForm">¿Genera alertas?</label>
                                 <div class="input-group">
                                     <input type="checkbox" id="generaAlertas" name="generaAlertas" data-toggle="toggle"
-                                        data-on="Enabled" data-off="Disabled"
+                                        data-on="Sí" data-off="No" data-width="60"
                                         {{ !isset($actuacion) || $actuacion['genera_alertas'] == '1' ?  'checked' : '' }} />
                                 </div>
                             </div>
@@ -33,6 +33,7 @@
                                 <label class="lblForm">¿Aplica control de vencimiento?</label>
                                 <div class="input-group">
                                     <input type="checkbox" id="aplicaControlVencimiento" name="aplicaControlVencimiento"
+                                        data-on="Sí" data-off="No" data-width="60"
                                         {{ !isset($actuacion) || $actuacion['aplica_control_vencimiento'] == '1' ?  'checked' : '' }} />
                                 </div>
                             </div>
@@ -48,7 +49,7 @@
                                 <label class="lblForm">¿Requiere estudio de favorabilidad?</label>
                                 <div class="input-group">
                                     <input type="checkbox" id="requiereEstudioFavorabilidad"
-                                        name="requiereEstudioFavorabilidad"
+                                        name="requiereEstudioFavorabilidad" data-on="Sí" data-off="No" data-width="60"
                                         {{ !isset($actuacion) || $actuacion['requiere_estudio_favorabilidad'] == '1' ?  'checked' : '' }} />
                                 </div>
                             </div>
@@ -56,6 +57,7 @@
                                 <label class="lblForm">¿La actuación tiene cobro?</label>
                                 <div class="input-group">
                                     <input type="checkbox" id="actuacionTieneCobro" name="actuacionTieneCobro"
+                                        data-on="Sí" data-off="No" data-width="60"
                                         {{ !isset($actuacion) || $actuacion['actuacion_tiene_cobro'] == '1' ?  'checked' : '' }} />
                                 </div>
                             </div>
@@ -71,6 +73,7 @@
                                 <label class="lblForm">Actuación para creación de cliente</label>
                                 <div class="input-group">
                                     <input type="checkbox" id="actuacionCreacionCliente" name="actuacionCreacionCliente"
+                                        data-on="Sí" data-off="No" data-width="60"
                                         {{ !isset($actuacion) || $actuacion['actuacion_creacion_cliente'] == '1' ?  'checked' : '' }} />
                                 </div>
                             </div>
@@ -81,6 +84,7 @@
                                 <label class="lblForm">¿Mostrar datos de radicado?</label>
                                 <div class="input-group">
                                     <input type="checkbox" id="mostrarDatosRadicado" name="mostrarDatosRadicado"
+                                        data-on="Sí" data-off="No" data-width="60"
                                         {{ !isset($actuacion) || $actuacion['mostrar_datos_radicado'] == '1' ?  'checked' : '' }} />
                                 </div>
                             </div>
@@ -88,6 +92,7 @@
                                 <label class="lblForm">¿Mostrar datos de juzgado?</label>
                                 <div class="input-group">
                                     <input type="checkbox" id="mostrarDatosJuzgado" name="mostrarDatosJuzgado"
+                                        data-on="Sí" data-off="No" data-width="60"
                                         {{ !isset($actuacion) || $actuacion['mostrar_datos_juzgado'] == '1' ?  'checked' : '' }} />
                                 </div>
                             </div>
@@ -95,6 +100,7 @@
                                 <label class="lblForm">¿Mostrar datos de respuesta?</label>
                                 <div class="input-group">
                                     <input type="checkbox" id="mostrarDatosRespuesta" name="mostrarDatosRespuesta"
+                                        data-on="Sí" data-off="No" data-width="60"
                                         {{ !isset($actuacion) || $actuacion['mostrar_datos_respuesta'] == '1' ?  'checked' : '' }} />
                                 </div>
                             </div>
@@ -104,6 +110,7 @@
                                 <label class="lblForm">¿Mostrar datos de apelación?</label>
                                 <div class="input-group">
                                     <input type="checkbox" id="mostrarDatosApelacion" name="mostrarDatosApelacion"
+                                        data-on="Sí" data-off="No" data-width="60"
                                         {{ !isset($actuacion) || $actuacion['mostrar_datos_apelacion'] == '1' ?  'checked' : '' }} />
                                 </div>
                             </div>
@@ -111,6 +118,7 @@
                                 <label class="lblForm">¿Mostrar datos de cobros?</label>
                                 <div class="input-group">
                                     <input type="checkbox" id="mostrarDatosCobros" name="mostrarDatosCobros"
+                                        data-on="Sí" data-off="No" data-width="60"
                                         {{ !isset($actuacion) || $actuacion['mostrar_datos_cobros'] == '1' ?  'checked' : '' }} />
                                 </div>
                             </div>
@@ -118,6 +126,7 @@
                                 <label class="lblForm">¿Programar audiencia?</label>
                                 <div class="input-group">
                                     <input type="checkbox" id="programarAudiencia" name="programarAudiencia"
+                                        data-on="Sí" data-off="No" data-width="60"
                                         {{ !isset($actuacion) || $actuacion['programar_audiencia'] == '1' ?  'checked' : '' }} />
                                 </div>
                             </div>
@@ -127,13 +136,15 @@
                                 <label class="lblForm">Control de entrega de documentos</label>
                                 <div class="input-group">
                                     <input type="checkbox" id="controlEntregaDocumentos" name="controlEntregaDocumentos"
+                                        data-on="Sí" data-off="No" data-width="60"
                                         {{ !isset($actuacion) || $actuacion['control_entrega_documentos'] == '1' ?  'checked' : '' }} />
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <label class="lblForm">¿Generar documentos?</label>
                                 <div class="input-group">
-                                    <input type="checkbox" id="generarDocumentos" name="generarDocumentos"
+                                    <input type="checkbox" id="generarDocumentos" name="generarDocumentos" data-on="Sí"
+                                        data-off="No" data-width="60"
                                         {{ !isset($actuacion) || $actuacion['generar_documentos'] == '1' ?  'checked' : '' }} />
                                 </div>
                             </div>

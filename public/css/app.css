@@ -260,15 +260,14 @@ div.navbar-app ul.dropdown-menu ul.multi-column-dropdown {
 
 div.navbar-app ul.dropdown-menu ul.multi-column-dropdown li.dropdown-header {
   color: #ccc;
-  text-transform: capitalize;
-  text-align: center;
+  text-align: left;
 }
 
 div.navbar-app ul.dropdown-menu ul.multi-column-dropdown li a {
   color: #ffffff;
   text-decoration: none;
   display: block;
-  padding: 10px 25px;
+  padding: 6px 25px;
 }
 
 div.navbar-app ul.dropdown-menu ul.multi-column-dropdown li a:hover {
@@ -1106,6 +1105,10 @@ div.ajax-file-upload-container div.ajax-file-upload-statusbar div.ajax-file-uplo
   padding: 3px 20px;
 }
 
+.checkbox-form .toggle-group label {
+  line-height: inherit !important;
+}
+
 .flex {
   display: flex;
 }
@@ -1236,6 +1239,10 @@ div.ajax-file-upload-container div.ajax-file-upload-statusbar div.ajax-file-uplo
   background-color: #14aa6b;
   border-color: #14aa6b;
   color: #fff;
+}
+
+.table .background-green {
+  background: #14aa6b0d;
 }
 
 .nav .open > a,

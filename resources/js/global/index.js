@@ -23,7 +23,7 @@ jQuery.ajaxSetup({
   },
   error: errorLog,
   complete: function (xhr, status) {
-    console.log(xhr)
+    console.log(xhr.responseJSON)
     hideLoading();
   }
 });

@@ -29,6 +29,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/actuacion/pdf', 'ActuacionController@createPDF');
     Route::get('/actuacion/excel', 'ActuacionController@createExcel');
 
+    Route::post('/opciones/listar', 'MenuController@index');
+    Route::post('/opciones/menu/upsert', 'MenuController@upsert');
+    Route::post('/opciones/menu/parents', 'MenuController@getParents');
+    Route::post('/opciones/menu/{id}', 'MenuController@get');
+    Route::post('/opciones/menu/delete/{id}', 'MenuController@delete');
+
+
 
     Route::post('/proceso/listar', 'ActuacionController@index');
     Route::post('/tipoproceso/listar', 'ActuacionController@index');
@@ -42,7 +49,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/cliente/listar', 'ActuacionController@index');
 
 
-    Route::post('/perfil/listar', 'ActuacionController@index');
+    Route::post('/perfil/listar', 'PerfilController@index');
     Route::post('/usuario/listar', 'ActuacionController@index');
 
 });

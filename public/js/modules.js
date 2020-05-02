@@ -165,3 +165,178 @@ var Actuacion = /*#__PURE__*/function () {
 }();
 
 var actuacion = new Actuacion();
+
+var Menu = /*#__PURE__*/function () {
+  function Menu() {
+    _classCallCheck(this, Menu);
+  }
+
+  _createClass(Menu, [{
+    key: "getParents",
+    value: function getParents() {
+      $.ajax({
+        url: '/opciones/menu/parents',
+        data: {},
+        success: function success(_ref) {
+          var parents = _ref.parents;
+          var html = [];
+          html.push('<option value="0">Sin padre</option>');
+          parents.map(function (parent) {
+            return html.push("<option value=\"".concat(parent.id_menu, "\">").concat(parent.nombre_menu, "</option>"));
+          });
+          $('#create_parent_id').html(html.join('')).selectpicker('refresh');
+        }
+      });
+    }
+  }, {
+    key: "toggleRutaMenu",
+    value: function toggleRutaMenu(value) {
+      var $ruta = $('#create_ruta_menu');
+
+      if (!parseInt(value)) {
+        $ruta.val('').removeClass('required').parent('.form-group').hide();
+      } else {
+        $ruta.val('').addClass('required').parent('.form-group').show();
+      }
+    }
+  }, {
+    key: "onChangeSelect",
+    value: function onChangeSelect(self) {
+      var value = $(self).val();
+      this.toggleRutaMenu(value);
+    }
+  }, {
+    key: "createModal",
+    value: function createModal(id) {
+      var _this = this;
+
+      var title = id ? 'Crear' : 'Editar';
+      this.getParents();
+      $('#createModal').modal();
+      $('#createTitle').text(title);
+      $('#idCreateElement').val(id);
+      $('#create_nombre_menu').val('');
+      $('#create_ruta_menu').val('');
+      $('#create_orden_menu').val('');
+      $('#create_parent_id').val('').selectpicker('refresh');
+
+      if (id) {
+        $.ajax({
+          url: '/opciones/menu/' + id,
+          data: {},
+          success: function success(data) {
+            setTimeout(function () {
+              _this.toggleRutaMenu(data.parent_id);
+
+              $('#create_nombre_menu').val(data.nombre_menu);
+              $('#create_ruta_menu').val(data.ruta_menu);
+              $('#create_orden_menu').val(data.orden_menu);
+              $('#create_parent_id').val(data.parent_id || 0).selectpicker('refresh');
+            }, 500);
+          }
+        });
+      }
+    }
+  }, {
+    key: "upsert",
+    value: function upsert(e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (validateForm(e)) {
+        var id = $('#idCreateElement').val();
+        var formData = new FormData(e.target);
+        id && formData.append('id_menu', id);
+        $.ajax({
+          url: '/opciones/menu/upsert',
+          data: new URLSearchParams(formData),
+          success: function success(data) {
+            if (data.saved) {
+              location.reload();
+            } else if (data.exists) {
+              $('#create_nombre_menu').parent().addClass('has-error');
+            }
+          }
+        });
+      }
+
+      return false;
+    }
+  }, {
+    key: "openDelete",
+    value: function openDelete(id) {
+      $('#deleteModal').modal();
+      $('#deleteValue').val(id);
+    }
+  }, {
+    key: "delete",
+    value: function _delete() {
+      var id = $('#deleteValue').val();
+      $.ajax({
+        url: '/opciones/menu/delete/' + id,
+        data: {
+          id: id
+        },
+        success: function success() {
+          location.reload();
+        }
+      });
+    }
+  }]);
+
+  return Menu;
+}();
+
+var menu = new Menu();
+
+var Perfil = /*#__PURE__*/function () {
+  function Perfil() {
+    _classCallCheck(this, Perfil);
+  }
+
+  _createClass(Perfil, [{
+    key: "openDelete",
+    value: function openDelete(id) {
+      $('#deleteModal').modal();
+      $('#deleteValue').val(id);
+    }
+  }, {
+    key: "delete",
+    value: function _delete() {
+      var id = $('#deleteValue').val();
+    }
+  }, {
+    key: "pdf",
+    value: function pdf() {
+      window.open('/perfil/pdf');
+    }
+  }, {
+    key: "excel",
+    value: function excel() {
+      window.open('/perfil/excel');
+    }
+  }, {
+    key: "createEditModal",
+    value: function createEditModal(id) {
+      var text = id ? 'Editar perfil' : 'Nuevo perfil';
+      $('#createModal').modal();
+      $('#createValue').val(id);
+      $('#createTitle').text(text);
+    }
+  }, {
+    key: "editModal",
+    value: function editModal() {}
+  }]);
+
+  return Perfil;
+}();
+
+var perfil = new Perfil(); // $(document).ready(function(){
+//     setTimeout(() => {
+//         const id = null;
+//         const text = id ? 'Editar perfil' : 'Nuevo perfil'
+//         $('#createModal').modal()
+//         $('#createValue').val(id)
+//         $('#createTitle').text(text)
+//     }, 1000);
+// })

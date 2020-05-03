@@ -1,35 +1,29 @@
 class Menu {
 
-    getParents() {
-        $.ajax({
-            url: '/opciones/menu/parents',
-            data: {},
-            success: ({ parents }) => {
-                let html = [];
-                html.push('<option value="0">Sin padre</option>')
-                parents.map(parent => html.push(`<option value="${parent.id_menu}">${parent.nombre_menu}</option>`))
-                $('#create_parent_id').html(html.join('')).selectpicker('refresh');
-            }
-        })
+    renderParents(parents) {
+        let html = [];
+        html.push('<option value="0">Sin padre</option>')
+        parents.map(parent => html.push(`<option value="${parent.id_menu}">${parent.nombre_menu}</option>`))
+        $('#create_parent_id').html(html.join('')).selectpicker('refresh');
     }
 
-    toggleRutaMenu(value){
+    toggleRutaMenu(value) {
         const $ruta = $('#create_ruta_menu');
-        if(!parseInt(value)) {
+        if (!parseInt(value)) {
             $ruta.val('').removeClass('required').parent('.form-group').hide()
         } else {
             $ruta.val('').addClass('required').parent('.form-group').show()
         }
     }
 
-    onChangeSelect(self){
+    onChangeSelect(self) {
         const value = $(self).val()
         this.toggleRutaMenu(value)
     }
 
     createModal(id) {
         const title = id ? 'Crear' : 'Editar'
-        this.getParents()
+        const that = this
 
         $('#createModal').modal()
         $('#createTitle').text(title)
@@ -38,30 +32,29 @@ class Menu {
         $('#create_ruta_menu').val('')
         $('#create_orden_menu').val('')
         $('#create_parent_id').val('')
-        .selectpicker('refresh')
+            .selectpicker('refresh')
 
-        if(id) {
-            $.ajax({
-                url: '/opciones/menu/' + id,
-                data: {},
-                success: data => {
-                    console.log(data, 'sdsadsad')
-                    setTimeout(() => {
-                        this.toggleRutaMenu(data.parent_id)
-                        $('#create_nombre_menu').val(data.nombre_menu)
-                        $('#create_ruta_menu').val(data.ruta_menu)
-                        $('#create_orden_menu').val(data.orden_menu)
-                        $('#create_parent_id').val(data.parent_id || 0).selectpicker('refresh')
-                        const html = (data.acciones || []).map(accion => {
-                            return this.rowAccion(accion);
-                        })
+        $.ajax({
+            url: '/opciones/menu/' + (id || 0),
+            data: {},
+            success: data => {
+                setTimeout(() => {
+                    that.toggleRutaMenu(data.parent_id)
+                    $('#create_nombre_menu').val(data.nombre_menu)
+                    $('#create_ruta_menu').val(data.ruta_menu)
+                    $('#create_orden_menu').val(data.orden_menu)
+                    $('#create_parent_id').val(data.parent_id || 0).selectpicker('refresh')
+                    const html = (data.acciones || []).map(accion => {
+                        return this.rowAccion(accion);
+                    })
 
-                        $('#tableCreateModal tbody').html(html.join(''))
-                        $('#tableCreateModal').footable()
-                    }, 500);
-                }
-            })
-        }
+                    that.renderParents(data.parents);
+                    $('#tableCreateModal tbody').html(html.join(''))
+                    $('#tableCreateModal').footable()
+                }, 500);
+            }
+        })
+
     }
 
     upsert(e) {
@@ -69,7 +62,7 @@ class Menu {
         e.preventDefault()
         e.stopPropagation()
 
-        if(validateForm(e)){
+        if (validateForm(e)) {
 
             const id = $('#idCreateElement').val()
             const formData = new FormData(e.target)
@@ -79,9 +72,9 @@ class Menu {
                 url: '/opciones/menu/upsert',
                 data: new URLSearchParams(formData),
                 success: data => {
-                    if(data.saved){
+                    if (data.saved) {
                         location.reload()
-                    } else if(data.exists) {
+                    } else if (data.exists) {
                         $('#create_nombre_menu').parent().addClass('has-error')
                     }
                 }
@@ -92,12 +85,12 @@ class Menu {
     }
 
 
-    openDelete(id){
+    openDelete(id) {
         $('#deleteModal').modal()
         $('#deleteValue').val(id)
     }
 
-    delete(){
+    delete() {
         const id = $('#deleteValue').val()
         $.ajax({
             url: '/opciones/menu/delete/' + id,
@@ -108,13 +101,13 @@ class Menu {
         })
     }
 
-    createActionModal(id){
+    createActionModal(id) {
         $('#createActionModal').modal()
         $('#id_accion').val('')
         $('#accion_nombre_accion').val('')
         $('#accion_observacion').val('')
 
-        if(id) {
+        if (id) {
             $.ajax({
                 url: '/opciones/accion/' + id,
                 data: {},
@@ -127,7 +120,7 @@ class Menu {
         }
     }
 
-    rowAccion({id_accion, nombre_accion, observacion}){
+    rowAccion({ id_accion, nombre_accion, observacion }) {
         return `
             <tr id="accionRow${id_accion}">
                 <td>${nombre_accion}</td>
@@ -157,7 +150,7 @@ class Menu {
             url: '/opciones/accion/delete/' + id,
             data: {},
             success: ({ deleted }) => {
-                if(deleted) {
+                if (deleted) {
                     $('#accionRow' + id).remove()
                 }
                 $('#deleteActionModal').modal('hide')
@@ -165,7 +158,7 @@ class Menu {
         })
     }
 
-    upsertAccion(e){
+    upsertAccion(e) {
         e.preventDefault()
         e.stopPropagation()
 
@@ -178,12 +171,13 @@ class Menu {
             success: data => {
                 const html = this.rowAccion(data)
                 const $item = $('#accionRow' + data.id_accion)
-                if($item.length){
+                if ($item.length) {
                     $item.replaceWith(html)
                 } else {
                     $('#tableCreateModal tbody').append(html)
                 }
 
+                $('#tableCreateModal .footable-empty').remove()
                 $('#tableCreateModal').footable()
                 $('#createActionModal').modal('hide')
             }

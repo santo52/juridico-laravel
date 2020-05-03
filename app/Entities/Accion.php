@@ -15,6 +15,6 @@ class Accion extends Model
     const UPDATED_AT = 'fecha_actualizacion';
 
     protected $fillable = [
-        "id_menu", "nombre_accion", "observacion", "inactivo", "fecha_creacion", "id_usuario_creacion", 'fecha_actualizacion'
+        "id_menu", "nombre_accion", "observacion", "inactivo", "global", "fecha_creacion", "id_usuario_creacion", 'fecha_actualizacion'
     ];
 }

@@ -172,21 +172,14 @@ var Menu = /*#__PURE__*/function () {
   }
 
   _createClass(Menu, [{
-    key: "getParents",
-    value: function getParents() {
-      $.ajax({
-        url: '/opciones/menu/parents',
-        data: {},
-        success: function success(_ref) {
-          var parents = _ref.parents;
-          var html = [];
-          html.push('<option value="0">Sin padre</option>');
-          parents.map(function (parent) {
-            return html.push("<option value=\"".concat(parent.id_menu, "\">").concat(parent.nombre_menu, "</option>"));
-          });
-          $('#create_parent_id').html(html.join('')).selectpicker('refresh');
-        }
+    key: "renderParents",
+    value: function renderParents(parents) {
+      var html = [];
+      html.push('<option value="0">Sin padre</option>');
+      parents.map(function (parent) {
+        return html.push("<option value=\"".concat(parent.id_menu, "\">").concat(parent.nombre_menu, "</option>"));
       });
+      $('#create_parent_id').html(html.join('')).selectpicker('refresh');
     }
   }, {
     key: "toggleRutaMenu",
@@ -211,7 +204,7 @@ var Menu = /*#__PURE__*/function () {
       var _this = this;
 
       var title = id ? 'Crear' : 'Editar';
-      this.getParents();
+      var that = this;
       $('#createModal').modal();
       $('#createTitle').text(title);
       $('#idCreateElement').val(id);
@@ -219,29 +212,25 @@ var Menu = /*#__PURE__*/function () {
       $('#create_ruta_menu').val('');
       $('#create_orden_menu').val('');
       $('#create_parent_id').val('').selectpicker('refresh');
-
-      if (id) {
-        $.ajax({
-          url: '/opciones/menu/' + id,
-          data: {},
-          success: function success(data) {
-            console.log(data, 'sdsadsad');
-            setTimeout(function () {
-              _this.toggleRutaMenu(data.parent_id);
-
-              $('#create_nombre_menu').val(data.nombre_menu);
-              $('#create_ruta_menu').val(data.ruta_menu);
-              $('#create_orden_menu').val(data.orden_menu);
-              $('#create_parent_id').val(data.parent_id || 0).selectpicker('refresh');
-              var html = (data.acciones || []).map(function (accion) {
-                return _this.rowAccion(accion);
-              });
-              $('#tableCreateModal tbody').html(html.join(''));
-              $('#tableCreateModal').footable();
-            }, 500);
-          }
-        });
-      }
+      $.ajax({
+        url: '/opciones/menu/' + (id || 0),
+        data: {},
+        success: function success(data) {
+          setTimeout(function () {
+            that.toggleRutaMenu(data.parent_id);
+            $('#create_nombre_menu').val(data.nombre_menu);
+            $('#create_ruta_menu').val(data.ruta_menu);
+            $('#create_orden_menu').val(data.orden_menu);
+            $('#create_parent_id').val(data.parent_id || 0).selectpicker('refresh');
+            var html = (data.acciones || []).map(function (accion) {
+              return _this.rowAccion(accion);
+            });
+            that.renderParents(data.parents);
+            $('#tableCreateModal tbody').html(html.join(''));
+            $('#tableCreateModal').footable();
+          }, 500);
+        }
+      });
     }
   }, {
     key: "upsert",
@@ -308,10 +297,10 @@ var Menu = /*#__PURE__*/function () {
     }
   }, {
     key: "rowAccion",
-    value: function rowAccion(_ref2) {
-      var id_accion = _ref2.id_accion,
-          nombre_accion = _ref2.nombre_accion,
-          observacion = _ref2.observacion;
+    value: function rowAccion(_ref) {
+      var id_accion = _ref.id_accion,
+          nombre_accion = _ref.nombre_accion,
+          observacion = _ref.observacion;
       return "\n            <tr id=\"accionRow".concat(id_accion, "\">\n                <td>").concat(nombre_accion, "</td>\n                <td>").concat(observacion || '', "</td>\n                <td width=\"30px\">\n                    <div class=\"flex justify-center table-actions\">\n                        <a href=\"javascript:void(0)\" onclick=\"menu.createActionModal(").concat(id_accion, ")\" class=\"btn text-primary\" type=\"button\">\n                            <span class=\"glyphicon glyphicon-pencil\"></span>\n                        </a>\n                        <a href=\"javascript:void(0)\" class=\"btn text-danger\" type=\"button\" onclick=\"menu.deleteActionModal(").concat(id_accion, ")\">\n                            <span class=\"glyphicon glyphicon-remove\"></span>\n                        </a>\n                    </div>\n                </td>\n            </tr>\n        ");
     }
   }, {
@@ -327,8 +316,8 @@ var Menu = /*#__PURE__*/function () {
       $.ajax({
         url: '/opciones/accion/delete/' + id,
         data: {},
-        success: function success(_ref3) {
-          var deleted = _ref3.deleted;
+        success: function success(_ref2) {
+          var deleted = _ref2.deleted;
 
           if (deleted) {
             $('#accionRow' + id).remove();
@@ -361,6 +350,7 @@ var Menu = /*#__PURE__*/function () {
             $('#tableCreateModal tbody').append(html);
           }
 
+          $('#tableCreateModal .footable-empty').remove();
           $('#tableCreateModal').footable();
           $('#createActionModal').modal('hide');
         }

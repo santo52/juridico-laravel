@@ -20,6 +20,10 @@ class AccionController extends Controller
             $data['id_usuario_creacion'] = Auth::id();
         }
 
+        if(empty($data['id_menu'])) {
+            $data['id_menu'] = 0;
+        }
+
         $data['id_usuario_actualizacion'] = Auth::id();
         $saved = Accion::updateOrCreate(['id_accion' => $id], $data);
         return response()->json($saved);
@@ -27,8 +31,13 @@ class AccionController extends Controller
 
     public function delete($id) {
         $menu = Accion::find($id);
-        $menu->eliminado = 1;
-        $deleted = $menu->save();
+        if($menu->id_menu) {
+            $menu->eliminado = 1;
+            $deleted = $menu->save();
+        } else {
+            $deleted = $menu->delete();
+        }
+
         return response()->json(['deleted' => $deleted]);
     }
 

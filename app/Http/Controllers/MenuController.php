@@ -16,24 +16,25 @@ class MenuController extends Controller
         ]);
     }
 
-    public function getParents() {
+    public function get($id) {
+
+        $cond['id_menu'] = $id;
+        $cond['eliminado'] = 0;
+        $cond['global'] = 0;
+        if(empty($id)) {
+            $cond['id_usuario_creacion'] = Auth::id();
+        }
+
         $parents = Menu::where([
             ['estado', 1],
             ['parent_id', 0]
         ])->get();
 
-        return response()->json([
-            'parents' => $parents
-        ]);
-    }
-
-    public function get($id) {
+        $acciones = Accion::where($cond)->get();
         $menu = Menu::find($id);
-        $acciones = Accion::where([
-            'id_menu' => $id,
-            'eliminado' => 0
-        ])->get();
+        $menu['parents'] = $parents;
         $menu['acciones'] = $acciones;
+        $menu['sendid'] = $id;
         return response()->json($menu);
     }
 
@@ -82,12 +83,20 @@ class MenuController extends Controller
             $data['parent_id'] = 0;
         }
 
-        if (!$id) {
+        if(empty($id)) {
             $data['id_usuario_creacion'] = Auth::id();
         }
 
         $data['ruta_menu'] = $data['parent_id'] !== 0 ? $data['ruta_menu'] : '';
         $saved = Menu::updateOrCreate(['id_menu' => $id], $data);
+
+        if(empty($id)) {
+            Accion::where([
+                'id_usuario_creacion' => Auth::id(),
+                'id_menu' => 0
+            ])->update(['id_menu' => $saved->id_menu ]);
+        }
+
         return response()->json([ 'saved' => $saved ]);
     }
 

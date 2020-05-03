@@ -98,6 +98,8 @@ DROP INDEX `UQ_accion` ;
 ALTER TABLE `accion`
 ADD COLUMN `eliminado` TINYINT(1) NULL DEFAULT 0;
 
+ALTER TABLE `accion`
+ADD COLUMN `global` TINYINT(1) NULL DEFAULT 0 COMMENT 'Indica si es una acción relacionada con cualquier módulo de la aplicación' AFTER `eliminado`;
 
 UPDATE `menu` SET `ruta_menu` = 'TipoProceso/listar' WHERE (`id_menu` = '2');
 UPDATE `menu` SET `ruta_menu` = 'Perfil/listar' WHERE (`id_menu` = '6');
@@ -141,3 +143,7 @@ UPDATE `menu` SET `estado` = '0' WHERE (`id_menu` = '40');
 UPDATE `menu` SET `estado` = '0' WHERE (`id_menu` = '41');
 
 INSERT INTO `menu` (`nombre_menu`, `ruta_menu`, `parent_id`, `tipo_menu`, `orden_menu`, `inactivo`, `fecha_creacion`, `id_usuario_creacion`, `id_usuario_actualizacion`) VALUES ('Opciones', 'opciones/listar', '1', '1', '44', '0', '', '1', '1');
+INSERT INTO `accion` (`id_menu`, `nombre_accion`, `observacion`, `inactivo`, `fecha_creacion`, `id_usuario_creacion`, `fecha_actualizacion`, `eliminado`, `global`) VALUES ('0', 'crear', 'Permisos para crear un registro en la base de datos', '0', '2020-05-03 00:25:00', '1', '2020-05-03 00:25:00', '0', '1');
+INSERT INTO `accion` (`id_menu`, `nombre_accion`, `observacion`, `inactivo`, `fecha_creacion`, `id_usuario_creacion`, `fecha_actualizacion`, `eliminado`, `global`) VALUES ('0', 'editar', 'Permisos para editar un registro en la base de datos', '0', '2020-05-03 00:25:00', '1', '2020-05-03 00:25:00', '0', '1');
+INSERT INTO `accion` (`id_menu`, `nombre_accion`, `observacion`, `inactivo`, `fecha_creacion`, `id_usuario_creacion`, `fecha_actualizacion`, `eliminado`, `global`) VALUES ('0', 'consultar', 'Permisos para consultar un registro en la base de datos', '0', '2020-05-03 00:25:00', '1', '2020-05-03 00:25:00', '0', '1');
+INSERT INTO `accion` (`id_menu`, `nombre_accion`, `observacion`, `inactivo`, `fecha_creacion`, `id_usuario_creacion`, `fecha_actualizacion`, `eliminado`, `global`) VALUES ('0', 'eliminar', 'Permisos para eliminar un registro en la base de datos', '0', '2020-05-03 00:25:00', '1', '2020-05-03 00:25:00', '0', '1');

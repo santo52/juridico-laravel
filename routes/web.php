@@ -31,7 +31,6 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/opciones/listar', 'MenuController@index');
     Route::post('/opciones/menu/upsert', 'MenuController@upsert');
-    Route::post('/opciones/menu/parents', 'MenuController@getParents');
     Route::post('/opciones/menu/{id}', 'MenuController@get');
     Route::post('/opciones/menu/delete/{id}', 'MenuController@delete');
 

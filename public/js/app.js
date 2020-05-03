@@ -327,10 +327,7 @@ jQuery.ajaxSetup({
 
 function compileLibraries() {
   $('input[type=checkbox]').bootstrapToggle({
-    on: 'Sí',
-    off: 'No',
     size: 'mini',
-    width: 60,
     height: 32,
     onstyle: 'success'
   });

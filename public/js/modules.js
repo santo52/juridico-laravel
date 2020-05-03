@@ -376,42 +376,104 @@ var Perfil = /*#__PURE__*/function () {
       $('#deleteValue').val(id);
     }
   }, {
-    key: "delete",
-    value: function _delete() {
-      var id = $('#deleteValue').val();
-    }
-  }, {
-    key: "pdf",
-    value: function pdf() {
-      window.open('/perfil/pdf');
-    }
-  }, {
-    key: "excel",
-    value: function excel() {
-      window.open('/perfil/excel');
-    }
-  }, {
     key: "createEditModal",
     value: function createEditModal(id) {
       var text = id ? 'Editar perfil' : 'Nuevo perfil';
+      var that = this;
       $('#createModal').modal();
       $('#createValue').val(id);
       $('#createTitle').text(text);
+      $.ajax({
+        url: '/perfil/get/' + (id || 0),
+        success: function success(data) {
+          var html = data.menus.map(function (menu) {
+            return "<option value=\"".concat(menu.id_menu, "\">").concat(menu.nombre_menu, "</option>");
+          });
+          $('#listaMenu').html(html).selectpicker('refresh');
+          html = data.selectedMenus.map(function (menu) {
+            return that.getRow(menu.id_menu_perfil, menu.nombre_menu);
+          });
+          $('#tableCreateModal tbody').html(html);
+          $('#tableCreateModal').footable();
+          $('#perfilNombre').val(data.perfil ? data.perfil.nombre_perfil : '');
+          $('#perfilEstado').prop('checked', data.perfil ? data.perfil.inactivo == 0 : true).change();
+        }
+      });
     }
   }, {
-    key: "editModal",
-    value: function editModal() {}
+    key: "create",
+    value: function create(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var id = $('#createValue').val();
+      var $formData = new FormData(e.target);
+      $formData.append('id_perfil', id);
+      $.ajax({
+        url: '/perfil/create',
+        data: new URLSearchParams($formData),
+        success: function success(data) {
+          $('#createModal').modal('hide');
+          setTimeout(function () {
+            location.reload();
+          }, 500);
+        }
+      });
+      return false;
+    }
+  }, {
+    key: "addMenu",
+    value: function addMenu() {
+      var _this3 = this;
+
+      var id_menu = $('#listaMenu').val();
+      var id_perfil = $('#createValue').val() || 0;
+      var params = {
+        id_menu: id_menu,
+        id_perfil: id_perfil
+      };
+      $.ajax({
+        url: '/perfil/menu/insert',
+        data: new URLSearchParams(params),
+        success: function success(_ref3) {
+          var saved = _ref3.saved,
+              menu_perfil = _ref3.menu_perfil;
+
+          if (saved) {
+            var $selected = $('#listaMenu').children('option:selected');
+            var nombre = $selected.text().trim();
+            $selected.remove();
+
+            var html = _this3.getRow(menu_perfil.id_menu_perfil, nombre);
+
+            $('#tableCreateModal tbody').append(html).children('.footable-empty').remove();
+            $('#tableCreateModal').footable();
+            $('#listaMenu').selectpicker('refresh');
+          }
+        }
+      });
+    }
+  }, {
+    key: "deleteMenu",
+    value: function deleteMenu(id) {
+      $.ajax({
+        url: '/perfil/menu/delete/' + id,
+        success: function success(_ref4) {
+          var deleted = _ref4.deleted;
+
+          if (deleted) {
+            $('#menuRow' + id).remove();
+          }
+        }
+      });
+    }
+  }, {
+    key: "getRow",
+    value: function getRow(id_menu_perfil, nombre) {
+      return "\n            <tr id=\"menuRow".concat(id_menu_perfil, "\">\n                <td>").concat(nombre, "</td>\n                <td width=\"30px\">\n                    <div class=\"flex justify-center table-actions\">\n                        <a href=\"javascript:void(0)\" class=\"btn text-danger\" type=\"button\" onclick=\"perfil.deleteMenu(").concat(id_menu_perfil, ")\">\n                            <span class=\"glyphicon glyphicon-remove\"></span>\n                        </a>\n                    </div>\n                </td>\n            </tr>\n        ");
+    }
   }]);
 
   return Perfil;
 }();
 
-var perfil = new Perfil(); // $(document).ready(function(){
-//     setTimeout(() => {
-//         const id = null;
-//         const text = id ? 'Editar perfil' : 'Nuevo perfil'
-//         $('#createModal').modal()
-//         $('#createValue').val(id)
-//         $('#createTitle').text(text)
-//     }, 1000);
-// })
+var perfil = new Perfil();

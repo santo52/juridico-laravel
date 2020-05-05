@@ -117,6 +117,7 @@
                             <thead>
                                 <tr>
                                     <td>Nombre</td>
+                                    <td>Permisos</td>
                                     <td></td>
                                 </tr>
                             </thead>

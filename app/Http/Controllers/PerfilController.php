@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Entities\Perfil;
 use App\Entities\Menu;
 use App\Entities\MenuPerfil;
+
+use App\Entities\AccionMenuPerfil;
 use Illuminate\Support\Facades\Auth;
 
 class PerfilController extends Controller
@@ -13,7 +15,8 @@ class PerfilController extends Controller
     public function index() {
         $perfil = new Perfil;
         $list = $perfil->where([
-            ['id_perfil', '<>', 1]
+            ['id_perfil', '<>', 1],
+            ['eliminado', 0]
         ])->orderBy('id_perfil', 'desc')->get();
 
         return $this->renderSection('perfil.listar', [
@@ -23,23 +26,16 @@ class PerfilController extends Controller
 
     public function get($id) {
 
+        $perfil = Perfil::find($id);
+
         $menus = Menu::where([
             ['parent_id', '<>', 0],
-            ['estado',  1]
+            ['estado', 1]
         ])->whereNotIn('id_menu',
             MenuPerfil::where('id_perfil', $id)->pluck('id_menu')
         )->get();
 
-        $selectedMenus = MenuPerfil::
-        leftjoin('menu as m', 'm.id_menu', '=', 'menu_perfil.id_menu')
-        ->where([
-            ['id_perfil', $id],
-            ['m.parent_id', '<>', 0],
-            ['m.estado',  1]
-        ])->get();
-
-        $perfil = Perfil::find($id);
-
+        $selectedMenus = MenuPerfil::getByProfile($id)->getWithActions();
         return response()->json([
             'menus' => $menus,
             'selectedMenus' => $selectedMenus,
@@ -49,13 +45,14 @@ class PerfilController extends Controller
 
     private function getPerfil($id, $name) {
 
-        if($id) {
+        if ($id) {
             $type = 'update';
             $perfiles = Perfil::where([
-                ['id_perfil', '<>',  $id],
-                ['nombre_perfil', '=' ,$name],
+                ['id_perfil', '<>', $id],
+                ['nombre_perfil', '=', $name],
             ]);
-        } else {
+        }
+        else {
             $type = 'create';
             $perfiles = Perfil::where('nombre_perfil', $name);
         }
@@ -67,18 +64,19 @@ class PerfilController extends Controller
         ];
     }
 
-    public function create(Request $request){
+    public function create(Request $request) {
         $data = $request->all();
 
         $id = $request->get('id_perfil');
         $data['nombre_perfil'] = strtoupper($request->get('nombre_perfil'));
         $perfil = $this->getPerfil($id, $data['nombre_perfil']);
         $data['inactivo'] = empty($data['estado']) ? 1 : 2;
+        $data['eliminado'] = 0;
 
         if ($perfil['exists']) {
 
             $perfil = $perfil['perfil'];
-            if($perfil['type'] === 'update' || $perfil->inactivo === 0) {
+            if ($perfil['type'] === 'update' || $perfil->inactivo === 0) {
                 return response()->json(['exists' => true]);
             }
 
@@ -87,7 +85,7 @@ class PerfilController extends Controller
             $id = $perfil->id_perfil;
         }
 
-        if(empty($id)){
+        if (empty($id)) {
             $data['id_usuario_creacion'] = Auth::id();
         }
         $data['id_usuario_actualizacion'] = Auth::id();
@@ -98,35 +96,59 @@ class PerfilController extends Controller
             'id_usuario_creacion' => Auth::id()
         ])->update(['id_perfil' => $saved->id_perfil]);
 
-        return response()->json([$saved]);
+        return response()->json([$saved, $data]);
     }
 
+    public function delete($id) {
+        $updated = Perfil::find($id)->update([ 'eliminado' => 1 ]);
+        return response()->json([ 'deleted' => $updated ]);
+    }
 
     public function insertMenu(Request $request) {
         $data = $request->all();
-        if($data['id_perfil'] == 0){
-            $data['id_usuario_creacion'] = Auth::id();
-        }
 
+        $data['id_usuario_creacion'] = Auth::id();
         $data['id_usuario_actualizacion'] = Auth::id();
         $menuPerfil = MenuPerfil::create($data);
-
-
-
         $saved = $menuPerfil->save();
 
         return response()->json([
-            'saved' => $saved,
-            'menu_perfil' => $menuPerfil
+            'saved' => $saved
         ]);
     }
 
     public function deleteMenu($id) {
         $menuPerfil = MenuPerfil::find($id);
         $deleted = $menuPerfil->delete();
+
+        if ($deleted) {
+            AccionMenuPerfil::
+                where('id_menu_perfil', $id)
+                ->delete();
+        }
+
+        $menuItem = Menu::find($menuPerfil->id_menu);
         return response()->json([
-            'deleted' => $deleted
+            'deleted' => $deleted,
+            'menuItem' => $menuItem
         ]);
     }
 
+    public function addOrRemovePermission(Request $request) {
+        $data = [
+            'id_menu_perfil' => $request->get('id_menu_perfil'),
+            'id_accion' => $request->get('id_accion')
+        ];
+
+        if ($request->get('add') === 'true') {
+            $accionMenuPerfil = AccionMenuPerfil::create($data);
+            $accionMenuPerfil->save();
+        }
+        else {
+            $accionMenuPerfil = AccionMenuPerfil::where($data);
+            $accionMenuPerfil->delete();
+        }
+
+        return response()->json(['saved' => true]);
+    }
 }

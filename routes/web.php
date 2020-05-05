@@ -48,19 +48,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/perfil/create', 'PerfilController@create');
     Route::post('/perfil/menu/insert', 'PerfilController@insertMenu');
     Route::post('/perfil/menu/delete/{id}', 'PerfilController@deleteMenu');
-
-
-
-
-
-
-
-
-    Route::post('/perfil/crear', 'PerfilController@create');
-    Route::post('/perfil/{id}', 'PerfilController@edit');
-    Route::post('/perfil/upsert', 'PerfilController@upsert');
+    Route::post('/perfil/menu/accion/addremove', 'PerfilController@addOrRemovePermission');
     Route::post('/perfil/delete/{id}', 'PerfilController@delete');
-
+    Route::post('/perfil/crear', 'PerfilController@create');
+    Route::post('/perfil/upsert', 'PerfilController@upsert');
+    Route::post('/perfil/{id}', 'PerfilController@edit');
 
 
 

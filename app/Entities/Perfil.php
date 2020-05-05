@@ -15,6 +15,6 @@ class Perfil extends Model
     const UPDATED_AT = 'fecha_actualizacion';
 
     protected $fillable = [
-        "id_perfil", "nombre_perfil", "inactivo", "fecha_creacion", "id_usuario_creacion", "fecha_actualizacion", "id_usuario_actualizacion"
+        "id_perfil", "nombre_perfil", "inactivo", "eliminado", "fecha_creacion", "id_usuario_creacion", "fecha_actualizacion", "id_usuario_actualizacion"
     ];
 }

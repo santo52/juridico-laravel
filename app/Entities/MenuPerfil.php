@@ -3,6 +3,7 @@
 namespace App\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Builder\MenuPerfilBuilder;
 
 class MenuPerfil extends Model
 {
@@ -17,4 +18,10 @@ class MenuPerfil extends Model
     protected $fillable = [
         "id_menu_perfil", "id_menu", "id_perfil", "inactivo", "fecha_creacion", "id_usuario_creacion", "fecha_actualizacion", "id_usuario_actualizacion"
     ];
+
+
+    public function newEloquentBuilder($builder) {
+      return new MenuPerfilBuilder($builder);
+   }
+
 }

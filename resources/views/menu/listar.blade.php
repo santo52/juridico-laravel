@@ -194,7 +194,7 @@
                     </div>
                 </div>
                 <div class="modal-footer center">
-                    <input type="hidden" name="id_accion" />
+                    <input type="hidden" id="id_accion" name="id_accion" />
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-success">Guardar</button>
                 </div>

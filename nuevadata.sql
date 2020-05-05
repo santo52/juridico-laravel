@@ -8,6 +8,16 @@ CREATE TABLE `error_log` (
   `updated_at` DATETIME NULL,
   PRIMARY KEY (`id`));
 
+CREATE TABLE `accion_menu_perfil` (
+  `id_accion_menu` INT NOT NULL AUTO_INCREMENT,
+  `id_menu_perfil` INT NOT NULL,
+  `id_accion` INT NOT NULL,
+  PRIMARY KEY (`id_accion_menu`),
+  INDEX `id_menu_perfil` (`id_menu_perfil` ASC),
+  INDEX `id_accion` (`id_accion` ASC))
+ENGINE = InnoDB
+COMMENT = 'Relación entre accion y menu_perfil';
+
 ALTER TABLE `usuario`
 ADD COLUMN `fecha_actualizacion` DATETIME NULL,
 ADD COLUMN `password` varchar(300) COLLATE utf8_spanish_ci DEFAULT NULL,
@@ -110,6 +120,9 @@ DROP INDEX `FK_menu_perfil_menu` ,
 DROP INDEX `IX_menu_perfil_inactivo` ,
 DROP INDEX `UQ_menu_perfil` ;
 
+ALTER TABLE `perfil`
+ADD COLUMN `eliminado` TINYINT(1) NULL DEFAULT 0 AFTER `id_usuario_actualizacion`;
+
 UPDATE `menu` SET `ruta_menu` = 'TipoProceso/listar' WHERE (`id_menu` = '2');
 UPDATE `menu` SET `ruta_menu` = 'Perfil/listar' WHERE (`id_menu` = '6');
 UPDATE `menu` SET `ruta_menu` = 'Usuario/listar' WHERE (`id_menu` = '8');
@@ -157,3 +170,5 @@ INSERT INTO `accion` (`id_menu`, `nombre_accion`, `observacion`, `inactivo`, `fe
 INSERT INTO `accion` (`id_menu`, `nombre_accion`, `observacion`, `inactivo`, `fecha_creacion`, `id_usuario_creacion`, `fecha_actualizacion`, `eliminado`, `global`) VALUES ('0', 'editar', 'Permisos para editar un registro en la base de datos', '0', '2020-05-03 00:25:00', '1', '2020-05-03 00:25:00', '0', '1');
 INSERT INTO `accion` (`id_menu`, `nombre_accion`, `observacion`, `inactivo`, `fecha_creacion`, `id_usuario_creacion`, `fecha_actualizacion`, `eliminado`, `global`) VALUES ('0', 'consultar', 'Permisos para consultar un registro en la base de datos', '0', '2020-05-03 00:25:00', '1', '2020-05-03 00:25:00', '0', '1');
 INSERT INTO `accion` (`id_menu`, `nombre_accion`, `observacion`, `inactivo`, `fecha_creacion`, `id_usuario_creacion`, `fecha_actualizacion`, `eliminado`, `global`) VALUES ('0', 'eliminar', 'Permisos para eliminar un registro en la base de datos', '0', '2020-05-03 00:25:00', '1', '2020-05-03 00:25:00', '0', '1');
+
+

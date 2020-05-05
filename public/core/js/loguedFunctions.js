@@ -1,12 +1,5 @@
 function render() {
 
-
-
-  if(!location.hash){
-    location.hash = 'actuacion/listar'
-    return
-  }
-
   const url = location.hash.replace('#', '').toLowerCase()
   if (url) {
     $.ajax({
@@ -14,7 +7,8 @@ function render() {
       data: new URLSearchParams({}),
       success: data => {
 
-        if(data.redirect){
+        if(data.redirect || data.redirect === ''){
+            location.pathname = '/'
             location.hash = data.redirect
             return false;
         }

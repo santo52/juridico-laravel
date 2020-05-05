@@ -10,7 +10,14 @@ use App\Entities\Accion;
 class MenuController extends Controller
 {
     public function index() {
-        $parents = Menu::getMenuWithChildren('orden_menu')->toHuman();
+        $parents = Menu::getMenuWithChildren('orden_menu');
+        foreach($parents as $key => $parent) {
+            if($parents[$key]['parent_id'] === 0){
+                $parents[$key]['parent_id'] = 'Ninguno';
+                $parents[$key]['ruta_menu'] = 'N/A';
+            }
+        }
+
         return $this->renderSection('menu.listar', [
             'parents' => $parents
         ]);

@@ -19,6 +19,7 @@ class PerfilController extends Controller
             ['eliminado', 0]
         ])->orderBy('id_perfil', 'desc')->get();
 
+
         return $this->renderSection('perfil.listar', [
             'perfiles' => $list
         ]);

@@ -6,13 +6,25 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
+use App\Entities\Menu;
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    private $permissions;
+
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $this->permissions = $request->route('permissions');
+            return $next($request);
+        });
+    }
+
     protected function renderSection($template, $data = []) {
 
+        $data['permissions'] = $this->permissions;
         $view = view($template, $data)->renderSections();
         $response['content'] = isset($view['content']) ? $view['content'] : '';
         $response['javascript'] = isset($view['javascript']) ? $view['javascript'] : '';
@@ -52,5 +64,5 @@ class Controller extends BaseController
 		$hash = hash_init('sha256');
 		hash_update($hash, $cadena);
 		return hash_final($hash);
-	}
+    }
 }

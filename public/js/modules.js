@@ -381,7 +381,6 @@ var Perfil = /*#__PURE__*/function () {
       $("#tableCreateModal select").on("changed.bs.select", function (e, clickedIndex, newValue, oldValue) {
         var id_menu_perfil = $(this).data('menu-perfil');
         var id_accion = $(this).find('option').eq(clickedIndex).val();
-        console.log(!!newValue);
         $.ajax({
           url: '/perfil/menu/accion/addremove',
           data: new URLSearchParams({

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class MenuCollection extends Collection
 {
-    public function toHuman(){
+    public function toHuman($data){
         return $this->map(function($item){
             if($item['parent_id'] === 0){
                 $item['parent_id'] = 'Ninguno';

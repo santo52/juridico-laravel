@@ -20,7 +20,7 @@ class Menu extends Model
         "id_menu", "nombre_menu", "ruta_menu", "parent_id", "tipo_menu", "orden_menu", "inactivo", "fecha_creacion", "id_usuario_creacion", "fecha_actualizacion", "id_usuario_actualizacion", "estado"
     ];
 
-    public static function getMenuWithChildren($orderBy = 'orden_menu') {
+    public static function getMenuWithChildren($orderBy = 'orden_menu', $validateAdmin = false) {
 
         $idProfile = Auth::user()->id_perfil;
         $menuItems = [];
@@ -32,14 +32,15 @@ class Menu extends Model
 
         foreach($menu as $key => $parent){
             $children = Menu::
-            leftjoin('menu_perfil as p', 'p.id_menu', 'menu.id_menu')
+            select('menu.*')
+            ->leftjoin('menu_perfil as p', 'p.id_menu', 'menu.id_menu')
             ->where([
                 ['estado', 1],
                 ['parent_id', $parent->id_menu]
             ]);
 
             // Si el usuario no es administrador se verifica el perfil
-            if($idProfile !== env('PROFILE_ADMIN_ID', 1)) {
+            if($validateAdmin && $idProfile !== env('PROFILE_ADMIN_ID', 1)) {
                 $children = $children->where('id_perfil', $idProfile);
             }
 

@@ -8,7 +8,7 @@ use App\Http\Middleware\Route;
 class HomeController extends Controller
 {
     function index() {
-        $menu = Menu::getMenuWithChildren();
+        $menu = Menu::getMenuWithChildren('orden_menu', true);
         return view('index', ['menu' => $menu]);
     }
 }

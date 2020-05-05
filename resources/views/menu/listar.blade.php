@@ -51,9 +51,7 @@
             </td>
         </tr>
         @isset($item['children'] )
-
         @foreach ($item['children'] as $child)
-
         <tr id="listRow{{$child['id_menu']}}">
             <td style="padding-left: 20px">{{$child['id_menu']}}</td>
             <td style="padding-left: 20px">{{$child['nombre_menu']}}</td>

@@ -10,9 +10,9 @@ class Menu {
     toggleRutaMenu(value) {
         const $ruta = $('#create_ruta_menu');
         if (!parseInt(value)) {
-            $ruta.val('').removeClass('required').parent('.form-group').hide()
+            $ruta.prop('disabled', true).removeClass('required').parent('.form-group').hide()
         } else {
-            $ruta.val('').addClass('required').parent('.form-group').show()
+            $ruta.prop('disabled', false).addClass('required').parent('.form-group').show()
         }
     }
 
@@ -38,20 +38,19 @@ class Menu {
             url: '/opciones/menu/' + (id || 0),
             data: {},
             success: data => {
-                setTimeout(() => {
-                    that.toggleRutaMenu(data.parent_id)
-                    $('#create_nombre_menu').val(data.nombre_menu)
-                    $('#create_ruta_menu').val(data.ruta_menu)
-                    $('#create_orden_menu').val(data.orden_menu)
-                    $('#create_parent_id').val(data.parent_id || 0).selectpicker('refresh')
-                    const html = (data.acciones || []).map(accion => {
-                        return this.rowAccion(accion);
-                    })
+                that.toggleRutaMenu(data.parent_id)
+                $('#create_nombre_menu').val(data.nombre_menu)
+                $('#create_ruta_menu').val(data.ruta_menu)
+                $('#create_orden_menu').val(data.orden_menu)
 
-                    that.renderParents(data.parents);
-                    $('#tableCreateModal tbody').html(html.join(''))
-                    $('#tableCreateModal').footable()
-                }, 500);
+                const html = (data.acciones || []).map(accion => {
+                    return this.rowAccion(accion);
+                })
+
+                that.renderParents(data.parents);
+                $('#tableCreateModal tbody').html(html.join(''))
+                $('#tableCreateModal').footable()
+                $('#create_parent_id').val(data.parent_id).selectpicker('refresh')
             }
         })
 

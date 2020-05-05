@@ -704,6 +704,12 @@ function detectarAbandonoPagina() {
 }
 
 function errorLog(xhr, status, error) {
+  if (error === 'Not Found') {
+    location.pathname = '/';
+    location.hash = '';
+    return false;
+  }
+
   console.log({
     xhr: xhr,
     status: status,

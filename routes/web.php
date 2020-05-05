@@ -13,14 +13,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'route'])->group(function () {
 
     Route::get('/', 'HomeController@index');
     Route::get('/logout', 'AuthController@logout');
 
-
     Route::post('/actuacion/listar', 'ActuacionController@index');
-    Route::post('/actuacion', 'ActuacionController@index');
     Route::post('/actuacion/crear', 'ActuacionController@create');
     Route::post('/actuacion/insert', 'ActuacionController@insert');
     Route::post('/actuacion/{id}', 'ActuacionController@edit');
@@ -41,8 +39,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/opciones/accion/{id}', 'AccionController@get');
 
 
-
-    Route::post('/perfil', 'PerfilController@index');
     Route::post('/perfil/listar', 'PerfilController@index');
     Route::post('/perfil/get/{id}', 'PerfilController@get');
     Route::post('/perfil/create', 'PerfilController@create');
@@ -50,9 +46,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/perfil/menu/delete/{id}', 'PerfilController@deleteMenu');
     Route::post('/perfil/menu/accion/addremove', 'PerfilController@addOrRemovePermission');
     Route::post('/perfil/delete/{id}', 'PerfilController@delete');
-    Route::post('/perfil/crear', 'PerfilController@create');
-    Route::post('/perfil/upsert', 'PerfilController@upsert');
-    Route::post('/perfil/{id}', 'PerfilController@edit');
 
 
 
@@ -62,20 +55,17 @@ Route::middleware('auth')->group(function () {
 
 
 
-    Route::post('/proceso/listar', 'ActuacionController@index');
-    Route::post('/tipoproceso/listar', 'ActuacionController@index');
-    Route::post('/etapaproceso/listar', 'ActuacionController@index');
-    Route::post('/documento/listar', 'ActuacionController@index');
-    Route::post('/plantilladocumento/listar', 'ActuacionController@index');
-    Route::post('/entidadpension/listar', 'ActuacionController@index');
-    Route::post('/entidadjusticia/listar', 'ActuacionController@index');
-    Route::post('/entermediario/listar', 'ActuacionController@index');
-    Route::post('/actuacionetapaproceso/listar', 'ActuacionController@index');
-    Route::post('/cliente/listar', 'ActuacionController@index');
-
-
-
-    Route::post('/usuario/listar', 'ActuacionController@index');
+    // Route::post('/proceso/listar', 'ActuacionController@index');
+    // Route::post('/tipoproceso/listar', 'ActuacionController@index');
+    // Route::post('/etapaproceso/listar', 'ActuacionController@index');
+    // Route::post('/documento/listar', 'ActuacionController@index');
+    // Route::post('/plantilladocumento/listar', 'ActuacionController@index');
+    // Route::post('/entidadpension/listar', 'ActuacionController@index');
+    // Route::post('/entidadjusticia/listar', 'ActuacionController@index');
+    // Route::post('/entermediario/listar', 'ActuacionController@index');
+    // Route::post('/actuacionetapaproceso/listar', 'ActuacionController@index');
+    // Route::post('/cliente/listar', 'ActuacionController@index');
+    // Route::post('/usuario/listar', 'ActuacionController@index');
 
 });
 

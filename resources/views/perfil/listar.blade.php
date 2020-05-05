@@ -1,10 +1,11 @@
 @section('content')
-
 <div class="juridico right-buttons">
     <div>
+        @isset ($permissions->crear)
         <a href="javascript:void(0)" onclick="perfil.createEditModal()" class="btn btn-default">
             Crear
         </a>
+        @endisset
     </div>
 </div>
 <div class="row">
@@ -35,21 +36,18 @@
             <td>{{$perfil['inactivo'] == 1 ? 'Inactivo' : 'Activo'}}</td>
             <td>
                 <div class="flex justify-center table-actions">
+                    @isset ($permissions->editar)
                     <a href="javascript:void(0)" onclick="perfil.createEditModal('{{$perfil['id_perfil']}}')"
                         class="btn text-primary" type="button">
                         <span class="glyphicon glyphicon-pencil"></span>
                     </a>
-                    @if ($perfil['estado_actuacion'] == 1)
+                    @endisset
+                    @isset ($permissions->eliminar)
                     <a href="javascript:void(0)" class="btn text-danger" type="button"
                         onclick="perfil.openDelete('{{$perfil['id_perfil']}}')">
                         <span class="glyphicon glyphicon-remove"></span>
                     </a>
-
-                    @else
-                    <a class="btn text-danger" type="button" onclick="perfil.openDelete('{{$perfil['id_perfil']}}')">
-                        <span class="glyphicon glyphicon-remove"></span>
-                    </a>
-                    @endif
+                    @endisset
                 </div>
             </td>
         </tr>
@@ -58,6 +56,7 @@
     </tbody>
 </table>
 
+@isset ($permissions->eliminar)
 <div class="modal fade" tabindex="-1" role="dialog" id="deleteModal">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
@@ -77,7 +76,9 @@
         </div>
     </div>
 </div>
+@endisset
 
+@if(isset($permissions->crear) || isset($permissions->editar))
 <div class="modal fade" tabindex="-1" role="dialog" id="createModal">
     <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
@@ -105,12 +106,13 @@
                             Menus del perfil
                         </label>
                         <div class="input-group">
-                            <select id="listaMenu" class="form-control" title="Seleccionar ..."  ><select>
-                            <span class="input-group-btn">
-                                <button type="button" class="pull-right btn-md btn btn-success" onclick="perfil.addMenu()">
-                                    <span class="glyphicon glyphicon-plus"></span>
-                                </button>
-                            </span>
+                            <select id="listaMenu" class="form-control" title="Seleccionar ..."><select>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="pull-right btn-md btn btn-success"
+                                            onclick="perfil.addMenu()">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                        </button>
+                                    </span>
                         </div>
                         <br>
                         <table class="table" id="tableCreateModal" data-empty="Sin acciones de perfil">
@@ -134,7 +136,7 @@
         </div>
     </div>
 </div>
-
+@endif
 
 
 @endsection

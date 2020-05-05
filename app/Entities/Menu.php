@@ -4,6 +4,7 @@ namespace App\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Collection\MenuCollection;
+use Illuminate\Support\Facades\Auth;
 
 class Menu extends Model
 {
@@ -20,21 +21,37 @@ class Menu extends Model
     ];
 
     public static function getMenuWithChildren($orderBy = 'orden_menu') {
+
+        $idProfile = Auth::user()->id_perfil;
+        $menuItems = [];
+
         $menu = Menu::where([
             ['estado', 1],
             ['parent_id', '0']
         ])->orderBy($orderBy)->get();
 
         foreach($menu as $key => $parent){
-            $children = Menu::where([
+            $children = Menu::
+            leftjoin('menu_perfil as p', 'p.id_menu', 'menu.id_menu')
+            ->where([
                 ['estado', 1],
                 ['parent_id', $parent->id_menu]
-            ])->orderBy($orderBy)->get();
+            ]);
 
-            $menu[$key]['children'] = $children;
+            // Si el usuario no es administrador se verifica el perfil
+            if($idProfile !== env('PROFILE_ADMIN_ID', 1)) {
+                $children = $children->where('id_perfil', $idProfile);
+            }
+
+            $children = $children->orderBy($orderBy)->get();
+
+            if($children->count() > 0) {
+                $menu[$key]['children'] = $children;
+                $menuItems[] = $menu[$key];
+            }
         }
 
-        return $menu;
+        return $menuItems;
     }
 
     public function newCollection(array $models = []) {

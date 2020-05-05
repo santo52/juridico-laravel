@@ -1,6 +1,11 @@
 function render() {
 
-  const url = location.hash.replace('#', '').toLowerCase()
+  let url = location.hash.replace('#', '').toLowerCase()
+  const count = url.split('/').filter(section => section.trim()).length
+  if(count === 1) {
+    url += '/listar'
+  }
+
   if (url) {
     $.ajax({
       url,

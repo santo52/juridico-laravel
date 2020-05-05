@@ -22,6 +22,7 @@ class Route
 
         if ($request->isMethod('post')) {
             $uri = $request->route()->uri;
+            $uri = explode('/', $uri)[0];
             $idPerfil = Auth::user()->id_perfil;
 
 
@@ -74,7 +75,7 @@ class Route
 
             $list = new \stdClass();
             foreach ($permissions as $permission) {
-                $key = strtolower($permission->nombre_accion);
+                $key = str_replace(' ', '_', strtolower($permission->nombre_accion));
                 $list->$key = true;
             }
 

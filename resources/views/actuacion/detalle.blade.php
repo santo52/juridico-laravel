@@ -16,7 +16,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <label class="lblForm">* Nombre de la actuación</label>
-                                <input value="{{ isset($actuacion) ? $actuacion['nombre_actuacion'] : ''}}" type="text"
+                                <input {{!isset($permissions->cambiar_nombre) ? 'disabled' : '' }} value="{{ isset($actuacion) ? $actuacion['nombre_actuacion'] : ''}}" type="text"
                                     id="nombreActuacion" name="nombreActuacion" class="form-control required" />
                             </div>
                         </div>
@@ -39,7 +39,7 @@
                             </div>
                             <div class="col-sm-3">
                                 <label class="lblForm">Días de vencimiento</label>
-                                <input maxlength="5" autocomplete="off" type="text" id="diasVencimiento"
+                                <input {{!isset($permissions->cambiar_dia_de_vencimiento) ? 'disabled' : '' }} maxlength="5" autocomplete="off" type="text" id="diasVencimiento"
                                     name="diasVencimiento" class="form-control required numeric"
                                     value="{{ isset($actuacion) ? $actuacion['dias_vencimiento'] : '' }}" />
                             </div>
@@ -64,6 +64,7 @@
                             <div class="col-sm-4">
                                 <label class="lblForm">Valor de la actuación</label>
                                 <input maxlength="10" autocomplete="off" type="text" id="valorActuacion"
+                                    {{!isset($permissions->cambiar_valor) ? 'disabled' : '' }}
                                     name="valorActuacion" class="form-control required money"
                                     value="{{ isset($actuacion) ? intval($actuacion['valor_actuacion']) : '' }}" />
                             </div>

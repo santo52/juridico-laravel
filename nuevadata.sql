@@ -172,3 +172,17 @@ INSERT INTO `accion` (`id_menu`, `nombre_accion`, `observacion`, `inactivo`, `fe
 INSERT INTO `accion` (`id_menu`, `nombre_accion`, `observacion`, `inactivo`, `fecha_creacion`, `id_usuario_creacion`, `fecha_actualizacion`, `eliminado`, `global`) VALUES ('0', 'eliminar', 'Permisos para eliminar un registro en la base de datos', '0', '2020-05-03 00:25:00', '1', '2020-05-03 00:25:00', '0', '1');
 
 
+UPDATE `menu` SET `ruta_menu` = 'tipo-proceso' WHERE (`id_menu` = '2');
+UPDATE `menu` SET `ruta_menu` = 'perfil' WHERE (`id_menu` = '6');
+UPDATE `menu` SET `ruta_menu` = 'usuario' WHERE (`id_menu` = '8');
+UPDATE `menu` SET `ruta_menu` = 'etapa-proceso' WHERE (`id_menu` = '11');
+UPDATE `menu` SET `ruta_menu` = 'documento' WHERE (`id_menu` = '14');
+UPDATE `menu` SET `ruta_menu` = 'plantilla-documento' WHERE (`id_menu` = '17');
+UPDATE `menu` SET `ruta_menu` = 'entidad-pension' WHERE (`id_menu` = '20');
+UPDATE `menu` SET `ruta_menu` = 'entidad-justicia' WHERE (`id_menu` = '23');
+UPDATE `menu` SET `ruta_menu` = 'intermediario' WHERE (`id_menu` = '26');
+UPDATE `menu` SET `ruta_menu` = 'actuacion' WHERE (`id_menu` = '29');
+UPDATE `menu` SET `ruta_menu` = 'actuacion-etapa-proceso' WHERE (`id_menu` = '32');
+UPDATE `menu` SET `ruta_menu` = 'cliente' WHERE (`id_menu` = '35');
+UPDATE `menu` SET `ruta_menu` = 'proceso' WHERE (`id_menu` = '39');
+UPDATE `menu` SET `ruta_menu` = 'opciones' WHERE (`id_menu` = '42');

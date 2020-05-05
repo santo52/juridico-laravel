@@ -29,11 +29,9 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::get('/actuacion/excel', 'ActuacionController@createExcel');
 
     Route::post('/opciones/listar', 'MenuController@index');
-    Route::post('/opciones', 'MenuController@index');
     Route::post('/opciones/menu/upsert', 'MenuController@upsert');
     Route::post('/opciones/menu/{id}', 'MenuController@get');
     Route::post('/opciones/menu/delete/{id}', 'MenuController@delete');
-
     Route::post('/opciones/accion/delete/{id}', 'AccionController@delete');
     Route::post('/opciones/accion/upsert', 'AccionController@upsert');
     Route::post('/opciones/accion/{id}', 'AccionController@get');

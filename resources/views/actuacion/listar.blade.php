@@ -1,30 +1,38 @@
 @section('content')
 
-<div class="juridico right-buttons" >
+<div class="juridico right-buttons">
+    @isset($permissions->crear)
     <div>
         <a href="#actuacion/crear" class="btn btn-default">
             Crear
         </a>
     </div>
+    @endisset
 </div>
 <div class="row">
     <div class="col-xs-12 flex juridico" id="filter-form-container">
         <div class="pull-left flex" style="padding-right:20px">
+            @isset($permissions->descargar_pdf)
             <div>
                 <a href="javascript:void(0)" onClick="actuacion.pdf()" class="btn download-file-action">
                     <img style="width: 100%" src="{!! asset('images/pdf.svg') !!}" />
                 </a>
             </div>
+            @endisset
+            @isset($permissions->descargar_excel)
             <div>
                 <a href="javascript:void(0)" onClick="actuacion.excel()" class="btn download-file-action">
                     <img style="width: 100%" src="{!! asset('images/xlsx.svg') !!}" />
                 </a>
             </div>
+            @endisset
+            @isset($permissions->imprimir)
             <div>
                 <a href="javascript:void(0)" onClick="window.print()" class="btn download-file-action">
                     <img style="width: 100%" src="{!! asset('images/print.svg') !!}" />
                 </a>
             </div>
+            @endisset
         </div>
     </div>
 </div>
@@ -54,7 +62,9 @@
             <th data-breakpoints="xs sm">Control de entrega de documentos</th>
             <th data-breakpoints="all">¿Generar documentos?</th>
             {{-- <th data-breakpoints="xs">Estado</th> --}}
+            @if (isset($permissions->editar) || isset($permissions->eliminar) )
             <th>Acciones</th>
+            @endif
         </tr>
     </thead>
     <tbody>
@@ -79,31 +89,30 @@
             <td>{{$actuacion['control_entrega_documentos']}}</td>
             <td>{{$actuacion['generar_documentos']}}</td>
             {{-- <td>{{$actuacion['estado_actuacion']}}</td> --}}
+            @if (isset($permissions->editar) || isset($permissions->eliminar) )
             <td>
                 <div class="flex justify-center table-actions">
+                    @isset($permissions->editar)
                     <a href="#actuacion/{{$actuacion['id_actuacion']}}" class="btn text-primary" type="button">
                         <span class="glyphicon glyphicon-pencil"></span>
                     </a>
-                    @if ($actuacion['estado_actuacion'] == 1)
+                    @endisset
+                    @isset($permissions->eliminar)
                     <a href="javascript:void(0)" class="btn text-danger" type="button"
                         onclick="actuacion.openDelete('{{$actuacion['id_actuacion']}}', '{{$actuacion['nombre_actuacion']}}');">
                         <span class="glyphicon glyphicon-remove"></span>
                     </a>
-
-                    @else
-                    <a class="btn text-danger" type="button"
-                        onclick="actuacion.openDelete('{{$actuacion['id_actuacion']}}', '{{$actuacion['nombre_actuacion']}}');">
-                        <span class="glyphicon glyphicon-remove"></span>
-                    </a>
-                    @endif
+                    @endisset
                 </div>
             </td>
+            @endif
         </tr>
         @endforeach
         @endif
     </tbody>
 </table>
 
+@isset($permissions->eliminar)
 <div class="modal fade" tabindex="-1" role="dialog" id="deleteModal">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
@@ -123,5 +132,5 @@
         </div>
     </div>
 </div>
-
+@endisset
 @endsection

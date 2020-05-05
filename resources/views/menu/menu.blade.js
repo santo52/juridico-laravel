@@ -53,7 +53,6 @@ class Menu {
                 $('#create_parent_id').val(data.parent_id).selectpicker('refresh')
             }
         })
-
     }
 
     upsert(e) {

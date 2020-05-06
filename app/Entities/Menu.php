@@ -44,7 +44,7 @@ class Menu extends Model
                 $children = $children->where('id_perfil', $idProfile);
             }
 
-            $children = $children->orderBy($orderBy)->get();
+            $children = $children->groupBy('menu.id_menu')->orderBy($orderBy)->get();
 
             if($children->count() > 0) {
                 $menu[$key]['children'] = $children;

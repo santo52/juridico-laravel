@@ -339,6 +339,8 @@ var EntidadJusticia = /*#__PURE__*/function () {
       $('#createValue').val(id);
       $('#etapaNombre').val('');
       $('#etapaEstado').prop('checked', true).change();
+      $('#primeraInstancia').prop('checked', false).change();
+      $('#segundaInstancia').prop('checked', false).change();
       $('#createTitle').text(title);
 
       if (id) {
@@ -348,6 +350,8 @@ var EntidadJusticia = /*#__PURE__*/function () {
             var entidadJusticia = _ref3.entidadJusticia;
             $('#etapaNombre').val(entidadJusticia.nombre_entidad_justicia);
             $('#etapaEstado').prop('checked', entidadJusticia.estado_entidad_justicia == 1).change();
+            $('#primeraInstancia').prop('checked', entidadJusticia.aplica_primera_instancia == 1).change();
+            $('#segundaInstancia').prop('checked', entidadJusticia.aplica_segunda_instancia == 1).change();
           }
         });
       }

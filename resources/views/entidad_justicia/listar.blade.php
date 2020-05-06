@@ -23,6 +23,8 @@
         <tr class="bg-success">
             <th>ID</th>
             <th>Nombre</th>
+            <th>¿Aplica primera instancia?</th>
+            <th>¿Aplica segunda instancia?</th>
             <th>Estado</th>
             <th>Acciones</th>
         </tr>
@@ -33,6 +35,8 @@
         <tr id="tipoProcesoRow{{$entidad['id_entidad_justicia']}}">
             <td>{{$entidad['id_entidad_justicia']}}</td>
             <td>{{$entidad['nombre_entidad_justicia']}}</td>
+            <td>{{$entidad['aplica_primera_instancia'] == 2 ? 'No' : 'Sí'}}</td>
+            <td>{{$entidad['aplica_segunda_instancia'] == 2 ? 'No' : 'Sí'}}</td>
             <td>{{$entidad['estado_entidad_justicia'] == 2 ? 'Inactivo' : 'Activo'}}</td>
             <td>
                 <div class="flex justify-center table-actions">
@@ -94,6 +98,20 @@
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">Nombre de la entidad de justicia</label>
                         <input type="text" class="form-control" id="etapaNombre" name="nombre_entidad_justicia">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">¿Aplica primara instancia?</label>
+                        <div class="checkbox-form">
+                            <input type="checkbox" data-on="Activo" data-off="Inactivo" data-width="90"
+                                class="form-control" id="primeraInstancia" name="segunda_instancia" checked />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">¿Aplica segunda instancia?</label>
+                        <div class="checkbox-form">
+                            <input type="checkbox" data-on="Activo" data-off="Inactivo" data-width="90"
+                                class="form-control" id="segundaInstancia" name="segunda_instancia" checked />
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">Estado</label>

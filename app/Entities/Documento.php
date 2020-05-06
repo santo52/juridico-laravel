@@ -15,6 +15,6 @@ class Documento extends Model
     const UPDATED_AT = 'fecha_actualizacion';
 
     protected $fillable = [
-        "id_documento", "nombre_documento", "obligatoriedad_documento", "estado_documento", "fecha_creacion", "id_usuario_creacion", "fecha_actualizacion", "id_usuario_actualizacion"
+        "id_documento", "nombre_documento", "obligatoriedad_documento", "estado_documento", "fecha_creacion", "id_usuario_creacion", "fecha_actualizacion", "id_usuario_actualizacion", "eliminado"
     ];
 }

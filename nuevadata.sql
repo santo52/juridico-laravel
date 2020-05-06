@@ -147,6 +147,9 @@ ADD COLUMN `order` INT(3) NULL DEFAULT 0 AFTER `id_etapa_proceso`;
 ALTER TABLE `etapas_proceso_tipo_proceso`
 ADD COLUMN `id_usuario_creacion` INT(11) NULL DEFAULT 0 AFTER `order`;
 
+ALTER TABLE `documento`
+ADD COLUMN `eliminado` TINYINT(1) NULL DEFAULT 0 AFTER `id_usuario_actualizacion`;
+
 UPDATE `menu` SET `ruta_menu` = 'TipoProceso/listar' WHERE (`id_menu` = '2');
 UPDATE `menu` SET `ruta_menu` = 'Perfil/listar' WHERE (`id_menu` = '6');
 UPDATE `menu` SET `ruta_menu` = 'Usuario/listar' WHERE (`id_menu` = '8');

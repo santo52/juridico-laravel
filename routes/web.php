@@ -45,12 +45,15 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/perfil/menu/accion/addremove', 'PerfilController@addOrRemovePermission');
     Route::post('/perfil/delete/{id}', 'PerfilController@delete');
 
-
     Route::post('/etapa-proceso/listar', 'EtapaProcesoController@index');
     Route::post('/etapa-proceso/upsert', 'EtapaProcesoController@upsert');
     Route::post('/etapa-proceso/get/{id}', 'EtapaProcesoController@get');
     Route::post('/etapa-proceso/delete/{id}', 'EtapaProcesoController@delete');
 
+    Route::post('/documento/listar', 'DocumentoController@index');
+    Route::post('/documento/upsert', 'DocumentoController@upsert');
+    Route::post('/documento/get/{id}', 'DocumentoController@get');
+    Route::post('/documento/delete/{id}', 'DocumentoController@delete');
 
     Route::post('/tipo-proceso/listar', 'TipoProcesoController@index');
     Route::post('/tipo-proceso/upsert', 'TipoProcesoController@upsert');

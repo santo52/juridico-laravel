@@ -76,8 +76,10 @@ class TipoProcesoController extends Controller {
 
 
 
-    public function delete() {
-
+    public function delete($id) {
+        $tipoProceso = TipoProceso::find($id);
+        $deleted = $tipoProceso->update([ 'eliminado' => 1]);
+        return response()->json([ 'deleted', $deleted ]);
     }
 
     public function get($id) {
@@ -103,7 +105,7 @@ class TipoProcesoController extends Controller {
         }
 
         $etapas = EtapaProceso::
-        ->where(['eliminado' => 0, 'estado_tipo_proceso' => 1 ])
+        where(['eliminado' => 0, 'estado_tipo_proceso' => 1 ])
         ->whereNotIn('id_etapa_proceso', $selectedIdEtapas)->get();
 
         return response()->json([

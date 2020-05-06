@@ -148,6 +148,102 @@ class Actuacion {
             $('#tblDocumentos').footableAdd(html)
         }
     }
+
+    etapaModal(id = 0) {
+
+        const title = id ? 'Editar etapa' : 'Agregar etapa'
+        $('#etapaModalUpsert').modal()
+        $('#etapaModalId').val(id)
+        $('#etapaModalTitle').text(title)
+
+        $.ajax({
+            url: '/actuacion/etapas/get/' + id,
+            success: data => {
+                const etapasHTML = data.etapasProceso.map(e => `<option value="${e.id_etapa_proceso}">${e.nombre_etapa_proceso}</option>`)
+                $('#etapasList').html(etapasHTML.join('')).selectpicker('refresh')
+                if(data.actuacionEtapaProceso) {
+                    $('#etapasList').val(data.actuacionEtapaProceso.id_etapa_proceso)
+                    $('#etapaMaximoTiempo').val(data.actuacionEtapaProceso.tiempo_maximo_proxima_actuacion)
+                    $('#etapaUnidadMaximoTiempo').val(data.actuacionEtapaProceso.unidad_tiempo_proxima_actuacion)
+                }
+
+                $('#etapasList').selectpicker('refresh')
+            }
+        })
+    }
+
+    etapaUpsert(e) {
+
+        e.preventDefault()
+        e.stopPropagation()
+
+        if (validateForm(e)) {
+
+            const formData = new FormData(e.target)
+            formData.append('id_actuacion', getId())
+
+            $.ajax({
+                url: '/actuacion/etapas/upsert',
+                data: new URLSearchParams(formData),
+                success: data => {
+                    if(data.saved){
+                        console.log(data.saved)
+                        location.reload()
+                    }
+                }
+            })
+        }
+
+        return false
+    }
+
+    removeEtapaModal(id){
+        $('#deleteEtapaValue').val(id)
+        $('#deleteEtapaModal').modal()
+    }
+
+    deleteEtapa(){
+        const id = $('#deleteEtapaValue').val()
+        $.ajax({
+            url: '/actuacion/etapas/delete/' + id,
+            success: data => {
+                if(data.deleted) {
+                    location.reload()
+                }
+            }
+        })
+    }
+
+    sortableStart(_, ui ) {
+        $(ui.item).css('background', '#ccc').children('td').css('visibility', 'hidden')
+        $(ui.item).find('.footable-first-visible').css('visibility', 'visible')
+    }
+
+    sortableStop(_, ui ) {
+        $(ui.item).css('background', 'inherit').children('td').css('visibility', 'visible')
+    }
+
+    sortableUpdate(event, _ ) {
+        const $rowList = $(event.target).children('tr') || []
+        const orderedList = []
+
+        for(item of $rowList) {
+            orderedList.push($(item).data('id'))
+        }
+
+        const params = {
+            orderedList,
+            id_actuacion: getId()
+        }
+
+        $.ajax({
+            url: '/actuacion/etapas/order/update',
+            data: new URLSearchParams(params),
+            success: data => {
+                console.log(data)
+            }
+        })
+    }
 }
 
 const actuacion = new Actuacion()

@@ -27,6 +27,13 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/actuacion/restore/{id}', 'ActuacionController@restore');
     Route::get('/actuacion/pdf', 'ActuacionController@createPDF');
     Route::get('/actuacion/excel', 'ActuacionController@createExcel');
+    Route::post('/actuacion/etapas/get/{id}', 'ActuacionController@getEtapas');
+    Route::post('/actuacion/etapas/upsert', 'ActuacionController@upsertEtapas');
+    Route::post('/actuacion/etapas/delete/{id}', 'ActuacionController@deleteEtapa');
+    Route::post('/actuacion/etapas/order/update', 'ActuacionController@reorderEtapas');
+
+
+
 
     Route::post('/opciones/listar', 'MenuController@index');
     Route::post('/opciones/menu/upsert', 'MenuController@upsert');

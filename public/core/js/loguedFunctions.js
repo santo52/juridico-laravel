@@ -27,6 +27,7 @@ function render() {
         html.push('</ol>');
 
         $('#breadcrumb').html(html.join(''))
+        if (data.javascript) { $('body').append(data.javascript) }
         compileLibraries()
       }
     })

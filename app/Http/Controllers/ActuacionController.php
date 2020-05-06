@@ -11,12 +11,46 @@ use App\Entities\PlantillaDocumento;
 use App\Entities\Actuacion;
 use App\Entities\ActuacionDocumento;
 use App\Entities\ActuacionPlantillaDocumento;
+use App\Entities\ActuacionEtapaProceso;
+use App\Entities\EtapaProceso;
 
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ActuacionExport;
 
 class ActuacionController extends Controller
 {
+
+    public function getEtapas($id){
+
+        $actuacion = ActuacionEtapaProceso::find($id);
+        $etapasProceso = EtapaProceso::where([
+            'eliminado' => 0,
+            'estado_etapa_proceso' => 1
+        ])->whereNotIn('id_etapa_proceso', [])->get();
+
+        return response()->json([
+            'etapasProceso' => $etapasProceso,
+            'actuacionEtapaProceso' => $actuacion
+        ]);
+    }
+
+    public function deleteEtapa($id) {
+        $actuacion = ActuacionEtapaProceso::find($id);
+        $deleted = $actuacion->delete();
+        return response()->json([ 'deleted' => $deleted ]);
+    }
+
+    public function upsertEtapas(Request $request){
+
+        $data = $request->all();
+        $data['id_usuario_creacion'] = Auth::id();
+        if(!$request->get('id_etapa_proceso')){
+            return response()->json([ 'id_etapa_proceso' => false ]);
+        }
+        $id = intval($request->get('id_actuacion_etapa_proceso'));
+        $saved = ActuacionEtapaProceso::updateOrCreate(['id_actuacion_etapa_proceso' => $id], $data);
+        return response()->json([ 'saved' => $saved ]);
+    }
 
     public function create() {
 
@@ -25,10 +59,38 @@ class ActuacionController extends Controller
         $documentos = Documento::where('estado_documento', 1)->get();
         $plantillasDocumento = PlantillaDocumento::where('estado_plantilla_documento', 1)->get();
 
+        $etapasProceso = ActuacionEtapaProceso::
+            leftjoin('etapa_proceso as ep', 'ep.id_etapa_proceso', 'actuacion_etapa_proceso.id_etapa_proceso')
+            ->where([
+                'id_actuacion' => 0,
+                'ep.eliminado' => 0,
+                'actuacion_etapa_proceso.id_usuario_creacion' => Auth::id()
+            ])->orderBy('order')->get();
+
+
         return $this->renderSection('actuacion.detalle', [
             'documentos' => $documentos,
-            'plantillasDocumento' => $plantillasDocumento
+            'plantillasDocumento' => $plantillasDocumento,
+            'etapasProceso' => $etapasProceso
         ]);
+    }
+
+    public function reorderEtapas(Request $request){
+
+        $listEtapaProceso = explode(',', $request->get('orderedList'));
+        $conditional['id_actuacion'] = $request->get('id_actuacion');
+        if($request->get('id_actuacion') == 0) {
+            $conditional['id_usuario_creacion'] = Auth::id();
+        }
+
+        $dataSaved = [];
+        foreach ($listEtapaProceso as $position => $value) {
+            $conditional['id_actuacion_etapa_proceso'] = $value;
+            $dataSaved[] = ActuacionEtapaProceso::where($conditional)
+                ->update([ 'order' => ($position + 1) ]);
+        }
+
+        return response()->json([$dataSaved, $conditional]);
     }
 
     public function insert(Request $request) {
@@ -47,6 +109,15 @@ class ActuacionController extends Controller
         }
 
         $saved = $this->upsert($request);
+
+        $etapasProceso = ActuacionEtapaProceso::
+            leftjoin('etapa_proceso as ep', 'ep.id_etapa_proceso', 'actuacion_etapa_proceso.id_etapa_proceso')
+            ->where([
+                'id_actuacion' => 0,
+                'ep.eliminado' => 0,
+                'actuacion_etapa_proceso.id_usuario_creacion' => Auth::id()
+            ])->update([ 'id_actuacion' => $saved->id_actuacion ]);
+
         return response()->json(['saved' => $saved]);
     }
 
@@ -84,7 +155,7 @@ class ActuacionController extends Controller
             ])->save();
         }
 
-        return true;
+        return $actuacion;
     }
 
     private function prepareActuacion(Request $request, $id = false) {
@@ -157,10 +228,18 @@ class ActuacionController extends Controller
             ->where([['a.id_actuacion', $id], ['pd.estado_plantilla_documento', 1]])
             ->get();
 
+        $etapasProceso = ActuacionEtapaProceso::
+            leftjoin('etapa_proceso as ep', 'ep.id_etapa_proceso', 'actuacion_etapa_proceso.id_etapa_proceso')
+            ->where([
+                'id_actuacion' => $id,
+                'ep.eliminado' => 0
+            ])->orderBy('order')->get();
+
         return $this->renderSection('actuacion.detalle', [
             'documentos' => $documentos,
             'plantillasDocumento' => $plantillasDocumento,
             'actuacion' => $actuacion,
+            'etapasProceso' => $etapasProceso,
             'actuacionDocumentos' => $actuacionDocumentos,
             'actuacionPlantillasDocumento' => $actuacionPlantillasDocumento,
         ]);

@@ -1117,6 +1117,10 @@ div.ajax-file-upload-container div.ajax-file-upload-statusbar div.ajax-file-uplo
   justify-content: center;
 }
 
+.space-between {
+  justify-content: space-between;
+}
+
 .items-center {
   align-items: center;
 }

@@ -213,3 +213,22 @@ UPDATE `menu` SET `ruta_menu` = 'actuacion-etapa-proceso' WHERE (`id_menu` = '32
 UPDATE `menu` SET `ruta_menu` = 'cliente' WHERE (`id_menu` = '35');
 UPDATE `menu` SET `ruta_menu` = 'proceso' WHERE (`id_menu` = '39');
 UPDATE `menu` SET `ruta_menu` = 'opciones' WHERE (`id_menu` = '42');
+UPDATE `menu` SET `estado` = '0' WHERE (`id_menu` = '32');
+
+CREATE TABLE `actuacion_etapa_proceso` (
+  `id_actuacion_etapa_proceso` INT NOT NULL,
+  `id_etapa_proceso` VARCHAR(45) NULL,
+  `id_actuacion` VARCHAR(45) NULL,
+  `tiempo_maximo_proxima_actuacion` INT NULL,
+  `unidad_tiempo_proxima_actuacion` INT(1) NULL DEFAULT 1,
+  PRIMARY KEY (`id_actuacion_etapa_proceso`));
+
+ALTER TABLE `actuacion_etapa_proceso`
+ADD COLUMN `id_usuario_creacion` INT NULL DEFAULT 0 AFTER `unidad_tiempo_proxima_actuacion`;
+
+ALTER TABLE `actuacion_etapa_proceso`
+CHANGE COLUMN `id_actuacion_etapa_proceso` `id_actuacion_etapa_proceso` INT(11) NOT NULL AUTO_INCREMENT ;
+
+ALTER TABLE `actuacion_etapa_proceso`
+ADD COLUMN `order` INT(3) NULL DEFAULT 0 AFTER `id_usuario_creacion`;
+

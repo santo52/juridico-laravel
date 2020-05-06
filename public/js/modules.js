@@ -165,6 +165,117 @@ var Actuacion = /*#__PURE__*/function () {
         $('#tblDocumentos').footableAdd(html);
       }
     }
+  }, {
+    key: "etapaModal",
+    value: function etapaModal() {
+      var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+      var title = id ? 'Editar etapa' : 'Agregar etapa';
+      $('#etapaModalUpsert').modal();
+      $('#etapaModalId').val(id);
+      $('#etapaModalTitle').text(title);
+      $.ajax({
+        url: '/actuacion/etapas/get/' + id,
+        success: function success(data) {
+          var etapasHTML = data.etapasProceso.map(function (e) {
+            return "<option value=\"".concat(e.id_etapa_proceso, "\">").concat(e.nombre_etapa_proceso, "</option>");
+          });
+          $('#etapasList').html(etapasHTML.join('')).selectpicker('refresh');
+
+          if (data.actuacionEtapaProceso) {
+            $('#etapasList').val(data.actuacionEtapaProceso.id_etapa_proceso);
+            $('#etapaMaximoTiempo').val(data.actuacionEtapaProceso.tiempo_maximo_proxima_actuacion);
+            $('#etapaUnidadMaximoTiempo').val(data.actuacionEtapaProceso.unidad_tiempo_proxima_actuacion);
+          }
+
+          $('#etapasList').selectpicker('refresh');
+        }
+      });
+    }
+  }, {
+    key: "etapaUpsert",
+    value: function etapaUpsert(e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (validateForm(e)) {
+        var formData = new FormData(e.target);
+        formData.append('id_actuacion', getId());
+        $.ajax({
+          url: '/actuacion/etapas/upsert',
+          data: new URLSearchParams(formData),
+          success: function success(data) {
+            if (data.saved) {
+              console.log(data.saved);
+              location.reload();
+            }
+          }
+        });
+      }
+
+      return false;
+    }
+  }, {
+    key: "removeEtapaModal",
+    value: function removeEtapaModal(id) {
+      $('#deleteEtapaValue').val(id);
+      $('#deleteEtapaModal').modal();
+    }
+  }, {
+    key: "deleteEtapa",
+    value: function deleteEtapa() {
+      var id = $('#deleteEtapaValue').val();
+      $.ajax({
+        url: '/actuacion/etapas/delete/' + id,
+        success: function success(data) {
+          if (data.deleted) {
+            location.reload();
+          }
+        }
+      });
+    }
+  }, {
+    key: "sortableStart",
+    value: function sortableStart(_, ui) {
+      $(ui.item).css('background', '#ccc').children('td').css('visibility', 'hidden');
+      $(ui.item).find('.footable-first-visible').css('visibility', 'visible');
+    }
+  }, {
+    key: "sortableStop",
+    value: function sortableStop(_, ui) {
+      $(ui.item).css('background', 'inherit').children('td').css('visibility', 'visible');
+    }
+  }, {
+    key: "sortableUpdate",
+    value: function sortableUpdate(event, _) {
+      var $rowList = $(event.target).children('tr') || [];
+      var orderedList = [];
+
+      var _iterator = _createForOfIteratorHelper($rowList),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          item = _step.value;
+          orderedList.push($(item).data('id'));
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+
+      var params = {
+        orderedList: orderedList,
+        id_actuacion: getId()
+      };
+      $.ajax({
+        url: '/actuacion/etapas/order/update',
+        data: new URLSearchParams(params),
+        success: function success(data) {
+          console.log(data);
+        }
+      });
+    }
   }]);
 
   return Actuacion;
@@ -710,18 +821,18 @@ var TipoProceso = /*#__PURE__*/function () {
       var $rowList = $(event.target).children('tr') || [];
       var orderedList = [];
 
-      var _iterator = _createForOfIteratorHelper($rowList),
-          _step;
+      var _iterator2 = _createForOfIteratorHelper($rowList),
+          _step2;
 
       try {
-        for (_iterator.s(); !(_step = _iterator.n()).done;) {
-          item = _step.value;
+        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+          item = _step2.value;
           orderedList.push($(item).data('id'));
         }
       } catch (err) {
-        _iterator.e(err);
+        _iterator2.e(err);
       } finally {
-        _iterator.f();
+        _iterator2.f();
       }
 
       var params = {

@@ -435,7 +435,12 @@ function errorLog(xhr, status, error) {
 function getId() {
     const split = location.hash.split('/')
     const index = split.length - 1
-    return split[index];
+    const id = split[index]
+    if(isNaN(id)){
+        return 0;
+    }
+
+    return id;
 }
 
 

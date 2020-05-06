@@ -63,6 +63,10 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/tipo-proceso/etapa/delete', 'TipoProcesoController@deleteEtapa');
     Route::post('/tipo-proceso/etapa/update', 'TipoProcesoController@updateEtapa');
 
+    Route::post('/entidades-demandadas/listar', 'EntidadDemandadaController@index');
+    Route::post('/entidades-demandadas/upsert', 'EntidadDemandadaController@upsert');
+    Route::post('/entidades-demandadas/get/{id}', 'EntidadDemandadaController@get');
+    Route::post('/entidades-demandadas/delete/{id}', 'EntidadDemandadaController@delete');
 
 
 

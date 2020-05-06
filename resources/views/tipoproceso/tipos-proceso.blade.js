@@ -1,5 +1,10 @@
 class TipoProceso {
 
+    //createEtapaModal
+    createEditEtapaModal(){
+        $('#createEtapaModal').modal()
+    }
+
     sortableStart(_, ui ) {
         $(ui.item).find('.footable-last-visible a').hide()
     }

@@ -1,9 +1,12 @@
 @section('content')
 <div class="juridico right-buttons">
-    <div>
+    <div class="flex">
         @isset ($permissions->crear)
-        <a href="javascript:void(0)" onclick="tipoProceso.createEditModal()" class="btn btn-default">
-            Crear
+        <a style="margin-right: 5px;" href="javascript:void(0)" onclick="tipoProceso.createEditModal()" class="btn btn-default">
+            Crear Tipo de proceso
+        </a>
+        <a href="javascript:void(0)" onclick="tipoProceso.createEditEtapaModal()" class="btn btn-default">
+            Crear etapa
         </a>
         @endisset
     </div>
@@ -80,6 +83,7 @@
 @endisset
 
 @if(isset($permissions->crear) || isset($permissions->editar))
+
 <div class="modal fade" tabindex="-1" role="dialog" id="createModal">
     <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
@@ -87,7 +91,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="createTitle"></h4>
+                <h4 class="modal-title">Crear etapa</h4>
             </div>
             <form onsubmit="tipoProceso.upsert(event)">
                 <div class="modal-body">
@@ -124,63 +128,7 @@
                                     <td></td>
                                 </tr>
                             </thead>
-                            <tbody id="sortable">
-                                <tr class="ui-state-default">
-                                    <td><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Item 1</td>
-                                    <td width="30px">
-                                        <div class="flex justify-center table-actions">
-                                            <a href="javascript:void(0)" class="btn text-danger" type="button"
-                                                onclick="perfil.deleteMenu(${id_menu_perfil})">
-                                                <span class="glyphicon glyphicon-remove"></span>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="ui-state-default">
-                                    <td><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Item 1</td>
-                                    <td width="30px">
-                                        <div class="flex justify-center table-actions">
-                                            <a href="javascript:void(0)" class="btn text-danger" type="button"
-                                                onclick="perfil.deleteMenu(${id_menu_perfil})">
-                                                <span class="glyphicon glyphicon-remove"></span>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="ui-state-default">
-                                    <td><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Item 1</td>
-                                    <td width="30px">
-                                        <div class="flex justify-center table-actions">
-                                            <a href="javascript:void(0)" class="btn text-danger" type="button"
-                                                onclick="perfil.deleteMenu(${id_menu_perfil})">
-                                                <span class="glyphicon glyphicon-remove"></span>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="ui-state-default">
-                                    <td><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Item 1</td>
-                                    <td width="30px">
-                                        <div class="flex justify-center table-actions">
-                                            <a href="javascript:void(0)" class="btn text-danger" type="button"
-                                                onclick="perfil.deleteMenu(${id_menu_perfil})">
-                                                <span class="glyphicon glyphicon-remove"></span>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="ui-state-default">
-                                    <td><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Item 1</td>
-                                    <td width="30px">
-                                        <div class="flex justify-center table-actions">
-                                            <a href="javascript:void(0)" class="btn text-danger" type="button"
-                                                onclick="perfil.deleteMenu(${id_menu_perfil})">
-                                                <span class="glyphicon glyphicon-remove"></span>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
+                            <tbody id="sortable"></tbody>
                         </table>
                     </div>
                 </div>
@@ -193,6 +141,44 @@
         </div>
     </div>
 </div>
+
+
+
+<!-- CREAR ETAPA -->
+<div class="modal fade" tabindex="-1" role="dialog" id="createEtapaModal">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="createTitle"></h4>
+            </div>
+            <form onsubmit="etapaProceso.upsert(event)">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">Nombre de la etapa de un proceso</label>
+                        <input type="text" class="form-control" id="etapaNombre" name="nombre_etapa_proceso">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">Estado</label>
+                        <div class="checkbox-form">
+                            <input type="checkbox" data-on="Activo" data-off="Inactivo" data-width="90"
+                                class="form-control" id="etapaEstado" name="estado" checked />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer center">
+                    <input type="hidden" id="createValue" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 @endif
 
 

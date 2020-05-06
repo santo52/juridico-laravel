@@ -611,6 +611,12 @@ var TipoProceso = /*#__PURE__*/function () {
   }
 
   _createClass(TipoProceso, [{
+    key: "createEditEtapaModal",
+    //createEtapaModal
+    value: function createEditEtapaModal() {
+      $('#createEtapaModal').modal();
+    }
+  }, {
     key: "sortableStart",
     value: function sortableStart(_, ui) {
       $(ui.item).find('.footable-last-visible a').hide();

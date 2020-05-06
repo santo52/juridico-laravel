@@ -213,6 +213,9 @@ UPDATE `menu` SET `ruta_menu` = 'actuacion-etapa-proceso' WHERE (`id_menu` = '32
 UPDATE `menu` SET `ruta_menu` = 'cliente' WHERE (`id_menu` = '35');
 UPDATE `menu` SET `ruta_menu` = 'proceso' WHERE (`id_menu` = '39');
 UPDATE `menu` SET `ruta_menu` = 'opciones' WHERE (`id_menu` = '42');
+UPDATE `menu` SET `nombre_menu` = 'Entidades demandadas', `ruta_menu` = 'entidades-demandadas' WHERE (`id_menu` = '20');
+UPDATE `menu` SET `ruta_menu` = 'entidades-de-justicia' WHERE (`id_menu` = '23');
+
 
 ALTER TABLE `entidad_pension`
 CHANGE COLUMN `id_entidad_pension` `id_entidad_demandada` INT(11) NOT NULL AUTO_INCREMENT ,
@@ -222,4 +225,6 @@ CHANGE COLUMN `estado_entidad_pension` `estado_entidad_demandada` ENUM('1', '2')
 ALTER TABLE `entidad_demandada`
 ADD COLUMN `eliminado` TINYINT(1) NULL DEFAULT 0 AFTER `id_usuario_actualizacion`;
 
-UPDATE `menu` SET `nombre_menu` = 'Entidades demandadas', `ruta_menu` = 'entidades-demandadas' WHERE (`id_menu` = '20');
+ALTER TABLE `entidad_justicia`
+ADD COLUMN `eliminado` TINYINT(1) NULL DEFAULT 0 AFTER `id_usuario_actualizacion`;
+

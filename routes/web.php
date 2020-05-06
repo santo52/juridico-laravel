@@ -68,6 +68,10 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/entidades-demandadas/get/{id}', 'EntidadDemandadaController@get');
     Route::post('/entidades-demandadas/delete/{id}', 'EntidadDemandadaController@delete');
 
+    Route::post('/entidades-de-justicia/listar', 'EntidadJusticiaController@index');
+    Route::post('/entidades-de-justicia/upsert', 'EntidadJusticiaController@upsert');
+    Route::post('/entidades-de-justicia/get/{id}', 'EntidadJusticiaController@get');
+    Route::post('/entidades-de-justicia/delete/{id}', 'EntidadJusticiaController@delete');
 
 
 

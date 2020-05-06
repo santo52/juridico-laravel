@@ -83,8 +83,8 @@ class TipoProceso {
         $('#createTitle').text(title)
         this.renderModalData(id).then(({ tipoProceso }) => {
             if (tipoProceso) {
-                $('#tipoNombre').val(tipoProceso.nombre_etapa_proceso)
-                $('#tipoEstado').prop('checked', tipoProceso.estado_etapa_proceso == 1).change()
+                $('#tipoNombre').val(tipoProceso.nombre_tipo_proceso)
+                $('#tipoEstado').prop('checked', tipoProceso.estado_tipo_proceso == 1).change()
             }
         })
 

@@ -102,7 +102,9 @@ class TipoProcesoController extends Controller {
             $selectedIdEtapas[] = $etapa->id_etapa_proceso;
         }
 
-        $etapas = EtapaProceso::whereNotIn('id_etapa_proceso', $selectedIdEtapas)->get();
+        $etapas = EtapaProceso::
+        ->where(['eliminado' => 0, 'estado_tipo_proceso' => 1 ])
+        ->whereNotIn('id_etapa_proceso', $selectedIdEtapas)->get();
 
         return response()->json([
             'tipoProceso' => $tipoProceso,

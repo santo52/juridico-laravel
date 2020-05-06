@@ -482,6 +482,82 @@ var EtapaProceso = /*#__PURE__*/function () {
 
 var etapaProceso = new EtapaProceso();
 
+var Intermediario = /*#__PURE__*/function () {
+  function Intermediario() {
+    _classCallCheck(this, Intermediario);
+  }
+
+  _createClass(Intermediario, [{
+    key: "createEditModal",
+    value: function createEditModal(id) {
+      var title = id ? 'Editar intermediario' : 'Crear intermediario';
+      $('#createModal').modal();
+      $('#createValue').val(id);
+      $('#etapaNombre').val('');
+      $('#etapaEstado').prop('checked', true).change();
+      $('#createTitle').text(title);
+
+      if (id) {
+        $.ajax({
+          url: '/etapa-proceso/get/' + id,
+          success: function success(_ref5) {
+            var intermediario = _ref5.intermediario;
+            $('#etapaNombre').val(intermediario.nombre_etapa_proceso);
+            $('#etapaEstado').prop('checked', intermediario.estado_etapa_proceso == 1).change();
+          }
+        });
+      }
+    }
+  }, {
+    key: "upsert",
+    value: function upsert(e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (validateForm(e)) {
+        var id = $('#createValue').val();
+        var formData = new FormData(e.target);
+        id && formData.append('id_etapa_proceso', id);
+        $.ajax({
+          url: '/etapa-proceso/upsert',
+          data: new URLSearchParams(formData),
+          success: function success(data) {
+            if (data.saved) {
+              location.reload();
+            } else if (data.exists) {
+              $('#etapaNombre').parent().addClass('has-error');
+            }
+          }
+        });
+      }
+
+      return false;
+    }
+  }, {
+    key: "openDelete",
+    value: function openDelete(id) {
+      $('#deleteModal').modal();
+      $('#deleteValue').val(id);
+    }
+  }, {
+    key: "delete",
+    value: function _delete() {
+      var id = $('#deleteValue').val();
+      $.ajax({
+        url: '/etapa-proceso/delete/' + id,
+        data: {},
+        success: function success() {
+          location.reload();
+        }
+      });
+    }
+  }]);
+
+  return Intermediario;
+}();
+
+var intermediario = new Intermediario();
+
 var Menu = /*#__PURE__*/function () {
   function Menu() {
     _classCallCheck(this, Menu);
@@ -611,10 +687,10 @@ var Menu = /*#__PURE__*/function () {
     }
   }, {
     key: "rowAccion",
-    value: function rowAccion(_ref5) {
-      var id_accion = _ref5.id_accion,
-          nombre_accion = _ref5.nombre_accion,
-          observacion = _ref5.observacion;
+    value: function rowAccion(_ref6) {
+      var id_accion = _ref6.id_accion,
+          nombre_accion = _ref6.nombre_accion,
+          observacion = _ref6.observacion;
       return "\n            <tr id=\"accionRow".concat(id_accion, "\">\n                <td>").concat(nombre_accion, "</td>\n                <td>").concat(observacion || '', "</td>\n                <td width=\"30px\">\n                    <div class=\"flex justify-center table-actions\">\n                        <a href=\"javascript:void(0)\" onclick=\"menu.createActionModal(").concat(id_accion, ")\" class=\"btn text-primary\" type=\"button\">\n                            <span class=\"glyphicon glyphicon-pencil\"></span>\n                        </a>\n                        <a href=\"javascript:void(0)\" class=\"btn text-danger\" type=\"button\" onclick=\"menu.deleteActionModal(").concat(id_accion, ")\">\n                            <span class=\"glyphicon glyphicon-remove\"></span>\n                        </a>\n                    </div>\n                </td>\n            </tr>\n        ");
     }
   }, {
@@ -630,8 +706,8 @@ var Menu = /*#__PURE__*/function () {
       $.ajax({
         url: '/opciones/accion/delete/' + id,
         data: {},
-        success: function success(_ref6) {
-          var deleted = _ref6.deleted;
+        success: function success(_ref7) {
+          var deleted = _ref7.deleted;
 
           if (deleted) {
             $('#accionRow' + id).remove();
@@ -781,8 +857,8 @@ var Perfil = /*#__PURE__*/function () {
       $.ajax({
         url: '/perfil/menu/insert',
         data: new URLSearchParams(params),
-        success: function success(_ref7) {
-          var saved = _ref7.saved;
+        success: function success(_ref8) {
+          var saved = _ref8.saved;
 
           if (saved) {
             _this4.redrawTableModal(id_perfil);
@@ -795,9 +871,9 @@ var Perfil = /*#__PURE__*/function () {
     value: function deleteMenu(id) {
       $.ajax({
         url: '/perfil/menu/delete/' + id,
-        success: function success(_ref8) {
-          var deleted = _ref8.deleted,
-              menuItem = _ref8.menuItem;
+        success: function success(_ref9) {
+          var deleted = _ref9.deleted,
+              menuItem = _ref9.menuItem;
 
           if (deleted) {
             $('#menuRow' + id).remove();
@@ -814,8 +890,8 @@ var Perfil = /*#__PURE__*/function () {
       var id = $('#deleteValue').val();
       $.ajax({
         url: '/perfil/delete/' + id,
-        success: function success(_ref9) {
-          var deleted = _ref9.deleted;
+        success: function success(_ref10) {
+          var deleted = _ref10.deleted;
 
           if (deleted) {
             $('#deleteModal').modal('hide');
@@ -951,12 +1027,12 @@ var TipoProceso = /*#__PURE__*/function () {
       $('#createValue').val(id);
       var title = id ? 'Nuevo tipo de proceso' : 'Editar tipo de proceso';
       $('#createTitle').text(title);
-      this.renderModalData(id).then(function (_ref10) {
-        var tipoProceso = _ref10.tipoProceso;
+      this.renderModalData(id).then(function (_ref11) {
+        var tipoProceso = _ref11.tipoProceso;
 
         if (tipoProceso) {
-          $('#tipoNombre').val(tipoProceso.nombre_etapa_proceso);
-          $('#tipoEstado').prop('checked', tipoProceso.estado_etapa_proceso == 1).change();
+          $('#tipoNombre').val(tipoProceso.nombre_tipo_proceso);
+          $('#tipoEstado').prop('checked', tipoProceso.estado_tipo_proceso == 1).change();
         }
       });
     }

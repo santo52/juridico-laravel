@@ -49,7 +49,7 @@
             <th data-breakpoints="all">¿Genera alertas?</th>
             <th data-breakpoints="all">¿Aplica control de vencimiento?</th>
             <th>Días de vencimiento</th>
-            <th data-breakpoints="all">¿Requiere estudio de favorabilidad?</th>
+            <th data-breakpoints="all">¿Aplica procedibilidad?</th>
             <th data-breakpoints="all">¿La actuación tiene cobro?</th>
             <th>Valor de la actuación</th>
             <th data-breakpoints="all">Actuación para creación de cliente</th>

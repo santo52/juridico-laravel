@@ -46,7 +46,7 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-4">
-                                <label class="lblForm">¿Requiere estudio de favorabilidad?</label>
+                                <label class="lblForm">¿Aplica procedibilidad?</label>
                                 <div class="input-group">
                                     <input type="checkbox" id="requiereEstudioFavorabilidad"
                                         name="requiereEstudioFavorabilidad" data-on="Sí" data-off="No" data-width="60"

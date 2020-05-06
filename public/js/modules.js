@@ -166,6 +166,82 @@ var Actuacion = /*#__PURE__*/function () {
 
 var actuacion = new Actuacion();
 
+var EtapaProceso = /*#__PURE__*/function () {
+  function EtapaProceso() {
+    _classCallCheck(this, EtapaProceso);
+  }
+
+  _createClass(EtapaProceso, [{
+    key: "createEditModal",
+    value: function createEditModal(id) {
+      var title = id ? 'Editar etapa' : 'Crear etapa';
+      $('#createModal').modal();
+      $('#createValue').val(id);
+      $('#etapaNombre').val('');
+      $('#etapaEstado').prop('checked', true).change();
+      $('#createTitle').text(title);
+
+      if (id) {
+        $.ajax({
+          url: '/etapa-proceso/get/' + id,
+          success: function success(_ref) {
+            var etapaProceso = _ref.etapaProceso;
+            $('#etapaNombre').val(etapaProceso.nombre_etapa_proceso);
+            $('#etapaEstado').prop('checked', etapaProceso.estado_etapa_proceso == 1).change();
+          }
+        });
+      }
+    }
+  }, {
+    key: "upsert",
+    value: function upsert(e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (validateForm(e)) {
+        var id = $('#createValue').val();
+        var formData = new FormData(e.target);
+        id && formData.append('id_etapa_proceso', id);
+        $.ajax({
+          url: '/etapa-proceso/upsert',
+          data: new URLSearchParams(formData),
+          success: function success(data) {
+            if (data.saved) {
+              location.reload();
+            } else if (data.exists) {
+              $('#etapaNombre').parent().addClass('has-error');
+            }
+          }
+        });
+      }
+
+      return false;
+    }
+  }, {
+    key: "openDelete",
+    value: function openDelete(id) {
+      $('#deleteModal').modal();
+      $('#deleteValue').val(id);
+    }
+  }, {
+    key: "delete",
+    value: function _delete() {
+      var id = $('#deleteValue').val();
+      $.ajax({
+        url: '/etapa-proceso/delete/' + id,
+        data: {},
+        success: function success() {
+          location.reload();
+        }
+      });
+    }
+  }]);
+
+  return EtapaProceso;
+}();
+
+var etapaProceso = new EtapaProceso();
+
 var Menu = /*#__PURE__*/function () {
   function Menu() {
     _classCallCheck(this, Menu);
@@ -295,10 +371,10 @@ var Menu = /*#__PURE__*/function () {
     }
   }, {
     key: "rowAccion",
-    value: function rowAccion(_ref) {
-      var id_accion = _ref.id_accion,
-          nombre_accion = _ref.nombre_accion,
-          observacion = _ref.observacion;
+    value: function rowAccion(_ref2) {
+      var id_accion = _ref2.id_accion,
+          nombre_accion = _ref2.nombre_accion,
+          observacion = _ref2.observacion;
       return "\n            <tr id=\"accionRow".concat(id_accion, "\">\n                <td>").concat(nombre_accion, "</td>\n                <td>").concat(observacion || '', "</td>\n                <td width=\"30px\">\n                    <div class=\"flex justify-center table-actions\">\n                        <a href=\"javascript:void(0)\" onclick=\"menu.createActionModal(").concat(id_accion, ")\" class=\"btn text-primary\" type=\"button\">\n                            <span class=\"glyphicon glyphicon-pencil\"></span>\n                        </a>\n                        <a href=\"javascript:void(0)\" class=\"btn text-danger\" type=\"button\" onclick=\"menu.deleteActionModal(").concat(id_accion, ")\">\n                            <span class=\"glyphicon glyphicon-remove\"></span>\n                        </a>\n                    </div>\n                </td>\n            </tr>\n        ");
     }
   }, {
@@ -314,8 +390,8 @@ var Menu = /*#__PURE__*/function () {
       $.ajax({
         url: '/opciones/accion/delete/' + id,
         data: {},
-        success: function success(_ref2) {
-          var deleted = _ref2.deleted;
+        success: function success(_ref3) {
+          var deleted = _ref3.deleted;
 
           if (deleted) {
             $('#accionRow' + id).remove();
@@ -465,8 +541,8 @@ var Perfil = /*#__PURE__*/function () {
       $.ajax({
         url: '/perfil/menu/insert',
         data: new URLSearchParams(params),
-        success: function success(_ref3) {
-          var saved = _ref3.saved;
+        success: function success(_ref4) {
+          var saved = _ref4.saved;
 
           if (saved) {
             _this4.redrawTableModal(id_perfil);
@@ -479,9 +555,9 @@ var Perfil = /*#__PURE__*/function () {
     value: function deleteMenu(id) {
       $.ajax({
         url: '/perfil/menu/delete/' + id,
-        success: function success(_ref4) {
-          var deleted = _ref4.deleted,
-              menuItem = _ref4.menuItem;
+        success: function success(_ref5) {
+          var deleted = _ref5.deleted,
+              menuItem = _ref5.menuItem;
 
           if (deleted) {
             $('#menuRow' + id).remove();
@@ -498,8 +574,8 @@ var Perfil = /*#__PURE__*/function () {
       var id = $('#deleteValue').val();
       $.ajax({
         url: '/perfil/delete/' + id,
-        success: function success(_ref5) {
-          var deleted = _ref5.deleted;
+        success: function success(_ref6) {
+          var deleted = _ref6.deleted;
 
           if (deleted) {
             $('#deleteModal').modal('hide');
@@ -522,3 +598,24 @@ var Perfil = /*#__PURE__*/function () {
 }();
 
 var perfil = new Perfil();
+
+var TipoProceso = /*#__PURE__*/function () {
+  function TipoProceso() {
+    _classCallCheck(this, TipoProceso);
+  }
+
+  _createClass(TipoProceso, [{
+    key: "createEditModal",
+    value: function createEditModal(id) {
+      $('#createModal').modal();
+      $('#createValue').val(id);
+      var title = id ? 'Nuevo tipo de proceso' : 'Editar tipo de proceso';
+      $('#createTitle').text(title);
+      $("#sortable").sortable().disableSelection();
+    }
+  }]);
+
+  return TipoProceso;
+}();
+
+var tipoProceso = new TipoProceso();

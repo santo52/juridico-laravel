@@ -15,6 +15,6 @@ class TipoProceso extends Model
     const UPDATED_AT = 'fecha_actualizacion';
 
     protected $fillable = [
-        "id_tipo_proceso", "nombre_tipo_proceso", "estado_tipo_proceso", "fecha_creacion", "id_usuario_creacion", "fecha_actualizacion", "id_usuario_actualizacion"
+        "id_tipo_proceso", "nombre_tipo_proceso", "estado_tipo_proceso", "eliminado", "fecha_creacion", "id_usuario_creacion", "fecha_actualizacion", "id_usuario_actualizacion"
     ];
 }

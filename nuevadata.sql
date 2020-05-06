@@ -18,6 +18,14 @@ CREATE TABLE `accion_menu_perfil` (
 ENGINE = InnoDB
 COMMENT = 'Relación entre accion y menu_perfil';
 
+CREATE TABLE `etapas` (
+  `id_etapa` INT NOT NULL AUTO_INCREMENT,
+  `nombre_etapa` VARCHAR(45) NULL,
+  `descripcion_etapa` TEXT NULL,
+  `activo` TINYINT(1) NULL DEFAULT 1,
+  `eliminado` TINYINT(1) NULL DEFAULT 0,
+  PRIMARY KEY (`id_etapa`));
+
 ALTER TABLE `usuario`
 ADD COLUMN `fecha_actualizacion` DATETIME NULL,
 ADD COLUMN `password` varchar(300) COLLATE utf8_spanish_ci DEFAULT NULL,
@@ -122,6 +130,19 @@ DROP INDEX `UQ_menu_perfil` ;
 
 ALTER TABLE `perfil`
 ADD COLUMN `eliminado` TINYINT(1) NULL DEFAULT 0 AFTER `id_usuario_actualizacion`;
+
+ALTER TABLE `tipo_proceso`
+ADD COLUMN `eliminado` TINYINT(1) NULL DEFAULT 0 AFTER `id_usuario_actualizacion`;
+
+ALTER TABLE `etapa_proceso`
+DROP COLUMN `id_etapa_proceso_siguiente`,
+DROP COLUMN `id_etapa_proceso_anterior`,
+DROP COLUMN `posicion_etapa_proceso`,
+ADD COLUMN `eliminado` TINYINT(1) NULL DEFAULT 0 AFTER `id_usuario_actualizacion`,
+DROP INDEX `IX_etapa_proceso_id_etapa_proceso_siguiente` ,
+DROP INDEX `IX_etapa_proceso_id_etapa_proceso_anterior` ,
+DROP INDEX `IX_etapa_proceso_posicion_etapa_proceso` ;
+
 
 UPDATE `menu` SET `ruta_menu` = 'TipoProceso/listar' WHERE (`id_menu` = '2');
 UPDATE `menu` SET `ruta_menu` = 'Perfil/listar' WHERE (`id_menu` = '6');

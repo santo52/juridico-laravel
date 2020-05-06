@@ -1302,6 +1302,13 @@ div.ajax-file-upload-container div.ajax-file-upload-statusbar div.ajax-file-uplo
   right: 15px;
 }
 
+tr.ui-state-default.ui-sortable-handle {
+  border: 1px solid #ccc;
+  background: #f6f6f6;
+  color: black;
+  font-weight: normal;
+}
+
 .juridico.right-buttons {
   position: relative;
   width: 100px;

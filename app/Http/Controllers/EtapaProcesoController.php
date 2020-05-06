@@ -6,11 +6,7 @@ use Illuminate\Http\Request;
 use App\Entities\EtapaProceso;
 use Illuminate\Support\Facades\Auth;
 
-class EtapaProcesoController extends Controller
-{
-
-    //SELECT id_etapa_proceso, nombre_etapa_proceso, estado_etapa_proceso FROM etapa_proceso WHERE 1 = 1 ORDER BY nombre_etapa_proceso
-
+class EtapaProcesoController extends Controller {
 
     public function index() {
         $etapasProceso = EtapaProceso::where('eliminado', 0)->get();

@@ -1,3 +1,9 @@
+function _createForOfIteratorHelper(o) { if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (o = _unsupportedIterableToArray(o))) { var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var it, normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -605,13 +611,181 @@ var TipoProceso = /*#__PURE__*/function () {
   }
 
   _createClass(TipoProceso, [{
+    key: "sortableStart",
+    value: function sortableStart(_, ui) {
+      $(ui.item).find('.footable-last-visible a').hide();
+    }
+  }, {
+    key: "sortableStop",
+    value: function sortableStop(_, ui) {
+      $(ui.item).find('.footable-last-visible a').show();
+    }
+  }, {
+    key: "sortableUpdate",
+    value: function sortableUpdate(event, _) {
+      var $rowList = $(event.target).children('tr') || [];
+      var orderedList = [];
+
+      var _iterator = _createForOfIteratorHelper($rowList),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          item = _step.value;
+          orderedList.push($(item).data('id'));
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+
+      var params = {
+        orderedList: orderedList,
+        id_tipo_proceso: $('#createValue').val() || 0
+      };
+      $.ajax({
+        url: '/tipo-proceso/etapa/update',
+        data: new URLSearchParams(params),
+        success: function success(data) {
+          console.log(data);
+        }
+      });
+    }
+  }, {
+    key: "renderModalData",
+    value: function renderModalData() {
+      var _this5 = this;
+
+      var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+      return $.ajax({
+        url: '/tipo-proceso/get/' + id,
+        success: function success(data) {
+          var htmlListaEtapas = data.etapas.map(function (etapa) {
+            return "<option value=\"".concat(etapa.id_etapa_proceso, "\">").concat(etapa.nombre_etapa_proceso, "</option>");
+          });
+          $('#listaEtapa').html(htmlListaEtapas.join('')).selectpicker('refresh'); //addRow
+
+          var htmlSelectedEtapas = data.selectedEtapas.map(function (e) {
+            return _this5.addRow(e.id_etapa_proceso, e.nombre_etapa_proceso);
+          });
+          $('#tableCreateModal tbody').html(htmlSelectedEtapas.join(''));
+          $('#tableCreateModal').footable();
+          $("#sortable").sortable({
+            start: _this5.sortableStart,
+            stop: _this5.sortableStop,
+            update: _this5.sortableUpdate
+          }).disableSelection();
+          return data;
+        }
+      });
+    }
+  }, {
+    key: "addEtapa",
+    value: function addEtapa() {
+      var _this6 = this;
+
+      var id_etapa_proceso = $('#listaEtapa').val();
+      var id_tipo_proceso = $('#createValue').val() || 0;
+
+      if (!id_etapa_proceso) {
+        return false;
+      }
+
+      $.ajax({
+        url: '/tipo-proceso/etapa/insert',
+        data: new URLSearchParams({
+          id_etapa_proceso: id_etapa_proceso,
+          id_tipo_proceso: id_tipo_proceso
+        }),
+        success: function success(data) {
+          _this6.renderModalData(id_tipo_proceso);
+        }
+      });
+    }
+  }, {
     key: "createEditModal",
-    value: function createEditModal(id) {
+    value: function createEditModal() {
+      var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
       $('#createModal').modal();
       $('#createValue').val(id);
       var title = id ? 'Nuevo tipo de proceso' : 'Editar tipo de proceso';
       $('#createTitle').text(title);
-      $("#sortable").sortable().disableSelection();
+      this.renderModalData(id).then(function (_ref7) {
+        var tipoProceso = _ref7.tipoProceso;
+
+        if (tipoProceso) {
+          $('#tipoNombre').val(tipoProceso.nombre_etapa_proceso);
+          $('#tipoEstado').prop('checked', tipoProceso.estado_etapa_proceso == 1).change();
+        }
+      });
+    }
+  }, {
+    key: "openDelete",
+    value: function openDelete(id) {
+      $('#deleteModal').modal();
+      $('#deleteValue').val(id);
+    }
+  }, {
+    key: "upsert",
+    value: function upsert(e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (validateForm(e)) {
+        var id = $('#createValue').val();
+        var formData = new FormData(e.target);
+        id && formData.append('id_tipo_proceso', id);
+        $.ajax({
+          url: '/tipo-proceso/upsert',
+          data: new URLSearchParams(formData),
+          success: function success(data) {
+            if (data.saved) {
+              location.reload();
+            } else if (data.exists) {
+              $('#etapaNombre').parent().addClass('has-error');
+            }
+          }
+        });
+      }
+
+      return false;
+    }
+  }, {
+    key: "delete",
+    value: function _delete() {
+      var id = $('#deleteValue').val();
+      $.ajax({
+        url: '/tipo-proceso/delete/' + id,
+        data: {},
+        success: function success() {
+          location.reload();
+        }
+      });
+    }
+  }, {
+    key: "deleteEtapa",
+    value: function deleteEtapa(id) {
+      var _this7 = this;
+
+      var id_tipo_proceso = $('#createValue').val() || 0;
+      var params = {
+        id_etapa_proceso: id,
+        id_tipo_proceso: id_tipo_proceso
+      };
+      $.ajax({
+        url: '/tipo-proceso/etapa/delete',
+        data: new URLSearchParams(params),
+        success: function success(data) {
+          _this7.renderModalData(id_tipo_proceso);
+        }
+      });
+    }
+  }, {
+    key: "addRow",
+    value: function addRow(id_etapa_proceso, nombre_etapa_proceso) {
+      //
+      return "\n            <tr data-id=\"".concat(id_etapa_proceso, "\" class=\"ui-state-default\">\n                <td><span class=\"ui-icon ui-icon-arrowthick-2-n-s\"></span>").concat(nombre_etapa_proceso, "</td>\n                <td width=\"30px\" class=\"sortable-column-delete\" >\n                    <div class=\"flex justify-center table-actions\">\n                        <a class=\"text-danger\" href=\"javascript:void(0)\" class=\"btn text-danger\" type=\"button\"\n                            onclick=\"tipoProceso.deleteEtapa(").concat(id_etapa_proceso, ")\">\n                            <span class=\"glyphicon glyphicon-remove\"></span>\n                        </a>\n                    </div>\n                </td>\n            </tr>\n        ");
     }
   }]);
 

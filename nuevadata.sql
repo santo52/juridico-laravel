@@ -18,13 +18,11 @@ CREATE TABLE `accion_menu_perfil` (
 ENGINE = InnoDB
 COMMENT = 'Relación entre accion y menu_perfil';
 
-CREATE TABLE `etapas` (
-  `id_etapa` INT NOT NULL AUTO_INCREMENT,
-  `nombre_etapa` VARCHAR(45) NULL,
-  `descripcion_etapa` TEXT NULL,
-  `activo` TINYINT(1) NULL DEFAULT 1,
-  `eliminado` TINYINT(1) NULL DEFAULT 0,
-  PRIMARY KEY (`id_etapa`));
+CREATE TABLE `etapas_proceso_tipo_proceso` (
+  `id_etapas_proceso_tipo_proceso` INT NOT NULL AUTO_INCREMENT,
+  `id_tipo_proceso` INT NOT NULL,
+  `id_etapa_proceso` INT NOT NULL,
+  PRIMARY KEY (`id_etapas_proceso_tipo_proceso`));
 
 ALTER TABLE `usuario`
 ADD COLUMN `fecha_actualizacion` DATETIME NULL,
@@ -143,6 +141,11 @@ DROP INDEX `IX_etapa_proceso_id_etapa_proceso_siguiente` ,
 DROP INDEX `IX_etapa_proceso_id_etapa_proceso_anterior` ,
 DROP INDEX `IX_etapa_proceso_posicion_etapa_proceso` ;
 
+ALTER TABLE `etapas_proceso_tipo_proceso`
+ADD COLUMN `order` INT(3) NULL DEFAULT 0 AFTER `id_etapa_proceso`;
+
+ALTER TABLE `etapas_proceso_tipo_proceso`
+ADD COLUMN `id_usuario_creacion` INT(11) NULL DEFAULT 0 AFTER `order`;
 
 UPDATE `menu` SET `ruta_menu` = 'TipoProceso/listar' WHERE (`id_menu` = '2');
 UPDATE `menu` SET `ruta_menu` = 'Perfil/listar' WHERE (`id_menu` = '6');

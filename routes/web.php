@@ -52,10 +52,13 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/etapa-proceso/delete/{id}', 'EtapaProcesoController@delete');
 
 
-
-
     Route::post('/tipo-proceso/listar', 'TipoProcesoController@index');
-
+    Route::post('/tipo-proceso/upsert', 'TipoProcesoController@upsert');
+    Route::post('/tipo-proceso/get/{id}', 'TipoProcesoController@get');
+    Route::post('/tipo-proceso/delete/{id}', 'TipoProcesoController@delete');
+    Route::post('/tipo-proceso/etapa/insert', 'TipoProcesoController@insertEtapa');
+    Route::post('/tipo-proceso/etapa/delete', 'TipoProcesoController@deleteEtapa');
+    Route::post('/tipo-proceso/etapa/update', 'TipoProcesoController@updateEtapa');
 
 
 

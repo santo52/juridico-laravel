@@ -3,7 +3,7 @@
     <div class="flex">
         @isset ($permissions->crear)
         <a style="margin-right: 5px;" href="javascript:void(0)" onclick="tipoProceso.createEditModal()" class="btn btn-default">
-            Crear Tipo de proceso
+            Crear tipo de proceso
         </a>
         <a href="javascript:void(0)" onclick="tipoProceso.createEditEtapaModal()" class="btn btn-default">
             Crear etapa

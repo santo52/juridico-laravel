@@ -493,17 +493,33 @@ var Intermediario = /*#__PURE__*/function () {
       var title = id ? 'Editar intermediario' : 'Crear intermediario';
       $('#createModal').modal();
       $('#createValue').val(id);
-      $('#etapaNombre').val('');
-      $('#etapaEstado').prop('checked', true).change();
       $('#createTitle').text(title);
+      $('#tipoDocumento').val(1).selectpicker('refresh');
+      $('#numeroDocumento').val('');
+      $('#primerApellido').val('');
+      $('#segundoApellido').val('');
+      $('#primerNombre').val('');
+      $('#segundoNombre').val('');
+      $('#telefono').val('');
+      $('#correoElectronico').val('');
+      $('#etapaEstado').prop('checked', true).change();
+      $('#retencion').val(0);
 
       if (id) {
         $.ajax({
-          url: '/etapa-proceso/get/' + id,
+          url: '/intermediario/get/' + id,
           success: function success(_ref5) {
             var intermediario = _ref5.intermediario;
-            $('#etapaNombre').val(intermediario.nombre_etapa_proceso);
-            $('#etapaEstado').prop('checked', intermediario.estado_etapa_proceso == 1).change();
+            $('#tipoDocumento').val(intermediario.id_tipo_documento).selectpicker('refresh');
+            $('#numeroDocumento').val(intermediario.numero_documento);
+            $('#primerApellido').val(intermediario.primer_apellido);
+            $('#segundoApellido').val(intermediario.segundo_apellido);
+            $('#primerNombre').val(intermediario.primer_nombre);
+            $('#segundoNombre').val(intermediario.segundo_nombre);
+            $('#telefono').val(intermediario.telefono);
+            $('#retencion').val(intermediario.retencion);
+            $('#correoElectronico').val(intermediario.correo_electronico);
+            $('#etapaEstado').prop('checked', intermediario.estado_intermediario == 1).change();
           }
         });
       }
@@ -517,15 +533,17 @@ var Intermediario = /*#__PURE__*/function () {
       if (validateForm(e)) {
         var id = $('#createValue').val();
         var formData = new FormData(e.target);
-        id && formData.append('id_etapa_proceso', id);
+        id && formData.append('id_intermediario', id);
         $.ajax({
-          url: '/etapa-proceso/upsert',
+          url: '/intermediario/upsert',
           data: new URLSearchParams(formData),
           success: function success(data) {
             if (data.saved) {
               location.reload();
-            } else if (data.exists) {
-              $('#etapaNombre').parent().addClass('has-error');
+            } else if (data.documentExists || data.invalidDocument) {
+              $('#numeroDocumento').parent().addClass('has-error');
+              var text = data.documentExists ? 'El número de documento ya existe' : 'Documento inválido';
+              showErrorPopover($('#numeroDocumento'), text, 'top');
             }
           }
         });
@@ -544,7 +562,7 @@ var Intermediario = /*#__PURE__*/function () {
     value: function _delete() {
       var id = $('#deleteValue').val();
       $.ajax({
-        url: '/etapa-proceso/delete/' + id,
+        url: '/intermediario/delete/' + id,
         data: {},
         success: function success() {
           location.reload();

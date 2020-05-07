@@ -15,6 +15,6 @@ class Intermediario extends Model
     const UPDATED_AT = 'fecha_actualizacion';
 
     protected $fillable = [
-        "id_intermediario", "id_persona", "estado_intermediario", "fecha_creacion", "id_usuario_creacion", "fecha_actualizacion", "id_usuario_actualizacion"
+        "id_intermediario", "id_persona", "estado_intermediario", "fecha_creacion", "id_usuario_creacion", "fecha_actualizacion", "id_usuario_actualizacion", "eliminado", "retencion"
     ];
 }

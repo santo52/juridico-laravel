@@ -228,3 +228,30 @@ ADD COLUMN `eliminado` TINYINT(1) NULL DEFAULT 0 AFTER `id_usuario_actualizacion
 ALTER TABLE `entidad_justicia`
 ADD COLUMN `eliminado` TINYINT(1) NULL DEFAULT 0 AFTER `id_usuario_actualizacion`;
 
+ALTER TABLE `intermediario`
+ADD COLUMN `eliminado` TINYINT(1) NULL DEFAULT 0 AFTER `id_usuario_actualizacion`;
+
+ALTER TABLE `tipo_documento`
+ADD COLUMN `eliminado` TINYINT(1) NULL DEFAULT 0 AFTER `id_usuario_creacion`;
+
+ALTER TABLE `persona`
+DROP FOREIGN KEY `FK_persona_tipo_documento`,
+DROP FOREIGN KEY `FK_persona_municipio`;
+
+ALTER TABLE `persona`
+DROP INDEX `FK_persona_municipio` ,
+DROP INDEX `IX_persona_estado_persona` ,
+DROP INDEX `UQ_persona_documento` ,
+DROP INDEX `UQ_persona` ;
+;
+
+ALTER TABLE `intermediario`
+DROP FOREIGN KEY `FK_intermediario_persona`;
+
+ALTER TABLE `intermediario`
+DROP INDEX `IX_intermediario_estado_intermediario` ,
+DROP INDEX `IX_intermediario_id_persona` ;
+
+ALTER TABLE `intermediario`
+ADD COLUMN `retencion` INT(3) NULL DEFAULT 0 AFTER `eliminado`;
+

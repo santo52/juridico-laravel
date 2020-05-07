@@ -15,6 +15,6 @@ class TipoDocumento extends Model
     const UPDATED_AT = 'fecha_actualizacion';
 
     protected $fillable = [
-        "id_tipo_documento", "abreviatura_tipo_documento", "nombre_tipo_documento", "estado_tipo_documento", "fecha_creacion", "id_usuario_creacion"
+        "id_tipo_documento", "abreviatura_tipo_documento", "nombre_tipo_documento", "estado_tipo_documento", "fecha_creacion", "id_usuario_creacion", "eliminado"
     ];
 }

@@ -15,6 +15,6 @@ class Persona extends Model
     const UPDATED_AT = 'fecha_actualizacion';
 
     protected $fillable = [
-        "id_persona", "id_tipo_documento", "numero_documento", "primer_apellido", "segundo_apellido", "primer_nombre", "segundo_nombre", "nombre_completo", "direccion", "barrio", "id_municipio", "celular", "telefono", "correo_electronico", "estado_persona", "fecha_creacion", "id_usuario_creacion", "fecha_actualizacion", "id_usuario_actualizacion"
+        "id_persona", "id_tipo_documento", "numero_documento", "primer_apellido", "segundo_apellido", "primer_nombre", "segundo_nombre", "direccion", "barrio", "id_municipio", "celular", "telefono", "correo_electronico", "estado_persona", "fecha_creacion", "id_usuario_creacion", "fecha_actualizacion", "id_usuario_actualizacion"
     ];
 }

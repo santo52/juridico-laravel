@@ -4,19 +4,35 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Entities\Intermediario;
+use App\Entities\TipoDocumento;
+use App\Entities\Persona;
 use Illuminate\Support\Facades\Auth;
 
 class IntermediarioController extends Controller
 {
     public function index() {
-        $intermediarios = Intermediario::where('eliminado', 0)->get();
+        $intermediarios = Intermediario::
+        leftjoin('persona as p', 'p.id_persona', 'intermediario.id_persona')
+        ->leftjoin('tipo_documento as td', 'p.id_tipo_documento', 'td.id_tipo_documento')
+        // ->leftjoin('municipio as mu', 'mu.id_municipio', 'p.id_municipio')
+        // ->leftjoin('departamento as de', 'de.id_departamento', 'mu.id_departamento')
+        // ->leftjoin('pais as pa', 'pa.id_pais', 'de.id_pais')
+        ->where('intermediario.eliminado', 0)->get();
+
+        $tiposDocumento = TipoDocumento::where('eliminado', 0)->get();
         return $this->renderSection('intermediario.listar', [
-            'entidades' => $intermediarios
+            'intermediarios' => $intermediarios,
+            'tiposDocumento' => $tiposDocumento
         ]);
     }
 
     public function get($id) {
-        $intermediario = Intermediario::find($id);
+
+        $intermediario = Intermediario::
+        leftjoin('persona as p', 'p.id_persona', 'intermediario.id_persona')
+        ->where('id_intermediario', $id)
+        ->first();
+
         return response()->json([ 'intermediario' => $intermediario ]);
     }
 
@@ -26,54 +42,51 @@ class IntermediarioController extends Controller
         return response()->json([ 'deleted' => $deleted ]);
     }
 
-    private function getEntidad($id, $name) {
+    private function intermediarioExists($id, $numero_documento) {
+
+        $conditional[] = ['numero_documento', $numero_documento];
+        $conditional[] = ['eliminado', 0];
         if($id) {
-            $type = 'update';
-            $intermediarios = Intermediario::where([
-                ['id_entidad_justicia', '<>',  $id],
-                ['nombre_entidad_justicia', '=' ,$name],
-            ]);
-        } else {
-            $type = 'create';
-            $intermediarios = Intermediario::where('nombre_entidad_justicia', $name);
+            $conditional[] = ['id_intermediario', '<>', $id];
         }
 
-        return [
-            'exists' => $intermediarios->exists(),
-            'entidades' => $intermediarios->first(),
-            'type' => $type
-        ];
+        return Intermediario::
+            leftjoin('persona as p', 'p.id_persona', 'intermediario.id_persona')
+            ->where($conditional)
+            ->exists();
     }
 
     public function upsert(Request $request){
 
-        $id = $request->get('id_entidad_justicia');
-        $name = strtoupper($request->get('nombre_entidad_justicia'));
-        $intermediario = $this->getEntidad($id, $name);
-        $data = $request->all();
-        $data['nombre_entidad_justicia'] = $name;
-        $data['estado_entidad_justicia'] = empty($data['estado']) ? 2 : 1;
+        $id = $request->get('id_intermediario');
+        preg_match_all('/([0-9])/', $request->get('numero_documento'), $matches);
+        $documento = implode('', $matches[0]);
 
-        if ($intermediario['exists']) {
-
-            $intermediarios = $intermediario['entidades'];
-            if($intermediario['type'] === 'update' || $intermediarios->estado_entidad_justicia === 1) {
-                return response()->json(['exists' => true]);
-            }
-
-            $data['estado_entidad_justicia'] = 1;
-            $data['id_entidad_justicia'] = $intermediarios->id_entidad_justicia;
-            $id = $intermediarios->id_entidad_justicia;
+        if(empty($documento)){
+            return response()->json([ 'invalidDocument' => true ]);
         }
 
-        $data['aplica_primera_instancia'] = empty($data['primera_instancia']) ? 2 : 1;
-        $data['aplica_segunda_instancia'] = empty($data['segunda_instancia']) ? 2 : 1;
-        $data['id_usuario_actualizacion'] = Auth::id();
+        $exists = $this->intermediarioExists($id, $documento);
+        if($exists) {
+            return response()->json([ 'documentExists' => true ]);
+        }
+
+        $intermediario = Intermediario::find($id);
+
+        $dataPersona = $request->all();
+        $dataPersona['numero_documento'] = $documento;
+        $dataPersona['id_usuario_actualizacion'] = Auth::id();
         if(empty($id)) {
-            $data['id_usuario_creacion'] = Auth::id();
+            $dataPersona['id_usuario_creacion'] = Auth::id();
         }
 
-        $saved = Intermediario::updateOrCreate(['id_entidad_justicia' => $id], $data);
+        $persona = Persona::updateOrCreate(['numero_documento' => $documento ], $dataPersona);
+
+        $dataIntermediario = $dataPersona;
+        $dataIntermediario['id_persona'] = $persona->id_persona;
+        $dataIntermediario['estado_intermediario'] = !empty($request->get('estado')) ? 1 : 2;
+        $saved = Intermediario::updateOrCreate(['id_intermediario' => $id], $dataIntermediario);
+
         return response()->json([ 'saved' => $saved ]);
     }
 }

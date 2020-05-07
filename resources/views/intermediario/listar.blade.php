@@ -33,6 +33,7 @@
             <th data-breakpoints="all">Municipio</th>
             <th data-breakpoints="all">Barrio</th>
             <th data-breakpoints="all">Dirección</th> --}}
+            <th>Retención aplicada</th>
             <th data-breakpoints="xs sm">Estado</th>
             <th>Acciones</th>
         </tr>
@@ -54,6 +55,7 @@
             <td>{{$intermediario['nombre_municipio']}}</td>
             <td>{{$intermediario['barrio']}}</td>
             <td>{{$intermediario['direccion']}}</td> --}}
+            <td>{{$intermediario['retencion']}}%</td>
             <td>{{$intermediario['estado_intermediario'] == 2 ? 'Inactivo' : 'Activo'}}</td>
             <td>
                 <div class="flex justify-center table-actions">

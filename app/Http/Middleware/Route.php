@@ -79,7 +79,7 @@ class Route
                 $list->$key = true;
             }
 
-            $request->route()->setParameter('permissions', $list);
+            $request->route()->setParameter('permissions', json_encode($list));
 
         }
         return $next($request);

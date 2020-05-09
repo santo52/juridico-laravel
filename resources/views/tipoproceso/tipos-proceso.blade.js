@@ -27,7 +27,7 @@ class TipoProceso {
         }
 
         $.ajax({
-            url: '/tipo-proceso/etapa/update',
+            url: '/tipos-de-proceso/etapa/update',
             data: new URLSearchParams(params),
             success: data => {
                 console.log(data)
@@ -37,7 +37,7 @@ class TipoProceso {
 
     renderModalData(id = 0) {
         return $.ajax({
-            url: '/tipo-proceso/get/' + id,
+            url: '/tipos-de-proceso/get/' + id,
             success: data => {
 
                 const htmlListaEtapas = data.etapas.map(etapa => `<option value="${etapa.id_etapa_proceso}">${etapa.nombre_etapa_proceso}</option>`)
@@ -67,7 +67,7 @@ class TipoProceso {
         }
 
         $.ajax({
-            url: '/tipo-proceso/etapa/insert',
+            url: '/tipos-de-proceso/etapa/insert',
             data: new URLSearchParams({ id_etapa_proceso, id_tipo_proceso }),
             success: data => {
                 this.renderModalData(id_tipo_proceso)
@@ -79,7 +79,7 @@ class TipoProceso {
     createEditModal(id = 0) {
         $('#createModal').modal()
         $('#createValue').val(id)
-        const title = id ? 'Nuevo tipo de proceso' : 'Editar tipo de proceso'
+        const title = id ? 'Editar tipo de proceso' : 'Nuevo tipo de proceso'
         $('#createTitle').text(title)
         this.renderModalData(id).then(({ tipoProceso }) => {
             if (tipoProceso) {
@@ -107,7 +107,7 @@ class TipoProceso {
             id && formData.append('id_tipo_proceso', id)
 
             $.ajax({
-                url: '/tipo-proceso/upsert',
+                url: '/tipos-de-proceso/upsert',
                 data: new URLSearchParams(formData),
                 success: data => {
                     if (data.saved) {
@@ -125,7 +125,7 @@ class TipoProceso {
     delete() {
         const id = $('#deleteValue').val()
         $.ajax({
-            url: '/tipo-proceso/delete/' + id,
+            url: '/tipos-de-proceso/delete/' + id,
             data: {},
             success: () => {
                 location.reload()
@@ -141,7 +141,7 @@ class TipoProceso {
         }
 
         $.ajax({
-            url: '/tipo-proceso/etapa/delete',
+            url: '/tipos-de-proceso/etapa/delete',
             data: new URLSearchParams(params),
             success: data => {
                 this.renderModalData(id_tipo_proceso)

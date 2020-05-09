@@ -91,7 +91,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title">Crear etapa</h4>
+                <h4 class="modal-title" id="createTitle"></h4>
             </div>
             <form onsubmit="tipoProceso.upsert(event)">
                 <div class="modal-body">
@@ -152,7 +152,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="createTitle"></h4>
+                <h4 class="modal-title">Crear etapa</h4>
             </div>
             <form onsubmit="etapaProceso.upsert(event)">
                 <div class="modal-body">

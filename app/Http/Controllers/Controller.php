@@ -17,7 +17,7 @@ class Controller extends BaseController
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
-            $this->permissions = $request->route('permissions');
+            $this->permissions = json_decode($request->route('permissions'));
             return $next($request);
         });
     }

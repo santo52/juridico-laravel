@@ -2,7 +2,8 @@
 <div class="juridico right-buttons">
     <div>
         @isset ($permissions->crear)
-        <a href="javascript:void(0)" onclick="etapaProceso.createEditModal()" class="btn btn-default">
+        {{-- onclick="etapaProceso.createEditModal()" --}}
+        <a href="#etapas-de-proceso/crear"  class="btn btn-default">
             Crear
         </a>
         @endisset
@@ -101,6 +102,29 @@
                             <input type="checkbox" data-on="Activo" data-off="Inactivo" data-width="90"
                                 class="form-control" id="etapaEstado" name="estado" checked />
                         </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name">
+                            Actuaciones
+                        </label>
+                        <div class="input-group">
+                            <select id="actuacionesList" class="form-control" title="Seleccionar">
+
+                            </select>
+                            <span class="input-group-btn">
+                                <button type="button" class="pull-right btn-md btn btn-success" onclick="tipoProceso.addEtapa()">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <br>
+
+                        <table class="table" id="tableCreateModal" data-empty="Sin actuaciones">
+                            <thead>
+                                <td>Actuación</td>
+                            </thead>
+                            <tbody id="sortable"></tbody>
+                        </table>
                     </div>
                 </div>
                 <div class="modal-footer center">

@@ -45,23 +45,26 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/perfil/menu/accion/addremove', 'PerfilController@addOrRemovePermission');
     Route::post('/perfil/delete/{id}', 'PerfilController@delete');
 
-    Route::post('/etapa-proceso/listar', 'EtapaProcesoController@index');
-    Route::post('/etapa-proceso/upsert', 'EtapaProcesoController@upsert');
-    Route::post('/etapa-proceso/get/{id}', 'EtapaProcesoController@get');
-    Route::post('/etapa-proceso/delete/{id}', 'EtapaProcesoController@delete');
+    Route::post('/etapas-de-proceso/listar', 'EtapaProcesoController@index');
+    Route::post('/etapas-de-proceso/upsert', 'EtapaProcesoController@upsert');
+    Route::post('/etapas-de-proceso/get/{id}', 'EtapaProcesoController@get');
+    Route::post('/etapas-de-proceso/delete/{id}', 'EtapaProcesoController@delete');
+    Route::post('/etapas-de-proceso/crear', 'EtapaProcesoController@detalle');
+
+
 
     Route::post('/documento/listar', 'DocumentoController@index');
     Route::post('/documento/upsert', 'DocumentoController@upsert');
     Route::post('/documento/get/{id}', 'DocumentoController@get');
     Route::post('/documento/delete/{id}', 'DocumentoController@delete');
 
-    Route::post('/tipo-proceso/listar', 'TipoProcesoController@index');
-    Route::post('/tipo-proceso/upsert', 'TipoProcesoController@upsert');
-    Route::post('/tipo-proceso/get/{id}', 'TipoProcesoController@get');
-    Route::post('/tipo-proceso/delete/{id}', 'TipoProcesoController@delete');
-    Route::post('/tipo-proceso/etapa/insert', 'TipoProcesoController@insertEtapa');
-    Route::post('/tipo-proceso/etapa/delete', 'TipoProcesoController@deleteEtapa');
-    Route::post('/tipo-proceso/etapa/update', 'TipoProcesoController@updateEtapa');
+    Route::post('/tipos-de-proceso/listar', 'TipoProcesoController@index');
+    Route::post('/tipos-de-proceso/upsert', 'TipoProcesoController@upsert');
+    Route::post('/tipos-de-proceso/get/{id}', 'TipoProcesoController@get');
+    Route::post('/tipos-de-proceso/delete/{id}', 'TipoProcesoController@delete');
+    Route::post('/tipos-de-proceso/etapa/insert', 'TipoProcesoController@insertEtapa');
+    Route::post('/tipos-de-proceso/etapa/delete', 'TipoProcesoController@deleteEtapa');
+    Route::post('/tipos-de-proceso/etapa/update', 'TipoProcesoController@updateEtapa');
 
     Route::post('/entidades-demandadas/listar', 'EntidadDemandadaController@index');
     Route::post('/entidades-demandadas/upsert', 'EntidadDemandadaController@upsert');
@@ -77,7 +80,6 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/intermediario/upsert', 'IntermediarioController@upsert');
     Route::post('/intermediario/get/{id}', 'IntermediarioController@get');
     Route::post('/intermediario/delete/{id}', 'IntermediarioController@delete');
-
 
 
     // Route::post('/proceso/listar', 'ActuacionController@index');

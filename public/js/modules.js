@@ -172,6 +172,82 @@ var Actuacion = /*#__PURE__*/function () {
 
 var actuacion = new Actuacion();
 
+var ActuacionEtapaProceso = /*#__PURE__*/function () {
+  function ActuacionEtapaProceso() {
+    _classCallCheck(this, ActuacionEtapaProceso);
+  }
+
+  _createClass(ActuacionEtapaProceso, [{
+    key: "createEditModal",
+    value: function createEditModal(id) {
+      var title = id ? 'Editar asociación Etapa/Actuación' : 'Crear asociación Etapa/Actuación';
+      $('#createModal').modal();
+      $('#createValue').val(id);
+      $('#etapaNombre').val('');
+      $('#etapaEstado').prop('checked', true).change();
+      $('#createTitle').text(title);
+
+      if (id) {
+        $.ajax({
+          url: '/actuaciones-y-etapas-de-proceso/get/' + id,
+          success: function success(_ref) {
+            var actuacionEtapaProceso = _ref.actuacionEtapaProceso;
+            $('#etapaNombre').val(actuacionEtapaProceso.nombre_etapa_proceso);
+            $('#etapaEstado').prop('checked', actuacionEtapaProceso.estado_etapa_proceso == 1).change();
+          }
+        });
+      }
+    }
+  }, {
+    key: "upsert",
+    value: function upsert(e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (validateForm(e)) {
+        var id = $('#createValue').val();
+        var formData = new FormData(e.target);
+        id && formData.append('id_etapa_proceso', id);
+        $.ajax({
+          url: '/actuaciones-y-etapas-de-proceso/upsert',
+          data: new URLSearchParams(formData),
+          success: function success(data) {
+            if (data.saved) {
+              location.reload();
+            } else if (data.exists) {
+              $('#etapaNombre').parent().addClass('has-error');
+            }
+          }
+        });
+      }
+
+      return false;
+    }
+  }, {
+    key: "openDelete",
+    value: function openDelete(id) {
+      $('#deleteModal').modal();
+      $('#deleteValue').val(id);
+    }
+  }, {
+    key: "delete",
+    value: function _delete() {
+      var id = $('#deleteValue').val();
+      $.ajax({
+        url: '/actuaciones-y-etapas-de-proceso/delete/' + id,
+        data: {},
+        success: function success() {
+          location.reload();
+        }
+      });
+    }
+  }]);
+
+  return ActuacionEtapaProceso;
+}();
+
+var actuacionEtapaProceso = new ActuacionEtapaProceso();
+
 var Documento = /*#__PURE__*/function () {
   function Documento() {
     _classCallCheck(this, Documento);
@@ -191,8 +267,8 @@ var Documento = /*#__PURE__*/function () {
       if (id) {
         $.ajax({
           url: '/documento/get/' + id,
-          success: function success(_ref) {
-            var documento = _ref.documento;
+          success: function success(_ref2) {
+            var documento = _ref2.documento;
             $('#documentoNombre').val(documento.nombre_documento);
             $('#documentoEstado').prop('checked', documento.estado_documento == 1).change();
             $('#documentoObligatorio').prop('checked', documento.obligatoriedad_documento == 1).change();
@@ -268,8 +344,8 @@ var EntidadDemandada = /*#__PURE__*/function () {
       if (id) {
         $.ajax({
           url: '/entidades-demandadas/get/' + id,
-          success: function success(_ref2) {
-            var entidadDemandada = _ref2.entidadDemandada;
+          success: function success(_ref3) {
+            var entidadDemandada = _ref3.entidadDemandada;
             $('#etapaNombre').val(entidadDemandada.nombre_entidad_demandada);
             $('#etapaEstado').prop('checked', entidadDemandada.estado_entidad_demandada == 1).change();
           }
@@ -346,8 +422,8 @@ var EntidadJusticia = /*#__PURE__*/function () {
       if (id) {
         $.ajax({
           url: '/entidades-de-justicia/get/' + id,
-          success: function success(_ref3) {
-            var entidadJusticia = _ref3.entidadJusticia;
+          success: function success(_ref4) {
+            var entidadJusticia = _ref4.entidadJusticia;
             $('#etapaNombre').val(entidadJusticia.nombre_entidad_justicia);
             $('#etapaEstado').prop('checked', entidadJusticia.estado_entidad_justicia == 1).change();
             $('#primeraInstancia').prop('checked', entidadJusticia.aplica_primera_instancia == 1).change();
@@ -423,11 +499,16 @@ var EtapaProceso = /*#__PURE__*/function () {
 
       if (id) {
         $.ajax({
-          url: '/etapa-proceso/get/' + id,
-          success: function success(_ref4) {
-            var etapaProceso = _ref4.etapaProceso;
+          url: '/etapas-de-proceso/get/' + id,
+          success: function success(_ref5) {
+            var etapaProceso = _ref5.etapaProceso,
+                actuaciones = _ref5.actuaciones;
             $('#etapaNombre').val(etapaProceso.nombre_etapa_proceso);
             $('#etapaEstado').prop('checked', etapaProceso.estado_etapa_proceso == 1).change();
+            var html = actuaciones.map(function (a) {
+              return "<option value=\"".concat(a.id_actuacion, "\">").concat(a.nombre_actuacion, "</option>");
+            });
+            $('#actuacionesList').html(html).selectpicker('refresh');
           }
         });
       }
@@ -443,7 +524,7 @@ var EtapaProceso = /*#__PURE__*/function () {
         var formData = new FormData(e.target);
         id && formData.append('id_etapa_proceso', id);
         $.ajax({
-          url: '/etapa-proceso/upsert',
+          url: '/etapas-de-proceso/upsert',
           data: new URLSearchParams(formData),
           success: function success(data) {
             if (data.saved) {
@@ -468,10 +549,58 @@ var EtapaProceso = /*#__PURE__*/function () {
     value: function _delete() {
       var id = $('#deleteValue').val();
       $.ajax({
-        url: '/etapa-proceso/delete/' + id,
+        url: '/etapas-de-proceso/delete/' + id,
         data: {},
         success: function success() {
           location.reload();
+        }
+      });
+    }
+  }, {
+    key: "addRow",
+    value: function addRow(id, name) {
+      return "\n            <tr data-id=\"".concat(id, "\" class=\"ui-state-default\">\n                <td><span class=\"ui-icon ui-icon-arrowthick-2-n-s\"></span>").concat(name, "</td>\n                <td width=\"30px\" class=\"sortable-column-delete\" >\n                    <div class=\"flex justify-center table-actions\">\n                        <a class=\"text-danger\" href=\"javascript:void(0)\" class=\"btn text-danger\" type=\"button\"\n                            onclick=\"etapaProceso.deleteActuacion(").concat(id, ")\">\n                            <span class=\"glyphicon glyphicon-remove\"></span>\n                        </a>\n                    </div>\n                </td>\n            </tr>\n        ");
+    }
+  }, {
+    key: "sortableStart",
+    value: function sortableStart(_, ui) {
+      $(ui.item).css('background', '#ccc').children('td').css('visibility', 'hidden');
+      $(ui.item).find('.footable-first-visible').css('visibility', 'visible');
+    }
+  }, {
+    key: "sortableStop",
+    value: function sortableStop(_, ui) {
+      $(ui.item).css('background', 'inherit').children('td').css('visibility', 'visible');
+    }
+  }, {
+    key: "sortableUpdate",
+    value: function sortableUpdate(event, _) {
+      var $rowList = $(event.target).children('tr') || [];
+      var orderedList = [];
+
+      var _iterator = _createForOfIteratorHelper($rowList),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          item = _step.value;
+          orderedList.push($(item).data('id'));
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+
+      var params = {
+        orderedList: orderedList,
+        id_actuacion: getId()
+      };
+      $.ajax({
+        url: '/actuacion/etapas/order/update',
+        data: new URLSearchParams(params),
+        success: function success(data) {
+          console.log(data);
         }
       });
     }
@@ -508,8 +637,8 @@ var Intermediario = /*#__PURE__*/function () {
       if (id) {
         $.ajax({
           url: '/intermediario/get/' + id,
-          success: function success(_ref5) {
-            var intermediario = _ref5.intermediario;
+          success: function success(_ref6) {
+            var intermediario = _ref6.intermediario;
             $('#tipoDocumento').val(intermediario.id_tipo_documento).selectpicker('refresh');
             $('#numeroDocumento').val(intermediario.numero_documento);
             $('#primerApellido').val(intermediario.primer_apellido);
@@ -705,10 +834,10 @@ var Menu = /*#__PURE__*/function () {
     }
   }, {
     key: "rowAccion",
-    value: function rowAccion(_ref6) {
-      var id_accion = _ref6.id_accion,
-          nombre_accion = _ref6.nombre_accion,
-          observacion = _ref6.observacion;
+    value: function rowAccion(_ref7) {
+      var id_accion = _ref7.id_accion,
+          nombre_accion = _ref7.nombre_accion,
+          observacion = _ref7.observacion;
       return "\n            <tr id=\"accionRow".concat(id_accion, "\">\n                <td>").concat(nombre_accion, "</td>\n                <td>").concat(observacion || '', "</td>\n                <td width=\"30px\">\n                    <div class=\"flex justify-center table-actions\">\n                        <a href=\"javascript:void(0)\" onclick=\"menu.createActionModal(").concat(id_accion, ")\" class=\"btn text-primary\" type=\"button\">\n                            <span class=\"glyphicon glyphicon-pencil\"></span>\n                        </a>\n                        <a href=\"javascript:void(0)\" class=\"btn text-danger\" type=\"button\" onclick=\"menu.deleteActionModal(").concat(id_accion, ")\">\n                            <span class=\"glyphicon glyphicon-remove\"></span>\n                        </a>\n                    </div>\n                </td>\n            </tr>\n        ");
     }
   }, {
@@ -724,8 +853,8 @@ var Menu = /*#__PURE__*/function () {
       $.ajax({
         url: '/opciones/accion/delete/' + id,
         data: {},
-        success: function success(_ref7) {
-          var deleted = _ref7.deleted;
+        success: function success(_ref8) {
+          var deleted = _ref8.deleted;
 
           if (deleted) {
             $('#accionRow' + id).remove();
@@ -875,8 +1004,8 @@ var Perfil = /*#__PURE__*/function () {
       $.ajax({
         url: '/perfil/menu/insert',
         data: new URLSearchParams(params),
-        success: function success(_ref8) {
-          var saved = _ref8.saved;
+        success: function success(_ref9) {
+          var saved = _ref9.saved;
 
           if (saved) {
             _this4.redrawTableModal(id_perfil);
@@ -889,9 +1018,9 @@ var Perfil = /*#__PURE__*/function () {
     value: function deleteMenu(id) {
       $.ajax({
         url: '/perfil/menu/delete/' + id,
-        success: function success(_ref9) {
-          var deleted = _ref9.deleted,
-              menuItem = _ref9.menuItem;
+        success: function success(_ref10) {
+          var deleted = _ref10.deleted,
+              menuItem = _ref10.menuItem;
 
           if (deleted) {
             $('#menuRow' + id).remove();
@@ -908,8 +1037,8 @@ var Perfil = /*#__PURE__*/function () {
       var id = $('#deleteValue').val();
       $.ajax({
         url: '/perfil/delete/' + id,
-        success: function success(_ref10) {
-          var deleted = _ref10.deleted;
+        success: function success(_ref11) {
+          var deleted = _ref11.deleted;
 
           if (deleted) {
             $('#deleteModal').modal('hide');
@@ -960,18 +1089,18 @@ var TipoProceso = /*#__PURE__*/function () {
       var $rowList = $(event.target).children('tr') || [];
       var orderedList = [];
 
-      var _iterator = _createForOfIteratorHelper($rowList),
-          _step;
+      var _iterator2 = _createForOfIteratorHelper($rowList),
+          _step2;
 
       try {
-        for (_iterator.s(); !(_step = _iterator.n()).done;) {
-          item = _step.value;
+        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+          item = _step2.value;
           orderedList.push($(item).data('id'));
         }
       } catch (err) {
-        _iterator.e(err);
+        _iterator2.e(err);
       } finally {
-        _iterator.f();
+        _iterator2.f();
       }
 
       var params = {
@@ -979,7 +1108,7 @@ var TipoProceso = /*#__PURE__*/function () {
         id_tipo_proceso: $('#createValue').val() || 0
       };
       $.ajax({
-        url: '/tipo-proceso/etapa/update',
+        url: '/tipos-de-proceso/etapa/update',
         data: new URLSearchParams(params),
         success: function success(data) {
           console.log(data);
@@ -993,7 +1122,7 @@ var TipoProceso = /*#__PURE__*/function () {
 
       var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
       return $.ajax({
-        url: '/tipo-proceso/get/' + id,
+        url: '/tipos-de-proceso/get/' + id,
         success: function success(data) {
           var htmlListaEtapas = data.etapas.map(function (etapa) {
             return "<option value=\"".concat(etapa.id_etapa_proceso, "\">").concat(etapa.nombre_etapa_proceso, "</option>");
@@ -1027,7 +1156,7 @@ var TipoProceso = /*#__PURE__*/function () {
       }
 
       $.ajax({
-        url: '/tipo-proceso/etapa/insert',
+        url: '/tipos-de-proceso/etapa/insert',
         data: new URLSearchParams({
           id_etapa_proceso: id_etapa_proceso,
           id_tipo_proceso: id_tipo_proceso
@@ -1043,10 +1172,10 @@ var TipoProceso = /*#__PURE__*/function () {
       var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
       $('#createModal').modal();
       $('#createValue').val(id);
-      var title = id ? 'Nuevo tipo de proceso' : 'Editar tipo de proceso';
+      var title = id ? 'Editar tipo de proceso' : 'Nuevo tipo de proceso';
       $('#createTitle').text(title);
-      this.renderModalData(id).then(function (_ref11) {
-        var tipoProceso = _ref11.tipoProceso;
+      this.renderModalData(id).then(function (_ref12) {
+        var tipoProceso = _ref12.tipoProceso;
 
         if (tipoProceso) {
           $('#tipoNombre').val(tipoProceso.nombre_tipo_proceso);
@@ -1071,7 +1200,7 @@ var TipoProceso = /*#__PURE__*/function () {
         var formData = new FormData(e.target);
         id && formData.append('id_tipo_proceso', id);
         $.ajax({
-          url: '/tipo-proceso/upsert',
+          url: '/tipos-de-proceso/upsert',
           data: new URLSearchParams(formData),
           success: function success(data) {
             if (data.saved) {
@@ -1090,7 +1219,7 @@ var TipoProceso = /*#__PURE__*/function () {
     value: function _delete() {
       var id = $('#deleteValue').val();
       $.ajax({
-        url: '/tipo-proceso/delete/' + id,
+        url: '/tipos-de-proceso/delete/' + id,
         data: {},
         success: function success() {
           location.reload();
@@ -1108,7 +1237,7 @@ var TipoProceso = /*#__PURE__*/function () {
         id_tipo_proceso: id_tipo_proceso
       };
       $.ajax({
-        url: '/tipo-proceso/etapa/delete',
+        url: '/tipos-de-proceso/etapa/delete',
         data: new URLSearchParams(params),
         success: function success(data) {
           _this7.renderModalData(id_tipo_proceso);

@@ -24,6 +24,17 @@ CREATE TABLE `etapas_proceso_tipo_proceso` (
   `id_etapa_proceso` INT NOT NULL,
   PRIMARY KEY (`id_etapas_proceso_tipo_proceso`));
 
+CREATE TABLE `actuacion_etapa_proceso` (
+  `id_actuacion_etapa_proceso` int(11) NOT NULL AUTO_INCREMENT,
+  `id_etapa_proceso` varchar(45) DEFAULT NULL,
+  `id_actuacion` varchar(45) DEFAULT NULL,
+  `tiempo_maximo_proxima_actuacion` int(11) DEFAULT NULL,
+  `unidad_tiempo_proxima_actuacion` int(1) DEFAULT '1',
+  `id_usuario_creacion` int(11) DEFAULT '0',
+  `order` int(3) DEFAULT '0',
+  PRIMARY KEY (`id_actuacion_etapa_proceso`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 ALTER TABLE `usuario`
 ADD COLUMN `fecha_actualizacion` DATETIME NULL,
 ADD COLUMN `password` varchar(300) COLLATE utf8_spanish_ci DEFAULT NULL,
@@ -133,9 +144,6 @@ ALTER TABLE `tipo_proceso`
 ADD COLUMN `eliminado` TINYINT(1) NULL DEFAULT 0 AFTER `id_usuario_actualizacion`;
 
 ALTER TABLE `etapa_proceso`
-DROP COLUMN `id_etapa_proceso_siguiente`,
-DROP COLUMN `id_etapa_proceso_anterior`,
-DROP COLUMN `posicion_etapa_proceso`,
 ADD COLUMN `eliminado` TINYINT(1) NULL DEFAULT 0 AFTER `id_usuario_actualizacion`,
 DROP INDEX `IX_etapa_proceso_id_etapa_proceso_siguiente` ,
 DROP INDEX `IX_etapa_proceso_id_etapa_proceso_anterior` ,
@@ -199,10 +207,10 @@ INSERT INTO `accion` (`id_menu`, `nombre_accion`, `observacion`, `inactivo`, `fe
 INSERT INTO `accion` (`id_menu`, `nombre_accion`, `observacion`, `inactivo`, `fecha_creacion`, `id_usuario_creacion`, `fecha_actualizacion`, `eliminado`, `global`) VALUES ('0', 'eliminar', 'Permisos para eliminar un registro en la base de datos', '0', '2020-05-03 00:25:00', '1', '2020-05-03 00:25:00', '0', '1');
 
 
-UPDATE `menu` SET `ruta_menu` = 'tipo-proceso' WHERE (`id_menu` = '2');
+UPDATE `menu` SET `ruta_menu` = 'tipos-de-proceso' WHERE (`id_menu` = '2');
 UPDATE `menu` SET `ruta_menu` = 'perfil' WHERE (`id_menu` = '6');
 UPDATE `menu` SET `ruta_menu` = 'usuario' WHERE (`id_menu` = '8');
-UPDATE `menu` SET `ruta_menu` = 'etapa-proceso' WHERE (`id_menu` = '11');
+UPDATE `menu` SET `ruta_menu` = 'etapas-de-proceso' WHERE (`id_menu` = '11');
 UPDATE `menu` SET `ruta_menu` = 'documento' WHERE (`id_menu` = '14');
 UPDATE `menu` SET `ruta_menu` = 'plantilla-documento' WHERE (`id_menu` = '17');
 UPDATE `menu` SET `ruta_menu` = 'entidad-pension' WHERE (`id_menu` = '20');
@@ -215,6 +223,7 @@ UPDATE `menu` SET `ruta_menu` = 'proceso' WHERE (`id_menu` = '39');
 UPDATE `menu` SET `ruta_menu` = 'opciones' WHERE (`id_menu` = '42');
 UPDATE `menu` SET `nombre_menu` = 'Entidades demandadas', `ruta_menu` = 'entidades-demandadas' WHERE (`id_menu` = '20');
 UPDATE `menu` SET `ruta_menu` = 'entidades-de-justicia' WHERE (`id_menu` = '23');
+UPDATE `menu` SET `estado` = '1', `ruta_menu` = 'actuaciones-y-etapas-de-proceso' WHERE (`id_menu` = '32');
 
 
 ALTER TABLE `entidad_pension`
@@ -254,4 +263,5 @@ DROP INDEX `IX_intermediario_id_persona` ;
 
 ALTER TABLE `intermediario`
 ADD COLUMN `retencion` INT(3) NULL DEFAULT 0 AFTER `eliminado`;
+
 

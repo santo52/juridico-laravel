@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Entities\EtapaProceso;
+use App\Entities\Actuacion;
+use App\Entities\ActuacionEtapaProceso;
 use Illuminate\Support\Facades\Auth;
 
 class EtapaProcesoController extends Controller {
@@ -15,9 +17,56 @@ class EtapaProcesoController extends Controller {
         ]);
     }
 
+    public function detalle($id) {
+        $etapaProceso = EtapaProceso::find($id);
+
+        $selectedActuaciones = ActuacionEtapaProceso::
+            leftjoin('actuacion as a', 'a.id_actuacion', 'actuacion_etapa_proceso.id_actuacion')
+            ->where([ 'id_etapa_proceso' => $id])
+            ->orderBy('actuacion_etapa_proceso.order')
+            ->get();
+
+        $selectedActuacionesID = [];
+
+        foreach($selectedActuaciones as $value) {
+            $selectedActuacionesID[] = $value->id_actuacion;
+        }
+
+        $actuaciones = Actuacion::
+        whereNotIn('id_actuacion', $selectedActuacionesID)
+        ->where('estado_actuacion', 1)->get();
+
+        return $this->renderSection('etapaproceso.detalle', [
+            'etapaProceso' => $etapaProceso,
+            'selectedActuaciones' => $selectedActuaciones,
+            'actuaciones' => $actuaciones
+        ]);
+    }
+
     public function get($id) {
         $etapaProceso = EtapaProceso::find($id);
-        return response()->json([ 'etapaProceso' => $etapaProceso ]);
+
+        $selectedActuaciones = ActuacionEtapaProceso::
+            leftjoin('actuacion as a', 'a.id_actuacion', 'actuacion_etapa_proceso.id_actuacion')
+            ->where([ 'id_etapa_proceso' => $id])
+            ->orderBy('actuacion_etapa_proceso.order')
+            ->get();
+
+        $selectedActuacionesID = [];
+
+        foreach($selectedActuaciones as $value) {
+            $selectedActuacionesID[] = $value->id_actuacion;
+        }
+
+        $actuaciones = Actuacion::
+        whereNotIn('id_actuacion', $selectedActuacionesID)
+        ->where('estado_actuacion', 1)->get();
+
+        return response()->json([
+            'etapaProceso' => $etapaProceso,
+            'selectedActuaciones' => $selectedActuaciones,
+            'actuaciones' => $actuaciones
+        ]);
     }
 
     public function delete($id) {

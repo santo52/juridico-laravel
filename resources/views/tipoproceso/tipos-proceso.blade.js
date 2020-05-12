@@ -1,8 +1,33 @@
 class TipoProceso {
 
     //createEtapaModal
-    createEditEtapaModal(){
-        $('#createEtapaModal').modal()
+    createEtapaOpen(){
+        $('#tipoProcesoEtapaPopover').popover('show')
+    }
+
+    popoverClose() {
+        $('#tipoProcesoEtapaPopover').popover('hide')
+    }
+
+    createEtapa() {
+
+        const nombre_etapa_proceso = $('#etapaProcesoNombre').val().trim()
+        if(nombre_etapa_proceso) {
+            const data = {
+                nombre_etapa_proceso,
+                estado: 1
+            }
+
+            $.ajax({
+                url: '/etapas-de-proceso/upsert',
+                data: new URLSearchParams(data),
+                success: data => {
+                    const id = $('#createValue').val() || 0
+                    this.renderModalData(id)
+                    $('#tipoProcesoEtapaPopover').popover('hide')
+                }
+            })
+        }
     }
 
     sortableStart(_, ui ) {
@@ -59,8 +84,8 @@ class TipoProceso {
         })
     }
 
-    addEtapa() {
-        const id_etapa_proceso = $('#listaEtapa').val()
+    addEtapa(self) {
+        const id_etapa_proceso = $(self).val()
         const id_tipo_proceso = $('#createValue').val() || 0
         if (!id_etapa_proceso) {
             return false
@@ -69,7 +94,7 @@ class TipoProceso {
         $.ajax({
             url: '/tipos-de-proceso/etapa/insert',
             data: new URLSearchParams({ id_etapa_proceso, id_tipo_proceso }),
-            success: data => {
+            success: () => {
                 this.renderModalData(id_tipo_proceso)
             }
         })
@@ -81,6 +106,7 @@ class TipoProceso {
         $('#createValue').val(id)
         const title = id ? 'Editar tipo de proceso' : 'Nuevo tipo de proceso'
         $('#createTitle').text(title)
+        $('#tipoNombre').val('')
         this.renderModalData(id).then(({ tipoProceso }) => {
             if (tipoProceso) {
                 $('#tipoNombre').val(tipoProceso.nombre_tipo_proceso)
@@ -152,8 +178,8 @@ class TipoProceso {
     addRow(id_etapa_proceso, nombre_etapa_proceso) {
         //
         return `
-            <tr data-id="${id_etapa_proceso}" class="ui-state-default">
-                <td><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>${nombre_etapa_proceso}</td>
+            <tr data-id="${id_etapa_proceso}" class="ui-state-default" style="cursor:move">
+                <td>${nombre_etapa_proceso}</td>
                 <td width="30px" class="sortable-column-delete" >
                     <div class="flex justify-center table-actions">
                         <a class="text-danger" href="javascript:void(0)" class="btn text-danger" type="button"

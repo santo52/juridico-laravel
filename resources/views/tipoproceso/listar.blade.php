@@ -5,9 +5,6 @@
         <a style="margin-right: 5px;" href="javascript:void(0)" onclick="tipoProceso.createEditModal()" class="btn btn-default">
             Crear tipo de proceso
         </a>
-        <a href="javascript:void(0)" onclick="tipoProceso.createEditEtapaModal()" class="btn btn-default">
-            Crear etapa
-        </a>
         @endisset
     </div>
 </div>
@@ -96,8 +93,8 @@
             <form onsubmit="tipoProceso.upsert(event)">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="recipient-name" class="control-label">Nombre del tipo de proceso</label>
-                        <input type="text" class="form-control" id="tipoNombre" name="nombre_tipo_proceso">
+                        <label for="recipient-name" class="control-label">* Nombre del tipo de proceso</label>
+                        <input type="text" class="form-control required" id="tipoNombre" name="nombre_tipo_proceso">
                     </div>
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">Estado</label>
@@ -111,10 +108,9 @@
                             Etapas
                         </label>
                         <div class="input-group">
-                            <select id="listaEtapa" class="form-control" title="Seleccionar ..."></select>
+                            <select onChange="tipoProceso.addEtapa(this)" id="listaEtapa" class="form-control" title="Seleccionar ..."></select>
                             <span class="input-group-btn">
-                                <button type="button" class="pull-right btn-md btn btn-success"
-                                    onclick="tipoProceso.addEtapa()">
+                                <button type="button" id="tipoProcesoEtapaPopover" class="pull-right btn-md btn btn-success" onclick="tipoProceso.createEtapaOpen(this)">
                                     <span class="glyphicon glyphicon-plus"></span>
                                 </button>
                             </span>
@@ -182,4 +178,29 @@
 @endif
 
 
+@endsection
+
+@section('javascript')
+<script>
+
+    $(document).ready(function(){
+        $('#tipoProcesoEtapaPopover').popover({
+            title: "Agregar etapa",
+            content: `
+                <div class="form-group">
+                    <label for="recipient-name" class="control-label">Nombre de la etapa de un proceso</label>
+                    <input type="text" class="form-control" id="etapaProcesoNombre">
+                </div>
+                <div style="margin:auto; width: 176px">
+                    <button type="button" class="btn btn-default" onClick="tipoProceso.popoverClose(this)">Cancelar</button>
+                    <button type="submit" class="btn btn-success" onClick="tipoProceso.createEtapa()" >Crear</button>
+                </div>
+            `,
+            html: true,
+            placement: "top",
+            // trigger: 'focus',
+            container: '#createModal'
+        });
+    })
+</script>
 @endsection

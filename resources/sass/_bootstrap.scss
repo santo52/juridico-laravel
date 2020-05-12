@@ -846,6 +846,9 @@ form .form-control[readonly] {
     font-family: 'Open Sans', sans-serif, Verdana;
     font-size: 12px;
     font-weight: normal;
+}
+
+.popover.danger {
     border: 1px solid #e27e7a;
     background-color: #f9f2f2;
 }

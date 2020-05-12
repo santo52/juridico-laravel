@@ -140,40 +140,6 @@
 
 
 
-<!-- CREAR ETAPA -->
-<div class="modal fade" tabindex="-1" role="dialog" id="createEtapaModal">
-    <div class="modal-dialog modal-md" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title">Crear etapa</h4>
-            </div>
-            <form onsubmit="etapaProceso.upsert(event)">
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="recipient-name" class="control-label">Nombre de la etapa de un proceso</label>
-                        <input type="text" class="form-control" id="etapaNombre" name="nombre_etapa_proceso">
-                    </div>
-                    <div class="form-group">
-                        <label for="recipient-name" class="control-label">Estado</label>
-                        <div class="checkbox-form">
-                            <input type="checkbox" data-on="Activo" data-off="Inactivo" data-width="90"
-                                class="form-control" id="etapaEstado" name="estado" checked />
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer center">
-                    <input type="hidden" id="createValue" />
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-success">Guardar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
 
 @endif
 
@@ -198,7 +164,6 @@
             `,
             html: true,
             placement: "top",
-            // trigger: 'focus',
             container: '#createModal'
         });
     })

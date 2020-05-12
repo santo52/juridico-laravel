@@ -98,7 +98,6 @@ class TipoProceso {
                 this.renderModalData(id_tipo_proceso)
             }
         })
-
     }
 
     createEditModal(id = 0) {

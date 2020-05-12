@@ -17,32 +17,6 @@ class EtapaProcesoController extends Controller {
         ]);
     }
 
-    public function detalle($id) {
-        $etapaProceso = EtapaProceso::find($id);
-
-        $selectedActuaciones = ActuacionEtapaProceso::
-            leftjoin('actuacion as a', 'a.id_actuacion', 'actuacion_etapa_proceso.id_actuacion')
-            ->where([ 'id_etapa_proceso' => $id])
-            ->orderBy('actuacion_etapa_proceso.order')
-            ->get();
-
-        $selectedActuacionesID = [];
-
-        foreach($selectedActuaciones as $value) {
-            $selectedActuacionesID[] = $value->id_actuacion;
-        }
-
-        $actuaciones = Actuacion::
-        whereNotIn('id_actuacion', $selectedActuacionesID)
-        ->where('estado_actuacion', 1)->get();
-
-        return $this->renderSection('etapaproceso.detalle', [
-            'etapaProceso' => $etapaProceso,
-            'selectedActuaciones' => $selectedActuaciones,
-            'actuaciones' => $actuaciones
-        ]);
-    }
-
     public function get($id) {
         $etapaProceso = EtapaProceso::find($id);
 
@@ -122,5 +96,42 @@ class EtapaProcesoController extends Controller {
 
         $saved = EtapaProceso::updateOrCreate(['id_etapa_proceso' => $id], $data);
         return response()->json([ 'saved' => $saved ]);
+    }
+
+    public function insertActuacion(Request $request) {
+        $data = $request->all();
+        $data['id_usuario_creacion'] = Auth::id();
+        $id = $data['id_actuacion_etapa_proceso'];
+        $saved = ActuacionEtapaProceso::updateOrCreate(['id_actuacion_etapa_proceso' => $id], $data);
+        return response()->json([ 'saved' => $saved, $data ]);
+    }
+
+    public function deleteActuacion($id) {
+        $deleted = ActuacionEtapaProceso::find($id)->delete();
+        return response()->json([ 'deleted' => $deleted ]);
+    }
+
+    public function getActuacion($id) {
+        $actuacion = ActuacionEtapaProceso::
+        leftjoin('actuacion as a', 'a.id_actuacion', 'actuacion_etapa_proceso.id_actuacion')
+        ->find($id);
+        return response()->json($actuacion);
+    }
+
+    public function updateOrderActuacion(Request $request) {
+        $listEtapaProceso = explode(',', $request->get('orderedList'));
+        $conditional['id_etapa_proceso'] = $request->get('id_etapa_proceso');
+        if($request->get('id_etapa_proceso') == 0) {
+            $conditional['id_usuario_creacion'] = Auth::id();
+        }
+
+        $dataSaved = [];
+        foreach ($listEtapaProceso as $position => $value) {
+            $dataSaved[] = ActuacionEtapaProceso::where($conditional)
+                ->where('id_actuacion_etapa_proceso', $value)
+                ->update([ 'order' => ($position + 1) ]);
+        }
+
+        return response()->json([ 'saved' => $dataSaved, $request->all(), $conditional ]);
     }
 }

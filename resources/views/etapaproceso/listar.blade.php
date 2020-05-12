@@ -2,10 +2,9 @@
 <div class="juridico right-buttons">
     <div>
         @isset ($permissions->crear)
-        {{-- onclick="etapaProceso.createEditModal()" --}}
-        <a href="#etapas-de-proceso/crear"  class="btn btn-default">
+        <button onclick="etapaProceso.createEditModal()" class="btn btn-default">
             Crear
-        </a>
+        </button>
         @endisset
     </div>
 </div>
@@ -81,6 +80,8 @@
 @endisset
 
 @if(isset($permissions->crear) || isset($permissions->editar))
+
+
 <div class="modal fade" tabindex="-1" role="dialog" id="createModal">
     <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
@@ -108,11 +109,13 @@
                             Actuaciones
                         </label>
                         <div class="input-group">
-                            <select id="actuacionesList" class="form-control" title="Seleccionar">
-
-                            </select>
+                            <button type="button" onClick="etapaProceso.asociarActuacionModal()"
+                                style="width:100%; border-radius: 4px 0 0 4px;" class="btn btn-default">
+                                Asociar actuación a la etapa
+                            </button>
                             <span class="input-group-btn">
-                                <button type="button" class="pull-right btn-md btn btn-success" onclick="tipoProceso.addEtapa()">
+                                <button type="button" class="pull-right btn-md btn btn-success"
+                                    onclick="etapaProceso.createActuacion(id)">
                                     <span class="glyphicon glyphicon-plus"></span>
                                 </button>
                             </span>
@@ -122,6 +125,8 @@
                         <table class="table" id="tableCreateModal" data-empty="Sin actuaciones">
                             <thead>
                                 <td>Actuación</td>
+                                <td>Duración máxima</td>
+                                <td></td>
                             </thead>
                             <tbody id="sortable"></tbody>
                         </table>
@@ -131,6 +136,49 @@
                     <input type="hidden" id="createValue" />
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-success">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="actuacionModal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" onclick="etapaProceso.asociarActuacionModal('hide')"
+                    aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Asociar actuación a etapa de proceso</h4>
+            </div>
+            <form onsubmit="etapaProceso.addActuacion(event)">
+                <div class="modal-body">
+                    <input type="hidden" name="id_actuacion_etapa_proceso" id="idActuacionEtapaProceso" />
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">Actuación</label>
+                        <select class="form-control" id="actuacionesList" name="id_actuacion" title="Seleccionar actuación"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">Tiempo máximo hasta la próxima
+                            actuación</label>
+
+                        <div class="input-group">
+                            <input type="text" style="width:95%; height:35px" class="form-control"  name="tiempo_maximo_proxima_actuacion" id="tiempoMaximoProximaActuacion">
+                            <div class="input-group-btn">
+                                <select class="form-control" id="UnidadTiempoProximaActuacion"  name="unidad_tiempo_proxima_actuacion" >
+                                    <option value="1">Días</option>
+                                    <option value="2">Semanas</option>
+                                    <option value="3">Meses</option>
+                                    <option value="4">Años</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer center">
+                    <input type="hidden" id="deleteValue" />
+                    <button type="button" class="btn btn-default"
+                        onclick="etapaProceso.asociarActuacionModal('hide')">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Asociar</button>
                 </div>
             </form>
         </div>

@@ -49,7 +49,10 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/etapas-de-proceso/upsert', 'EtapaProcesoController@upsert');
     Route::post('/etapas-de-proceso/get/{id}', 'EtapaProcesoController@get');
     Route::post('/etapas-de-proceso/delete/{id}', 'EtapaProcesoController@delete');
-    Route::post('/etapas-de-proceso/crear', 'EtapaProcesoController@detalle');
+    Route::post('/etapas-de-proceso/actuacion/insert', 'EtapaProcesoController@insertActuacion');
+    Route::post('/etapas-de-proceso/actuacion/delete/{id}', 'EtapaProcesoController@deleteActuacion');
+    Route::post('/etapas-de-proceso/actuacion/get/{id}', 'EtapaProcesoController@getActuacion');
+    Route::post('/etapas-de-proceso/actuacion/order/update', 'EtapaProcesoController@updateOrderActuacion');
 
 
 

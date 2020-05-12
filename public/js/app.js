@@ -384,13 +384,12 @@ function showErrorPopover(objError, mensaje, posicion) {
     trigger: 'focus',
     title: '',
     content: mensaje,
-    container: 'body',
-    template: '<div class="popover danger"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>'
+    container: 'body'
   });
   if (!objError.is('button')) objError.addClass('error');
   objError.focus();
   setTimeout(function () {
-    //hideErrorPopover(objError);
+    hideErrorPopover(objError);
   }, 4000);
   return false;
 }

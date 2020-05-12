@@ -1314,10 +1314,16 @@ div.ajax-file-upload-container div.ajax-file-upload-statusbar div.ajax-file-uplo
   font-weight: normal;
 }
 
-.ui-state-default a,
-.ui-state-default a:link,
+.ui-state-default a.text-danger,
+.ui-state-default a.text-danger:link,
 .ui-state-default a.text-danger:visited {
   color: #a94442 !important;
+}
+
+.ui-state-default a.text-primary,
+.ui-state-default a.text-primary:link,
+.ui-state-default a.text-primary:visited {
+  color: #337ab7 !important;
 }
 
 .juridico.right-buttons {

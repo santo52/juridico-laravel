@@ -97,7 +97,7 @@ var Actuacion = /*#__PURE__*/function () {
             if (data.exists) {
               showErrorPopover($('#nombreActuacion'), 'Ya existe una actuación con este nombre', 'top');
             } else if (data.saved) {
-              location.hash = 'actuacion/listar';
+              window.history.back();
             }
           }
         });
@@ -488,6 +488,83 @@ var EtapaProceso = /*#__PURE__*/function () {
   }
 
   _createClass(EtapaProceso, [{
+    key: "createActuacion",
+    value: function createActuacion() {
+      $('#createModal').modal('hide');
+      $('.modal-backdrop').remove();
+      $('body').removeClass('modal-open');
+      location.hash = 'actuacion/crear';
+    }
+  }, {
+    key: "renderModalData",
+    value: function renderModalData(id) {
+      var _this = this;
+
+      return $.ajax({
+        url: '/etapas-de-proceso/get/' + (id || 0),
+        success: function success(data) {
+          var actuaciones = data.actuaciones,
+              selectedActuaciones = data.selectedActuaciones;
+          var htmlActuaciones = actuaciones.map(function (a) {
+            return "<option value=\"".concat(a.id_actuacion, "\">").concat(a.nombre_actuacion, "</option>");
+          });
+          $('#actuacionesList').html(htmlActuaciones).selectpicker('refresh');
+          var htmlSelected = selectedActuaciones.map(function (a) {
+            return _this.addRow(a.id_actuacion_etapa_proceso, a.nombre_actuacion, a.tiempo_maximo_proxima_actuacion, a.unidad_tiempo_proxima_actuacion);
+          });
+          $('#sortable').html(htmlSelected);
+          $('#tableCreateModal').footable();
+          $("#sortable").sortable({
+            start: _this.sortableStart,
+            stop: _this.sortableStop,
+            update: _this.sortableUpdate
+          }).disableSelection();
+          return data;
+        }
+      });
+    }
+  }, {
+    key: "asociarActuacionModal",
+    value: function asociarActuacionModal() {
+      var type = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'show';
+      $('#idActuacionEtapaProceso').val('');
+      $('#actuacionesList').val('').selectpicker('refresh');
+      $('#UnidadTiempoProximaActuacion').val(1).selectpicker('refresh');
+      $('#tiempoMaximoProximaActuacion').val('');
+      $('#createModal').css('opacity', type === 'show' ? .7 : 1);
+      $('#actuacionModal').modal(type);
+      setTimeout(function () {
+        $('body').addClass('modal-open');
+      }, 500);
+    }
+  }, {
+    key: "addActuacion",
+    value: function addActuacion(e) {
+      var _this2 = this;
+
+      e.preventDefault();
+      e.stopPropagation();
+      var id_actuacion = $('#actuacionesList').val();
+      var id_etapa_proceso = $('#createValue').val() || 0;
+
+      if (!id_actuacion) {
+        return false;
+      }
+
+      var formData = new FormData(e.target);
+      formData.append('id_etapa_proceso', id_etapa_proceso);
+      $.ajax({
+        url: '/etapas-de-proceso/actuacion/insert',
+        data: new URLSearchParams(formData),
+        success: function success() {
+          _this2.renderModalData(id_etapa_proceso);
+
+          _this2.asociarActuacionModal('hide');
+        }
+      });
+      return false;
+    }
+  }, {
     key: "createEditModal",
     value: function createEditModal(id) {
       var title = id ? 'Editar etapa' : 'Crear etapa';
@@ -496,22 +573,11 @@ var EtapaProceso = /*#__PURE__*/function () {
       $('#etapaNombre').val('');
       $('#etapaEstado').prop('checked', true).change();
       $('#createTitle').text(title);
-
-      if (id) {
-        $.ajax({
-          url: '/etapas-de-proceso/get/' + id,
-          success: function success(_ref5) {
-            var etapaProceso = _ref5.etapaProceso,
-                actuaciones = _ref5.actuaciones;
-            $('#etapaNombre').val(etapaProceso.nombre_etapa_proceso);
-            $('#etapaEstado').prop('checked', etapaProceso.estado_etapa_proceso == 1).change();
-            var html = actuaciones.map(function (a) {
-              return "<option value=\"".concat(a.id_actuacion, "\">").concat(a.nombre_actuacion, "</option>");
-            });
-            $('#actuacionesList').html(html).selectpicker('refresh');
-          }
-        });
-      }
+      this.renderModalData(id).then(function (_ref5) {
+        var etapaProceso = _ref5.etapaProceso;
+        $('#etapaNombre').val(etapaProceso.nombre_etapa_proceso);
+        $('#etapaEstado').prop('checked', etapaProceso.estado_etapa_proceso == 1).change();
+      });
     }
   }, {
     key: "upsert",
@@ -557,9 +623,59 @@ var EtapaProceso = /*#__PURE__*/function () {
       });
     }
   }, {
+    key: "deleteActuacion",
+    value: function deleteActuacion(id) {
+      $.ajax({
+        url: '/etapas-de-proceso/actuacion/delete/' + id,
+        data: {},
+        success: function success(_ref6) {
+          var deleted = _ref6.deleted;
+
+          if (deleted) {
+            $('#actuacionRow' + id).remove();
+          }
+        }
+      });
+    }
+  }, {
+    key: "editActuacion",
+    value: function editActuacion(id) {
+      this.asociarActuacionModal('show');
+      $.ajax({
+        url: '/etapas-de-proceso/actuacion/get/' + id,
+        success: function success(data) {
+          $('#tiempoMaximoProximaActuacion').val(data.tiempo_maximo_proxima_actuacion);
+          $('#UnidadTiempoProximaActuacion').val(data.unidad_tiempo_proxima_actuacion).selectpicker('refresh');
+          $('#idActuacionEtapaProceso').val(data.id_actuacion_etapa_proceso);
+          $('#actuacionesList').append("<option value=\"".concat(data.id_actuacion, "\">").concat(data.nombre_actuacion, "</option>"));
+          $('#actuacionesList').val(data.id_actuacion).selectpicker('refresh');
+        }
+      });
+    }
+  }, {
+    key: "getUnityName",
+    value: function getUnityName(unity) {
+      switch (unity) {
+        case 1:
+          return 'Días';
+
+        case 2:
+          return 'Semanas';
+
+        case 3:
+          return 'Meses';
+
+        case 4:
+          return 'Años';
+
+        default:
+          return 'Días';
+      }
+    }
+  }, {
     key: "addRow",
-    value: function addRow(id, name) {
-      return "\n            <tr data-id=\"".concat(id, "\" class=\"ui-state-default\">\n                <td><span class=\"ui-icon ui-icon-arrowthick-2-n-s\"></span>").concat(name, "</td>\n                <td width=\"30px\" class=\"sortable-column-delete\" >\n                    <div class=\"flex justify-center table-actions\">\n                        <a class=\"text-danger\" href=\"javascript:void(0)\" class=\"btn text-danger\" type=\"button\"\n                            onclick=\"etapaProceso.deleteActuacion(").concat(id, ")\">\n                            <span class=\"glyphicon glyphicon-remove\"></span>\n                        </a>\n                    </div>\n                </td>\n            </tr>\n        ");
+    value: function addRow(id, name, time, unity) {
+      return "\n            <tr id=\"actuacionRow".concat(id, "\" data-id=\"").concat(id, "\" class=\"ui-state-default\">\n                <td><span class=\"ui-icon ui-icon-arrowthick-2-n-s\"></span>").concat(name, "</td>\n                <td><span class=\"ui-icon ui-icon-arrowthick-2-n-s\"></span>").concat(time || 0, " ").concat(this.getUnityName(unity), "</td>\n                <td width=\"30px\" class=\"sortable-column-delete\" >\n                    <div class=\"flex justify-center table-actions\">\n                        <a  href=\"javascript:void(0)\" class=\"text-primary btn\" type=\"button\"\n                            onclick=\"etapaProceso.editActuacion(").concat(id, ")\">\n                            <span class=\"glyphicon glyphicon-pencil\"></span>\n                        </a>\n                        <a href=\"javascript:void(0)\" class=\"text-danger btn\" type=\"button\"\n                            onclick=\"etapaProceso.deleteActuacion(").concat(id, ")\">\n                            <span class=\"glyphicon glyphicon-remove\"></span>\n                        </a>\n                    </div>\n                </td>\n            </tr>\n        ");
     }
   }, {
     key: "sortableStart",
@@ -594,7 +710,7 @@ var EtapaProceso = /*#__PURE__*/function () {
 
       var params = {
         orderedList: orderedList,
-        id_actuacion: getId()
+        id_etapa_proceso: $('#createValue').val()
       };
       $.ajax({
         url: '/etapas-de-proceso/actuacion/order/update',
@@ -654,8 +770,8 @@ var Intermediario = /*#__PURE__*/function () {
       if (id) {
         $.ajax({
           url: '/intermediario/get/' + id,
-          success: function success(_ref6) {
-            var intermediario = _ref6.intermediario;
+          success: function success(_ref7) {
+            var intermediario = _ref7.intermediario;
             $('#tipoDocumento').val(intermediario.id_tipo_documento).selectpicker('refresh');
             $('#numeroDocumento').val(intermediario.numero_documento);
             $('#primerApellido').val(intermediario.primer_apellido);
@@ -764,7 +880,7 @@ var Menu = /*#__PURE__*/function () {
   }, {
     key: "createModal",
     value: function createModal(id) {
-      var _this = this;
+      var _this3 = this;
 
       var title = id ? 'Crear' : 'Editar';
       var that = this;
@@ -784,7 +900,7 @@ var Menu = /*#__PURE__*/function () {
           $('#create_ruta_menu').val(data.ruta_menu);
           $('#create_orden_menu').val(data.orden_menu);
           var html = (data.acciones || []).map(function (accion) {
-            return _this.rowAccion(accion);
+            return _this3.rowAccion(accion);
           });
           that.renderParents(data.parents);
           $('#tableCreateModal tbody').html(html.join(''));
@@ -858,10 +974,10 @@ var Menu = /*#__PURE__*/function () {
     }
   }, {
     key: "rowAccion",
-    value: function rowAccion(_ref7) {
-      var id_accion = _ref7.id_accion,
-          nombre_accion = _ref7.nombre_accion,
-          observacion = _ref7.observacion;
+    value: function rowAccion(_ref8) {
+      var id_accion = _ref8.id_accion,
+          nombre_accion = _ref8.nombre_accion,
+          observacion = _ref8.observacion;
       return "\n            <tr id=\"accionRow".concat(id_accion, "\">\n                <td>").concat(nombre_accion, "</td>\n                <td>").concat(observacion || '', "</td>\n                <td width=\"30px\">\n                    <div class=\"flex justify-center table-actions\">\n                        <a href=\"javascript:void(0)\" onclick=\"menu.createActionModal(").concat(id_accion, ")\" class=\"btn text-primary\" type=\"button\">\n                            <span class=\"glyphicon glyphicon-pencil\"></span>\n                        </a>\n                        <a href=\"javascript:void(0)\" class=\"btn text-danger\" type=\"button\" onclick=\"menu.deleteActionModal(").concat(id_accion, ")\">\n                            <span class=\"glyphicon glyphicon-remove\"></span>\n                        </a>\n                    </div>\n                </td>\n            </tr>\n        ");
     }
   }, {
@@ -877,8 +993,8 @@ var Menu = /*#__PURE__*/function () {
       $.ajax({
         url: '/opciones/accion/delete/' + id,
         data: {},
-        success: function success(_ref8) {
-          var deleted = _ref8.deleted;
+        success: function success(_ref9) {
+          var deleted = _ref9.deleted;
 
           if (deleted) {
             $('#accionRow' + id).remove();
@@ -891,7 +1007,7 @@ var Menu = /*#__PURE__*/function () {
   }, {
     key: "upsertAccion",
     value: function upsertAccion(e) {
-      var _this2 = this;
+      var _this4 = this;
 
       e.preventDefault();
       e.stopPropagation();
@@ -901,7 +1017,7 @@ var Menu = /*#__PURE__*/function () {
         url: '/opciones/accion/upsert',
         data: new URLSearchParams(formData),
         success: function success(data) {
-          var html = _this2.rowAccion(data);
+          var html = _this4.rowAccion(data);
 
           var $item = $('#accionRow' + data.id_accion);
 
@@ -955,7 +1071,7 @@ var Perfil = /*#__PURE__*/function () {
   }, {
     key: "redrawTableModal",
     value: function redrawTableModal(id) {
-      var _this3 = this;
+      var _this5 = this;
 
       return $.ajax({
         url: '/perfil/get/' + (id || 0),
@@ -965,13 +1081,13 @@ var Perfil = /*#__PURE__*/function () {
           });
           $('#listaMenu').html(html).selectpicker('refresh');
           html = data.selectedMenus.map(function (menu) {
-            return _this3.getRow(menu.id_menu_perfil, menu.nombre_menu, menu.acciones);
+            return _this5.getRow(menu.id_menu_perfil, menu.nombre_menu, menu.acciones);
           });
           $('#tableCreateModal tbody').html(html).children('.footable-empty').remove();
           $('#tableCreateModal').footable();
           $('#tableCreateModal select').selectpicker('refresh');
 
-          _this3.addSelectListener();
+          _this5.addSelectListener();
 
           return data;
         }
@@ -1012,7 +1128,7 @@ var Perfil = /*#__PURE__*/function () {
   }, {
     key: "addMenu",
     value: function addMenu() {
-      var _this4 = this;
+      var _this6 = this;
 
       var id_menu = $('#listaMenu').val();
       var id_perfil = $('#createValue').val() || 0;
@@ -1028,11 +1144,11 @@ var Perfil = /*#__PURE__*/function () {
       $.ajax({
         url: '/perfil/menu/insert',
         data: new URLSearchParams(params),
-        success: function success(_ref9) {
-          var saved = _ref9.saved;
+        success: function success(_ref10) {
+          var saved = _ref10.saved;
 
           if (saved) {
-            _this4.redrawTableModal(id_perfil);
+            _this6.redrawTableModal(id_perfil);
           }
         }
       });
@@ -1042,9 +1158,9 @@ var Perfil = /*#__PURE__*/function () {
     value: function deleteMenu(id) {
       $.ajax({
         url: '/perfil/menu/delete/' + id,
-        success: function success(_ref10) {
-          var deleted = _ref10.deleted,
-              menuItem = _ref10.menuItem;
+        success: function success(_ref11) {
+          var deleted = _ref11.deleted,
+              menuItem = _ref11.menuItem;
 
           if (deleted) {
             $('#menuRow' + id).remove();
@@ -1061,8 +1177,8 @@ var Perfil = /*#__PURE__*/function () {
       var id = $('#deleteValue').val();
       $.ajax({
         url: '/perfil/delete/' + id,
-        success: function success(_ref11) {
-          var deleted = _ref11.deleted;
+        success: function success(_ref12) {
+          var deleted = _ref12.deleted;
 
           if (deleted) {
             $('#deleteModal').modal('hide');
@@ -1105,7 +1221,7 @@ var TipoProceso = /*#__PURE__*/function () {
   }, {
     key: "createEtapa",
     value: function createEtapa() {
-      var _this5 = this;
+      var _this7 = this;
 
       var nombre_etapa_proceso = $('#etapaProcesoNombre').val().trim();
 
@@ -1120,7 +1236,7 @@ var TipoProceso = /*#__PURE__*/function () {
           success: function success(data) {
             var id = $('#createValue').val() || 0;
 
-            _this5.renderModalData(id);
+            _this7.renderModalData(id);
 
             $('#tipoProcesoEtapaPopover').popover('hide');
           }
@@ -1172,7 +1288,7 @@ var TipoProceso = /*#__PURE__*/function () {
   }, {
     key: "renderModalData",
     value: function renderModalData() {
-      var _this6 = this;
+      var _this8 = this;
 
       var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
       return $.ajax({
@@ -1184,14 +1300,14 @@ var TipoProceso = /*#__PURE__*/function () {
           $('#listaEtapa').html(htmlListaEtapas.join('')).selectpicker('refresh'); //addRow
 
           var htmlSelectedEtapas = data.selectedEtapas.map(function (e) {
-            return _this6.addRow(e.id_etapa_proceso, e.nombre_etapa_proceso);
+            return _this8.addRow(e.id_etapa_proceso, e.nombre_etapa_proceso);
           });
           $('#tableCreateModal tbody').html(htmlSelectedEtapas.join(''));
           $('#tableCreateModal').footable();
           $("#sortable").sortable({
-            start: _this6.sortableStart,
-            stop: _this6.sortableStop,
-            update: _this6.sortableUpdate
+            start: _this8.sortableStart,
+            stop: _this8.sortableStop,
+            update: _this8.sortableUpdate
           }).disableSelection();
           return data;
         }
@@ -1200,7 +1316,7 @@ var TipoProceso = /*#__PURE__*/function () {
   }, {
     key: "addEtapa",
     value: function addEtapa(self) {
-      var _this7 = this;
+      var _this9 = this;
 
       var id_etapa_proceso = $(self).val();
       var id_tipo_proceso = $('#createValue').val() || 0;
@@ -1216,7 +1332,7 @@ var TipoProceso = /*#__PURE__*/function () {
           id_tipo_proceso: id_tipo_proceso
         }),
         success: function success() {
-          _this7.renderModalData(id_tipo_proceso);
+          _this9.renderModalData(id_tipo_proceso);
         }
       });
     }
@@ -1229,8 +1345,8 @@ var TipoProceso = /*#__PURE__*/function () {
       var title = id ? 'Editar tipo de proceso' : 'Nuevo tipo de proceso';
       $('#createTitle').text(title);
       $('#tipoNombre').val('');
-      this.renderModalData(id).then(function (_ref12) {
-        var tipoProceso = _ref12.tipoProceso;
+      this.renderModalData(id).then(function (_ref13) {
+        var tipoProceso = _ref13.tipoProceso;
 
         if (tipoProceso) {
           $('#tipoNombre').val(tipoProceso.nombre_tipo_proceso);
@@ -1284,7 +1400,7 @@ var TipoProceso = /*#__PURE__*/function () {
   }, {
     key: "deleteEtapa",
     value: function deleteEtapa(id) {
-      var _this8 = this;
+      var _this10 = this;
 
       var id_tipo_proceso = $('#createValue').val() || 0;
       var params = {
@@ -1295,7 +1411,7 @@ var TipoProceso = /*#__PURE__*/function () {
         url: '/tipos-de-proceso/etapa/delete',
         data: new URLSearchParams(params),
         success: function success(data) {
-          _this8.renderModalData(id_tipo_proceso);
+          _this10.renderModalData(id_tipo_proceso);
         }
       });
     }

@@ -145,7 +145,7 @@ class TipoProcesoController extends Controller {
         $conditionals['id_tipo_proceso'] = $request->get('id_tipo_proceso');
         $conditionals['id_etapa_proceso'] = $request->get('id_etapa_proceso');
         if($request->get('id_tipo_proceso') == 0) {
-            $conditional['id_usuario_creacion'] = Auth::id();
+            $conditionals['id_usuario_creacion'] = Auth::id();
         }
 
         $deleted = EtapasProcesoTipoProceso::where($conditionals)->delete();

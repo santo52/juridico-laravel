@@ -410,7 +410,7 @@ var EntidadJusticia = /*#__PURE__*/function () {
   _createClass(EntidadJusticia, [{
     key: "createEditModal",
     value: function createEditModal(id) {
-      var title = id ? 'Editar entidad demandada' : 'Crear entidad demandada';
+      var title = id ? 'Editar entidad de justicia' : 'Crear entidad de justicia';
       $('#createModal').modal();
       $('#createValue').val(id);
       $('#etapaNombre').val('');

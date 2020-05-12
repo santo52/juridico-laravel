@@ -15,7 +15,7 @@
     </div>
 </div>
 
-<table id="tipoProcesoTable" class="table table-hover" data-empty="Sin tipos de proceso"
+<table id="tipoProcesoTable" class="table table-hover" data-empty="Sin etapas de proceso"
     data-paging-count-format="Mostrando del {PF} al {PL} de {TR} registros"
     data-filter-container="#filter-form-container" data-sorting="true" data-filtering="true" data-paging="true"
     data-filter-placeholder="Buscar ..." data-filter-position="left" data-filter-dropdown-title="Buscar por"
@@ -65,10 +65,10 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Eliminar tipo de proceso</h4>
+                <h4 class="modal-title">Eliminar etapa de proceso</h4>
             </div>
             <div class="modal-body">
-                <p>¿Está seguro que desea eliminar el tipo de proceso?</p>
+                <p>¿Está seguro que desea eliminar la etapa de proceso?</p>
             </div>
             <div class="modal-footer center">
                 <input type="hidden" id="deleteValue" />
@@ -93,8 +93,8 @@
             <form onsubmit="etapaProceso.upsert(event)">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="recipient-name" class="control-label">Nombre de la etapa de un proceso</label>
-                        <input type="text" class="form-control" id="etapaNombre" name="nombre_etapa_proceso">
+                        <label for="recipient-name" class="control-label">* Nombre de la etapa de un proceso</label>
+                        <input type="text" class="form-control required" id="etapaNombre" name="nombre_etapa_proceso">
                     </div>
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">Estado</label>

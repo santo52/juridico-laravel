@@ -64,10 +64,10 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Eliminar tipo de proceso</h4>
+                <h4 class="modal-title">Eliminar entidad demandada</h4>
             </div>
             <div class="modal-body">
-                <p>¿Está seguro que desea eliminar el tipo de proceso?</p>
+                <p>¿Está seguro que desea eliminar la entidad demandada?</p>
             </div>
             <div class="modal-footer center">
                 <input type="hidden" id="deleteValue" />
@@ -92,8 +92,8 @@
             <form onsubmit="entidadDemandada.upsert(event)">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="recipient-name" class="control-label">Nombre de la entidad demandada</label>
-                        <input type="text" class="form-control" id="etapaNombre" name="nombre_entidad_demandada">
+                        <label for="recipient-name" class="control-label">* Nombre de la entidad demandada</label>
+                        <input type="text" class="form-control required" id="etapaNombre" name="nombre_entidad_demandada">
                     </div>
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">Estado</label>

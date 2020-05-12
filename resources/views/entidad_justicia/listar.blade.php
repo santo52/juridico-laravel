@@ -68,10 +68,10 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Eliminar tipo de proceso</h4>
+                <h4 class="modal-title">Eliminar entidad de justicia</h4>
             </div>
             <div class="modal-body">
-                <p>¿Está seguro que desea eliminar el tipo de proceso?</p>
+                <p>¿Está seguro que desea eliminar la entidad de justicia?</p>
             </div>
             <div class="modal-footer center">
                 <input type="hidden" id="deleteValue" />
@@ -96,8 +96,8 @@
             <form onsubmit="entidadJusticia.upsert(event)">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="recipient-name" class="control-label">Nombre de la entidad de justicia</label>
-                        <input type="text" class="form-control" id="etapaNombre" name="nombre_entidad_justicia">
+                        <label for="recipient-name" class="control-label">* Nombre de la entidad de justicia</label>
+                        <input type="text" class="form-control required" id="etapaNombre" name="nombre_entidad_justicia">
                     </div>
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">¿Aplica primara instancia?</label>

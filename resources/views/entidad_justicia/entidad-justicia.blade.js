@@ -2,7 +2,7 @@ class EntidadJusticia {
 
     createEditModal(id) {
 
-        const title = id ? 'Editar entidad demandada' : 'Crear entidad demandada'
+        const title = id ? 'Editar entidad de justicia' : 'Crear entidad de justicia'
 
         $('#createModal').modal()
         $('#createValue').val(id)

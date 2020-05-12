@@ -29,9 +29,9 @@
             {{-- <th data-breakpoints="xs sm">Celular</th> --}}
             <th data-breakpoints="xs">Correo electrónico</th>
             {{-- <th data-breakpoints="all">País</th>
-            <th data-breakpoints="all">Departamento</th>
+            <th data-breakpoints="all">Departamento</th> --}}
             <th data-breakpoints="all">Municipio</th>
-            <th data-breakpoints="all">Barrio</th>
+            {{-- <th data-breakpoints="all">Barrio</th>
             <th data-breakpoints="all">Dirección</th> --}}
             <th>Retención aplicada</th>
             <th data-breakpoints="xs sm">Estado</th>
@@ -47,13 +47,15 @@
             <td>{{$intermediario['numero_documento']}}</td>
             <td>{{$intermediario['primer_apellido']}} {{$intermediario['segundo_apellido']}}
                 {{$intermediario['primer_nombre']}} {{$intermediario['segundo_nombre']}}</td>
-            <td>{{$intermediario['telefono']}}</td>
+            <td>
+                @if($intermediario['indicativo'])<span style="margin-right:2px;">(+{{$intermediario['indicativo']}})</span>@endif{{$intermediario['telefono']}}
+            </td>
             {{-- <td>{{$intermediario['celular']}}</td> --}}
             <td>{{$intermediario['correo_electronico']}}</td>
             {{-- <td>{{$intermediario['nombre_pais']}}</td>
-            <td>{{$intermediario['nombre_departamento']}}</td>
+            <td>{{$intermediario['nombre_departamento']}}</td> --}}
             <td>{{$intermediario['nombre_municipio']}}</td>
-            <td>{{$intermediario['barrio']}}</td>
+            {{-- <td>{{$intermediario['barrio']}}</td>
             <td>{{$intermediario['direccion']}}</td> --}}
             <td>{{$intermediario['retencion']}}%</td>
             <td>{{$intermediario['estado_intermediario'] == 2 ? 'Inactivo' : 'Activo'}}</td>
@@ -115,7 +117,16 @@
             <form onsubmit="intermediario.upsert(event)">
                 <div class="modal-body">
                     <div class="form-group row">
-                        <div class="col-xs-6">
+                        <div class="col-xs-4">
+                            <label for="recipient-name" class="control-label">* Municipio</label>
+                            <select class="form-control" id="municipio" name="id_municipio" title="Seleccione" onchange="intermediario.changeMunicipio(this)">
+                                @foreach ($municipios as $item)
+                                <option value="{{$item->id_municipio}}">{{$item->nombre_municipio}}
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-xs-4">
                             <label for="recipient-name" class="control-label">* Tipo de documento</label>
                             <select class="form-control" id="tipoDocumento" name="id_tipo_documento" title="Seleccione">
                                 @foreach ($tiposDocumento as $item)
@@ -124,7 +135,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-xs-6">
+                        <div class="col-xs-4">
                             <label for="recipient-name" class="control-label">* Número de documento</label>
                             <input type="text" class="form-control required" id="numeroDocumento"
                                 name="numero_documento">
@@ -153,7 +164,10 @@
                     <div class="form-group row">
                         <div class="col-xs-4">
                             <label for="recipient-name" class="control-label">* Teléfono</label>
-                            <input type="text" class="form-control required" id="telefono" name="telefono">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="indicativo">+1</span>
+                                <input type="text" class="form-control required" id="telefono" name="telefono">
+                            </div>
                         </div>
                         <div class="col-xs-5">
                             <label for="recipient-name" class="control-label">* Correo electrónico</label>

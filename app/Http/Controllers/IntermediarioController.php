@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Entities\Intermediario;
 use App\Entities\TipoDocumento;
 use App\Entities\Persona;
+use App\Entities\Municipio;
 use Illuminate\Support\Facades\Auth;
 
 class IntermediarioController extends Controller
@@ -14,22 +15,32 @@ class IntermediarioController extends Controller
         $intermediarios = Intermediario::
         leftjoin('persona as p', 'p.id_persona', 'intermediario.id_persona')
         ->leftjoin('tipo_documento as td', 'p.id_tipo_documento', 'td.id_tipo_documento')
-        // ->leftjoin('municipio as mu', 'mu.id_municipio', 'p.id_municipio')
+        ->leftjoin('municipio as mu', 'mu.id_municipio', 'p.id_municipio')
         // ->leftjoin('departamento as de', 'de.id_departamento', 'mu.id_departamento')
         // ->leftjoin('pais as pa', 'pa.id_pais', 'de.id_pais')
         ->where('intermediario.eliminado', 0)->get();
 
+        $municipios = Municipio::all();
+
+
         $tiposDocumento = TipoDocumento::where('eliminado', 0)->get();
         return $this->renderSection('intermediario.listar', [
             'intermediarios' => $intermediarios,
-            'tiposDocumento' => $tiposDocumento
+            'tiposDocumento' => $tiposDocumento,
+            'municipios' => $municipios
         ]);
+    }
+
+    public function getMunicipio($id) {
+        $municipio = Municipio::find($id);
+        return response()->json($municipio);
     }
 
     public function get($id) {
 
         $intermediario = Intermediario::
         leftjoin('persona as p', 'p.id_persona', 'intermediario.id_persona')
+        ->leftjoin('municipio as mu', 'mu.id_municipio', 'p.id_municipio')
         ->where('id_intermediario', $id)
         ->first();
 

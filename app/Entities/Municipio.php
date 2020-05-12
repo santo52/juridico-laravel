@@ -13,6 +13,6 @@ class Municipio extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        "id_municipio", "id_departamento", "nombre_municipio"
+        "id_municipio", "id_departamento", "nombre_municipio", 'indicativo'
     ];
 }

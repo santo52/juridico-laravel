@@ -80,6 +80,8 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/intermediario/upsert', 'IntermediarioController@upsert');
     Route::post('/intermediario/get/{id}', 'IntermediarioController@get');
     Route::post('/intermediario/delete/{id}', 'IntermediarioController@delete');
+    Route::post('/intermediario/municipio/{id}', 'IntermediarioController@getMunicipio');
+
 
 
     // Route::post('/proceso/listar', 'ActuacionController@index');

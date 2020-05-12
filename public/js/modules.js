@@ -597,7 +597,7 @@ var EtapaProceso = /*#__PURE__*/function () {
         id_actuacion: getId()
       };
       $.ajax({
-        url: '/actuacion/etapas/order/update',
+        url: '/etapas-de-proceso/actuacion/order/update',
         data: new URLSearchParams(params),
         success: function success(data) {
           console.log(data);
@@ -617,6 +617,21 @@ var Intermediario = /*#__PURE__*/function () {
   }
 
   _createClass(Intermediario, [{
+    key: "changeMunicipio",
+    value: function changeMunicipio(self) {
+      var municipio = $(self).val();
+      $.ajax({
+        url: '/intermediario/municipio/' + municipio,
+        success: function success(data) {
+          if (data.indicativo) {
+            $('#indicativo').show().text('+' + data.indicativo);
+          } else {
+            $('#indicativo').hide();
+          }
+        }
+      });
+    }
+  }, {
     key: "createEditModal",
     value: function createEditModal(id) {
       var title = id ? 'Editar intermediario' : 'Crear intermediario';
@@ -624,6 +639,7 @@ var Intermediario = /*#__PURE__*/function () {
       $('#createValue').val(id);
       $('#createTitle').text(title);
       $('#tipoDocumento').val(1).selectpicker('refresh');
+      $('#municipio').val(1).selectpicker('refresh');
       $('#numeroDocumento').val('');
       $('#primerApellido').val('');
       $('#segundoApellido').val('');
@@ -633,6 +649,7 @@ var Intermediario = /*#__PURE__*/function () {
       $('#correoElectronico').val('');
       $('#etapaEstado').prop('checked', true).change();
       $('#retencion').val(0);
+      $('#indicativo').show().text('+1');
 
       if (id) {
         $.ajax({
@@ -647,8 +664,15 @@ var Intermediario = /*#__PURE__*/function () {
             $('#segundoNombre').val(intermediario.segundo_nombre);
             $('#telefono').val(intermediario.telefono);
             $('#retencion').val(intermediario.retencion);
+            $('#municipio').val(intermediario.id_municipio).selectpicker('refresh');
             $('#correoElectronico').val(intermediario.correo_electronico);
             $('#etapaEstado').prop('checked', intermediario.estado_intermediario == 1).change();
+
+            if (intermediario.indicativo) {
+              $('#indicativo').text('+' + intermediario.indicativo);
+            } else {
+              $('#indicativo').hide();
+            }
           }
         });
       }

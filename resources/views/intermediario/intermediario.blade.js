@@ -1,5 +1,19 @@
 class Intermediario {
 
+    changeMunicipio(self){
+        const municipio = $(self).val()
+        $.ajax({
+            url: '/intermediario/municipio/' + municipio,
+            success: data => {
+                if(data.indicativo){
+                    $('#indicativo').show().text('+' + data.indicativo)
+                } else {
+                    $('#indicativo').hide()
+                }
+            }
+        })
+    }
+
     createEditModal(id) {
 
         const title = id ? 'Editar intermediario' : 'Crear intermediario'
@@ -8,6 +22,7 @@ class Intermediario {
         $('#createValue').val(id)
         $('#createTitle').text(title)
         $('#tipoDocumento').val(1).selectpicker('refresh')
+        $('#municipio').val(1).selectpicker('refresh')
         $('#numeroDocumento').val('')
         $('#primerApellido').val('')
         $('#segundoApellido').val('')
@@ -17,6 +32,7 @@ class Intermediario {
         $('#correoElectronico').val('')
         $('#etapaEstado').prop('checked', true).change()
         $('#retencion').val(0)
+        $('#indicativo').show().text('+1')
 
         if (id) {
             $.ajax({
@@ -30,9 +46,16 @@ class Intermediario {
                     $('#segundoNombre').val(intermediario.segundo_nombre)
                     $('#telefono').val(intermediario.telefono)
                     $('#retencion').val(intermediario.retencion)
+                    $('#municipio').val(intermediario.id_municipio).selectpicker('refresh')
                     $('#correoElectronico').val(intermediario.correo_electronico)
                     $('#etapaEstado').prop('checked', intermediario.estado_intermediario == 1).change()
-                }
+
+                    if(intermediario.indicativo) {
+                        $('#indicativo').text('+' + intermediario.indicativo)
+                    } else {
+                        $('#indicativo').hide()
+                    }
+ }
             })
         }
     }

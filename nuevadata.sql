@@ -264,4 +264,21 @@ DROP INDEX `IX_intermediario_id_persona` ;
 ALTER TABLE `intermediario`
 ADD COLUMN `retencion` INT(3) NULL DEFAULT 0 AFTER `eliminado`;
 
+insert into actuacion_etapa_proceso
+(id_actuacion,id_etapa_proceso,tiempo_maximo_proxima_actuacion,unidad_tiempo_proxima_actuacion)
+(select id_actuacion,id_etapa_proceso,tiempo_maximo_proxima_actuacion,unidad_tiempo_proxima_actuacion from actuacion_etapa_proceso_maestro m
+left join actuacion_etapa_proceso_detalle d
+on d.id_actuacion_etapa_proceso_maestro = m.id_actuacion_etapa_proceso_maestro
+order by id_actuacion_proxima,d.id_actuacion_etapa_proceso_maestro);
 
+ALTER TABLE `municipio`
+ADD COLUMN `indicativo` INT(2) NULL AFTER `nombre_municipio`;
+
+UPDATE `municipio` SET `indicativo` = '1' WHERE (`id_municipio` = '1');
+UPDATE `municipio` SET `indicativo` = '1' WHERE (`id_municipio` = '2');
+UPDATE `municipio` SET `indicativo` = '1' WHERE (`id_municipio` = '3');
+UPDATE `municipio` SET `indicativo` = '4' WHERE (`id_municipio` = '4');
+UPDATE `municipio` SET `indicativo` = '4' WHERE (`id_municipio` = '5');
+UPDATE `municipio` SET `indicativo` = '4' WHERE (`id_municipio` = '6');
+UPDATE `municipio` SET `indicativo` = '2' WHERE (`id_municipio` = '7');
+UPDATE `municipio` SET `indicativo` = '2' WHERE (`id_municipio` = '8');

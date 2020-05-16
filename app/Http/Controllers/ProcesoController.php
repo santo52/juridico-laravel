@@ -17,10 +17,17 @@ class ProcesoController extends Controller
             ->leftjoin('usuario as u', 'u.id_usuario', 'proceso.id_usuario_responsable')
             ->leftjoin('cliente as c', 'c.id_cliente', 'proceso.id_cliente')
             ->leftjoin('persona as p', 'p.id_persona', 'c.id_persona')
+            ->where('proceso.eliminado', 0)
             ->get();
 
         return $this->renderSection('proceso.listar', [
             'procesos' => $procesos
         ]);
+    }
+
+    public function delete($id) {
+        $client = Proceso::find($id);
+        $client->update(['eliminado' => 1]);
+        return response()->json(['deleted' => true]);
     }
 }

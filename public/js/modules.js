@@ -1348,6 +1348,41 @@ var Perfil = /*#__PURE__*/function () {
 
 var perfil = new Perfil();
 
+var Proceso = /*#__PURE__*/function () {
+  function Proceso() {
+    _classCallCheck(this, Proceso);
+  }
+
+  _createClass(Proceso, [{
+    key: "openDelete",
+    value: function openDelete(id) {
+      $('#deleteModal').modal();
+      $('#deleteValue').val(id);
+    }
+  }, {
+    key: "delete",
+    value: function _delete() {
+      var id = $('#deleteValue').val();
+      $.ajax({
+        url: '/proceso/delete/' + id,
+        success: function success(_ref15) {
+          var deleted = _ref15.deleted;
+
+          if (deleted) {
+            $('#tipoProcesoRow' + id).remove();
+            $('#deleteModal').modal('hide');
+          }
+        }
+      });
+      return false;
+    }
+  }]);
+
+  return Proceso;
+}();
+
+var proceso = new Proceso();
+
 var TipoProceso = /*#__PURE__*/function () {
   function TipoProceso() {
     _classCallCheck(this, TipoProceso);
@@ -1491,8 +1526,8 @@ var TipoProceso = /*#__PURE__*/function () {
       var title = id ? 'Editar tipo de proceso' : 'Nuevo tipo de proceso';
       $('#createTitle').text(title);
       $('#tipoNombre').val('');
-      this.renderModalData(id).then(function (_ref15) {
-        var tipoProceso = _ref15.tipoProceso;
+      this.renderModalData(id).then(function (_ref16) {
+        var tipoProceso = _ref16.tipoProceso;
 
         if (tipoProceso) {
           $('#tipoNombre').val(tipoProceso.nombre_tipo_proceso);
@@ -1620,8 +1655,8 @@ var Usuario = /*#__PURE__*/function () {
       if (id) {
         $.ajax({
           url: '/usuario/get/' + id,
-          success: function success(_ref16) {
-            var usuario = _ref16.usuario;
+          success: function success(_ref17) {
+            var usuario = _ref17.usuario;
             $('#tipoDocumento').val(usuario.id_tipo_documento).selectpicker('refresh');
             $('#numeroDocumento').val(usuario.numero_documento);
             $('#primerApellido').val(usuario.primer_apellido);

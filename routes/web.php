@@ -94,7 +94,7 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/cliente/delete/{id}', 'ClienteController@delete');
 
     Route::post('/proceso/listar', 'ProcesoController@index');
-
+    Route::post('/proceso/delete/{id}', 'ProcesoController@delete');
 
 
     Route::post('/departamento/municipios/{id}', 'DepartamentoController@getMunicipios');

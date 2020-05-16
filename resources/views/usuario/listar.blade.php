@@ -2,7 +2,7 @@
 <div class="juridico right-buttons">
     <div>
         @isset ($permissions->crear)
-        <a href="javascript:void(0)" onclick="intermediario.createEditModal()" class="btn btn-default">
+        <a href="javascript:void(0)" onclick="usuario.createEditModal()" class="btn btn-default">
             Crear
         </a>
         @endisset
@@ -33,44 +33,42 @@
             <th data-breakpoints="all">Municipio</th>
             {{-- <th data-breakpoints="all">Barrio</th>
             <th data-breakpoints="all">Dirección</th> --}}
-            <th>Retención aplicada</th>
             <th data-breakpoints="xs sm">Estado</th>
             <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
-        @if (count($intermediarios) > 0)
-        @foreach ($intermediarios as $intermediario)
-        <tr id="tipoProcesoRow{{$intermediario['id_intermediario']}}">
-            <td>{{$intermediario['id_intermediario']}}</td>
-            <td>{{$intermediario['abreviatura_tipo_documento']}}</td>
-            <td>{{$intermediario['numero_documento']}}</td>
-            <td>{{$intermediario['primer_apellido']}} {{$intermediario['segundo_apellido']}}
-                {{$intermediario['primer_nombre']}} {{$intermediario['segundo_nombre']}}</td>
+        @if (count($usuarios) > 0)
+        @foreach ($usuarios as $usuario)
+        <tr id="tipoProcesoRow{{$usuario['id_usuario']}}">
+            <td>{{$usuario['id_usuario']}}</td>
+            <td>{{$usuario['abreviatura_tipo_documento']}}</td>
+            <td>{{$usuario['numero_documento']}}</td>
+            <td>{{$usuario['primer_apellido']}} {{$usuario['segundo_apellido']}}
+                {{$usuario['primer_nombre']}} {{$usuario['segundo_nombre']}}</td>
             <td>
-                @if($intermediario['indicativo'])<span style="margin-right:2px;">(+{{$intermediario['indicativo']}})</span>@endif{{$intermediario['telefono']}}
+                @if($usuario['indicativo'])<span style="margin-right:2px;">(+{{$usuario['indicativo']}})</span>@endif{{$usuario['telefono']}}
             </td>
-            {{-- <td>{{$intermediario['celular']}}</td> --}}
-            <td>{{$intermediario['correo_electronico']}}</td>
-            {{-- <td>{{$intermediario['nombre_pais']}}</td>
-            <td>{{$intermediario['nombre_departamento']}}</td> --}}
-            <td>{{$intermediario['nombre_municipio']}}</td>
-            {{-- <td>{{$intermediario['barrio']}}</td>
-            <td>{{$intermediario['direccion']}}</td> --}}
-            <td>{{$intermediario['retencion']}}%</td>
-            <td>{{$intermediario['estado_intermediario'] == 2 ? 'Inactivo' : 'Activo'}}</td>
+            {{-- <td>{{$usuario['celular']}}</td> --}}
+            <td>{{$usuario['correo_electronico']}}</td>
+            {{-- <td>{{$usuario['nombre_pais']}}</td>
+            <td>{{$usuario['nombre_departamento']}}</td> --}}
+            <td>{{$usuario['nombre_municipio']}}</td>
+            {{-- <td>{{$usuario['barrio']}}</td>
+            <td>{{$usuario['direccion']}}</td> --}}
+            <td>{{$usuario['estado_usuario'] == 2 ? 'Inactivo' : 'Activo'}}</td>
             <td>
                 <div class="flex justify-center table-actions">
                     @isset ($permissions->editar)
                     <a href="javascript:void(0)"
-                        onclick="intermediario.createEditModal('{{$intermediario['id_intermediario']}}')"
+                        onclick="usuario.createEditModal('{{$usuario['id_usuario']}}')"
                         class="btn text-primary" type="button">
                         <span class="glyphicon glyphicon-pencil"></span>
                     </a>
                     @endisset
                     @isset ($permissions->eliminar)
                     <a href="javascript:void(0)" class="btn text-danger" type="button"
-                        onclick="intermediario.openDelete('{{$intermediario['id_intermediario']}}')">
+                        onclick="usuario.openDelete('{{$usuario['id_usuario']}}')">
                         <span class="glyphicon glyphicon-remove"></span>
                     </a>
                     @endisset
@@ -89,15 +87,15 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Eliminar intermediario</h4>
+                <h4 class="modal-title">Eliminar usuario</h4>
             </div>
             <div class="modal-body">
-                <p>¿Está seguro que desea eliminar el intermediario?</p>
+                <p>¿Está seguro que desea eliminar el usuario?</p>
             </div>
             <div class="modal-footer center">
                 <input type="hidden" id="deleteValue" />
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button type="button" onClick="intermediario.delete()" class="btn btn-danger">Eliminar</button>
+                <button type="button" onClick="usuario.delete()" class="btn btn-danger">Eliminar</button>
             </div>
         </div>
     </div>
@@ -114,28 +112,41 @@
                 </button>
                 <h4 class="modal-title" id="createTitle"></h4>
             </div>
-            <form onsubmit="intermediario.upsert(event)">
+            <form onsubmit="usuario.upsert(event)">
                 <div class="modal-body">
                     <div class="form-group row">
                         <div class="col-xs-4">
-                            <label for="recipient-name" class="control-label">* Municipio</label>
-                            <select class="form-control required" id="municipio" name="id_municipio" title="Seleccione" onchange="intermediario.changeMunicipio(this)">
-                                @foreach ($municipios as $item)
-                                <option value="{{$item->id_municipio}}">{{$item->nombre_municipio}}
+                            <label for="recipient-name" class="control-label">* Perfil</label>
+                            <select class="form-control required" id="id_perfil" name="id_perfil" title="Seleccione">
+                                @foreach ($perfiles as $item)
+                                <option value="{{$item->id_perfil}}">{{$item->nombre_perfil}}
                                 </option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="col-xs-4">
+                            <label for="recipient-name" class="control-label">* Usuario</label>
+                            <input type="text" class="form-control required" id="nombre_usuario"
+                                name="nombre_usuario">
+                        </div>
+                        <div class="col-xs-4">
+                            <label for="recipient-name" class="control-label">Contraseña</label>
+                            <input type="text" class="form-control" id="password"
+                                name="password_value">
+                        </div>
+                    </div>
+                    <hr class="separator">
+                    <div class="form-group row">
+                        <div class="col-xs-6">
                             <label for="recipient-name" class="control-label">* Tipo de documento</label>
-                            <select class="form-control required" id="tipoDocumento" name="id_tipo_documento" title="Seleccione">
+                            <select class="form-control" id="tipoDocumento" name="id_tipo_documento" title="Seleccione">
                                 @foreach ($tiposDocumento as $item)
                                 <option value="{{$item->id_tipo_documento}}">{{$item->nombre_tipo_documento}}
                                 </option>
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-xs-4">
+                        <div class="col-xs-6">
                             <label for="recipient-name" class="control-label">* Número de documento</label>
                             <input type="text" class="form-control required" id="numeroDocumento"
                                 name="numero_documento">
@@ -153,7 +164,7 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-xs-6">
-                            <label for="recipient-name" class="control-label">* Primer nombre</label>
+                            <label for="primerNombre" class="control-label">* Primer nombre</label>
                             <input type="text" class="form-control required" id="primerNombre" name="primer_nombre">
                         </div>
                         <div class="col-xs-6">
@@ -161,26 +172,35 @@
                             <input type="text" class="form-control" id="segundoNombre" name="segundo_nombre">
                         </div>
                     </div>
+                    <hr class="separator">
                     <div class="form-group row">
-                        <div class="col-xs-4">
+                        <div class="col-xs-6">
+                            <label for="recipient-name" class="control-label">* Sede operativa</label>
+                            <select class="form-control" id="municipio" name="id_municipio" title="Seleccione" onchange="usuario.changeMunicipio(this)">
+                                @foreach ($municipios as $item)
+                                <option value="{{$item->id_municipio}}">{{$item->nombre_municipio}}
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-xs-6">
+                            <label for="recipient-name" class="control-label">* Dirección</label>
+                            <input type="text" class="form-control required" id="direccion"
+                                name="direccion">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-xs-6">
                             <label for="recipient-name" class="control-label">* Teléfono</label>
                             <div class="input-group">
                                 <span class="input-group-addon" id="indicativo">+1</span>
                                 <input type="text" class="form-control required" id="telefono" name="telefono">
                             </div>
                         </div>
-                        <div class="col-xs-5">
+                        <div class="col-xs-6">
                             <label for="recipient-name" class="control-label">* Correo electrónico</label>
                             <input type="email" class="form-control required" id="correoElectronico"
                                 name="correo_electronico">
-                        </div>
-                        <div class="col-xs-3">
-                            <label for="recipient-name" class="control-label">Retención aplicada</label>
-                            <div class="input-group">
-                                <input type="number" min="0" max="100" class="center form-control required numeric"
-                                    id="retencion" name="retencion">
-                                <span class="input-group-addon" id="basic-addon2">%</span>
-                            </div>
                         </div>
                     </div>
                     <div class="form-group">

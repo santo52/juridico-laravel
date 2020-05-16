@@ -18,11 +18,11 @@ class Usuario extends Authenticatable
     protected $fillable = [
         'id_persona', 'id_perfil', 'nombre_usuario', 'contrasena',
         'estado_usuario', 'fecha_creacion', 'id_usuario_creacion',
-        'fecha_actualizacion', 'id_usuario_actualizacion',
+        'fecha_actualizacion', 'id_usuario_actualizacion', 'password', 'eliminado'
     ];
 
     protected $hidden = [
-        'contrasena'
+        'contrasena', 'password'
     ];
 }
 

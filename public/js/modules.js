@@ -1427,3 +1427,134 @@ var TipoProceso = /*#__PURE__*/function () {
 }();
 
 var tipoProceso = new TipoProceso();
+
+var Usuario = /*#__PURE__*/function () {
+  function Usuario() {
+    _classCallCheck(this, Usuario);
+  }
+
+  _createClass(Usuario, [{
+    key: "changeMunicipio",
+    value: function changeMunicipio(self) {
+      var municipio = $(self).val();
+      $.ajax({
+        url: '/usuario/municipio/' + municipio,
+        success: function success(data) {
+          if (data.indicativo) {
+            $('#indicativo').show().text('+' + data.indicativo);
+          } else {
+            $('#indicativo').hide();
+          }
+        }
+      });
+    }
+  }, {
+    key: "createEditModal",
+    value: function createEditModal(id) {
+      var title = id ? 'Editar usuario' : 'Crear usuario';
+      $('#createModal').modal();
+      $('#createValue').val(id);
+      $('#createTitle').text(title);
+      $('#tipoDocumento').val(1).selectpicker('refresh');
+      $('#municipio').val(1).selectpicker('refresh');
+      $('#numeroDocumento').val('');
+      $('#id_perfil').val('').selectpicker('refresh');
+      $('#primerApellido').val('');
+      $('#segundoApellido').val('');
+      $('#password').val('');
+      $('#primerNombre').val('');
+      $('#segundoNombre').val('');
+      $('#telefono').val('');
+      $('#correoElectronico').val('');
+      $('#etapaEstado').prop('checked', true).change();
+      $('#nombre_usuario').val('');
+      $('#direccion').val('');
+      $('#indicativo').show().text('+1');
+
+      if (id) {
+        $.ajax({
+          url: '/usuario/get/' + id,
+          success: function success(_ref14) {
+            var usuario = _ref14.usuario;
+            $('#tipoDocumento').val(usuario.id_tipo_documento).selectpicker('refresh');
+            $('#numeroDocumento').val(usuario.numero_documento);
+            $('#primerApellido').val(usuario.primer_apellido);
+            $('#segundoApellido').val(usuario.segundo_apellido);
+            $('#primerNombre').val(usuario.primer_nombre);
+            $('#segundoNombre').val(usuario.segundo_nombre);
+            $('#telefono').val(usuario.telefono);
+            $('#nombre_usuario').val(usuario.nombre_usuario);
+            $('#direccion').val(usuario.direccion);
+            $('#municipio').val(usuario.id_municipio).selectpicker('refresh');
+            $('#correoElectronico').val(usuario.correo_electronico);
+            $('#etapaEstado').prop('checked', usuario.estado_usuario == 1).change();
+            $('#id_perfil').val(usuario.id_perfil).selectpicker('refresh');
+
+            if (usuario.indicativo) {
+              $('#indicativo').text('+' + usuario.indicativo);
+            } else {
+              $('#indicativo').hide();
+            }
+          }
+        });
+      }
+    }
+  }, {
+    key: "upsert",
+    value: function upsert(e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (validateForm(e)) {
+        var id = $('#createValue').val();
+        var formData = new FormData(e.target);
+        id && formData.append('id_usuario', id);
+        $.ajax({
+          url: '/usuario/upsert',
+          data: new URLSearchParams(formData),
+          success: function success(data) {
+            if (data.saved) {
+              location.reload();
+            } else if (data.documentExists || data.invalidDocument) {
+              $('#numeroDocumento').parent().addClass('has-error');
+              var text = data.documentExists ? 'El número de documento ya existe' : 'Documento inválido';
+              showErrorPopover($('#numeroDocumento'), text, 'top');
+            } else if (data.invalidPassword) {
+              $('#password').parent().addClass('has-error');
+              var _text = 'La contraseña debe tener al menos 6 caracteres';
+              showErrorPopover($('#password'), _text, 'top');
+            } else if (data.userExists) {
+              $('#nombre_usuario').parent().addClass('has-error');
+              var _text2 = 'El nombre de usuario ya existe';
+              showErrorPopover($('#nombre_usuario'), _text2, 'top');
+            }
+          }
+        });
+      }
+
+      return false;
+    }
+  }, {
+    key: "openDelete",
+    value: function openDelete(id) {
+      $('#deleteModal').modal();
+      $('#deleteValue').val(id);
+    }
+  }, {
+    key: "delete",
+    value: function _delete() {
+      var id = $('#deleteValue').val();
+      $.ajax({
+        url: '/usuario/delete/' + id,
+        data: {},
+        success: function success() {
+          location.reload();
+        }
+      });
+    }
+  }]);
+
+  return Usuario;
+}();
+
+var usuario = new Usuario();

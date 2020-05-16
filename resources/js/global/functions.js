@@ -23,7 +23,12 @@ function validateNumeric($form) {
                 $(item).focus();
                 completed = false
             }
-            $(item).parents('.form-group').eq(0).addClass('has-error')
+            const tagName = $(item).prop('tagName')
+            if(tagName === 'SELECT') {
+                $(item).parent().parent().addClass('has-error')
+            } else {
+                $(item).parent().addClass('has-error')
+            }
             const message = $(item).hasClass('money') ? 'Debe ser un valor monetario válido.' : 'No es un número válido.'
             showErrorPopover($(item), message, 'top')
         }
@@ -32,7 +37,7 @@ function validateNumeric($form) {
 }
 
 function validateRequired($form){
-    const requiredFields = $form.find('.form-control.required').toArray()
+    const requiredFields = $form.find('select.required, input.required, textarea.required').toArray()
     let completed = true
     requiredFields.map(item => {
         const value = $(item).val()
@@ -41,7 +46,12 @@ function validateRequired($form){
                 $(item).focus();
                 completed = false
             }
-            $(item).parents('.form-group').eq(0).addClass('has-error')
+            const tagName = $(item).prop('tagName')
+            if(tagName === 'SELECT') {
+                $(item).parent().parent().addClass('has-error')
+            } else {
+                $(item).parent().addClass('has-error')
+            }
             showErrorPopover($(item), 'Esta información es obligatoria.', 'top')
         }
     })

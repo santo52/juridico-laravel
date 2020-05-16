@@ -15,8 +15,22 @@ class AuthController extends Controller
 
     public function login(Request $request) {
 
-        $usuario = Usuario::where('nombre_usuario', $request->get('user'))->first();
-        if($usuario && empty($usuario->password)) {
+        //Se busca un usuario que este activo y que su perfil esté activo
+        $usuario = Usuario::
+            leftjoin('perfil as p', 'p.id_perfil', 'usuario.id_perfil')
+            ->where([
+            'nombre_usuario' => $request->get('user'),
+            'estado_usuario' => 1,
+            'usuario.eliminado' => 0,
+            'p.eliminado' => 0,
+            'p.inactivo' => '0'
+        ])->first();
+
+        if(empty($usuario)) {
+            return response()->json(['auth' => false]);
+        }
+
+        if (empty($usuario->password)) {
             Usuario::where('nombre_usuario', $request->get('user'))->update(['password' => Hash::make($request->get('password'))]);
         }
 

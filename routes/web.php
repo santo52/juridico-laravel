@@ -36,7 +36,6 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/opciones/accion/upsert', 'AccionController@upsert');
     Route::post('/opciones/accion/{id}', 'AccionController@get');
 
-
     Route::post('/perfil/listar', 'PerfilController@index');
     Route::post('/perfil/get/{id}', 'PerfilController@get');
     Route::post('/perfil/create', 'PerfilController@create');
@@ -53,8 +52,6 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/etapas-de-proceso/actuacion/delete/{id}', 'EtapaProcesoController@deleteActuacion');
     Route::post('/etapas-de-proceso/actuacion/get/{id}', 'EtapaProcesoController@getActuacion');
     Route::post('/etapas-de-proceso/actuacion/order/update', 'EtapaProcesoController@updateOrderActuacion');
-
-
 
     Route::post('/documento/listar', 'DocumentoController@index');
     Route::post('/documento/upsert', 'DocumentoController@upsert');
@@ -85,6 +82,11 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/intermediario/delete/{id}', 'IntermediarioController@delete');
     Route::post('/intermediario/municipio/{id}', 'IntermediarioController@getMunicipio');
 
+    Route::post('/usuario/listar', 'UsuarioController@index');
+    Route::post('/usuario/upsert', 'UsuarioController@upsert');
+    Route::post('/usuario/get/{id}', 'UsuarioController@get');
+    Route::post('/usuario/delete/{id}', 'UsuarioController@delete');
+    Route::post('/usuario/municipio/{id}', 'UsuarioController@getMunicipio');
 
 
     // Route::post('/proceso/listar', 'ActuacionController@index');

@@ -96,7 +96,7 @@
             <form onsubmit="entidadJusticia.upsert(event)">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="recipient-name" class="control-label">* Nombre de la entidad de justicia</label>
+                        <label for="recipient-name" class="control-label">Nombre de la entidad de justicia</label>
                         <input type="text" class="form-control required" id="etapaNombre" name="nombre_entidad_justicia">
                     </div>
                     <div class="form-group">

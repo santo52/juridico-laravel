@@ -69,7 +69,7 @@ class PerfilController extends Controller
         $data = $request->all();
 
         $id = $request->get('id_perfil');
-        $data['nombre_perfil'] = strtoupper($request->get('nombre_perfil'));
+        $data['nombre_perfil'] = $request->get('nombre_perfil');
         $perfil = $this->getPerfil($id, $data['nombre_perfil']);
         $data['inactivo'] = empty($data['estado']) ? 1 : 2;
         $data['eliminado'] = 0;

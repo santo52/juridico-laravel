@@ -333,6 +333,11 @@ function compileLibraries() {
   });
   $('select').selectpicker();
   $('.table').footable();
+  var requiredFields = $('form').find('.form-control.required').toArray();
+  requiredFields.map(function (item) {
+    var $label = $(item).siblings('label');
+    $label.html('* ' + $label.html());
+  });
 }
 
 jQuery(function () {

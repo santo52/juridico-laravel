@@ -114,20 +114,20 @@
             <form onsubmit="menu.upsert(event)" id="createFormModal">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="parentsMenu" class="control-label">* Padre</label>
+                        <label for="parentsMenu" class="control-label">Padre</label>
                         <select class="form-control" title="Seleccionar" name="parent_id" id="create_parent_id"
                             onchange="menu.onChangeSelect(this)"></select>
                     </div>
                     <div class="form-group">
-                        <label for="recipient-name" class="control-label">* Nombre</label>
+                        <label for="recipient-name" class="control-label">Nombre</label>
                         <input type="text" class="form-control required" id="create_nombre_menu" name="nombre_menu">
                     </div>
                     <div class="form-group" style="display:none">
-                        <label for="recipient-name" class="control-label">* Ruta</label>
+                        <label for="recipient-name" class="control-label">Ruta</label>
                         <input type="text" class="form-control required" id="create_ruta_menu" name="ruta_menu">
                     </div>
                     <div class="form-group">
-                        <label for="recipient-name" class="control-label">* Orden</label>
+                        <label for="recipient-name" class="control-label">Orden</label>
                         <input type="text" class="form-control required numeric" id="create_orden_menu"
                             name="orden_menu">
                     </div>

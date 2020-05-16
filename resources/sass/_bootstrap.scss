@@ -132,7 +132,7 @@ div.navbar-app ul.navbar-nav>li>a:focus {
     color: #fff;
 }
 
-div.navbar-app ul.navbar-nav>li>a:hover{
+div.navbar-app ul.navbar-nav>li>a:hover {
     color: $default;
 }
 
@@ -200,6 +200,7 @@ div.navbar-app ul.dropdown-menu ul.multi-column-dropdown li a {
     text-decoration: none;
     display: block;
     padding: 6px 25px;
+
     &:hover {
         background-color: $selected-module;
         color: #fff;
@@ -235,13 +236,14 @@ ol.breadcrumb {
     font-family: 'Open Sans', sans-serif, Verdana;
     font-size: 12px;
     text-transform: capitalize;
+
     li:last-child {
         font-weight: bold;
     }
 }
 
 ol.breadcrumb a {
-    color: #195f30;
+    color: $link-color;
     text-decoration: none;
 }
 
@@ -1002,6 +1004,7 @@ div.ajax-file-upload-container div.ajax-file-upload-statusbar div.ajax-file-uplo
 .btn-blue {
     background-color: $primary;
     border-color: lighten($primary, 5);
+
     &:hover,
     &:active,
     &:focus,
@@ -1016,6 +1019,7 @@ div.ajax-file-upload-container div.ajax-file-upload-statusbar div.ajax-file-uplo
 .btn-success {
     background-color: $third-color;
     border-color: lighten($third-color, 5);
+
     &:hover,
     &:active,
     &:focus,
@@ -1039,5 +1043,50 @@ div.ajax-file-upload-container div.ajax-file-upload-statusbar div.ajax-file-uplo
 }
 
 .separator {
-    border-top: 1px solid #ccc !important;
+    border-top: 1px solid #eee !important;
+    &.margin {
+        margin: 20px 0;
+    }
+
+    &.white {
+        border-color: #fff !important;
+    }
+}
+
+ul.nav-tabs {
+    border: none;
+    >li {
+        >a {
+            padding: 7px 10px;
+            background-color: $tab-color !important;
+            color: #fff !important;
+            &:hover,
+            &:active,
+            &:focus {
+                border-bottom: 0;
+                opacity: .8;
+                outline: 0;
+            }
+        }
+
+        &.active {
+            >a {
+                background-color: #fff !important;
+                color: $link-color !important;
+                font-weight: bold;
+            }
+        }
+    }
+}
+
+.tab-content {
+    border: 1px solid #ddd;
+    border-top: 0;
+}
+
+.form-group.row > * {
+    padding-bottom: 10px;
+    &:last-child {
+        padding-bottom: 0;
+    }
 }

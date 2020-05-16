@@ -38,7 +38,7 @@ class TipoProcesoController extends Controller {
 
     public function upsert(Request $request) {
         $id = $request->get('id_tipo_proceso');
-        $name = strtoupper($request->get('nombre_tipo_proceso'));
+        $name = $request->get('nombre_tipo_proceso');
         $tipo = $this->getTipoProceso($id, $name);
         $data = $request->all();
         $data['nombre_tipo_proceso'] = $name;

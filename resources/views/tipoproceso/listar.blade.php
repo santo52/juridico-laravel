@@ -93,7 +93,7 @@
             <form onsubmit="tipoProceso.upsert(event)">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="recipient-name" class="control-label">* Nombre del tipo de proceso</label>
+                        <label for="recipient-name" class="control-label">Nombre del tipo de proceso</label>
                         <input type="text" class="form-control required" id="tipoNombre" name="nombre_tipo_proceso">
                     </div>
                     <div class="form-group">

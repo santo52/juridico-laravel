@@ -49,7 +49,7 @@ class EntidadJusticiaController extends Controller
     public function upsert(Request $request){
 
         $id = $request->get('id_entidad_justicia');
-        $name = strtoupper($request->get('nombre_entidad_justicia'));
+        $name = $request->get('nombre_entidad_justicia');
         $entidad = $this->getEntidad($id, $name);
         $data = $request->all();
         $data['nombre_entidad_justicia'] = $name;

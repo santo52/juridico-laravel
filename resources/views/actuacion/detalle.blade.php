@@ -15,7 +15,7 @@
                     <div class="col-sm-12">
                         <div class="row">
                             <div class="col-sm-12">
-                                <label class="lblForm">* Nombre de la actuación</label>
+                                <label class="lblForm">Nombre de la actuación</label>
                                 <input {{!isset($permissions->cambiar_nombre) ? 'disabled' : '' }} value="{{ isset($actuacion) ? $actuacion['nombre_actuacion'] : ''}}" type="text"
                                     id="nombreActuacion" name="nombreActuacion" class="form-control required" />
                             </div>
@@ -164,7 +164,7 @@
                         <div id="alertaDocumentos"></div>
                         <div class="row">
                             <div class="col-sm-6">
-                                <label id="documentosAsociados" class="lblForm">* Documentos asociados a la
+                                <label id="documentosAsociados" class="lblForm">Documentos asociados a la
                                     actuación</label>
                                 <select class="form-control" title="Seleccionar" onchange="actuacion.addDocument(this)">
                                     @foreach($documentos as $documento)
@@ -174,7 +174,7 @@
                                 </select>
                             </div>
                             <div class="col-sm-6">
-                                <label id="platillasAsociadas" class="lblForm">* Plantillas asociadas a la
+                                <label id="platillasAsociadas" class="lblForm">Plantillas asociadas a la
                                     actuación</label>
                                 <select class="form-control" title="Seleccionar"
                                     onchange="actuacion.addDocumentTemplate(this)">

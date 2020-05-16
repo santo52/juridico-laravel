@@ -116,7 +116,7 @@
                 <div class="modal-body">
                     <div class="form-group row">
                         <div class="col-xs-4">
-                            <label for="recipient-name" class="control-label">* Perfil</label>
+                            <label for="recipient-name" class="control-label">Perfil</label>
                             <select class="form-control required" id="id_perfil" name="id_perfil" title="Seleccione">
                                 @foreach ($perfiles as $item)
                                 <option value="{{$item->id_perfil}}">{{$item->nombre_perfil}}
@@ -125,7 +125,7 @@
                             </select>
                         </div>
                         <div class="col-xs-4">
-                            <label for="recipient-name" class="control-label">* Usuario</label>
+                            <label for="recipient-name" class="control-label">Usuario</label>
                             <input type="text" class="form-control required" id="nombre_usuario"
                                 name="nombre_usuario">
                         </div>
@@ -138,7 +138,7 @@
                     <hr class="separator">
                     <div class="form-group row">
                         <div class="col-xs-6">
-                            <label for="recipient-name" class="control-label">* Tipo de documento</label>
+                            <label for="recipient-name" class="control-label">Tipo de documento</label>
                             <select class="form-control" id="tipoDocumento" name="id_tipo_documento" title="Seleccione">
                                 @foreach ($tiposDocumento as $item)
                                 <option value="{{$item->id_tipo_documento}}">{{$item->nombre_tipo_documento}}
@@ -147,14 +147,14 @@
                             </select>
                         </div>
                         <div class="col-xs-6">
-                            <label for="recipient-name" class="control-label">* Número de documento</label>
+                            <label for="recipient-name" class="control-label">Número de documento</label>
                             <input type="text" class="form-control required" id="numeroDocumento"
                                 name="numero_documento">
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-xs-6">
-                            <label for="recipient-name" class="control-label">* Primer apellido</label>
+                            <label for="recipient-name" class="control-label">Primer apellido</label>
                             <input type="text" class="form-control required" id="primerApellido" name="primer_apellido">
                         </div>
                         <div class="col-xs-6">
@@ -164,7 +164,7 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-xs-6">
-                            <label for="primerNombre" class="control-label">* Primer nombre</label>
+                            <label for="primerNombre" class="control-label">Primer nombre</label>
                             <input type="text" class="form-control required" id="primerNombre" name="primer_nombre">
                         </div>
                         <div class="col-xs-6">
@@ -175,7 +175,7 @@
                     <hr class="separator">
                     <div class="form-group row">
                         <div class="col-xs-6">
-                            <label for="recipient-name" class="control-label">* Sede operativa</label>
+                            <label for="recipient-name" class="control-label">Sede operativa</label>
                             <select class="form-control" id="municipio" name="id_municipio" title="Seleccione" onchange="usuario.changeMunicipio(this)">
                                 @foreach ($municipios as $item)
                                 <option value="{{$item->id_municipio}}">{{$item->nombre_municipio}}
@@ -184,21 +184,21 @@
                             </select>
                         </div>
                         <div class="col-xs-6">
-                            <label for="recipient-name" class="control-label">* Dirección</label>
+                            <label for="recipient-name" class="control-label">Dirección</label>
                             <input type="text" class="form-control required" id="direccion"
                                 name="direccion">
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-xs-6">
-                            <label for="recipient-name" class="control-label">* Teléfono</label>
+                            <label for="recipient-name" class="control-label">Teléfono</label>
                             <div class="input-group">
                                 <span class="input-group-addon" id="indicativo">+1</span>
                                 <input type="text" class="form-control required" id="telefono" name="telefono">
                             </div>
                         </div>
                         <div class="col-xs-6">
-                            <label for="recipient-name" class="control-label">* Correo electrónico</label>
+                            <label for="recipient-name" class="control-label">Correo electrónico</label>
                             <input type="email" class="form-control required" id="correoElectronico"
                                 name="correo_electronico">
                         </div>

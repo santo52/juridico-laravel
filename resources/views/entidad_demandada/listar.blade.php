@@ -92,7 +92,7 @@
             <form onsubmit="entidadDemandada.upsert(event)">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="recipient-name" class="control-label">* Nombre de la entidad demandada</label>
+                        <label for="recipient-name" class="control-label">Nombre de la entidad demandada</label>
                         <input type="text" class="form-control required" id="etapaNombre" name="nombre_entidad_demandada">
                     </div>
                     <div class="form-group">

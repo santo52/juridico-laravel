@@ -71,7 +71,7 @@ class EtapaProcesoController extends Controller {
     public function upsert(Request $request){
 
         $id = $request->get('id_etapa_proceso');
-        $name = strtoupper($request->get('nombre_etapa_proceso'));
+        $name = $request->get('nombre_etapa_proceso');
         $etapa = $this->getEtapa($id, $name);
         $data = $request->all();
         $data['nombre_etapa_proceso'] = $name;

@@ -88,6 +88,12 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/usuario/delete/{id}', 'UsuarioController@delete');
     Route::post('/usuario/municipio/{id}', 'UsuarioController@getMunicipio');
 
+    Route::post('/cliente/listar', 'ClienteController@index');
+    Route::post('/cliente/upsert', 'ClienteController@upsert');
+    Route::post('/cliente/{id}', 'ClienteController@get');
+
+    Route::post('/departamento/municipios/{id}', 'DepartamentoController@getMunicipios');
+
 
     // Route::post('/proceso/listar', 'ActuacionController@index');
     // Route::post('/tipoproceso/listar', 'ActuacionController@index');

@@ -94,7 +94,7 @@
             <form onsubmit="etapaProceso.upsert(event)">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="recipient-name" class="control-label">* Nombre de la etapa de un proceso</label>
+                        <label for="recipient-name" class="control-label">Nombre de la etapa de un proceso</label>
                         <input type="text" class="form-control required" id="etapaNombre" name="nombre_etapa_proceso">
                     </div>
                     <div class="form-group">

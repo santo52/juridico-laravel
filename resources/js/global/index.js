@@ -36,8 +36,12 @@ function compileLibraries() {
     })
 
     $('select').selectpicker();
-
     $('.table').footable();
+    const requiredFields = $('form').find('.form-control.required').toArray()
+    requiredFields.map(item => {
+        const $label = $(item).siblings('label')
+        $label.html('* ' + $label.html())
+    })
 }
 
 jQuery(function () {

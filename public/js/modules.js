@@ -248,6 +248,152 @@ var ActuacionEtapaProceso = /*#__PURE__*/function () {
 
 var actuacionEtapaProceso = new ActuacionEtapaProceso();
 
+var Cliente = /*#__PURE__*/function () {
+  function Cliente() {
+    _classCallCheck(this, Cliente);
+  }
+
+  _createClass(Cliente, [{
+    key: "changeMunicipio",
+    value: function changeMunicipio(self) {
+      var municipio = $(self).val();
+      $.ajax({
+        url: '/cliente/municipio/' + municipio,
+        success: function success(data) {
+          if (data.indicativo) {
+            $('#indicativo').show().text('+' + data.indicativo);
+          } else {
+            $('#indicativo').hide();
+          }
+        }
+      });
+    }
+  }, {
+    key: "changeDepartamento",
+    value: function changeDepartamento(self) {
+      var departamento = $(self).val();
+      $.ajax({
+        url: '/departamento/municipios/' + departamento,
+        success: function success(data) {
+          $('#id_municipio').val('');
+          var html = data.map(function (item) {
+            return "<option value=\"".concat(item.id_municipio, "\">").concat(item.nombre_municipio, "</option>");
+          });
+          $('#id_municipio').html(html).selectpicker('refresh');
+        }
+      });
+    }
+  }, {
+    key: "onChangeIntermediario",
+    value: function onChangeIntermediario(self) {
+      var intermediario = $(self).val();
+      $.ajax({
+        url: '/intermediario/get/' + intermediario,
+        success: function success(_ref2) {
+          var intermediario = _ref2.intermediario;
+          $('#documento_intermediario').val(intermediario.numero_documento);
+          $('#indicativo_intermediario').text('+' + intermediario.indicativo);
+          $('#telefono_intermediario').val(intermediario.telefono);
+          $('#email_intermediario').val(intermediario.correo_electronico);
+        }
+      });
+    }
+  }, {
+    key: "createEditModal",
+    value: function createEditModal(id) {
+      var title = id ? 'Editar cliente' : 'Crear cliente';
+      $('#createModal').modal();
+      $('#createValue').val(id);
+      $('#createTitle').text(title);
+      $('#tipoDocumento').val(1).selectpicker('refresh');
+      $('#municipio').val(1).selectpicker('refresh');
+      $('#numeroDocumento').val('');
+      $('#primerApellido').val('');
+      $('#segundoApellido').val('');
+      $('#primerNombre').val('');
+      $('#segundoNombre').val('');
+      $('#telefono').val('');
+      $('#correoElectronico').val('');
+      $('#etapaEstado').prop('checked', true).change();
+      $('#retencion').val(0);
+      $('#indicativo').show().text('+1');
+
+      if (id) {
+        $.ajax({
+          url: '/cliente/get/' + id,
+          success: function success(_ref3) {
+            var cliente = _ref3.cliente;
+            $('#tipoDocumento').val(cliente.id_tipo_documento).selectpicker('refresh');
+            $('#numeroDocumento').val(cliente.numero_documento);
+            $('#primerApellido').val(cliente.primer_apellido);
+            $('#segundoApellido').val(cliente.segundo_apellido);
+            $('#primerNombre').val(cliente.primer_nombre);
+            $('#segundoNombre').val(cliente.segundo_nombre);
+            $('#telefono').val(cliente.telefono);
+            $('#retencion').val(cliente.retencion);
+            $('#municipio').val(cliente.id_municipio).selectpicker('refresh');
+            $('#correoElectronico').val(cliente.correo_electronico);
+            $('#etapaEstado').prop('checked', cliente.estado_cliente == 1).change();
+
+            if (cliente.indicativo) {
+              $('#indicativo').text('+' + cliente.indicativo);
+            } else {
+              $('#indicativo').hide();
+            }
+          }
+        });
+      }
+    }
+  }, {
+    key: "upsert",
+    value: function upsert(e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (validateForm(e)) {
+        var formData = new FormData(e.target);
+        $.ajax({
+          url: '/cliente/upsert',
+          data: new URLSearchParams(formData),
+          success: function success(data) {
+            if (data.clientExists) {
+              $('#numero_documento').parent().addClass('has-error');
+              var text = 'Ya existe un cliente con este número de documento';
+              showErrorPopover($('#numero_documento'), text, 'top');
+            } else if (data.saved) {
+              location.hash = 'cliente/listar';
+            }
+          }
+        });
+      }
+
+      return false;
+    }
+  }, {
+    key: "openDelete",
+    value: function openDelete(id) {
+      $('#deleteModal').modal();
+      $('#deleteValue').val(id);
+    }
+  }, {
+    key: "delete",
+    value: function _delete() {
+      var id = $('#deleteValue').val();
+      $.ajax({
+        url: '/cliente/delete/' + id,
+        data: {},
+        success: function success() {
+          location.reload();
+        }
+      });
+    }
+  }]);
+
+  return Cliente;
+}();
+
+var cliente = new Cliente();
+
 var Documento = /*#__PURE__*/function () {
   function Documento() {
     _classCallCheck(this, Documento);
@@ -267,8 +413,8 @@ var Documento = /*#__PURE__*/function () {
       if (id) {
         $.ajax({
           url: '/documento/get/' + id,
-          success: function success(_ref2) {
-            var documento = _ref2.documento;
+          success: function success(_ref4) {
+            var documento = _ref4.documento;
             $('#documentoNombre').val(documento.nombre_documento);
             $('#documentoEstado').prop('checked', documento.estado_documento == 1).change();
             $('#documentoObligatorio').prop('checked', documento.obligatoriedad_documento == 1).change();
@@ -344,8 +490,8 @@ var EntidadDemandada = /*#__PURE__*/function () {
       if (id) {
         $.ajax({
           url: '/entidades-demandadas/get/' + id,
-          success: function success(_ref3) {
-            var entidadDemandada = _ref3.entidadDemandada;
+          success: function success(_ref5) {
+            var entidadDemandada = _ref5.entidadDemandada;
             $('#etapaNombre').val(entidadDemandada.nombre_entidad_demandada);
             $('#etapaEstado').prop('checked', entidadDemandada.estado_entidad_demandada == 1).change();
           }
@@ -422,8 +568,8 @@ var EntidadJusticia = /*#__PURE__*/function () {
       if (id) {
         $.ajax({
           url: '/entidades-de-justicia/get/' + id,
-          success: function success(_ref4) {
-            var entidadJusticia = _ref4.entidadJusticia;
+          success: function success(_ref6) {
+            var entidadJusticia = _ref6.entidadJusticia;
             $('#etapaNombre').val(entidadJusticia.nombre_entidad_justicia);
             $('#etapaEstado').prop('checked', entidadJusticia.estado_entidad_justicia == 1).change();
             $('#primeraInstancia').prop('checked', entidadJusticia.aplica_primera_instancia == 1).change();
@@ -573,8 +719,8 @@ var EtapaProceso = /*#__PURE__*/function () {
       $('#etapaNombre').val('');
       $('#etapaEstado').prop('checked', true).change();
       $('#createTitle').text(title);
-      this.renderModalData(id).then(function (_ref5) {
-        var etapaProceso = _ref5.etapaProceso;
+      this.renderModalData(id).then(function (_ref7) {
+        var etapaProceso = _ref7.etapaProceso;
         $('#etapaNombre').val(etapaProceso.nombre_etapa_proceso);
         $('#etapaEstado').prop('checked', etapaProceso.estado_etapa_proceso == 1).change();
       });
@@ -628,8 +774,8 @@ var EtapaProceso = /*#__PURE__*/function () {
       $.ajax({
         url: '/etapas-de-proceso/actuacion/delete/' + id,
         data: {},
-        success: function success(_ref6) {
-          var deleted = _ref6.deleted;
+        success: function success(_ref8) {
+          var deleted = _ref8.deleted;
 
           if (deleted) {
             $('#actuacionRow' + id).remove();
@@ -770,8 +916,8 @@ var Intermediario = /*#__PURE__*/function () {
       if (id) {
         $.ajax({
           url: '/intermediario/get/' + id,
-          success: function success(_ref7) {
-            var intermediario = _ref7.intermediario;
+          success: function success(_ref9) {
+            var intermediario = _ref9.intermediario;
             $('#tipoDocumento').val(intermediario.id_tipo_documento).selectpicker('refresh');
             $('#numeroDocumento').val(intermediario.numero_documento);
             $('#primerApellido').val(intermediario.primer_apellido);
@@ -974,10 +1120,10 @@ var Menu = /*#__PURE__*/function () {
     }
   }, {
     key: "rowAccion",
-    value: function rowAccion(_ref8) {
-      var id_accion = _ref8.id_accion,
-          nombre_accion = _ref8.nombre_accion,
-          observacion = _ref8.observacion;
+    value: function rowAccion(_ref10) {
+      var id_accion = _ref10.id_accion,
+          nombre_accion = _ref10.nombre_accion,
+          observacion = _ref10.observacion;
       return "\n            <tr id=\"accionRow".concat(id_accion, "\">\n                <td>").concat(nombre_accion, "</td>\n                <td>").concat(observacion || '', "</td>\n                <td width=\"30px\">\n                    <div class=\"flex justify-center table-actions\">\n                        <a href=\"javascript:void(0)\" onclick=\"menu.createActionModal(").concat(id_accion, ")\" class=\"btn text-primary\" type=\"button\">\n                            <span class=\"glyphicon glyphicon-pencil\"></span>\n                        </a>\n                        <a href=\"javascript:void(0)\" class=\"btn text-danger\" type=\"button\" onclick=\"menu.deleteActionModal(").concat(id_accion, ")\">\n                            <span class=\"glyphicon glyphicon-remove\"></span>\n                        </a>\n                    </div>\n                </td>\n            </tr>\n        ");
     }
   }, {
@@ -993,8 +1139,8 @@ var Menu = /*#__PURE__*/function () {
       $.ajax({
         url: '/opciones/accion/delete/' + id,
         data: {},
-        success: function success(_ref9) {
-          var deleted = _ref9.deleted;
+        success: function success(_ref11) {
+          var deleted = _ref11.deleted;
 
           if (deleted) {
             $('#accionRow' + id).remove();
@@ -1144,8 +1290,8 @@ var Perfil = /*#__PURE__*/function () {
       $.ajax({
         url: '/perfil/menu/insert',
         data: new URLSearchParams(params),
-        success: function success(_ref10) {
-          var saved = _ref10.saved;
+        success: function success(_ref12) {
+          var saved = _ref12.saved;
 
           if (saved) {
             _this6.redrawTableModal(id_perfil);
@@ -1158,9 +1304,9 @@ var Perfil = /*#__PURE__*/function () {
     value: function deleteMenu(id) {
       $.ajax({
         url: '/perfil/menu/delete/' + id,
-        success: function success(_ref11) {
-          var deleted = _ref11.deleted,
-              menuItem = _ref11.menuItem;
+        success: function success(_ref13) {
+          var deleted = _ref13.deleted,
+              menuItem = _ref13.menuItem;
 
           if (deleted) {
             $('#menuRow' + id).remove();
@@ -1177,8 +1323,8 @@ var Perfil = /*#__PURE__*/function () {
       var id = $('#deleteValue').val();
       $.ajax({
         url: '/perfil/delete/' + id,
-        success: function success(_ref12) {
-          var deleted = _ref12.deleted;
+        success: function success(_ref14) {
+          var deleted = _ref14.deleted;
 
           if (deleted) {
             $('#deleteModal').modal('hide');
@@ -1345,8 +1491,8 @@ var TipoProceso = /*#__PURE__*/function () {
       var title = id ? 'Editar tipo de proceso' : 'Nuevo tipo de proceso';
       $('#createTitle').text(title);
       $('#tipoNombre').val('');
-      this.renderModalData(id).then(function (_ref13) {
-        var tipoProceso = _ref13.tipoProceso;
+      this.renderModalData(id).then(function (_ref15) {
+        var tipoProceso = _ref15.tipoProceso;
 
         if (tipoProceso) {
           $('#tipoNombre').val(tipoProceso.nombre_tipo_proceso);
@@ -1474,8 +1620,8 @@ var Usuario = /*#__PURE__*/function () {
       if (id) {
         $.ajax({
           url: '/usuario/get/' + id,
-          success: function success(_ref14) {
-            var usuario = _ref14.usuario;
+          success: function success(_ref16) {
+            var usuario = _ref16.usuario;
             $('#tipoDocumento').val(usuario.id_tipo_documento).selectpicker('refresh');
             $('#numeroDocumento').val(usuario.numero_documento);
             $('#primerApellido').val(usuario.primer_apellido);

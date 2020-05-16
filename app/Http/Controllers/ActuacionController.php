@@ -39,7 +39,7 @@ class ActuacionController extends Controller
         $nombreActuacion = $request->get('nombreActuacion');
         $actuacion = Actuacion::where([
             'estado_actuacion' => 1,
-            'nombre_actuacion' => trim(strtoupper($nombreActuacion))
+            'nombre_actuacion' => trim($nombreActuacion)
         ]);
 
         if ($actuacion->exists()) {
@@ -90,7 +90,7 @@ class ActuacionController extends Controller
     private function prepareActuacion(Request $request, $id = false) {
 
         $data = [
-            'nombre_actuacion' => trim(strtoupper($request->get('nombreActuacion'))),
+            'nombre_actuacion' => trim($request->get('nombreActuacion')),
             'genera_alertas' => empty($request->get('generaAlertas')) ? 2 : 1,
             'aplica_control_vencimiento' => empty($request->get('aplicaControlVencimiento')) ? 2 : 1,
             'dias_vencimiento' => $request->get('diasVencimiento'),
@@ -171,7 +171,7 @@ class ActuacionController extends Controller
         $nombreActuacion = $request->get('nombreActuacion');
         $actuacion = Actuacion::where([
             ['estado_actuacion', 1],
-            ['nombre_actuacion', trim(strtoupper($nombreActuacion))],
+            ['nombre_actuacion', trim($nombreActuacion)],
             ['id_actuacion', '<>', $id]
         ]);
 

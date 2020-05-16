@@ -48,7 +48,7 @@ class DocumentoController extends Controller
     public function upsert(Request $request){
 
         $id = $request->get('id_documento');
-        $name = strtoupper($request->get('nombre_documento'));
+        $name = $request->get('nombre_documento');
         $documento = $this->getDocumento($id, $name);
         $data = $request->all();
         $data['nombre_documento'] = $name;

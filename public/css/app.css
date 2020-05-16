@@ -1113,7 +1113,52 @@ div.ajax-file-upload-container div.ajax-file-upload-statusbar div.ajax-file-uplo
 }
 
 .separator {
-  border-top: 1px solid #ccc !important;
+  border-top: 1px solid #eee !important;
+}
+
+.separator.margin {
+  margin: 20px 0;
+}
+
+.separator.white {
+  border-color: #fff !important;
+}
+
+ul.nav-tabs {
+  border: none;
+}
+
+ul.nav-tabs > li > a {
+  padding: 7px 10px;
+  background-color: #1f9a7e !important;
+  color: #fff !important;
+}
+
+ul.nav-tabs > li > a:hover,
+ul.nav-tabs > li > a:active,
+ul.nav-tabs > li > a:focus {
+  border-bottom: 0;
+  opacity: 0.8;
+  outline: 0;
+}
+
+ul.nav-tabs > li.active > a {
+  background-color: #fff !important;
+  color: #195f30 !important;
+  font-weight: bold;
+}
+
+.tab-content {
+  border: 1px solid #ddd;
+  border-top: 0;
+}
+
+.form-group.row > * {
+  padding-bottom: 10px;
+}
+
+.form-group.row > *:last-child {
+  padding-bottom: 0;
 }
 
 .flex {

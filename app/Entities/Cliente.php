@@ -15,6 +15,10 @@ class Cliente extends Model
     const UPDATED_AT = 'fecha_actualizacion';
 
     protected $fillable = [
-        "id_cliente", "id_persona", "id_intermediario", "id_contacto", "estado_vital_cliente", "fecha_fallecimiento", "nombre_persona_recomienda", "numero_documento_beneficiario", "nombre_beneficiario", "parentesco_beneficiario", "estado_cliente", "fecha_creacion", "id_usuario_creacion", "fecha_actualizacion", "id_usuario_actualizacion"
+        "id_cliente", "id_persona", "id_intermediario", "id_contacto", "estado_vital_cliente",
+        "fecha_fallecimiento", "nombre_persona_recomienda", "numero_documento_beneficiario",
+        "nombre_beneficiario", "parentesco_beneficiario", "estado_cliente", "fecha_creacion",
+        "id_usuario_creacion", "fecha_actualizacion", "id_usuario_actualizacion", "eliminado",
+        'celular2'
     ];
 }

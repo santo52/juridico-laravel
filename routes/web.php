@@ -91,6 +91,7 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/cliente/listar', 'ClienteController@index');
     Route::post('/cliente/upsert', 'ClienteController@upsert');
     Route::post('/cliente/{id}', 'ClienteController@get');
+    Route::post('/cliente/delete/{id}', 'ClienteController@delete');
 
     Route::post('/proceso/listar', 'ProcesoController@index');
 

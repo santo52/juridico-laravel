@@ -160,5 +160,11 @@ class ClienteController extends Controller
         return Contacto::updateOrCreate(['id_contacto' => $request->get('id_contacto')], $dataContacto);
     }
 
+    public function delete($id) {
+        $client = Cliente::find($id);
+        $client->update([ 'eliminado' => 1 ]);
+        return response()->json([ 'deleted' => true ]);
+    }
+
 
 }

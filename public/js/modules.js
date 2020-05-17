@@ -1375,6 +1375,35 @@ var Proceso = /*#__PURE__*/function () {
       });
     }
   }, {
+    key: "upsert",
+    value: function upsert(e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (validateForm(e)) {
+        var formData = new FormData(e.target);
+        $.ajax({
+          url: '/proceso/upsert',
+          data: new URLSearchParams(formData),
+          success: function success(data) {
+            if (data.procesoExists) {
+              $('#numero_proceso').parent().addClass('has-error');
+              var text = 'Ya existe un proceso con este número';
+              showErrorPopover($('#numero_proceso'), text, 'top');
+            } else if (data.folderExists) {
+              $('#id_carpeta').parent().addClass('has-error');
+              var _text = 'Ya existe un proceso con esta identificación';
+              showErrorPopover($('#id_carpeta'), _text, 'top');
+            } else if (data.saved) {
+              location.hash = 'proceso/listar';
+            }
+          }
+        });
+      }
+
+      return false;
+    }
+  }, {
     key: "changeCliente",
     value: function changeCliente(self) {
       var id = $(self).val();
@@ -1757,12 +1786,12 @@ var Usuario = /*#__PURE__*/function () {
               showErrorPopover($('#numeroDocumento'), text, 'top');
             } else if (data.invalidPassword) {
               $('#password').parent().addClass('has-error');
-              var _text = 'La contraseña debe tener al menos 6 caracteres';
-              showErrorPopover($('#password'), _text, 'top');
+              var _text2 = 'La contraseña debe tener al menos 6 caracteres';
+              showErrorPopover($('#password'), _text2, 'top');
             } else if (data.userExists) {
               $('#nombre_usuario').parent().addClass('has-error');
-              var _text2 = 'El nombre de usuario ya existe';
-              showErrorPopover($('#nombre_usuario'), _text2, 'top');
+              var _text3 = 'El nombre de usuario ya existe';
+              showErrorPopover($('#nombre_usuario'), _text3, 'top');
             }
           }
         });

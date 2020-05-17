@@ -82,8 +82,6 @@ class IntermediarioController extends Controller
             return response()->json([ 'documentExists' => true ]);
         }
 
-        $intermediario = Intermediario::find($id);
-
         $dataPersona = $request->all();
         $dataPersona['numero_documento'] = $documento;
         $dataPersona['id_usuario_actualizacion'] = Auth::id();

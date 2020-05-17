@@ -23,7 +23,7 @@ class ProcesoController extends Controller
             leftjoin('tipo_proceso as tp', 'tp.id_tipo_proceso', 'proceso.id_tipo_proceso')
             ->leftjoin('entidad_demandada as ed', 'ed.id_entidad_demandada', 'proceso.id_entidad_demandada')
             ->leftjoin('municipio as m', 'm.id_municipio', 'proceso.id_municipio')
-            // ->leftjoin('entidad_justicia as ej', 'ej.id_entidad_justicia', 'proceso.id_ultima_entidad_servicio')
+            ->leftjoin('entidad_justicia as ej', 'ej.id_entidad_justicia', 'proceso.id_entidad_justicia')
             ->leftjoin('usuario as u', 'u.id_usuario', 'proceso.id_usuario_responsable')
             ->leftjoin('cliente as c', 'c.id_cliente', 'proceso.id_cliente')
             ->leftjoin('persona as p', 'p.id_persona', 'c.id_persona')
@@ -39,6 +39,7 @@ class ProcesoController extends Controller
 
         $proceso = Proceso::
         leftjoin('municipio as mu', 'mu.id_municipio', 'proceso.id_municipio')
+        ->leftjoin('departamento as de', 'de.id_departamento', 'mu.id_departamento')
         ->where('id_proceso', $id)
         ->first();
 
@@ -95,6 +96,54 @@ class ProcesoController extends Controller
             'usuarios' => $usuarios,
             'clientes' => $clientes
         ]);
+    }
+
+    private function procesoExists($id, $numero_proceso) {
+
+        $conditional[] = ['numero_proceso', $numero_proceso];
+        $conditional[] = ['eliminado', 0];
+        if($id) {
+            $conditional[] = ['id_proceso', '<>', $id];
+        }
+
+        return Proceso::where($conditional)->exists();
+    }
+
+    private function folderExists($id, $id_carpeta) {
+
+        $conditional[] = ['id_carpeta', $id_carpeta];
+        $conditional[] = ['eliminado', 0];
+        if($id) {
+            $conditional[] = ['id_proceso', '<>', $id];
+        }
+
+        return Proceso::where($conditional)->exists();
+    }
+
+    public function upsert(Request $request) {
+        $id = $request->get('id_proceso');
+        $numero_proceso = strtoupper($request->get('numero_proceso'));
+        $id_carpeta = strtoupper($request->get('numero_proceso'));
+
+        if($this->procesoExists($id, $numero_proceso)){
+            return response()->json([ 'procesoExists' => true ]);
+        }
+
+        // if($this->folderExists($id, $id_carpeta)){
+        //     return response()->json([ 'folderExists' => true ]);
+        // }
+
+        $dataProceso = $request->all();
+        $dataProceso['id_usuario_actualizacion'] = Auth::id();
+        $dataProceso['numero_proceso'] = $numero_proceso;
+        $dataProceso['id_carpeta'] = $id_carpeta;
+        $dataProceso['dar_informacion_caso'] = !empty($request->get('dar_informacion_caso')) ? 1 : 0;
+        if(empty($id)){
+            $dataProceso['id_usuario_creacion'] = Auth::id();
+        }
+
+        $saved = Proceso::updateOrCreate(['id_proceso' => $id], $dataProceso);
+        return response()->json([ 'saved' => $saved, $request->all() ]);
     }
 
     public function delete($id) {

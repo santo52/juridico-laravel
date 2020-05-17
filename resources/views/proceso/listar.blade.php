@@ -53,7 +53,12 @@
             <td>{{$proceso['nombre_usuario']}}</td>
             <td>{{$proceso['valor_estudio']}}</td>
             <td>{{$proceso['fecha_retiro_servicio']}}</td>
-            <td>{{$proceso['id_ultima_entidad_servicio']}}</td>
+            <td>
+                @if($proceso['id_ultima_entidad_servicio'])
+                    {{$proceso['id_ultima_entidad_servicio']}}</td>
+                @else
+                    {{$proceso['nombre_entidad_justicia']}}
+                @endif
             <td>{{$proceso['nombre_municipio']}}</td>
             <td>{{$proceso['id_acto_administrativo_retiro']}}</td>
             <td>{{$proceso['normatividad_aplicada_caso']}}</td>

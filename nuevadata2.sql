@@ -49,3 +49,13 @@ ADD COLUMN `eliminado` TINYINT(1) NULL DEFAULT 0 AFTER `id_usuario_actualizacion
 
 ALTER TABLE `actuacion`
 ADD COLUMN `eliminado` TINYINT(1) NULL DEFAULT 0 AFTER `id_usuario_actualizacion`;
+
+ALTER TABLE `proceso`
+ADD COLUMN `numero_proceso` VARCHAR(10) NULL DEFAULT '' AFTER `eliminado`,
+ADD COLUMN `id_carpeta` VARCHAR(45) NULL DEFAULT '' AFTER `numero_proceso`;
+
+ALTER TABLE `proceso`
+ADD COLUMN `id_entidad_justicia` INT NULL AFTER `id_carpeta`;
+
+ALTER TABLE `proceso`
+ADD COLUMN `dar_informacion_caso` TINYINT(1) NULL DEFAULT 0 AFTER `id_entidad_justicia`;

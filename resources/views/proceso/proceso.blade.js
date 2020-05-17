@@ -17,7 +17,39 @@ class Proceso {
         })
     }
 
-    changeCliente(self){
+    upsert(e) {
+
+        e.preventDefault()
+        e.stopPropagation()
+
+        if (validateForm(e)) {
+
+            const formData = new FormData(e.target)
+
+            $.ajax({
+                url: '/proceso/upsert',
+                data: new URLSearchParams(formData),
+                success: data => {
+
+                    if (data.procesoExists) {
+                        $('#numero_proceso').parent().addClass('has-error')
+                        const text = 'Ya existe un proceso con este número'
+                        showErrorPopover($('#numero_proceso'), text, 'top')
+                    } else if (data.folderExists) {
+                        $('#id_carpeta').parent().addClass('has-error')
+                        const text = 'Ya existe un proceso con esta identificación'
+                        showErrorPopover($('#id_carpeta'), text, 'top')
+                    } else if (data.saved) {
+                        location.hash = 'proceso/listar'
+                    }
+                }
+            })
+        }
+
+        return false
+    }
+
+    changeCliente(self) {
         const id = $(self).val()
         $.ajax({
             url: '/cliente/basic/' + id,
@@ -25,23 +57,23 @@ class Proceso {
 
                 const telefonoCliente = []
                 const telefonoIntermediario = []
-                if(cliente.celular) {
+                if (cliente.celular) {
                     telefonoCliente.push(cliente.celular)
                 }
 
-                if(cliente.telefono) {
+                if (cliente.telefono) {
                     telefonoCliente.push(cliente.telefono)
                 }
 
-                if(cliente.celular2) {
+                if (cliente.celular2) {
                     telefonoCliente.push(cliente.celular2)
                 }
 
-                if(cliente.celular_intermediario) {
+                if (cliente.celular_intermediario) {
                     telefonoIntermediario.push(cliente.celular_intermediario)
                 }
 
-                if(cliente.telefono_intermediario) {
+                if (cliente.telefono_intermediario) {
                     telefonoIntermediario.push(cliente.telefono_intermediario)
                 }
 
@@ -62,12 +94,12 @@ class Proceso {
         })
     }
 
-    delete(){
+    delete() {
         const id = $('#deleteValue').val()
         $.ajax({
             url: '/proceso/delete/' + id,
             success: ({ deleted }) => {
-                if(deleted) {
+                if (deleted) {
                     $('#tipoProcesoRow' + id).remove()
                     $('#deleteModal').modal('hide')
                 }

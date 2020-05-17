@@ -46,3 +46,6 @@ ADD COLUMN `celular2` VARCHAR(10) NULL DEFAULT '' AFTER `eliminado`;
 
 ALTER TABLE `proceso`
 ADD COLUMN `eliminado` TINYINT(1) NULL DEFAULT 0 AFTER `id_usuario_actualizacion`;
+
+ALTER TABLE `actuacion`
+ADD COLUMN `eliminado` TINYINT(1) NULL DEFAULT 0 AFTER `id_usuario_actualizacion`;

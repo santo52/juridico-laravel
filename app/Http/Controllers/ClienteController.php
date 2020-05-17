@@ -43,6 +43,28 @@ class ClienteController extends Controller
         ]);
     }
 
+    public function getBasic($id) {
+        $cliente = Cliente::
+            select(
+                'cliente.id_cliente', 'p.numero_documento', 'p.celular', 'p.telefono', 'cliente.celular2', 'mu.indicativo',
+                'pi.numero_documento as numero_documento_intermediario', 'pi.celular as celular_intermediario',
+                'pi.primer_nombre as intermediario_p_nombre', 'pi.segundo_nombre as intermediario_s_nombre',
+                'pi.primer_apellido as intermediario_p_apellido', 'pi.segundo_apellido as intermediario_s_apellido',
+                'pi.telefono as telefono_intermediario', 'pi.celular as celular_intermediario',
+                'mui.indicativo as indicativo_intermediario', 'pi.correo_electronico as correo_electronico_intermediario'
+                )
+            ->leftjoin('persona as p', 'p.id_persona', 'cliente.id_persona')
+            ->leftjoin('municipio as mu', 'mu.id_municipio', 'p.id_municipio')
+
+            ->leftjoin('intermediario as i', 'i.id_intermediario', 'cliente.id_intermediario')
+            ->leftjoin('persona as pi', 'pi.id_persona', 'i.id_persona')
+            ->leftjoin('municipio as mui', 'mui.id_municipio', 'pi.id_municipio')
+            ->where('cliente.id_cliente', $id)
+            ->first();
+
+        return response()->json($cliente);
+    }
+
 
     public function get($id) {
 

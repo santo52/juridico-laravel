@@ -333,6 +333,10 @@ function compileLibraries() {
   });
   $('select').selectpicker();
   $('.table').footable();
+  $('.datepicker-here').datepicker({
+    language: 'es',
+    autoClose: true
+  });
   var requiredFields = $('form').find('.form-control.required').toArray();
   requiredFields.map(function (item) {
     var $label = $(item).siblings('label');

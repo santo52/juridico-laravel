@@ -37,6 +37,12 @@ function compileLibraries() {
 
     $('select').selectpicker();
     $('.table').footable();
+
+    $('.datepicker-here').datepicker({
+        language: 'es',
+        autoClose: true
+    })
+
     const requiredFields = $('form').find('.form-control.required').toArray()
     requiredFields.map(item => {
         const $label = $(item).siblings('label')

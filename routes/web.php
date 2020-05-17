@@ -91,11 +91,12 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/cliente/listar', 'ClienteController@index');
     Route::post('/cliente/upsert', 'ClienteController@upsert');
     Route::post('/cliente/{id}', 'ClienteController@get');
+    Route::post('/cliente/basic/{id}', 'ClienteController@getBasic');
     Route::post('/cliente/delete/{id}', 'ClienteController@delete');
 
     Route::post('/proceso/listar', 'ProcesoController@index');
     Route::post('/proceso/delete/{id}', 'ProcesoController@delete');
-
+    Route::post('/proceso/{id}', 'ProcesoController@get');
 
     Route::post('/departamento/municipios/{id}', 'DepartamentoController@getMunicipios');
 

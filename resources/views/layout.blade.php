@@ -23,9 +23,11 @@
         href="{!! asset('lib/bower_components/bootstrap-toggle/css/bootstrap2-toggle.min.css') !!}" />
     <link rel="stylesheet" type="text/css"
         href="{!! asset('lib/bower_components/footable/compiled/footable.bootstrap.min.css') !!}" />
+        <link rel="stylesheet" type="text/css"
+        href="{!! asset('lib/bower_components/footable/compiled/footable.bootstrap.min.css') !!}" />
 
     <link rel="stylesheet" type="text/css"
-        href="/lib/bower_components/datatables-bootstrap/3/dataTables.bootstrap.css" />
+        href="{!! asset('/lib/bower_components/air-datepicker/dist/css/datepicker.min.css') !!}" />
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.data.css" />
     <link rel="stylesheet" type="text/css" href="/lib/bower_components/nprogress/nprogress.css" />
     <link rel="stylesheet" type="text/css" href="/lib/bower_components/font-awesome/css/font-awesome.min.css" />
@@ -185,19 +187,13 @@
     </script>
 
     <script type="text/javascript" src="/lib/bower_components/nprogress/nprogress.js"></script>
+    <script type="text/javascript" src="{!! asset('lib/bower_components/air-datepicker/dist/js/datepicker.min.js') !!}"></script>
+    <script src="{!! asset('lib/bower_components/air-datepicker/dist/js/i18n/datepicker.es.js') !!}"></script>
+
     <script type="text/javascript" src="{!! asset('js/app.js') !!}"></script>
 
     <script type="text/javascript" src="/css/bootstrap.data.css.js"></script>
-    {{-- <script type="text/javascript" src="/lib/@ckeditor/ckeditor5-build-decoupled-document/build/ckeditor.js"></script>
-		<script type="text/javascript" src="/lib/@ckeditor/ckeditor5-build-decoupled-document/build/translations/es.js"></script> --}}
-    {{-- <script type="text/javascript" src="/core/js/Menu.js"></script> --}}
-    {{-- <script type="text/javascript" src="/core/js/Datatables.js"></script> --}}
-    <script type="text/javascript" src="/core/js/Date.js"></script>
-    <script type="text/javascript" src="/core/js/Message.js"></script>
-    <script type="text/javascript" src="/core/js/State.js"></script>
-    <script type="text/javascript" src="/core/js/Type.js"></script>
-    <script type="text/javascript" src="/core/js/Strings.js"></script>
-    <script type="text/javascript" src="/core/js/Config.js"></script>
+
     @yield('scripts')
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->

@@ -4,6 +4,5 @@ composer update
 #Update autoloads
 composer dump-autoload
 
-# npm run postinstall
-#Migrations
-# php core/migrate.php
+# php artisan storage
+#php artisan storage:link

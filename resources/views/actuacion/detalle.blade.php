@@ -69,7 +69,7 @@
                                     value="{{ isset($actuacion) ? intval($actuacion['valor_actuacion']) : '' }}" />
                             </div>
                         </div>
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-sm-4">
                                 <label class="lblForm">Actuación para creación de cliente</label>
                                 <div class="input-group">
@@ -78,7 +78,7 @@
                                         {{ !isset($actuacion) || $actuacion['actuacion_creacion_cliente'] == '1' ?  'checked' : '' }} />
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                         <hr />
                         <div class="row">
                             <div class="col-sm-4">

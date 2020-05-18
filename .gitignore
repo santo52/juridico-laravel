@@ -11,4 +11,10 @@ Homestead.yaml
 npm-debug.log
 yarn-error.log
 public/lib/bower_components
+public/lib/bower_components/**/*
 resources/views/layout
+public/uploads/**/*
+!public/uploads/.gitkeep
+
+
+

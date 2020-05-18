@@ -98,6 +98,7 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/proceso/upsert', 'ProcesoController@upsert');
     Route::post('/proceso/upload', 'ProcesoController@uploadFile');
     Route::post('/proceso/upload/delete', 'ProcesoController@deleteFile');
+    Route::post('/proceso/tipo-proceso/documentos', 'ProcesoController@getDocumentosTipoProceso');
     Route::post('/proceso/delete/{id}', 'ProcesoController@delete');
     Route::post('/proceso/{id}', 'ProcesoController@get');
 

@@ -13,6 +13,7 @@ class ProcesoDocumento extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        "id_proceso_documento", "id_proceso", "id_documento", "ruta_fisica_archivo", "ruta_http_archivo", "nombre_archivo"
+        "id_proceso_documento", "id_proceso", "id_documento", "ruta_fisica_archivo", "ruta_http_archivo", "nombre_archivo",
+        "id_usuario_creacion"
     ];
 }

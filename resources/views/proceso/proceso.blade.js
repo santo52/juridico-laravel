@@ -5,6 +5,47 @@ class Proceso {
         $('#deleteValue').val(id)
     }
 
+    changeTipoProceso(self) {
+
+        const id = $(self).val()
+
+        const params = {
+            id_proceso: getId(),
+            id_tipo_proceso: id
+        }
+
+        $.ajax({
+            url: '/proceso/tipo-proceso/documentos',
+            data: new URLSearchParams(params),
+            success: data => {
+                if(!data.length) {
+                    $('#documentos-proceso-tab').hide()
+                    return
+                }
+
+                const html = data.map(item => `
+                <div class="file-document"
+                    data-filename="${item.filename ? item.filename : ''}"
+                    data-id="${item.id_documento}"
+                    data-title="${item.nombre_documento}"
+                    data-required="${item.obligatoriedad_documento == 1 ? 'true' : 'false'}">
+                </div>`)
+
+                $('#documentos-proceso-tab').show()
+                $('#documentos-requeridos').html(html)
+
+                const id = getId()
+                fileDocument.init({
+                    url: 'proceso/upload',
+                    path: 'uploads/documentos',
+                    id
+                })
+
+            }
+        })
+
+    }
+
     changeDepartamento(self) {
         const departamento = $(self).val()
         $.ajax({

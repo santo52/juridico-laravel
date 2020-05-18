@@ -6,12 +6,13 @@
 
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation">
+        <li role="presentation" class="active">
             <a href="#informacion-proceso" aria-controls="informacion-proceso" role="tab" data-toggle="tab">
                 Información del proceso
             </a>
         </li>
-        <li role="presentation" class="active">
+
+        <li role="presentation" id="documentos-proceso-tab" @if (!count($documentos)) style="display: none" @endif>
             <a href="#documentos-proceso" aria-controls="documentos-proceso" role="tab" data-toggle="tab">
                 Documentos del proceso
             </a>
@@ -22,7 +23,7 @@
         @if ($proceso)
         <input type="hidden" name="id_proceso" value="{{$proceso->id_proceso}}" />
         @endif
-        <div role="tabpanel" class="tab-pane " id="informacion-proceso">
+        <div role="tabpanel" class="tab-pane active" id="informacion-proceso">
             <div class="form-group row">
                 @if($proceso)
                 <div class="col-xs-12 col-sm-4">
@@ -94,7 +95,7 @@
                 <div class="col-xs-12 col-sm-6">
                     <label for="id_tipo_proceso" class="control-label">Tipo de proceso</label>
                     <select id="id_tipo_proceso" name="id_tipo_proceso" data-live-search="true"
-                        class="form-control required" title="Seleccionar">
+                        class="form-control required" title="Seleccionar" onchange="proceso.changeTipoProceso(this)">
                         @foreach ($tiposProceso as $item)
                         <option @if($proceso && $proceso->id_tipo_proceso == $item->id_tipo_proceso) selected @endif
                             value="{{$item->id_tipo_proceso}}">{{$item->nombre_tipo_proceso}}</option>
@@ -229,7 +230,7 @@
                     class="form-control required">@if($proceso){{$proceso->observaciones_caso}}@endif</textarea>
             </div>
         </div>
-        <div role="tabpanel" class="tab-pane active" id="documentos-proceso">
+        <div role="tabpanel" class="tab-pane" id="documentos-proceso">
 
             {{-- <div>
             <ul>
@@ -253,11 +254,14 @@
                             <div class="separator"></div>
                         </div>
                         <div class="separator margin white"></div>
-                        @foreach ($documentos as $item)
-                        <div class="file-document" data-filename="{{$item->filename}}" data-id="{{$item->id_documento}}"
-                            data-title="{{$item->nombre_documento}}" @if($item->obligatoriedad_documento == 1)
-                            data-required="true" @else data-required="true" @endif></div>
-                        @endforeach
+                        <div id="documentos-requeridos">
+                            @foreach ($documentos as $item)
+                            <div class="file-document" data-filename="{{$item->filename}}"
+                                data-id="{{$item->id_documento}}" data-title="{{$item->nombre_documento}}" @if($item->
+                                obligatoriedad_documento == 1)
+                                data-required="true" @else data-required="true" @endif></div>
+                            @endforeach
+                        </div>
                     </div>
                 </nav>
                 <div style="width: 10px"></div>
@@ -280,11 +284,14 @@
 <script>
     $(document).ready(function(){
         proceso.changeCliente('#id_cliente')
+        const id = getId()
         fileDocument.init({
             url: 'proceso/upload',
             path: 'uploads/documentos',
-            id: getId(),
+            id
         })
+
+        !id && $('#documentos-proceso-tab').hide()
     })
 </script>
 @endsection

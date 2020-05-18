@@ -1360,6 +1360,37 @@ var Proceso = /*#__PURE__*/function () {
       $('#deleteValue').val(id);
     }
   }, {
+    key: "changeTipoProceso",
+    value: function changeTipoProceso(self) {
+      var id = $(self).val();
+      var params = {
+        id_proceso: getId(),
+        id_tipo_proceso: id
+      };
+      $.ajax({
+        url: '/proceso/tipo-proceso/documentos',
+        data: new URLSearchParams(params),
+        success: function success(data) {
+          if (!data.length) {
+            $('#documentos-proceso-tab').hide();
+            return;
+          }
+
+          var html = data.map(function (item) {
+            return "\n                <div class=\"file-document\"\n                    data-filename=\"".concat(item.filename ? item.filename : '', "\"\n                    data-id=\"").concat(item.id_documento, "\"\n                    data-title=\"").concat(item.nombre_documento, "\"\n                    data-required=\"").concat(item.obligatoriedad_documento == 1 ? 'true' : 'false', "\">\n                </div>");
+          });
+          $('#documentos-proceso-tab').show();
+          $('#documentos-requeridos').html(html);
+          var id = getId();
+          fileDocument.init({
+            url: 'proceso/upload',
+            path: 'uploads/documentos',
+            id: id
+          });
+        }
+      });
+    }
+  }, {
     key: "changeDepartamento",
     value: function changeDepartamento(self) {
       var departamento = $(self).val();

@@ -59,3 +59,12 @@ ADD COLUMN `id_entidad_justicia` INT NULL AFTER `id_carpeta`;
 
 ALTER TABLE `proceso`
 ADD COLUMN `dar_informacion_caso` TINYINT(1) NULL DEFAULT 0 AFTER `id_entidad_justicia`;
+
+ALTER TABLE `proceso_documento`
+DROP FOREIGN KEY `FK_proceso_documento_proceso`;
+
+ALTER TABLE `proceso_documento`
+DROP INDEX `FK_proceso_documento_proceso` ;
+
+ALTER TABLE `proceso_documento`
+ADD COLUMN `id_usuario_creacion` INT NULL DEFAULT 0 AFTER `nombre_archivo`;

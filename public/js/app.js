@@ -743,7 +743,8 @@ function errorLog(xhr, status, error) {
 function getId() {
   var split = location.hash.split('/');
   var index = split.length - 1;
-  return split[index];
+  var id = split[index];
+  return isNaN(id) ? 0 : id;
 }
 
 $.fn.footableAdd = function (html) {

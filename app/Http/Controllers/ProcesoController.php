@@ -40,6 +40,15 @@ class ProcesoController extends Controller
         ]);
     }
 
+    public function getDocumentosTipoProceso(Request $request) {
+        $id_proceso = $request->get('id_proceso');
+        $id_tipo_proceso = $request->get('id_tipo_proceso');
+        if(empty($id_tipo_proceso)) {
+            return response()->json([]);
+        }
+        return response()->json($this->getDocumentos($id_proceso, $id_tipo_proceso));
+    }
+
     private function getDocumentos($id, $id_tipo_proceso) {
         $actuacion = EtapasProcesoTipoProceso::
             select('a.id_actuacion')
@@ -197,7 +206,15 @@ class ProcesoController extends Controller
         }
 
         $saved = Proceso::updateOrCreate(['id_proceso' => $id], $dataProceso);
-        return response()->json(['saved' => $saved, $request->all()]);
+
+        if(empty($id)) {
+            ProcesoDocumento::where([
+                'id_proceso' => 0,
+                'id_usuario_creacion' => Auth::id()
+            ])->update([ 'id_proceso' => $saved->id_proceso ]);
+        }
+
+        return response()->json(['saved' => $saved, $request->all(), Auth::id(), $id]);
     }
 
     public function delete($id) {
@@ -238,7 +255,8 @@ class ProcesoController extends Controller
         ], [
             'id_proceso' => $request->get('id'),
             'id_documento' => $request->get('file_id'),
-            'nombre_archivo' => $filename
+            'nombre_archivo' => $filename,
+            'id_usuario_creacion' => Auth::id()
         ]);
 
         $ext = $this->getExtention($filename);

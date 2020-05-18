@@ -96,10 +96,14 @@ Route::middleware(['auth', 'route'])->group(function () {
 
     Route::post('/proceso/listar', 'ProcesoController@index');
     Route::post('/proceso/upsert', 'ProcesoController@upsert');
+    Route::post('/proceso/upload', 'ProcesoController@uploadFile');
+    Route::post('/proceso/upload/delete', 'ProcesoController@deleteFile');
     Route::post('/proceso/delete/{id}', 'ProcesoController@delete');
     Route::post('/proceso/{id}', 'ProcesoController@get');
 
+
     Route::post('/departamento/municipios/{id}', 'DepartamentoController@getMunicipios');
+
 
 
     // Route::post('/proceso/listar', 'ActuacionController@index');

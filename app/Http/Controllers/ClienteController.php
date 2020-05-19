@@ -50,7 +50,7 @@ class ClienteController extends Controller
                 'pi.numero_documento as numero_documento_intermediario', 'pi.celular as celular_intermediario',
                 'pi.primer_nombre as intermediario_p_nombre', 'pi.segundo_nombre as intermediario_s_nombre',
                 'pi.primer_apellido as intermediario_p_apellido', 'pi.segundo_apellido as intermediario_s_apellido',
-                'pi.telefono as telefono_intermediario', 'pi.celular as celular_intermediario',
+                'pi.telefono as telefono_intermediario', 'pi.celular as celular_intermediario', 'cliente.id_tipo_documento_beneficiario',
                 'mui.indicativo as indicativo_intermediario', 'pi.correo_electronico as correo_electronico_intermediario'
                 )
             ->leftjoin('persona as p', 'p.id_persona', 'cliente.id_persona')
@@ -76,7 +76,7 @@ class ClienteController extends Controller
                 'p.segundo_apellido', 'p.primer_nombre', 'p.segundo_nombre', 'p.direccion', 'p.barrio', 'p.id_municipio', 'p.celular', 'p.telefono',
                 'p.correo_electronico', 'mu.id_departamento', 'de.id_pais', 'mu.indicativo', 'pi.numero_documento as numero_documento_intermediario',
                 'pi.telefono as telefono_intermediario', 'pi.celular as celular_intermediario', 'mui.indicativo as indicativo_intermediario', 'cliente.celular2',
-                'pi.correo_electronico as correo_electronico_intermediario', 'co.numero_documento as numero_documento_contacto', 'co.nombre_contacto',
+                'pi.correo_electronico as correo_electronico_intermediario', 'co.numero_documento as numero_documento_contacto', 'co.nombre_contacto', 'cliente.id_tipo_documento_beneficiario',
                 'co.parentesco as parentesco_contacto', 'co.direccion as direccion_contacto', 'co.barrio as barrio_contacto', 'co.celular as celular_contacto',
                 'co.telefono as telefono_contacto', 'co.correo_electronico as correo_electronico_contacto', 'co.informacion_adicional', 'co.id_municipio as id_municipio_contacto'
             )

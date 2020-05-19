@@ -92,6 +92,23 @@
                         value="{{$cliente->segundo_nombre }}" @endif />
                 </div>
             </div>
+            <div class="form-group row">
+                <div class="col-xs-12 col-sm-6">
+                    <label for="estado_vital_cliente" class="control-label">Estado vital</label>
+                    <select class="form-control required" id="estado_vital_cliente" name="estado_vital_cliente">
+                        <option value="1" @if($cliente) @if($cliente->estado_vital_cliente == 1) selected @endif @else
+                            selected @endif >VIVO</option>
+                        <option value="2" @if($cliente && $cliente->estado_vital_cliente == 2) selected @endif>FALLECIDO
+                        </option>
+                    </select>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <label for="nombre_persona_recomienda" class="control-label">Nombre de la persona que recomendó a la
+                        compañía</label>
+                    <input type="text" class="form-control" id="nombre_persona_recomienda" name="nombre_persona_recomienda"
+                        @if($cliente) value="{{$cliente->nombre_persona_recomienda }}" @endif />
+                </div>
+            </div>
             <div class="separator margin"></div>
             <div class="form-group row">
                 <div class="col-xs-12 col-sm-4">
@@ -138,16 +155,16 @@
             </div>
             <div class="separator margin"></div>
             <div class="form-group row">
-                {{-- <div class="col-xs-12 col-sm-3">
+                <div class="col-xs-12 col-sm-3">
                     <label for="id_tipo_documento_beneficiario" class="control-label">Tipo de documento
                         beneficiario</label>
                     <select class="form-control" id="id_tipo_documento_beneficiario"
                         name="id_tipo_documento_beneficiario" title="Seleccionar">
                         @foreach ($tiposDocumento as $item)
-                        <option value="{{$item->id_tipo_documento}}">{{$item->nombre_tipo_documento}}</option>
+                        <option @if($cliente && $item->id_tipo_documento === $cliente->id_tipo_documento_beneficiario) selected @endif value="{{$item->id_tipo_documento}}">{{$item->nombre_tipo_documento}}</option>
                 @endforeach
                 </select>
-            </div> --}}
+            </div>
             <div class="col-xs-12 col-sm-3">
                 <label for="numero_documento_beneficiario" class="control-label">Documento beneficiario</label>
                 <input type="text" class="form-control" id="numero_documento_beneficiario"
@@ -187,6 +204,7 @@
                     @if($cliente) value="{{$cliente->correo_electronico }}" @endif />
             </div>
         </div>
+        <div class="separator margin"></div>
         <div class="form-group row">
             <div class="col-xs-12 col-sm-3">
                 <label for="id_intermediario" class="control-label">Intermediario</label>
@@ -221,24 +239,7 @@
                     value="{{$cliente->correo_electronico_intermediario }}" @endif />
             </div>
         </div>
-        <div class="separator margin"></div>
-        <div class="form-group row">
-            <div class="col-xs-12 col-sm-6">
-                <label for="estado_vital_cliente" class="control-label">Estado vital</label>
-                <select class="form-control required" id="estado_vital_cliente" name="estado_vital_cliente">
-                    <option value="1" @if($cliente) @if($cliente->estado_vital_cliente == 1) selected @endif @else
-                        selected @endif >VIVO</option>
-                    <option value="2" @if($cliente && $cliente->estado_vital_cliente == 2) selected @endif>FALLECIDO
-                    </option>
-                </select>
-            </div>
-            <div class="col-xs-12 col-sm-6">
-                <label for="nombre_persona_recomienda" class="control-label">Nombre de la persona que recomendó a la
-                    compañía</label>
-                <input type="text" class="form-control" id="nombre_persona_recomienda" name="nombre_persona_recomienda"
-                    @if($cliente) value="{{$cliente->nombre_persona_recomienda }}" @endif />
-            </div>
-        </div>
+
 </div>
 <div role="tabpanel" class="tab-pane" id="informacion-contacto">
     <div class="form-group row">

@@ -68,3 +68,6 @@ DROP INDEX `FK_proceso_documento_proceso` ;
 
 ALTER TABLE `proceso_documento`
 ADD COLUMN `id_usuario_creacion` INT NULL DEFAULT 0 AFTER `nombre_archivo`;
+
+ALTER TABLE `cliente`
+ADD COLUMN `id_tipo_documento_beneficiario` INT NULL DEFAULT 0 AFTER `celular2`;

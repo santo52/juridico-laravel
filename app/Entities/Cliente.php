@@ -19,6 +19,6 @@ class Cliente extends Model
         "fecha_fallecimiento", "nombre_persona_recomienda", "numero_documento_beneficiario",
         "nombre_beneficiario", "parentesco_beneficiario", "estado_cliente", "fecha_creacion",
         "id_usuario_creacion", "fecha_actualizacion", "id_usuario_actualizacion", "eliminado",
-        'celular2'
+        'celular2', 'id_tipo_documento_beneficiario'
     ];
 }

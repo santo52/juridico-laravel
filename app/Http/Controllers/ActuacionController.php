@@ -43,7 +43,7 @@ class ActuacionController extends Controller
         ]);
 
         if ($actuacion->exists()) {
-            return response()->json(['exists' => true]);
+            return response()->json(['exists' => truez]);
         }
 
         $saved = $this->upsert($request);
@@ -146,17 +146,16 @@ class ActuacionController extends Controller
             return response()->json(['redirect' => 'actuacion/crear']);
         }
 
-        $table = DB::Table('actuacion as a');
         $documentos = Documento::where('estado_documento', 1)->get();
         $plantillasDocumento = PlantillaDocumento::where('estado_plantilla_documento', 1)->get();
 
-        $actuacionDocumentos = $table->select('d.*')
+        $actuacionDocumentos = DB::Table('actuacion as a')->select('d.*')
             ->leftJoin('actuacion_documento as ad', 'a.id_actuacion', '=', 'ad.id_actuacion')
             ->leftJoin('documento as d', 'd.id_documento', '=', 'ad.id_documento')
             ->where([['a.id_actuacion', $id], ['d.estado_documento', 1]])
             ->get();
 
-        $actuacionPlantillasDocumento = $table->select('pd.*')
+        $actuacionPlantillasDocumento = DB::Table('actuacion as a')->select('pd.*')
             ->leftJoin('actuacion_plantilla_documento as apd', 'a.id_actuacion', '=', 'apd.id_actuacion')
             ->leftJoin('plantilla_documento as pd', 'pd.id_plantilla_documento', '=', 'apd.id_plantilla_documento')
             ->where([['a.id_actuacion', $id], ['pd.estado_plantilla_documento', 1]])

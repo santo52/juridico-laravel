@@ -33,9 +33,9 @@
             <th data-breakpoints="all">Municipio</th>
             {{-- <th data-breakpoints="all">Barrio</th>
             <th data-breakpoints="all">Dirección</th> --}}
-            <th>Retención aplicada</th>
+            <th data-filterable="false">Retención aplicada</th>
             <th data-breakpoints="xs sm">Estado</th>
-            <th>Acciones</th>
+            <th data-filterable="false" data-sortable="false"></th>
         </tr>
     </thead>
     <tbody>

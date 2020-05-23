@@ -29,7 +29,7 @@
             <th data-breakpoints="xs sm">Celular</th>
             <th data-breakpoints="all">Celular 2</th>
             <th data-breakpoints="xs">Correo electrónico</th>
-            <th data-breakpoints="all">Fecha de creación</th>
+            <th data-breakpoints="all" data-filterable="false">Fecha de creación</th>
             <th data-breakpoints="all">Nombre de quien recomienda</th>
             {{-- <th data-breakpoints="all">País</th>
             <th data-breakpoints="all">Departamento</th> --}}
@@ -38,7 +38,7 @@
              <th data-breakpoints="all">Dirección</th>
             <th>Estado vital</th>
             <th data-breakpoints="xs sm">Estado</th>
-            <th>Acciones</th>
+            <th data-filterable="false" data-sortable="false"></th>
         </tr>
     </thead>
     <tbody>

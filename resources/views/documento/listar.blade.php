@@ -23,9 +23,9 @@
         <tr class="bg-success">
             <th>ID</th>
             <th>Nombre</th>
-            <th>¿obligatorio?</th>
+            <th data-filterable="false">¿obligatorio?</th>
             <th>Estado</th>
-            <th>Acciones</th>
+            <th data-filterable="false" data-sortable="false"></th>
         </tr>
     </thead>
     <tbody>

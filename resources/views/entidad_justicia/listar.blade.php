@@ -23,10 +23,10 @@
         <tr class="bg-success">
             <th>ID</th>
             <th>Nombre</th>
-            <th>¿Aplica primera instancia?</th>
-            <th>¿Aplica segunda instancia?</th>
+            <th data-filterable="false">¿Aplica primera instancia?</th>
+            <th data-filterable="false">¿Aplica segunda instancia?</th>
             <th>Estado</th>
-            <th>Acciones</th>
+            <th data-filterable="false" data-sortable="false"></th>
         </tr>
     </thead>
     <tbody>

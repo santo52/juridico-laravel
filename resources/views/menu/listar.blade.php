@@ -27,7 +27,7 @@
             <th>Nombre</th>
             <th>Padre</th>
             <th>Ruta</th>
-            <th>Acciones</th>
+            <th data-filterable="false" data-sortable="false"></th>
         </tr>
     </thead>
     <tbody>

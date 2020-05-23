@@ -24,7 +24,7 @@
             <th>ID</th>
             <th>Perfil</th>
             <th>Estado</th>
-            <th>Acciones</th>
+            <th data-filterable="false" data-sortable="false"></th>
         </tr>
     </thead>
     <tbody>

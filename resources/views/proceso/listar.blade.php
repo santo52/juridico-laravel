@@ -29,15 +29,15 @@
             <th>Tipo de proceso</th>
             <th>Entidad demandada</th>
             <th>Usuario responsable</th>
-            <th data-breakpoints="all">Valor del estudio</th>
-            <th data-breakpoints="all">Fecha de retiro del servicio</th>
+            <th data-breakpoints="all" data-filterable="false">Valor del estudio</th>
+            <th data-breakpoints="all" data-filterable="false">Fecha de retiro del servicio</th>
             <th data-breakpoints="all">Última entidad de servicio</th>
             <th>Municipio</th>
             <th data-breakpoints="all">Acto administrativo del retiro</th>
             <th data-breakpoints="all">Normatividad aplicada al caso</th>
             <th data-breakpoints="all">Observaciones del caso</th>
             <th data-breakpoints="xs sm">Estado</th>
-            <th></th>
+            <th data-filterable="false" data-sortable="false"></th>
         </tr>
     </thead>
     <tbody>
@@ -64,7 +64,7 @@
             <td>{{$proceso['normatividad_aplicada_caso']}}</td>
             <td>{{$proceso['observaciones_caso']}}</td>
             <td>{{$proceso['estado_proceso'] == 2 ? 'Inactivo' : 'Activo'}}</td>
-            <td>
+            <td >
                 <div class="flex justify-center table-actions">
                     @isset ($permissions->editar)
                     <a href="#proceso/{{$proceso['id_proceso']}}" class="btn text-primary" type="button">

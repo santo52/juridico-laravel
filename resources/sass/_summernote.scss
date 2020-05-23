@@ -1,0 +1,10 @@
+.summernote-variables-container {
+    .summernote-variables-item {
+        padding: 5px 15px;
+        cursor: pointer;
+        display: block;
+        &:hover {
+            background-color: #52ebab;
+        }
+    }
+}

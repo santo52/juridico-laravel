@@ -449,6 +449,97 @@ function getId() {
     return isNaN(id) ? 0 : id;
 }
 
+function initSummernoteVariables() {
+    $.ajax({
+        url: '/variables/all',
+        async: false,
+        success: variables => window.summernoteVariableList = variables || []
+    })
+
+    return window.summernoteVariableList.reduce((initial, item) => {
+        const key = item.nombre_grupo_variable.toLowerCase().replace(' ', '_');
+        const func = buildSummernoteFunction(key, item)
+        return { ...initial, [key]: func };
+    }, {})
+}
+
+function buildSummernoteFunction(key, item) {
+    return function (context) {
+        const ui = $.summernote.ui;
+        if(item.children && item.children.length) {
+            context.memo('button.' + key, function () {
+                // create button
+
+                const list = item.children
+                    .map(child => `<div class="summernote-variables-item" data-slug="${child.valor_variable}" >${child.nombre_variable}</div>`)
+                    .join('')
+
+                var button = ui.buttonGroup([
+                    ui.button({
+                        className: 'dropdown-toggle',
+                        contents: '<span class="fa fa-database"></span><span style="padding: 10px;">' +  item.nombre_grupo_variable + '</span><span class="caret"></span>',
+                        tooltip: 'Variables ' + item.nombre_grupo_variable,
+                        data: {
+                            toggle: 'dropdown'
+                        }
+                    }),
+                    ui.dropdown({
+                        className: 'drop-default summernote-list',
+                        contents: "<div class='summernote-variables-container'>" + list + "</div>",
+                        callback: function ($dropdown) {
+                            $dropdown.find('.summernote-variables-item').each(function () {
+                                $(this).click(function () {
+                                    context.invoke('editor.saveRange');
+                                    context.invoke('editor.restoreRange');
+                                    context.invoke('editor.focus');
+                                    context.invoke("insertText", ' {!!' + $(this).data("slug") + '!!} ');
+                                });
+                            });
+                        }
+                    })
+                ]);
+
+                // create jQuery object from button instance.
+                return button.render();
+            });
+        }
+    }
+}
+
+
+
+$.fn.richText = function (config = {}) {
+
+    const placeholder = $(this).attr('placeholder') || config.placeholder || ''
+
+    const toolbar = [
+        ["style", ["style"]],
+        ["font", ["bold", "underline", "clear"]],
+        ["fontname", ["fontname"]],
+        ["color", ["color"]],
+        ["para", ["ul", "ol", "paragraph"]],
+        ["table", ["table"]],
+        ["insert", ["link", "picture", "video"]]
+    ]
+
+    if(config.variables) {
+        const plugins = initSummernoteVariables()
+        $.extend($.summernote.plugins, plugins);
+        toolbar.push(['variables', Object.keys(plugins)])
+    }
+
+    // toolbar.push(["view", [/*"fullscreen", "codeview", */"help"]])
+
+    $(this).summernote({
+        ...config,
+        lang: 'es-ES',
+        minHeight: 200,
+        tabsize: 2,
+        placeholder,
+        toolbar
+    })
+}
+
 
 $.fn.footableAdd = function (html) {
     $(this).find('tbody .footable-empty').remove()
@@ -636,7 +727,7 @@ const fileDocument = {
                 success: data => {
                     $progress.removeClass('active').css('width', '100%')
                     $link = $parent.find('.file-document-content a')
-                    if(path) {
+                    if (path) {
                         $link.attr('href', path + '/' + data.path)
                         $link.attr('target', '_blank')
                     } else {

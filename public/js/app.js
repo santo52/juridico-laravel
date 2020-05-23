@@ -1,3 +1,9 @@
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function utf8_encode(argString) {
   //  discuss at: http://phpjs.org/functions/utf8_encode/
   // original by: Webtoolkit.info (http://www.webtoolkit.info/)
@@ -746,6 +752,80 @@ function getId() {
   var id = split[index];
   return isNaN(id) ? 0 : id;
 }
+
+function initSummernoteVariables() {
+  $.ajax({
+    url: '/variables/all',
+    async: false,
+    success: function success(variables) {
+      return window.summernoteVariableList = variables || [];
+    }
+  });
+  return window.summernoteVariableList.reduce(function (initial, item) {
+    var key = item.nombre_grupo_variable.toLowerCase().replace(' ', '_');
+    var func = buildSummernoteFunction(key, item);
+    return _objectSpread(_objectSpread({}, initial), {}, _defineProperty({}, key, func));
+  }, {});
+}
+
+function buildSummernoteFunction(key, item) {
+  return function (context) {
+    var ui = $.summernote.ui;
+
+    if (item.children && item.children.length) {
+      context.memo('button.' + key, function () {
+        // create button
+        var list = item.children.map(function (child) {
+          return "<div class=\"summernote-variables-item\" data-slug=\"".concat(child.valor_variable, "\" >").concat(child.nombre_variable, "</div>");
+        }).join('');
+        var button = ui.buttonGroup([ui.button({
+          className: 'dropdown-toggle',
+          contents: '<span class="fa fa-database"></span><span style="padding: 10px;">' + item.nombre_grupo_variable + '</span><span class="caret"></span>',
+          tooltip: 'Variables ' + item.nombre_grupo_variable,
+          data: {
+            toggle: 'dropdown'
+          }
+        }), ui.dropdown({
+          className: 'drop-default summernote-list',
+          contents: "<div class='summernote-variables-container'>" + list + "</div>",
+          callback: function callback($dropdown) {
+            $dropdown.find('.summernote-variables-item').each(function () {
+              $(this).click(function () {
+                context.invoke('editor.saveRange');
+                context.invoke('editor.restoreRange');
+                context.invoke('editor.focus');
+                context.invoke("insertText", ' {!!' + $(this).data("slug") + '!!} ');
+              });
+            });
+          }
+        })]); // create jQuery object from button instance.
+
+        return button.render();
+      });
+    }
+  };
+}
+
+$.fn.richText = function () {
+  var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var placeholder = $(this).attr('placeholder') || config.placeholder || '';
+  var toolbar = [["style", ["style"]], ["font", ["bold", "underline", "clear"]], ["fontname", ["fontname"]], ["color", ["color"]], ["para", ["ul", "ol", "paragraph"]], ["table", ["table"]], ["insert", ["link", "picture", "video"]]];
+
+  if (config.variables) {
+    var plugins = initSummernoteVariables();
+    $.extend($.summernote.plugins, plugins);
+    toolbar.push(['variables', Object.keys(plugins)]);
+  } // toolbar.push(["view", [/*"fullscreen", "codeview", */"help"]])
+
+
+  $(this).summernote(_objectSpread(_objectSpread({}, config), {}, {
+    lang: 'es-ES',
+    minHeight: 200,
+    tabsize: 2,
+    placeholder: placeholder,
+    toolbar: toolbar
+  }));
+};
 
 $.fn.footableAdd = function (html) {
   $(this).find('tbody .footable-empty').remove();

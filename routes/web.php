@@ -102,22 +102,14 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/proceso/delete/{id}', 'ProcesoController@delete');
     Route::post('/proceso/{id}', 'ProcesoController@get');
 
-
     Route::post('/departamento/municipios/{id}', 'DepartamentoController@getMunicipios');
+    Route::post('/variables/all', 'VariableController@getAll');
 
+    Route::post('/plantillas/listar', 'PlantillaDocumentoController@index');
+    Route::post('/plantillas/upsert', 'PlantillaDocumentoController@upsert');
+    Route::post('/plantillas/delete/{id}', 'PlantillaDocumentoController@delete');
+    Route::post('/plantillas/{id}', 'PlantillaDocumentoController@get');
 
-
-    // Route::post('/proceso/listar', 'ActuacionController@index');
-    // Route::post('/tipoproceso/listar', 'ActuacionController@index');
-    // Route::post('/etapaproceso/listar', 'ActuacionController@index');
-    // Route::post('/documento/listar', 'ActuacionController@index');
-    // Route::post('/plantilladocumento/listar', 'ActuacionController@index');
-    // Route::post('/entidadpension/listar', 'ActuacionController@index');
-    // Route::post('/entidadjusticia/listar', 'ActuacionController@index');
-    // Route::post('/entermediario/listar', 'ActuacionController@index');
-    // Route::post('/actuacionetapaproceso/listar', 'ActuacionController@index');
-    // Route::post('/cliente/listar', 'ActuacionController@index');
-    // Route::post('/usuario/listar', 'ActuacionController@index');
 
 });
 

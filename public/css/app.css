@@ -1395,6 +1395,16 @@ ul.nav-tabs > li.active > a {
   color: #337ab7 !important;
 }
 
+.summernote-variables-container .summernote-variables-item {
+  padding: 5px 15px;
+  cursor: pointer;
+  display: block;
+}
+
+.summernote-variables-container .summernote-variables-item:hover {
+  background-color: #52ebab;
+}
+
 .juridico.right-buttons {
   position: relative;
   width: 100px;

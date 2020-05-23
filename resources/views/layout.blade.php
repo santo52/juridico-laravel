@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" ng-app="appData">
+<html lang="es">
 
 <head>
     <title>{{ env('APP_NAME') }}<?php if(isset($this->opcion)) echo ' :: ' . $this->opcion; ?></title>
@@ -13,8 +13,9 @@
 
     <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="stylesheet" type="text/css"
-        href="/lib/bower_components/jquery-ui/themes/south-street/jquery-ui.min.css" />
-    <link rel="stylesheet" type="text/css" href="/lib/bower_components/bootstrap/dist/css/bootstrap.min.css" />
+        href="{!! asset('lib/bower_components/jquery-ui/themes/south-street/jquery-ui.min.css') !!}" />
+    <link rel="stylesheet" type="text/css"
+        href="{!! asset('lib/bower_components/bootstrap/dist/css/bootstrap.min.css') !!}" />
     {{-- <link rel="stylesheet" type="text/css" --}}
     {{-- href="/lib/bower_components/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css" /> --}}
     <link rel="stylesheet" type="text/css"
@@ -23,24 +24,23 @@
         href="{!! asset('lib/bower_components/bootstrap-toggle/css/bootstrap2-toggle.min.css') !!}" />
     <link rel="stylesheet" type="text/css"
         href="{!! asset('lib/bower_components/footable/compiled/footable.bootstrap.min.css') !!}" />
-        <link rel="stylesheet" type="text/css"
+    <link rel="stylesheet" type="text/css"
         href="{!! asset('lib/bower_components/footable/compiled/footable.bootstrap.min.css') !!}" />
 
     <link rel="stylesheet" type="text/css"
-        href="{!! asset('/lib/bower_components/air-datepicker/dist/css/datepicker.min.css') !!}" />
-    <link rel="stylesheet" type="text/css" href="/css/bootstrap.data.css" />
-    <link rel="stylesheet" type="text/css" href="/lib/bower_components/nprogress/nprogress.css" />
-    <link rel="stylesheet" type="text/css" href="/lib/bower_components/font-awesome/css/font-awesome.min.css" />
-    <link rel="stylesheet" type="text/css" href="/lib/jquery-file-upload/css/uploadfile.css" />
-    <link rel="stylesheet" type="text/css" href="/css/app.css" />
+        href="{!! asset('lib/bower_components/air-datepicker/dist/css/datepicker.min.css') !!}" />
+    <link rel="stylesheet" type="text/css"
+        href="{!! asset('lib/bower_components/summernote/dist/summernote.min.css') !!}" />
 
-    <script type="text/javascript" src="/js/fontOpenSans.js"></script>
-    <script type="text/javascript" src="/lib/bower_components/jquery/dist/jquery.min.js"></script>
-    {{-- <script type="text/javascript" src="/lib/bower_components/angular/angular.min.js"></script>
-    <script type="text/javascript">
-        var appData = angular.module('appData', []);
-    </script> --}}
+    <link rel="stylesheet" type="text/css" href="{!! asset('css/bootstrap.data.css') !!}" />
+    <link rel="stylesheet" type="text/css" href="{!! asset('lib/bower_components/nprogress/nprogress.css') !!}" />
+    <link rel="stylesheet" type="text/css"
+        href="{!! asset('lib/bower_components/font-awesome/css/font-awesome.min.css') !!}" />
+    <link rel="stylesheet" type="text/css" href="{!! asset('lib/jquery-file-upload/css/uploadfile.css') !!}" />
+    <link rel="stylesheet" type="text/css" href="{!! asset('css/app.css') !!}" />
 
+    <script type="text/javascript" src="{!! asset('js/fontOpenSans.js') !!}"></script>
+    <script type="text/javascript" src="{!! asset('lib/bower_components/jquery/dist/jquery.min.js') !!}"></script>
     <noscript>Tu navegador no soporta JavaScript!</noscript>
 </head>
 
@@ -169,8 +169,9 @@
         </div>
     </div>
 
-    <script type="text/javascript" src="/lib/bower_components/jquery-ui/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="/lib/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="{!! asset('lib/bower_components/jquery-ui/jquery-ui.min.js') !!}"></script>
+    <script type="text/javascript" src="{!! asset('lib/bower_components/bootstrap/dist/js/bootstrap.min.js') !!}">
+    </script>
     {{-- <script type="text/javascript" src="/lib/bower_components/bootstrap-switch/dist/js/bootstrap-switch.min.js"></script> --}}
     <script type="text/javascript"
         src="{!! asset('lib/bower_components/bootstrap-toggle/js/bootstrap2-toggle.min.js') !!}"></script>
@@ -178,21 +179,32 @@
         src="{!! asset('lib/bower_components/bootstrap-select/dist/js/bootstrap-select.min.js') !!}"></script>
     <script type="text/javascript" src="{!! asset('lib/bower_components/footable/compiled/footable.min.js') !!}">
     </script>
-    <script type="text/javascript" src="/lib/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="/lib/bower_components/datatables-bootstrap/3/dataTables.bootstrap.min.js">
+    <script type="text/javascript"
+        src="{!! asset('lib/bower_components/datatables/media/js/jquery.dataTables.min.js') !!}"></script>
+    <script type="text/javascript"
+        src="{!! asset('lib/bower_components/datatables-bootstrap/3/dataTables.bootstrap.min.js') !!}">
     </script>
-    <script type="text/javascript" src="lib/jquery-file-upload/js/jquery.uploadfile.min.js"></script>
-    <script type="text/javascript" src="/lib/bower_components/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script type="text/javascript" src="/lib/bower_components/jquery-validation/dist/additional-methods.min.js">
+    <script type="text/javascript" src="{!! asset('lib/jquery-file-upload/js/jquery.uploadfile.min.js') !!}"></script>
+    <script type="text/javascript"
+        src="{!! asset('lib/bower_components/jquery-validation/dist/jquery.validate.min.js') !!}"></script>
+    <script type="text/javascript"
+        src="{!! asset('lib/bower_components/jquery-validation/dist/additional-methods.min.js') !!}">
     </script>
 
-    <script type="text/javascript" src="/lib/bower_components/nprogress/nprogress.js"></script>
-    <script type="text/javascript" src="{!! asset('lib/bower_components/air-datepicker/dist/js/datepicker.min.js') !!}"></script>
+    <script type="text/javascript" src="{!! asset('lib/bower_components/nprogress/nprogress.js') !!}"></script>
+    <script type="text/javascript" src="{!! asset('lib/bower_components/air-datepicker/dist/js/datepicker.min.js') !!}">
+    </script>
+
+    <script type="text/javascript" src="{!! asset('lib/bower_components/summernote/dist/summernote.min.js') !!}">
+    </script>
+
+    <script type="text/javascript"
+        src="{!! asset('lib/bower_components/summernote/dist/lang/summernote-es-ES.min.js') !!}"></script>
     <script src="{!! asset('lib/bower_components/air-datepicker/dist/js/i18n/datepicker.es.js') !!}"></script>
 
     <script type="text/javascript" src="{!! asset('js/app.js') !!}"></script>
 
-    <script type="text/javascript" src="/css/bootstrap.data.css.js"></script>
+    <script type="text/javascript" src="{!! asset('css/bootstrap.data.css.js') !!}"></script>
 
     @yield('scripts')
 

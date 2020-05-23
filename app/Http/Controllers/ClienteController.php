@@ -34,7 +34,6 @@ class ClienteController extends Controller
             ->leftjoin('municipio as mui', 'mui.id_municipio', 'pi.id_municipio')
 
             ->where([
-            'estado_cliente' => '1',
             'cliente.eliminado' => 0,
         ])->get();
 
@@ -162,6 +161,8 @@ class ClienteController extends Controller
         $dataCliente =  $dataPersona;
         $dataCliente['id_persona'] = $persona->id_persona;
 
+
+        $dataCliente['estado_cliente'] = empty($request->get('estado')) ? 2 : 1;
         $saved = Cliente::updateOrCreate(['id_cliente' => $id], $dataCliente);
         return response()->json(['saved' => $saved, $request->all() ]);
     }

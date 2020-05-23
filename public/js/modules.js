@@ -82,12 +82,6 @@ var Actuacion = /*#__PURE__*/function () {
           var value = $(item).data('value');
           value && templates.push(value);
         });
-
-        if (!documents.length || !templates.length) {
-          this.alert(documents.length, templates.length);
-          return false;
-        }
-
         formData.append('documents', documents);
         formData.append('templates', templates);
         $.ajax({
@@ -104,25 +98,6 @@ var Actuacion = /*#__PURE__*/function () {
       }
 
       return false;
-    }
-  }, {
-    key: "alert",
-    value: function alert(documents, templates) {
-      var message = [];
-
-      if (!documents) {
-        message.push('un documento');
-      }
-
-      if (!templates) {
-        message.push('una plantilla');
-      }
-
-      var html = "\n        <div class=\"alert alert-danger alert-dismissible fade in\" role=\"alert\">\n            <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">\xD7</span></button>\n            Se debe agregar al menos ".concat(message.join(' y '), "\n        </div>\n  ");
-      $('#alertaDocumentos').html(html);
-      setTimeout(function () {
-        $('#alertaDocumentos').children().alert('close');
-      }, 5000);
     }
   }, {
     key: "removeDocument",

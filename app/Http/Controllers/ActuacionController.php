@@ -70,18 +70,22 @@ class ActuacionController extends Controller
 
         //Relacion con Actuacion documento
         foreach ($documents as $document) {
-            ActuacionDocumento::create([
-                'id_actuacion' => $actuacion->id_actuacion,
-                'id_documento' => $document
-            ])->save();
+            if($document) {
+                ActuacionDocumento::create([
+                    'id_actuacion' => $actuacion->id_actuacion,
+                    'id_documento' => $document
+                ])->save();
+            }
         }
 
         //Relacion con Actuacion plantilla documento
         foreach ($templates as $template) {
-            ActuacionPlantillaDocumento::create([
-                'id_actuacion' => $actuacion->id_actuacion,
-                'id_plantilla_documento' => $template
-            ])->save();
+            if($template) {
+                ActuacionPlantillaDocumento::create([
+                    'id_actuacion' => $actuacion->id_actuacion,
+                    'id_plantilla_documento' => $template
+                ])->save();
+            }
         }
 
         return true;
@@ -179,8 +183,8 @@ class ActuacionController extends Controller
             return response()->json(['exists' => true]);
         }
 
-        $saved = $this->upsert($request, $id);
-        return response()->json(['saved' => $saved]);
+       $saved = $this->upsert($request, $id);
+       return response()->json(['saved' => $saved]);
     }
 
     public function delete($id) {

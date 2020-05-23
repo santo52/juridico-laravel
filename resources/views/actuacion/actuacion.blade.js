@@ -61,11 +61,6 @@ class Actuacion {
                 value && templates.push(value)
             })
 
-            if (!documents.length || !templates.length) {
-                this.alert(documents.length, templates.length)
-                return false
-            }
-
             formData.append('documents', documents)
             formData.append('templates', templates)
 
@@ -82,24 +77,6 @@ class Actuacion {
             })
         }
         return false
-    }
-
-    alert(documents, templates) {
-
-        const message = []
-        if (!documents) { message.push('un documento') }
-        if (!templates) { message.push('una plantilla') }
-
-        const html = `
-        <div class="alert alert-danger alert-dismissible fade in" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-            Se debe agregar al menos ${message.join(' y ')}
-        </div>
-  `
-        $('#alertaDocumentos').html(html)
-        setTimeout(() => {
-            $('#alertaDocumentos').children().alert('close')
-        }, 5000)
     }
 
     removeDocument(self) {

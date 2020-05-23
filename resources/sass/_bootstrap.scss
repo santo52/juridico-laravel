@@ -1057,16 +1057,21 @@ ul.nav-tabs {
     border: none;
     >li {
         >a {
+            margin-top: 3px;
             padding: 7px 10px;
             background-color: $tab-color !important;
             color: #fff !important;
+
             &:hover,
             &:active,
             &:focus {
-                border-bottom: 0;
                 opacity: .8;
                 outline: 0;
             }
+        }
+
+        &.finalized {
+            opacity: .6;
         }
 
         &.active {

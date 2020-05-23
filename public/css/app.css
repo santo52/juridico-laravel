@@ -1129,6 +1129,7 @@ ul.nav-tabs {
 }
 
 ul.nav-tabs > li > a {
+  margin-top: 3px;
   padding: 7px 10px;
   background-color: #1f9a7e !important;
   color: #fff !important;
@@ -1137,9 +1138,12 @@ ul.nav-tabs > li > a {
 ul.nav-tabs > li > a:hover,
 ul.nav-tabs > li > a:active,
 ul.nav-tabs > li > a:focus {
-  border-bottom: 0;
   opacity: 0.8;
   outline: 0;
+}
+
+ul.nav-tabs > li.finalized {
+  opacity: 0.6;
 }
 
 ul.nav-tabs > li.active > a {

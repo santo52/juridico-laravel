@@ -23,45 +23,36 @@ use App\Entities\Cliente;
 
 class ProcesoController extends Controller
 {
-    public function index() {
-        $procesos = Proceso::
-            leftjoin('tipo_proceso as tp', 'tp.id_tipo_proceso', 'proceso.id_tipo_proceso')
-            ->leftjoin('entidad_demandada as ed', 'ed.id_entidad_demandada', 'proceso.id_entidad_demandada')
-            ->leftjoin('municipio as m', 'm.id_municipio', 'proceso.id_municipio')
-            ->leftjoin('entidad_justicia as ej', 'ej.id_entidad_justicia', 'proceso.id_entidad_justicia')
-            ->leftjoin('usuario as u', 'u.id_usuario', 'proceso.id_usuario_responsable')
-            ->leftjoin('cliente as c', 'c.id_cliente', 'proceso.id_cliente')
-            ->leftjoin('persona as p', 'p.id_persona', 'c.id_persona')
-            ->where('proceso.eliminado', 0)
-            ->get();
-
+    public function index()
+    {
         return $this->renderSection('proceso.listar', [
-            'procesos' => $procesos
+            'procesos' => Proceso::getAll()
         ]);
     }
 
-    public function getDocumentosTipoProceso(Request $request) {
+    public function getDocumentosTipoProceso(Request $request)
+    {
         $id_proceso = $request->get('id_proceso');
         $id_tipo_proceso = $request->get('id_tipo_proceso');
-        if(empty($id_tipo_proceso)) {
+        if (empty($id_tipo_proceso)) {
             return response()->json([]);
         }
         return response()->json($this->getDocumentos($id_proceso, $id_tipo_proceso));
     }
 
-    private function getDocumentos($id, $id_tipo_proceso) {
-        $actuacion = EtapasProcesoTipoProceso::
-            select('a.id_actuacion')
+    private function getDocumentos($id, $id_tipo_proceso)
+    {
+        $actuacion = EtapasProcesoTipoProceso::select('a.id_actuacion')
             ->leftjoin('etapa_proceso as ep', 'ep.id_etapa_proceso', 'etapas_proceso_tipo_proceso.id_etapa_proceso')
             ->leftjoin('actuacion_etapa_proceso as aep', 'aep.id_etapa_proceso', 'ep.id_etapa_proceso')
             ->leftjoin('actuacion as a', 'a.id_actuacion', 'aep.id_actuacion')
             ->where([
-            'id_tipo_proceso' => $id_tipo_proceso,
-            'ep.eliminado' => 0,
-            'a.eliminado' => 0,
-            'ep.estado_etapa_proceso' => '1',
-            'a.estado_actuacion' => '1',
-        ])
+                'id_tipo_proceso' => $id_tipo_proceso,
+                'ep.eliminado' => 0,
+                'a.eliminado' => 0,
+                'ep.estado_etapa_proceso' => '1',
+                'a.estado_actuacion' => '1',
+            ])
             ->whereNotNull('id_actuacion_etapa_proceso')
             ->orderBy('etapas_proceso_tipo_proceso.order')
             ->orderBy('aep.order')
@@ -71,18 +62,16 @@ class ProcesoController extends Controller
             return [];
         }
 
-        $actuacionDocumentos = ActuacionDocumento::
-            leftjoin('documento as d', 'd.id_documento', 'actuacion_documento.id_documento')
+        $actuacionDocumentos = ActuacionDocumento::leftjoin('documento as d', 'd.id_documento', 'actuacion_documento.id_documento')
             ->where([
-            'id_actuacion' => $actuacion->id_actuacion,
-            'eliminado' => 0,
-            'estado_documento' => '1',
-        ])->get();
+                'id_actuacion' => $actuacion->id_actuacion,
+                'eliminado' => 0,
+                'estado_documento' => '1',
+            ])->get();
 
         foreach ($actuacionDocumentos as $key => $value) {
             $idProceso = $id ? $id : 0;
-            $procesoDocumento = ProcesoDocumento::
-                where([
+            $procesoDocumento = ProcesoDocumento::where([
                 'id_proceso' => $idProceso,
                 'id_documento' => $value->id_documento,
             ])->first();
@@ -99,20 +88,14 @@ class ProcesoController extends Controller
         return $actuacionDocumentos;
     }
 
-    public function get($id) {
-
-        $proceso = Proceso::
-            leftjoin('municipio as mu', 'mu.id_municipio', 'proceso.id_municipio')
-            ->leftjoin('departamento as de', 'de.id_departamento', 'mu.id_departamento')
-            ->where('id_proceso', $id)
-            ->first();
-
-        $clientes = Cliente::
-            leftjoin('persona as pe', 'pe.id_persona', 'cliente.id_persona')
+    public function get($id)
+    {
+        $proceso = Proceso::get($id);
+        $clientes = Cliente::leftjoin('persona as pe', 'pe.id_persona', 'cliente.id_persona')
             ->where([
-            'cliente.eliminado' => 0,
-            'estado_cliente' => '1'
-        ])->get();
+                'cliente.eliminado' => 0,
+                'estado_cliente' => '1'
+            ])->get();
 
         $tiposProceso = TipoProceso::where([
             'eliminado' => 0,
@@ -134,17 +117,16 @@ class ProcesoController extends Controller
             'estado_actuacion' => '1'
         ])->get();
 
-        $usuarios = Usuario::
-            leftjoin('persona as p', 'p.id_persona', 'usuario.id_persona')
+        $usuarios = Usuario::leftjoin('persona as p', 'p.id_persona', 'usuario.id_persona')
             ->where([
-            'eliminado' => 0,
-            'estado_usuario' => '1'
-        ])->get();
+                'eliminado' => 0,
+                'estado_usuario' => '1'
+            ])->get();
 
         $documentos = $proceso ? $this->getDocumentos($id, $proceso->id_tipo_proceso) : [];
         $paises = Pais::all();
         $departamentos = Departamento::all();
-        $municipios = $proceso ?Municipio::where('id_departamento', $proceso->id_departamento)->get() : [];
+        $municipios = $proceso ? Municipio::where('id_departamento', $proceso->id_departamento)->get() : [];
 
         return $this->renderSection('proceso.detalle', [
             'proceso' => $proceso,
@@ -161,7 +143,8 @@ class ProcesoController extends Controller
         ]);
     }
 
-    private function procesoExists($id, $numero_proceso) {
+    private function procesoExists($id, $numero_proceso)
+    {
 
         $conditional[] = ['numero_proceso', $numero_proceso];
         $conditional[] = ['eliminado', 0];
@@ -172,7 +155,8 @@ class ProcesoController extends Controller
         return Proceso::where($conditional)->exists();
     }
 
-    private function folderExists($id, $id_carpeta) {
+    private function folderExists($id, $id_carpeta)
+    {
 
         $conditional[] = ['id_carpeta', $id_carpeta];
         $conditional[] = ['eliminado', 0];
@@ -183,7 +167,8 @@ class ProcesoController extends Controller
         return Proceso::where($conditional)->exists();
     }
 
-    public function upsert(Request $request) {
+    public function upsert(Request $request)
+    {
         $id = $request->get('id_proceso');
         $numero_proceso = strtoupper($request->get('numero_proceso'));
         $id_carpeta = strtoupper($request->get('numero_proceso'));
@@ -207,29 +192,32 @@ class ProcesoController extends Controller
 
         $saved = Proceso::updateOrCreate(['id_proceso' => $id], $dataProceso);
 
-        if(empty($id)) {
+        if (empty($id)) {
             ProcesoDocumento::where([
                 'id_proceso' => 0,
                 'id_usuario_creacion' => Auth::id()
-            ])->update([ 'id_proceso' => $saved->id_proceso ]);
+            ])->update(['id_proceso' => $saved->id_proceso]);
         }
 
         return response()->json(['saved' => $saved, $request->all(), Auth::id(), $id]);
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $client = Proceso::find($id);
         $client->update(['eliminado' => 1]);
         return response()->json(['deleted' => true]);
     }
 
-    private function getExtention($filename) {
+    private function getExtention($filename)
+    {
         $fileSplit = explode('.', $filename);
         $index = count($fileSplit) - 1;
         return '.' . $fileSplit[$index];
     }
 
-    public function deleteFile(Request $request) {
+    public function deleteFile(Request $request)
+    {
         $procesoDocumento = ProcesoDocumento::where([
             'id_proceso' => $request->get('id'),
             'id_documento' => $request->get('file_id')
@@ -246,7 +234,8 @@ class ProcesoController extends Controller
         return response()->json(['deleted' => $deleted]);
     }
 
-    public function uploadFile(Request $request) {
+    public function uploadFile(Request $request)
+    {
         $file = $request->file('file');
         $filename = $file->getClientOriginalName();
         $procesoDocumento = ProcesoDocumento::updateOrCreate([
@@ -264,4 +253,37 @@ class ProcesoController extends Controller
         $path = Storage::disk('documentos')->putFileAs('proceso', $file, $saveAs);
         return response()->json(['filename' => $filename, 'path' => $path]);
     }
+
+    public function seguimientoListar()
+    {
+        return $this->renderSection('proceso.listar', [
+            'procesos' => Proceso::getAll(),
+            'seguimiento' => true
+        ]);
+    }
+
+    public function seguimientoDetalle($id)
+    {
+        $proceso = Proceso::get($id);
+        if(empty($proceso)) {
+            return response()->json([ 'redirect' => 'seguimiento-procesos' ]);
+        }
+
+        return $this->renderSection('seguimiento_proceso.detalle', [
+            'proceso' => $proceso,
+            'etapas' => TipoProceso::getEtapas($proceso->id_tipo_proceso)
+        ]);
+    }
+
+    // 23 caracteres id proceso
+    /**
+     * 12 caracteres id carpeta
+     *
+     * actuaciones
+     *
+     * rojo: desde el dia de vencimiento hacia atras
+     * verde: 0% hasta el 75%;
+     * amarillo: 76% al día anterior.
+     * terminado en gris,
+     */
 }

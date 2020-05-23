@@ -3,11 +3,11 @@
 @section('content')
 <div class="juridico right-buttons">
     <div>
-        @isset ($permissions->crear)
+        @if (isset($permissions->crear) && !isset($seguimiento))
         <a href="#proceso/crear" class="btn btn-default">
             Crear
         </a>
-        @endisset
+        @endif
     </div>
 </div>
 <div class="row">
@@ -32,7 +32,7 @@
             <th data-breakpoints="all" data-filterable="false">Valor del estudio</th>
             <th data-breakpoints="all" data-filterable="false">Fecha de retiro del servicio</th>
             <th data-breakpoints="all">Última entidad de servicio</th>
-            <th>Municipio</th>
+            <th data-breakpoints="all">Municipio</th>
             <th data-breakpoints="all">Acto administrativo del retiro</th>
             <th data-breakpoints="all">Normatividad aplicada al caso</th>
             <th data-breakpoints="all">Observaciones del caso</th>
@@ -67,16 +67,16 @@
             <td >
                 <div class="flex justify-center table-actions">
                     @isset ($permissions->editar)
-                    <a href="#proceso/{{$proceso['id_proceso']}}" class="btn text-primary" type="button">
+                    <a @isset($seguimiento) href="#seguimiento-procesos/{{$proceso['id_proceso']}}" @else href="#proceso/{{$proceso['id_proceso']}}"@endisset class="btn text-primary" type="button">
                         <span class="glyphicon glyphicon-pencil"></span>
                     </a>
                     @endisset
-                    @isset ($permissions->eliminar)
+                    @if (isset($permissions->eliminar) && !isset($seguimiento))
                     <a href="javascript:void(0)" class="btn text-danger" type="button"
                         onclick="proceso.openDelete('{{$proceso['id_proceso']}}')">
                         <span class="glyphicon glyphicon-remove"></span>
                     </a>
-                    @endisset
+                    @endif
                 </div>
             </td>
         </tr>
@@ -85,7 +85,7 @@
     </tbody>
 </table>
 
-@isset ($permissions->eliminar)
+@if (isset($permissions->eliminar) && !isset($seguimiento))
 <div class="modal fade" tabindex="-1" role="dialog" id="deleteModal">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
@@ -105,7 +105,7 @@
         </div>
     </div>
 </div>
-@endisset
+@endif
 
 
 @endsection

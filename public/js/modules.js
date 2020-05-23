@@ -1457,6 +1457,156 @@ var Proceso = /*#__PURE__*/function () {
 
 var proceso = new Proceso();
 
+var SeguimientoProceso = /*#__PURE__*/function () {
+  function SeguimientoProceso() {
+    _classCallCheck(this, SeguimientoProceso);
+  }
+
+  _createClass(SeguimientoProceso, [{
+    key: "openDelete",
+    value: function openDelete(id) {
+      $('#deleteModal').modal();
+      $('#deleteValue').val(id);
+    }
+  }, {
+    key: "changeTipoProceso",
+    value: function changeTipoProceso(self) {
+      var id = $(self).val();
+      var params = {
+        id_proceso: getId(),
+        id_tipo_proceso: id
+      };
+      $.ajax({
+        url: '/proceso/tipo-proceso/documentos',
+        data: new URLSearchParams(params),
+        success: function success(data) {
+          if (!data.length) {
+            $('#documentos-proceso-tab').hide();
+            return;
+          }
+
+          var html = data.map(function (item) {
+            return "\n                <div class=\"file-document\"\n                    data-filename=\"".concat(item.filename ? item.filename : '', "\"\n                    data-id=\"").concat(item.id_documento, "\"\n                    data-title=\"").concat(item.nombre_documento, "\"\n                    data-required=\"").concat(item.obligatoriedad_documento == 1 ? 'true' : 'false', "\">\n                </div>");
+          });
+          $('#documentos-proceso-tab').show();
+          $('#documentos-requeridos').html(html);
+          var id = getId();
+          fileDocument.init({
+            url: 'proceso/upload',
+            path: 'uploads/documentos',
+            id: id
+          });
+        }
+      });
+    }
+  }, {
+    key: "changeDepartamento",
+    value: function changeDepartamento(self) {
+      var departamento = $(self).val();
+      $.ajax({
+        url: '/departamento/municipios/' + departamento,
+        success: function success(data) {
+          $('#id_municipio').val('');
+          var html = data.map(function (item) {
+            return "<option value=\"".concat(item.id_municipio, "\">").concat(item.nombre_municipio, "</option>");
+          });
+          $('#id_municipio').html(html).selectpicker('refresh');
+        }
+      });
+    }
+  }, {
+    key: "upsert",
+    value: function upsert(e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (validateForm(e)) {
+        var formData = new FormData(e.target);
+        $.ajax({
+          url: '/proceso/upsert',
+          data: new URLSearchParams(formData),
+          success: function success(data) {
+            if (data.procesoExists) {
+              $('#numero_proceso').parent().addClass('has-error');
+              var text = 'Ya existe un proceso con este número';
+              showErrorPopover($('#numero_proceso'), text, 'top');
+            } else if (data.folderExists) {
+              $('#id_carpeta').parent().addClass('has-error');
+              var _text2 = 'Ya existe un proceso con esta identificación';
+              showErrorPopover($('#id_carpeta'), _text2, 'top');
+            } else if (data.saved) {
+              location.hash = 'proceso/listar';
+            }
+          }
+        });
+      }
+
+      return false;
+    }
+  }, {
+    key: "changeCliente",
+    value: function changeCliente(self) {
+      var id = $(self).val();
+      $.ajax({
+        url: '/cliente/basic/' + id,
+        success: function success(cliente) {
+          var telefonoCliente = [];
+          var telefonoIntermediario = [];
+
+          if (cliente.celular) {
+            telefonoCliente.push(cliente.celular);
+          }
+
+          if (cliente.telefono) {
+            telefonoCliente.push(cliente.telefono);
+          }
+
+          if (cliente.celular2) {
+            telefonoCliente.push(cliente.celular2);
+          }
+
+          if (cliente.celular_intermediario) {
+            telefonoIntermediario.push(cliente.celular_intermediario);
+          }
+
+          if (cliente.telefono_intermediario) {
+            telefonoIntermediario.push(cliente.telefono_intermediario);
+          }
+
+          $('#documento_cliente').val(cliente.numero_documento);
+          $('#telefono_cliente').val(telefonoCliente.join(' | '));
+          $('#indicativo_cliente').text('+' + cliente.indicativo);
+          $('#nombre_intermediario').val((cliente.intermediario_p_nombre || '') + ' ' + (cliente.intermediario_s_nombre || '') + ' ' + (cliente.intermediario_p_apellido || '') + ' ' + (cliente.intermediario_s_apellido || ''));
+          $('#telefono_intermediario').val(telefonoIntermediario.join(' | '));
+          $('#indicativo_intermediario').val(cliente.indicativo_intermediario);
+          $('#email_intermediario').val(cliente.correo_electronico_intermediario);
+        }
+      });
+    }
+  }, {
+    key: "delete",
+    value: function _delete() {
+      var id = $('#deleteValue').val();
+      $.ajax({
+        url: '/proceso/delete/' + id,
+        success: function success(_ref16) {
+          var deleted = _ref16.deleted;
+
+          if (deleted) {
+            $('#tipoProcesoRow' + id).remove();
+            $('#deleteModal').modal('hide');
+          }
+        }
+      });
+      return false;
+    }
+  }]);
+
+  return SeguimientoProceso;
+}();
+
+var seguimientoProceso = new SeguimientoProceso();
+
 var TipoProceso = /*#__PURE__*/function () {
   function TipoProceso() {
     _classCallCheck(this, TipoProceso);
@@ -1600,8 +1750,8 @@ var TipoProceso = /*#__PURE__*/function () {
       var title = id ? 'Editar tipo de proceso' : 'Nuevo tipo de proceso';
       $('#createTitle').text(title);
       $('#tipoNombre').val('');
-      this.renderModalData(id).then(function (_ref16) {
-        var tipoProceso = _ref16.tipoProceso;
+      this.renderModalData(id).then(function (_ref17) {
+        var tipoProceso = _ref17.tipoProceso;
 
         if (tipoProceso) {
           $('#tipoNombre').val(tipoProceso.nombre_tipo_proceso);
@@ -1729,8 +1879,8 @@ var Usuario = /*#__PURE__*/function () {
       if (id) {
         $.ajax({
           url: '/usuario/get/' + id,
-          success: function success(_ref17) {
-            var usuario = _ref17.usuario;
+          success: function success(_ref18) {
+            var usuario = _ref18.usuario;
             $('#tipoDocumento').val(usuario.id_tipo_documento).selectpicker('refresh');
             $('#numeroDocumento').val(usuario.numero_documento);
             $('#primerApellido').val(usuario.primer_apellido);
@@ -1776,12 +1926,12 @@ var Usuario = /*#__PURE__*/function () {
               showErrorPopover($('#numeroDocumento'), text, 'top');
             } else if (data.invalidPassword) {
               $('#password').parent().addClass('has-error');
-              var _text2 = 'La contraseña debe tener al menos 6 caracteres';
-              showErrorPopover($('#password'), _text2, 'top');
+              var _text3 = 'La contraseña debe tener al menos 6 caracteres';
+              showErrorPopover($('#password'), _text3, 'top');
             } else if (data.userExists) {
               $('#nombre_usuario').parent().addClass('has-error');
-              var _text3 = 'El nombre de usuario ya existe';
-              showErrorPopover($('#nombre_usuario'), _text3, 'top');
+              var _text4 = 'El nombre de usuario ya existe';
+              showErrorPopover($('#nombre_usuario'), _text4, 'top');
             }
           }
         });

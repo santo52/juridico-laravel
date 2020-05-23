@@ -61,7 +61,7 @@
             <th data-breakpoints="all">¿Programar audiencia?</th>
             <th data-breakpoints="xs sm">Control de entrega de documentos</th>
             <th data-breakpoints="all">¿Generar documentos?</th>
-            {{-- <th data-breakpoints="xs">Estado</th> --}}
+            <th data-breakpoints="xs">Estado</th>
             @if (isset($permissions->editar) || isset($permissions->eliminar) )
             <th>Acciones</th>
             @endif
@@ -88,7 +88,7 @@
             <td>{{$actuacion['programar_audiencia']}}</td>
             <td>{{$actuacion['control_entrega_documentos']}}</td>
             <td>{{$actuacion['generar_documentos']}}</td>
-            {{-- <td>{{$actuacion['estado_actuacion']}}</td> --}}
+            <td>{{$actuacion['estado_actuacion']}}</td>
             @if (isset($permissions->editar) || isset($permissions->eliminar) )
             <td>
                 <div class="flex justify-center table-actions">

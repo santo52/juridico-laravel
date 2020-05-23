@@ -23,6 +23,7 @@ class ActuacionCollection extends Collection
             $item['generar_documentos'] = $item['generar_documentos'] == 1 ? 'Sí' : 'No';
             $item['dias_vencimiento'] = number_format($item['dias_vencimiento'], 0, ',', '.');
             $item['valor_actuacion'] = '$ ' . number_format($item['valor_actuacion'], 0, ',', '.');
+            $item['estado_actuacion'] = $item['estado_actuacion'] == 1 ? 'Activo' : 'Inactivo';
             return $item;
         });
     }

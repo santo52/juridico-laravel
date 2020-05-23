@@ -11,6 +11,18 @@
     align-items: center;
 }
 
+.flex-column {
+    flex-direction: column
+}
+
+.justify-end {
+    justify-content: flex-end
+}
+
+.items-end {
+    align-items: flex-end
+}
+
 .space-between {
     justify-content: space-between;
 }

@@ -38,7 +38,7 @@ class ActuacionController extends Controller
 
         $nombreActuacion = $request->get('nombreActuacion');
         $actuacion = Actuacion::where([
-            'estado_actuacion' => 1,
+            'eliminado' => 0,
             'nombre_actuacion' => trim($nombreActuacion)
         ]);
 
@@ -110,11 +110,12 @@ class ActuacionController extends Controller
             'programar_audiencia' => empty($request->get('programarAudiencia')) ? 2 : 1,
             'control_entrega_documentos' => empty($request->get('controlEntregaDocumentos')) ? 2 : 1,
             'generar_documentos' => empty($request->get('generarDocumentos')) ? 2 : 1,
+            'estado_actuacion' => empty($request->get('estado')) ? 2 : 1,
             'id_usuario_actualizacion' => Auth::id()
         ];
 
         if (!$id) {
-            $data['estado_actuacion'] = 1;
+            $data['eliminado'] = 0;
             $data['id_usuario_creacion'] = Auth::id();
         }
 
@@ -126,7 +127,7 @@ class ActuacionController extends Controller
 
         $actuacion = new Actuacion;
         $list = $actuacion
-            ->where('estado_actuacion', 1)
+            ->where('eliminado', 0)
             ->orderBy('id_actuacion', 'desc')
             ->get()
             ->toHuman();
@@ -174,7 +175,7 @@ class ActuacionController extends Controller
 
         $nombreActuacion = $request->get('nombreActuacion');
         $actuacion = Actuacion::where([
-            ['estado_actuacion', 1],
+            ['eliminado', 0],
             ['nombre_actuacion', trim($nombreActuacion)],
             ['id_actuacion', '<>', $id]
         ]);
@@ -189,14 +190,14 @@ class ActuacionController extends Controller
 
     public function delete($id) {
         $actuacion = Actuacion::find($id);
-        $actuacion->estado_actuacion = 2;
+        $actuacion->eliminado = 1;
         $deleted = $actuacion->save();
         return response()->json(['deleted' => $deleted]);
     }
 
     public function restore($id) {
         $actuacion = Actuacion::find($id);
-        $actuacion->estado_actuacion = 1;
+        $actuacion->eliminado = 0;
         $undeleted = $actuacion->save();
         return response()->json(['undeleted' => $undeleted]);
     }
@@ -207,7 +208,7 @@ class ActuacionController extends Controller
 
     public function createPDF() {
         //    return Excel::download(new ActuacionExport, 'actuaciones.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
-        $actuaciones = Actuacion::where('estado_actuacion', 1)->get()->toHuman();
+        $actuaciones = Actuacion::where('eliminado', 0)->get()->toHuman();
         $pdf = \PDF::loadView('actuacion.pdf', ["actuaciones" => $actuaciones])->setPaper('a4', 'landscape');
         return $pdf->download('archivo.pdf');
     }

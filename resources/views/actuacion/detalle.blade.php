@@ -240,6 +240,16 @@
                                 </table>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-sm-12 flex flex-column items-end">
+                                <label class="lblForm">Estado</label>
+                                <div class="input-group">
+                                    <input type="checkbox" id="estado_actuacion" name="estado"
+                                        data-on="Activo" data-off="Inactivo" data-width="100"
+                                        {{ !isset($actuacion) || $actuacion['estado_actuacion'] == '1' ?  'checked' : '' }} />
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">&nbsp;</div>
                         <div class="row">
                             <div class="col-sm-12">

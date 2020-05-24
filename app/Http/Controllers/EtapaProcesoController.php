@@ -8,33 +8,40 @@ use App\Entities\Actuacion;
 use App\Entities\ActuacionEtapaProceso;
 use Illuminate\Support\Facades\Auth;
 
-class EtapaProcesoController extends Controller {
+class EtapaProcesoController extends Controller
+{
 
-    public function index() {
+    public function index()
+    {
         $etapasProceso = EtapaProceso::where('eliminado', 0)->get();
         return $this->renderSection('etapaproceso.listar', [
             'etapas' => $etapasProceso
         ]);
     }
 
-    public function get($id) {
+    public function getActuaciones($id)
+    {
+        $actuaciones = EtapaProceso::getActuaciones($id);
+        return response()->json($actuaciones);
+    }
+
+    public function get($id)
+    {
         $etapaProceso = EtapaProceso::find($id);
 
-        $selectedActuaciones = ActuacionEtapaProceso::
-            leftjoin('actuacion as a', 'a.id_actuacion', 'actuacion_etapa_proceso.id_actuacion')
-            ->where([ 'id_etapa_proceso' => $id])
+        $selectedActuaciones = ActuacionEtapaProceso::leftjoin('actuacion as a', 'a.id_actuacion', 'actuacion_etapa_proceso.id_actuacion')
+            ->where(['id_etapa_proceso' => $id])
             ->orderBy('actuacion_etapa_proceso.order')
             ->get();
 
         $selectedActuacionesID = [];
 
-        foreach($selectedActuaciones as $value) {
+        foreach ($selectedActuaciones as $value) {
             $selectedActuacionesID[] = $value->id_actuacion;
         }
 
-        $actuaciones = Actuacion::
-        whereNotIn('id_actuacion', $selectedActuacionesID)
-        ->where('estado_actuacion', 1)->get();
+        $actuaciones = Actuacion::whereNotIn('id_actuacion', $selectedActuacionesID)
+            ->where('estado_actuacion', 1)->get();
 
         return response()->json([
             'etapaProceso' => $etapaProceso,
@@ -43,18 +50,20 @@ class EtapaProcesoController extends Controller {
         ]);
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $etapaProceso = EtapaProceso::find($id);
-        $deleted = $etapaProceso->update([ 'eliminado' => 1 ]);
-        return response()->json([ 'deleted' => $deleted ]);
+        $deleted = $etapaProceso->update(['eliminado' => 1]);
+        return response()->json(['deleted' => $deleted]);
     }
 
-    private function getEtapa($id, $name) {
-        if($id) {
+    private function getEtapa($id, $name)
+    {
+        if ($id) {
             $type = 'update';
             $etapas = EtapaProceso::where([
                 ['id_etapa_proceso', '<>',  $id],
-                ['nombre_etapa_proceso', '=' ,$name],
+                ['nombre_etapa_proceso', '=', $name],
             ]);
         } else {
             $type = 'create';
@@ -68,7 +77,8 @@ class EtapaProcesoController extends Controller {
         ];
     }
 
-    public function upsert(Request $request){
+    public function upsert(Request $request)
+    {
 
         $id = $request->get('id_etapa_proceso');
         $name = $request->get('nombre_etapa_proceso');
@@ -80,7 +90,7 @@ class EtapaProcesoController extends Controller {
         if ($etapa['exists']) {
 
             $etapas = $etapa['etapas'];
-            if($etapa['type'] === 'update' || $etapas->estado_etapa_proceso === 1) {
+            if ($etapa['type'] === 'update' || $etapas->estado_etapa_proceso === 1) {
                 return response()->json(['exists' => true]);
             }
 
@@ -90,38 +100,61 @@ class EtapaProcesoController extends Controller {
         }
 
         $data['id_usuario_actualizacion'] = Auth::id();
-        if(empty($id)) {
+        if (empty($id)) {
             $data['id_usuario_creacion'] = Auth::id();
         }
 
         $saved = EtapaProceso::updateOrCreate(['id_etapa_proceso' => $id], $data);
-        return response()->json([ 'saved' => $saved ]);
+        return response()->json(['saved' => $saved]);
     }
 
-    public function insertActuacion(Request $request) {
+    public function insertActuacion(Request $request)
+    {
         $data = $request->all();
         $data['id_usuario_creacion'] = Auth::id();
-        $id = $data['id_actuacion_etapa_proceso'];
+        $id = $request->get('id_actuacion_etapa_proceso');
+
+        if (isset($data['after'])) {
+
+            $all = ActuacionEtapaProceso::where([
+                'id_etapa_proceso' => $data['id_etapa_proceso'],
+            ])->orderBy('order')->get();
+
+            foreach ($all as $key => $value) {
+                $found = ActuacionEtapaProceso::find($value->id_actuacion_etapa_proceso);
+                $found->update(['order' => ($key + 1)]);
+            }
+
+            $after = ActuacionEtapaProceso::where([
+                'id_actuacion' => $data['after'],
+                'id_etapa_proceso' => $data['id_etapa_proceso'],
+            ])->first();
+
+            $data['order'] = $after->order;
+        }
+
         $saved = ActuacionEtapaProceso::updateOrCreate(['id_actuacion_etapa_proceso' => $id], $data);
-        return response()->json([ 'saved' => $saved, $data ]);
+        return response()->json(['saved' => $saved, $data]);
     }
 
-    public function deleteActuacion($id) {
+    public function deleteActuacion($id)
+    {
         $deleted = ActuacionEtapaProceso::find($id)->delete();
-        return response()->json([ 'deleted' => $deleted ]);
+        return response()->json(['deleted' => $deleted]);
     }
 
-    public function getActuacion($id) {
-        $actuacion = ActuacionEtapaProceso::
-        leftjoin('actuacion as a', 'a.id_actuacion', 'actuacion_etapa_proceso.id_actuacion')
-        ->find($id);
+    public function getActuacion($id)
+    {
+        $actuacion = ActuacionEtapaProceso::leftjoin('actuacion as a', 'a.id_actuacion', 'actuacion_etapa_proceso.id_actuacion')
+            ->find($id);
         return response()->json($actuacion);
     }
 
-    public function updateOrderActuacion(Request $request) {
+    public function updateOrderActuacion(Request $request)
+    {
         $listEtapaProceso = explode(',', $request->get('orderedList'));
         $conditional['id_etapa_proceso'] = $request->get('id_etapa_proceso');
-        if($request->get('id_etapa_proceso') == 0) {
+        if ($request->get('id_etapa_proceso') == 0) {
             $conditional['id_usuario_creacion'] = Auth::id();
         }
 
@@ -129,9 +162,9 @@ class EtapaProcesoController extends Controller {
         foreach ($listEtapaProceso as $position => $value) {
             $dataSaved[] = ActuacionEtapaProceso::where($conditional)
                 ->where('id_actuacion_etapa_proceso', $value)
-                ->update([ 'order' => ($position + 1) ]);
+                ->update(['order' => ($position + 1)]);
         }
 
-        return response()->json([ 'saved' => $dataSaved, $request->all(), $conditional ]);
+        return response()->json(['saved' => $dataSaved, $request->all(), $conditional]);
     }
 }

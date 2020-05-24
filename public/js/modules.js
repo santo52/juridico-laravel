@@ -1463,80 +1463,56 @@ var SeguimientoProceso = /*#__PURE__*/function () {
   }
 
   _createClass(SeguimientoProceso, [{
-    key: "openDelete",
-    value: function openDelete(id) {
-      $('#deleteModal').modal();
-      $('#deleteValue').val(id);
-    }
-  }, {
-    key: "changeTipoProceso",
-    value: function changeTipoProceso(self) {
-      var id = $(self).val();
-      var params = {
-        id_proceso: getId(),
-        id_tipo_proceso: id
-      };
+    key: "addActuacion",
+    value: function addActuacion(id_etapa_proceso) {
+      $('#actuacionModal').modal();
+      $('#idEtapaProceso').val(id_etapa_proceso);
+      $('#nombre_actuacion').val('');
+      $('#etapaPrimeraActuacion').prop('checked', false).change();
+      $('#orderActuacion').val(1);
+      $('#tiempoMaximoProximaActuacion').val('');
+      $('#UnidadTiempoProximaActuacion').val(1).selectpicker('refresh');
+      $('#agregarActuacionDespuesDe').show().val('').addClass('required').selectpicker('refresh');
       $.ajax({
-        url: '/proceso/tipo-proceso/documentos',
-        data: new URLSearchParams(params),
-        success: function success(data) {
-          if (!data.length) {
-            $('#documentos-proceso-tab').hide();
-            return;
+        url: '/etapas-de-proceso/actuacion/all/' + id_etapa_proceso,
+        success: function success(actuaciones) {
+          if (actuaciones.length) {
+            var html = actuaciones.map(function (actuacion) {
+              return "<option value=\"".concat(actuacion.id_actuacion, "\">").concat(actuacion.nombre_actuacion, "</option>");
+            });
+            $('#actuacionesAfterList').addClass('required').html(html).parents('.form-group').show();
+          } else {
+            $('#actuacionesAfterList').removeClass('required').html('').parents('.form-group').hide();
           }
 
-          var html = data.map(function (item) {
-            return "\n                <div class=\"file-document\"\n                    data-filename=\"".concat(item.filename ? item.filename : '', "\"\n                    data-id=\"").concat(item.id_documento, "\"\n                    data-title=\"").concat(item.nombre_documento, "\"\n                    data-required=\"").concat(item.obligatoriedad_documento == 1 ? 'true' : 'false', "\">\n                </div>");
-          });
-          $('#documentos-proceso-tab').show();
-          $('#documentos-requeridos').html(html);
-          var id = getId();
-          fileDocument.init({
-            url: 'proceso/upload',
-            path: 'uploads/documentos',
-            id: id
-          });
+          $('#actuacionesAfterList').val('').selectpicker('refresh');
+          $('#orderActuacion').val(actuaciones.length + 1);
         }
       });
-    }
-  }, {
-    key: "changeDepartamento",
-    value: function changeDepartamento(self) {
-      var departamento = $(self).val();
       $.ajax({
-        url: '/departamento/municipios/' + departamento,
-        success: function success(data) {
-          $('#id_municipio').val('');
-          var html = data.map(function (item) {
-            return "<option value=\"".concat(item.id_municipio, "\">").concat(item.nombre_municipio, "</option>");
+        url: '/etapas-de-proceso/get/' + id_etapa_proceso,
+        success: function success(_ref16) {
+          var actuaciones = _ref16.actuaciones;
+          var html = actuaciones.map(function (data) {
+            return "<option value=\"".concat(data.id_actuacion, "\">").concat(data.nombre_actuacion, "</option>");
           });
-          $('#id_municipio').html(html).selectpicker('refresh');
+          $('#actuacionesList').html(html).val('').selectpicker('refresh');
         }
       });
     }
   }, {
-    key: "upsert",
-    value: function upsert(e) {
+    key: "saveActuacion",
+    value: function saveActuacion(e) {
       e.preventDefault();
       e.stopPropagation();
 
       if (validateForm(e)) {
         var formData = new FormData(e.target);
         $.ajax({
-          url: '/proceso/upsert',
+          url: '/etapas-de-proceso/actuacion/insert',
           data: new URLSearchParams(formData),
           success: function success(data) {
-            if (data.procesoExists) {
-              $('#numero_proceso').parent().addClass('has-error');
-              var text = 'Ya existe un proceso con este número';
-              showErrorPopover($('#numero_proceso'), text, 'top');
-            } else if (data.folderExists) {
-              $('#id_carpeta').parent().addClass('has-error');
-              var _text2 = 'Ya existe un proceso con esta identificación';
-              showErrorPopover($('#id_carpeta'), _text2, 'top');
-            } else if (data.saved) {
-              location.hash = 'proceso/listar';
-            }
+            location.reload();
           }
         });
       }
@@ -1544,61 +1520,22 @@ var SeguimientoProceso = /*#__PURE__*/function () {
       return false;
     }
   }, {
-    key: "changeCliente",
-    value: function changeCliente(self) {
-      var id = $(self).val();
-      $.ajax({
-        url: '/cliente/basic/' + id,
-        success: function success(cliente) {
-          var telefonoCliente = [];
-          var telefonoIntermediario = [];
+    key: "changeEtapa",
+    value: function changeEtapa(self) {
+      var $self = $(self);
+      var position = $self.data('position');
+      var id = $self.data('id');
+      var currentPosition = $('#position').val();
 
-          if (cliente.celular) {
-            telefonoCliente.push(cliente.celular);
-          }
-
-          if (cliente.telefono) {
-            telefonoCliente.push(cliente.telefono);
-          }
-
-          if (cliente.celular2) {
-            telefonoCliente.push(cliente.celular2);
-          }
-
-          if (cliente.celular_intermediario) {
-            telefonoIntermediario.push(cliente.celular_intermediario);
-          }
-
-          if (cliente.telefono_intermediario) {
-            telefonoIntermediario.push(cliente.telefono_intermediario);
-          }
-
-          $('#documento_cliente').val(cliente.numero_documento);
-          $('#telefono_cliente').val(telefonoCliente.join(' | '));
-          $('#indicativo_cliente').text('+' + cliente.indicativo);
-          $('#nombre_intermediario').val((cliente.intermediario_p_nombre || '') + ' ' + (cliente.intermediario_s_nombre || '') + ' ' + (cliente.intermediario_p_apellido || '') + ' ' + (cliente.intermediario_s_apellido || ''));
-          $('#telefono_intermediario').val(telefonoIntermediario.join(' | '));
-          $('#indicativo_intermediario').val(cliente.indicativo_intermediario);
-          $('#email_intermediario').val(cliente.correo_electronico_intermediario);
-        }
-      });
-    }
-  }, {
-    key: "delete",
-    value: function _delete() {
-      var id = $('#deleteValue').val();
-      $.ajax({
-        url: '/proceso/delete/' + id,
-        success: function success(_ref16) {
-          var deleted = _ref16.deleted;
-
-          if (deleted) {
-            $('#tipoProcesoRow' + id).remove();
-            $('#deleteModal').modal('hide');
-          }
-        }
-      });
-      return false;
+      if (position == 0 && currentPosition == 0) {
+        var params = new FormData();
+        params.append('id_etapa_proceso', id);
+        params.append('id_proceso', getId());
+        $.ajax({
+          url: '/seguimiento-procesos/set-etapa',
+          data: new URLSearchParams(params)
+        });
+      }
     }
   }]);
 
@@ -1926,12 +1863,12 @@ var Usuario = /*#__PURE__*/function () {
               showErrorPopover($('#numeroDocumento'), text, 'top');
             } else if (data.invalidPassword) {
               $('#password').parent().addClass('has-error');
-              var _text3 = 'La contraseña debe tener al menos 6 caracteres';
-              showErrorPopover($('#password'), _text3, 'top');
+              var _text2 = 'La contraseña debe tener al menos 6 caracteres';
+              showErrorPopover($('#password'), _text2, 'top');
             } else if (data.userExists) {
               $('#nombre_usuario').parent().addClass('has-error');
-              var _text4 = 'El nombre de usuario ya existe';
-              showErrorPopover($('#nombre_usuario'), _text4, 'top');
+              var _text3 = 'El nombre de usuario ya existe';
+              showErrorPopover($('#nombre_usuario'), _text3, 'top');
             }
           }
         });

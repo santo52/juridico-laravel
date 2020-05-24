@@ -6,6 +6,8 @@
 
     <!--  -->
 
+    <input type="hidden" id="position" value="{{$proceso->id_etapa_proceso}}"/>
+
     @if($proceso->dar_informacion_caso != 1)
     <div class="alert alert-danger" role="alert">
         <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -16,23 +18,25 @@
 
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active">
+        <li role="presentation" @if($proceso->id_etapa_proceso == 0) class="active" @endif >
             <a href="#informacion-proceso" aria-controls="informacion-proceso" role="tab" data-toggle="tab">
                 Información del proceso
             </a>
         </li>
-        <li role="presentation">
-            <a href="#informacion-proceso" aria-controls="informacion-proceso" role="tab" data-toggle="tab">
-                Etapa 1
+        @if(isset($etapas) && count($etapas))
+        @foreach ($etapas as $key => $item)
+        <li @if($proceso->id_etapa_proceso == $item->id_etapa_proceso) class="active" @endif  role="presentation" data-id="{{$item->id_etapa_proceso}}" data-position="{{$key}}" onclick="seguimientoProceso.changeEtapa(this)">
+            <a href="#etapa-{{$item->id_etapa_proceso}}" aria-controls="etapa-{{$item->id_etapa_proceso}}" role="tab"
+                data-toggle="tab">
+                {{ucwords(strtolower($item->nombre_etapa_proceso))}}
             </a>
         </li>
+        @endforeach
+        @endif
     </ul>
 
-    <form class="tab-content" onsubmit="proceso.upsert(event)">
-        @if ($proceso)
-        <input type="hidden" name="id_proceso" value="{{$proceso->id_proceso}}" />
-        @endif
-        <div role="tabpanel" class="tab-pane active" id="informacion-proceso">
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane @if($proceso->id_etapa_proceso == 0) active @endif" id="informacion-proceso">
             <div class="form-group row">
                 @if($proceso)
                 <div class="col-xs-12 col-sm-4">
@@ -146,9 +150,127 @@
                     class="form-control required">@if($proceso){{$proceso->observaciones_caso}}@endif</textarea>
             </div>
         </div>
+        @if(isset($etapas) && count($etapas))
+        @foreach ($etapas as $item)
+        <div role="tabpanel" class="tab-pane @if($proceso->id_etapa_proceso == $item->id_etapa_proceso) active @endif" id="etapa-{{$item->id_etapa_proceso}}">
 
-        <button class="btn btn-success" style="width: 100%">Guardar proceso</button>
-    </form>
+            <div class="juridico right-buttons">
+                <div>
+                    <a href="javascript:void(0)" onclick="seguimientoProceso.addActuacion('{{$item->id_etapa_proceso}}')" class="btn btn-default">
+                        Asociar actuación
+                    </a>
+                </div>
+            </div>
+            <table id="tipoProcesoTable" class="table table-hover" data-empty="Sin actuaciones"
+                data-paging-count-format="Mostrando del {PF} al {PL} de {TR} registros"
+                data-filter-container="#filter-form-container" data-sorting="false" data-filtering="false"
+                data-paging="false" data-filter-placeholder="Buscar ..." data-filter-position="left"
+                data-filter-dropdown-title="Buscar por" data-filter-space="OR">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre de la actuación</th>
+                        <th data-breakpoints="all">Días de vencimiento</th>
+                        <th data-breakpoints="all">Tiempo máximo próxima actuación</th>
+                        <th data-breakpoints="all">Fecha de inicio</th>
+                        <th>Fecha de vencimiento</th>
+                        <th>Fecha de finalización</th>
+                        <th>Responsable</th>
+                        <th>Estado</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($item->actuaciones as $actuacion)
+                    <tr>
+                    <td>{{$actuacion->id_actuacion}}</td>
+                        <td>{{strtolower($actuacion->nombre_actuacion)}}</td>
+                        <td>{{$actuacion->dias_vencimiento}} días</td>
+                        <td>{{$actuacion->tiempo_maximo_proxima_actuacion}}
+                            @if($actuacion->unidad_tiempo_proxima_actuacion == 1)
+                                días
+                            @elseif($actuacion->unidad_tiempo_proxima_actuacion == 2)
+                                semanas
+                            @elseif($actuacion->unidad_tiempo_proxima_actuacion == 3)
+                                meses
+                            @elseif($actuacion->unidad_tiempo_proxima_actuacion == 4)
+                                años
+                            @else
+                                días
+                            @endif
+                        </td>
+                        <td>Sin iniciar</td>
+                        <td>Sin iniciar</td>
+                        <td>Sin iniciar</td>
+                        <td>Sin asignar</td>
+                        <td>Pendiente</td>
+                        <td></td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+
+
+
+        </div>
+        @endforeach
+        @endif
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="actuacionModal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" onclick="etapaProceso.asociarActuacionModal('hide')"
+                    aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Asociar actuación a etapa de proceso</h4>
+            </div>
+            <form onsubmit="seguimientoProceso.saveActuacion(event)">
+                <div class="modal-body">
+                    <input type="hidden" class="required" name="id_etapa_proceso" id="idEtapaProceso" />
+                    <input type="hidden" class="required" name="order" id="orderActuacion" />
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">Nombre actuación</label>
+                        <select data-live-search="true" class="form-control required" id="actuacionesList" name="id_actuacion" title="Seleccionar actuación"></select>
+                    </div>
+                    {{-- <div class="form-group">
+                        <label for="recipient-name" class="control-label">¿Primera actuación?</label>
+                        <div class="checkbox-form">
+                            <input type="checkbox" data-on="Sí" data-off="No" data-width="90"
+                                class="form-control" id="etapaPrimeraActuacion" onchange="seguimientoProceso.isFirst(this)" />
+                        </div>
+                    </div> --}}
+                    <div class="form-group" id="agregarActuacionDespuesDe">
+                        <label for="recipient-name" class="control-label">Agregar después de</label>
+                        <select data-live-search="true" class="form-control required" id="actuacionesAfterList" name="after" title="Seleccionar actuación"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">* Tiempo máximo hasta la próxima
+                            actuación</label>
+
+                        <div class="input-group">
+                            <input type="text" style="width:95%; height:35px" class="form-control required"  name="tiempo_maximo_proxima_actuacion" id="tiempoMaximoProximaActuacion">
+                            <div class="input-group-btn">
+                                <select class="form-control required" id="UnidadTiempoProximaActuacion"  name="unidad_tiempo_proxima_actuacion" >
+                                    <option value="1">Días</option>
+                                    <option value="2">Semanas</option>
+                                    <option value="3">Meses</option>
+                                    <option value="4">Años</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer center">
+                    <input type="hidden" id="deleteValue" />
+                    <button type="button" class="btn btn-default"
+                        onclick="etapaProceso.asociarActuacionModal('hide')">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Asociar</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 @endsection
 

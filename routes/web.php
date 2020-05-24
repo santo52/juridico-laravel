@@ -51,6 +51,7 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/etapas-de-proceso/actuacion/insert', 'EtapaProcesoController@insertActuacion');
     Route::post('/etapas-de-proceso/actuacion/delete/{id}', 'EtapaProcesoController@deleteActuacion');
     Route::post('/etapas-de-proceso/actuacion/get/{id}', 'EtapaProcesoController@getActuacion');
+    Route::post('/etapas-de-proceso/actuacion/all/{id}', 'EtapaProcesoController@getActuaciones');
     Route::post('/etapas-de-proceso/actuacion/order/update', 'EtapaProcesoController@updateOrderActuacion');
 
     Route::post('/documento/listar', 'DocumentoController@index');
@@ -111,7 +112,11 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/plantillas/{id}', 'PlantillaDocumentoController@get');
 
     Route::post('/seguimiento-procesos/listar', 'ProcesoController@seguimientoListar');
+    Route::post('/seguimiento-procesos/set-etapa', 'ProcesoController@setEtapa');
     Route::post('/seguimiento-procesos/{id}', 'ProcesoController@seguimientoDetalle');
+
+
+
     // Route::post('/proceso/upsert', 'ProcesoController@upsert');
     // Route::post('/proceso/upload', 'ProcesoController@uploadFile');
     // Route::post('/proceso/upload/delete', 'ProcesoController@deleteFile');

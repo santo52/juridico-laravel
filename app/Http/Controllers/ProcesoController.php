@@ -19,7 +19,7 @@ use App\Entities\Departamento;
 use App\Entities\Usuario;
 use App\Entities\Municipio;
 use App\Entities\Cliente;
-
+use App\Entities\EtapaProceso;
 
 class ProcesoController extends Controller
 {
@@ -269,10 +269,21 @@ class ProcesoController extends Controller
             return response()->json([ 'redirect' => 'seguimiento-procesos' ]);
         }
 
+        $etapas = TipoProceso::getEtapas($proceso->id_tipo_proceso);
+        foreach($etapas as $key => $value) {
+            $etapas[$key]['actuaciones'] = EtapaProceso::getActuaciones($value->id_etapa_proceso);
+        }
+
         return $this->renderSection('seguimiento_proceso.detalle', [
             'proceso' => $proceso,
-            'etapas' => TipoProceso::getEtapas($proceso->id_tipo_proceso)
+            'etapas' => $etapas
         ]);
+    }
+
+    public function setEtapa(Request $request) {
+        $proceso = Proceso::find($request->get('id_proceso'));
+        $updated = $proceso->update([ 'id_etapa_proceso' => $request->get('id_etapa_proceso')]);
+        return response()->json([ 'updated' => $updated ]);
     }
 
     // 23 caracteres id proceso

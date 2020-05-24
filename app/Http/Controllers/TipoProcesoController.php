@@ -9,8 +9,10 @@ use App\Entities\EtapasProcesoTipoProceso;
 use Illuminate\Support\Facades\Auth;
 
 
-class TipoProcesoController extends Controller {
-    public function index() {
+class TipoProcesoController extends Controller
+{
+    public function index()
+    {
         $tiposProceso = TipoProceso::where([
             'eliminado' => 0,
             'estado_tipo_proceso' => 1
@@ -20,12 +22,13 @@ class TipoProcesoController extends Controller {
         ]);
     }
 
-    private function getTipoProceso($id, $name) {
-        if($id) {
+    private function getTipoProceso($id, $name)
+    {
+        if ($id) {
             $type = 'update';
             $tipos = TipoProceso::where([
                 ['id_tipo_proceso', '<>',  $id],
-                ['nombre_tipo_proceso', '=' ,$name],
+                ['nombre_tipo_proceso', '=', $name],
             ]);
         } else {
             $type = 'create';
@@ -39,7 +42,8 @@ class TipoProcesoController extends Controller {
         ];
     }
 
-    public function upsert(Request $request) {
+    public function upsert(Request $request)
+    {
         $id = $request->get('id_tipo_proceso');
         $name = $request->get('nombre_tipo_proceso');
         $tipo = $this->getTipoProceso($id, $name);
@@ -50,7 +54,7 @@ class TipoProcesoController extends Controller {
         if ($tipo['exists']) {
 
             $tipos = $tipo['tipos'];
-            if($tipo['type'] === 'update' || $tipos->estado_tipo_proceso === 1) {
+            if ($tipo['type'] === 'update' || $tipos->estado_tipo_proceso === 1) {
                 return response()->json(['exists' => true]);
             }
 
@@ -60,56 +64,58 @@ class TipoProcesoController extends Controller {
         }
 
         $data['id_usuario_actualizacion'] = Auth::id();
-        if(empty($id)) {
+        if (empty($id)) {
             $data['id_usuario_creacion'] = Auth::id();
         }
 
         $saved = TipoProceso::updateOrCreate(['id_tipo_proceso' => $id], $data);
 
 
-        if(empty($id)) {
+        if (empty($id)) {
             EtapasProcesoTipoProceso::where([
                 'id_tipo_proceso' => 0,
                 'id_usuario_creacion' => Auth::id()
-            ])->update([ 'id_tipo_proceso' => $saved->id_tipo_proceso ]);
+            ])->update(['id_tipo_proceso' => $saved->id_tipo_proceso]);
         }
 
-        return response()->json([ 'saved' => $saved, $request->all() ]);
+        return response()->json(['saved' => $saved, $request->all()]);
     }
 
 
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $tipoProceso = TipoProceso::find($id);
-        $deleted = $tipoProceso->update([ 'eliminado' => 1]);
-        return response()->json([ 'deleted', $deleted ]);
+        $deleted = $tipoProceso->update(['eliminado' => 1]);
+        return response()->json(['deleted', $deleted]);
     }
 
-    public function get($id) {
+    public function get($id)
+    {
 
         $tipoProceso = TipoProceso::find($id);
         $idTipo = !empty($tipoProceso) ? $tipoProceso->id_tipo_proceso : 0;
 
         $conditional['id_tipo_proceso'] = $idTipo;
-        if($idTipo == 0) {
+        $conditional['eliminado'] = 0;
+        $conditional['estado_etapa_proceso'] = 1;
+        if ($idTipo == 0) {
             $conditional['eptp.id_usuario_creacion'] = Auth::id();
         }
 
-        $selectedEtapas = EtapaProceso::
-        select('etapa_proceso.*')
-        ->leftjoin('etapas_proceso_tipo_proceso as eptp', 'eptp.id_etapa_proceso', 'etapa_proceso.id_etapa_proceso')
-        ->where($conditional)
-        ->orderBy('eptp.order')
-        ->get();
+        $selectedEtapas = EtapaProceso::select('etapa_proceso.*')
+            ->leftjoin('etapas_proceso_tipo_proceso as eptp', 'eptp.id_etapa_proceso', 'etapa_proceso.id_etapa_proceso')
+            ->where($conditional)
+            ->orderBy('eptp.order')
+            ->get();
 
         $selectedIdEtapas = [];
-        foreach($selectedEtapas as $etapa) {
+        foreach ($selectedEtapas as $etapa) {
             $selectedIdEtapas[] = $etapa->id_etapa_proceso;
         }
 
-        $etapas = EtapaProceso::
-        where(['eliminado' => 0, 'estado_etapa_proceso' => 1 ])
-        ->whereNotIn('id_etapa_proceso', $selectedIdEtapas)->get();
+        $etapas = EtapaProceso::where(['eliminado' => 0, 'estado_etapa_proceso' => 1])
+            ->whereNotIn('id_etapa_proceso', $selectedIdEtapas)->get();
 
         return response()->json([
             'tipoProceso' => $tipoProceso,
@@ -118,19 +124,21 @@ class TipoProcesoController extends Controller {
         ]);
     }
 
-    public function insertEtapa(Request $request) {
+    public function insertEtapa(Request $request)
+    {
         $data = $request->all();
         $data['id_usuario_creacion'] = Auth::id();
         $data = EtapasProcesoTipoProceso::create($data);
         $saved = $data->save();
-        return response()->json([ 'saved' => $saved ]);
+        return response()->json(['saved' => $saved]);
     }
 
-    public function updateEtapa(Request $request) {
+    public function updateEtapa(Request $request)
+    {
 
         $listEtapaProceso = explode(',', $request->get('orderedList'));
         $conditional['id_tipo_proceso'] = $request->get('id_tipo_proceso');
-        if($request->get('id_tipo_proceso') == 0) {
+        if ($request->get('id_tipo_proceso') == 0) {
             $conditional['id_usuario_creacion'] = Auth::id();
         }
 
@@ -138,20 +146,21 @@ class TipoProcesoController extends Controller {
         foreach ($listEtapaProceso as $position => $value) {
             $dataSaved[] = EtapasProcesoTipoProceso::where($conditional)
                 ->where('id_etapa_proceso', $value)
-                ->update([ 'order' => ($position + 1) ]);
+                ->update(['order' => ($position + 1)]);
         }
 
-        return response()->json([ 'saved' => $dataSaved, $request->all() ]);
+        return response()->json(['saved' => $dataSaved, $request->all()]);
     }
 
-    public function deleteEtapa(Request $request) {
+    public function deleteEtapa(Request $request)
+    {
         $conditionals['id_tipo_proceso'] = $request->get('id_tipo_proceso');
         $conditionals['id_etapa_proceso'] = $request->get('id_etapa_proceso');
-        if($request->get('id_tipo_proceso') == 0) {
+        if ($request->get('id_tipo_proceso') == 0) {
             $conditionals['id_usuario_creacion'] = Auth::id();
         }
 
         $deleted = EtapasProcesoTipoProceso::where($conditionals)->delete();
-        return response()->json([ 'deleted' => $deleted ]);
+        return response()->json(['deleted' => $deleted]);
     }
 }

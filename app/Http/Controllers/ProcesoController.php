@@ -155,18 +155,6 @@ class ProcesoController extends Controller
         return Proceso::where($conditional)->exists();
     }
 
-    private function folderExists($id, $id_carpeta)
-    {
-
-        $conditional[] = ['id_carpeta', $id_carpeta];
-        $conditional[] = ['eliminado', 0];
-        if ($id) {
-            $conditional[] = ['id_proceso', '<>', $id];
-        }
-
-        return Proceso::where($conditional)->exists();
-    }
-
     public function upsert(Request $request)
     {
         $id = $request->get('id_proceso');
@@ -176,10 +164,6 @@ class ProcesoController extends Controller
         if ($this->procesoExists($id, $numero_proceso)) {
             return response()->json(['procesoExists' => true]);
         }
-
-        // if($this->folderExists($id, $id_carpeta)){
-        //     return response()->json([ 'folderExists' => true ]);
-        // }
 
         $dataProceso = $request->all();
         $dataProceso['id_usuario_actualizacion'] = Auth::id();

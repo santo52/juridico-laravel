@@ -96,6 +96,7 @@ class SeguimientoProcesoController extends Controller
         ])->first();
 
         if (!empty($procesoEtapaActuacion)) {
+            $actuacion->id_proceso_etapa_actuacion = $procesoEtapaActuacion->id_proceso_etapa_actuacion;
             $actuacion->responsable = $procesoEtapaActuacion->getResponsable();
             $actuacion->fechaInicio = $procesoEtapaActuacion->getFechaInicioString();
             $actuacion->fechaVencimiento = $procesoEtapaActuacion->getFechaVencimientoString();
@@ -107,16 +108,11 @@ class SeguimientoProcesoController extends Controller
         return $actuacion;
     }
 
-    // 23 caracteres id proceso
-    /**
-     * 12 caracteres id carpeta
-     *
-     * actuaciones
-     *
-     * rojo: desde el dia de vencimiento hacia atras
-     * verde: 0% hasta el 75%;
-     * amarillo: 76% al día anterior.
-     * terminado en gris,
-     */
+    public function actuacion($id) {
+        $procesoEtapaActuacion = ProcesoEtapaActuacion::find($id);
+        return $this->renderSection('seguimiento_proceso.actuacion', [
+            'procesoEtapaActuacion' => $procesoEtapaActuacion
+        ]);
+    }
 
 }

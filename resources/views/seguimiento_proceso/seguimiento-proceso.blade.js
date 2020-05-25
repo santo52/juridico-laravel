@@ -67,7 +67,10 @@ class SeguimientoProceso {
 
             $.ajax({
                 url: '/seguimiento-procesos/set-etapa',
-                data: new URLSearchParams(params)
+                data: new URLSearchParams(params),
+                success: data => {
+                    $('#position').val(1)
+                }
             })
         }
     }

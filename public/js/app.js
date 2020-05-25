@@ -738,7 +738,11 @@ function errorLog(xhr, status, error) {
       error: error
     }),
     success: function success(data) {
-      alerta("ERROR - Ocurri\xF3 un problema con el servidor; por favor intenta de nuevo o comun\xEDcate con un agente de soporte t\xE9cnico.");
+      if (data.message.indexOf('CSRF') !== -1) {
+        alerta("ERROR - Ocurri\xF3 un problema con el servidor; por favor intenta de nuevo o comun\xEDcate con un agente de soporte t\xE9cnico.");
+      } else {
+        location.reload();
+      }
     },
     error: function error() {
       alerta("ERROR FATAL - Ocurri\xF3 un problema con el servidor; por favor intenta de nuevo o comun\xEDcate con un agente de soporte t\xE9cnico.");

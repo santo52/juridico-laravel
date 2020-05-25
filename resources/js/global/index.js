@@ -434,7 +434,11 @@ function errorLog(xhr, status, error) {
         url: "/error/submit",
         data: new URLSearchParams({ xhr: xhr.responseText, status, error }),
         success: data => {
-            alerta('ERROR - Ocurri\u00F3 un problema con el servidor; por favor intenta de nuevo o comun\u00EDcate con un agente de soporte t\u00E9cnico.');
+            if (data.message.indexOf('CSRF') !== -1) {
+                alerta('ERROR - Ocurri\u00F3 un problema con el servidor; por favor intenta de nuevo o comun\u00EDcate con un agente de soporte t\u00E9cnico.');
+            } else {
+                location.reload()
+            }
         },
         error: () => {
             alerta('ERROR FATAL - Ocurri\u00F3 un problema con el servidor; por favor intenta de nuevo o comun\u00EDcate con un agente de soporte t\u00E9cnico.');
@@ -466,7 +470,7 @@ function initSummernoteVariables() {
 function buildSummernoteFunction(key, item) {
     return function (context) {
         const ui = $.summernote.ui;
-        if(item.children && item.children.length) {
+        if (item.children && item.children.length) {
             context.memo('button.' + key, function () {
                 // create button
 
@@ -477,7 +481,7 @@ function buildSummernoteFunction(key, item) {
                 var button = ui.buttonGroup([
                     ui.button({
                         className: 'dropdown-toggle',
-                        contents: '<span class="fa fa-database"></span><span style="padding: 10px;">' +  item.nombre_grupo_variable + '</span><span class="caret"></span>',
+                        contents: '<span class="fa fa-database"></span><span style="padding: 10px;">' + item.nombre_grupo_variable + '</span><span class="caret"></span>',
                         tooltip: 'Variables ' + item.nombre_grupo_variable,
                         data: {
                             toggle: 'dropdown'
@@ -522,7 +526,7 @@ $.fn.richText = function (config = {}) {
         ["insert", ["link", "picture", "video"]]
     ]
 
-    if(config.variables) {
+    if (config.variables) {
         const plugins = initSummernoteVariables()
         $.extend($.summernote.plugins, plugins);
         toolbar.push(['variables', Object.keys(plugins)])

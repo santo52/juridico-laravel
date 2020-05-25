@@ -190,11 +190,13 @@
                         <td>
                             @if($comentario->canEdit())
                             <div class="flex justify-center table-actions">
-                                <a data-toggle="tooltip" title="Editar" onClick="seguimientoProceso.addComentarioModal('{{$comentario->id_proceso_bitacora}}')"
+                                <a data-toggle="tooltip" title="Editar"
+                                    onClick="seguimientoProceso.addComentarioModal('{{$comentario->id_proceso_bitacora}}')"
                                     class="btn text-primary" type="button">
                                     <span class="glyphicon glyphicon-pencil"></span>
                                 </a>
-                                <a data-toggle="tooltip" title="Eliminar" onclick="seguimientoProceso.openDeleteComentario('{{$comentario->id_proceso_bitacora}}')"
+                                <a data-toggle="tooltip" title="Eliminar"
+                                    onclick="seguimientoProceso.openDeleteComentario('{{$comentario->id_proceso_bitacora}}')"
                                     href="javascript:void(0)" class="btn text-danger" type="button">
                                     <span class="glyphicon glyphicon-remove"></span>
                                 </a>
@@ -236,7 +238,7 @@
                         <th>Fecha de finalización</th>
                         <th>Responsable</th>
                         <th>Estado</th>
-                        <th></th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -253,7 +255,18 @@
                         <td class="estado">
                             <span>{{$actuacion->estado}}</span>
                         </td>
-                        <td></td>
+                        <td>
+                            @isset($actuacion->id_proceso_etapa_actuacion)
+                            <a href="#seguimiento-procesos/actuacion/{{$actuacion->id_proceso_etapa_actuacion}}" data-toggle="tooltip" title="Editar actuación"
+                                class="btn text-primary" type="button">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </a>
+                            @else
+                            <span style="cursor:default; color:#777 !important;" class="btn text-muted" type="button">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </span>
+                            @endisset
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -363,7 +376,8 @@
             <div class="modal-footer center">
                 <input type="hidden" id="deleteValue" />
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button type="button" onClick="seguimientoProceso.deleteComentario()" class="btn btn-danger">Eliminar</button>
+                <button type="button" onClick="seguimientoProceso.deleteComentario()"
+                    class="btn btn-danger">Eliminar</button>
             </div>
         </div>
     </div>

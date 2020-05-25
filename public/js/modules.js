@@ -1555,7 +1555,10 @@ var SeguimientoProceso = /*#__PURE__*/function () {
         params.append('id_proceso', getId());
         $.ajax({
           url: '/seguimiento-procesos/set-etapa',
-          data: new URLSearchParams(params)
+          data: new URLSearchParams(params),
+          success: function success(data) {
+            $('#position').val(1);
+          }
         });
       }
     }

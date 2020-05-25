@@ -134,14 +134,14 @@ class SeguimientoProceso {
                                 <a onClick="seguimientoProceso.addComentarioModal('${saved.id_proceso_bitacora}')" class="btn text-primary" type="button">
                                     <span class="glyphicon glyphicon-pencil"></span>
                                 </a>
-                                <a onclick="proceso.openDeleteComentario('${saved.id_proceso_bitacora}')" href="javascript:void(0)" class="btn text-danger" type="button">
+                                <a onclick="seguimientoProceso.openDeleteComentario('${saved.id_proceso_bitacora}')" href="javascript:void(0)" class="btn text-danger" type="button">
                                     <span class="glyphicon glyphicon-remove"></span>
                                 </a>
                             </div>
                             </td>
                         </tr>
                     `
-
+                    $table.find('.footable-empty').remove();
                     if($row.length) {
                         $row.replaceWith(html)
                     } else {

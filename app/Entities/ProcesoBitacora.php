@@ -22,7 +22,8 @@ class ProcesoBitacora extends Model
     ];
 
     public function getFechaCreacion() {
-        return date('Y-m-d h:i:s', strtotime($this->fecha_creacion));
+        $timestamp = strtotime($this->fecha_creacion);
+        return date('d/m/Y', $timestamp) . ' a las ' . date('h:i A', $timestamp);
     }
 
     public function getNombreCompleto() {

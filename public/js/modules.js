@@ -1479,6 +1479,12 @@ var Proceso = /*#__PURE__*/function () {
 
 var proceso = new Proceso();
 
+var SeguimientoActuacion = function SeguimientoActuacion() {
+  _classCallCheck(this, SeguimientoActuacion);
+};
+
+var seguimientoActuacion = new SeguimientoActuacion();
+
 var SeguimientoProceso = /*#__PURE__*/function () {
   function SeguimientoProceso() {
     _classCallCheck(this, SeguimientoProceso);

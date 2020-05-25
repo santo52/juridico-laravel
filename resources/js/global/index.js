@@ -434,7 +434,7 @@ function errorLog(xhr, status, error) {
         url: "/error/submit",
         data: new URLSearchParams({ xhr: xhr.responseText, status, error }),
         success: data => {
-            if (data.message.indexOf('CSRF') !== -1) {
+            if (!data.message || data.message.indexOf('CSRF') !== -1) {
                 alerta('ERROR - Ocurri\u00F3 un problema con el servidor; por favor intenta de nuevo o comun\u00EDcate con un agente de soporte t\u00E9cnico.');
             } else {
                 location.reload()

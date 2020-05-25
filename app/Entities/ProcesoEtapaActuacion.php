@@ -5,6 +5,7 @@ namespace App\Entities;
 use Illuminate\Database\Eloquent\Model;
 use App\Entities\Usuario;
 use App\Entities\Actuacion;
+use App\Entities\ProcesoEtapa;
 
 class ProcesoEtapaActuacion extends Model
 {
@@ -29,20 +30,20 @@ class ProcesoEtapaActuacion extends Model
 
     public function getFechaInicioString()
     {
-        return date('Y-m-d h:i:s', strtotime($this->fecha_inicio));
+        return date('d/m/Y h:i A', strtotime($this->fecha_inicio));
     }
 
     public function getFechaVencimientoString()
     {
         $actuacion = Actuacion::find($this->id_actuacion);
-        $dias = $actuacion && $actuacion->dias_vencimiento ? $actuacion->dias_vencimiento : 1;
+        $dias = $actuacion && $actuacion->dias_vencimiento ? $actuacion->dias_vencimiento : 0;
         $this->diasVencimiento = $dias;
-        return date('Y-m-d h:i:s', strtotime("+{$dias} days {$this->fecha_inicio}"));
+        return date('d/m/Y h:i A', strtotime("+{$dias} days {$this->fecha_inicio}"));
     }
 
     public function getFechaFinString()
     {
-        return $this->fecha_fin ? date('Y-m-d h:i:s', strtotime($this->fecha_fin)) : 'En proceso';
+        return $this->fecha_fin ? date('d/m/Y h:i A', strtotime($this->fecha_fin)) : 'En proceso';
     }
 
     public function getEstado()
@@ -53,7 +54,7 @@ class ProcesoEtapaActuacion extends Model
     public function getEstadoColor()
     {
         $hoy = date('Y-m-d');
-        $vencimiento = strtotime($this->getFechaVencimientoString());
+        $vencimiento = strtotime("+{$this->diasVencimiento} days {$this->fecha_inicio}");
 
         if ($this->finalizado == 0) {
             if ($hoy === date('Y-m-d', $vencimiento)) {
@@ -77,5 +78,11 @@ class ProcesoEtapaActuacion extends Model
     {
         $usuario = Usuario::find($this->id_usuario_responsable);
         return $usuario ? $usuario->getNombreCompleto() : 'Sin responsable';
+    }
+
+    public function getSeguimientoId() {
+        return 20;
+        $procesoEtapa = ProcesoEtapa::find($this->id_proceso_etapa);
+        return $procesoEtapa->id_proceso;
     }
 }

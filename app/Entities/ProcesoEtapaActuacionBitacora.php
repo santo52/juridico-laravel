@@ -22,7 +22,7 @@ class ProcesoEtapaActuacionBitacora extends Model
     ];
 
     public function getFechaCreacion() {
-        return date('Y-m-d h:i:s', strtotime($this->fecha_creacion));
+        return date('d/m/Y h:i A', strtotime($this->fecha_creacion));
     }
 
     public function getNombreCompleto() {

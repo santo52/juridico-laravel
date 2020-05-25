@@ -54,26 +54,35 @@
             <td>{{$proceso['fecha_retiro_servicio']}}</td>
             <td>
                 @if($proceso['id_ultima_entidad_servicio'])
-                    {{$proceso['id_ultima_entidad_servicio']}}</td>
-                @else
-                    {{$proceso['nombre_entidad_justicia']}}
-                @endif
+                {{$proceso['id_ultima_entidad_servicio']}}</td>
+            @else
+            {{$proceso['nombre_entidad_justicia']}}
+            @endif
             <td>{{$proceso['nombre_municipio']}}</td>
             <td>{{$proceso['id_acto_administrativo_retiro']}}</td>
             <td>{{$proceso['normatividad_aplicada_caso']}}</td>
             <td>{{$proceso['observaciones_caso']}}</td>
             <td>{{$proceso['estado_proceso'] == 2 ? 'Inactivo' : 'Activo'}}</td>
-            <td >
+            <td>
                 <div class="flex justify-center table-actions">
                     @isset ($permissions->editar)
-                    <a @isset($seguimiento) href="#seguimiento-procesos/{{$proceso['id_proceso']}}" @else href="#proceso/{{$proceso['id_proceso']}}"@endisset class="btn text-primary" type="button">
+                    <a @isset($seguimiento) href="#seguimiento-procesos/{{$proceso['id_proceso']}}" @else
+                        href="#proceso/{{$proceso['id_proceso']}}" @endisset class="btn text-primary" type="button">
                         <span class="glyphicon glyphicon-pencil"></span>
                     </a>
                     @endisset
+
                     @if (isset($permissions->eliminar) && !isset($seguimiento))
                     <a href="javascript:void(0)" class="btn text-danger" type="button"
                         onclick="proceso.openDelete('{{$proceso['id_proceso']}}')">
                         <span class="glyphicon glyphicon-remove"></span>
+                    </a>
+                    @endif
+                    @if(isset($seguimiento))
+                    <a href="javascript:void(0)" class="btn text-primary" type="button"
+                        onclick="proceso.openComments('{{$proceso['id_proceso']}}')">
+                        <span class="glyphicon glyphicon-comment"></span>
+                        <span class="badge badge-sm">{{$proceso['totalComentarios']}}</span>
                     </a>
                     @endif
                 </div>
@@ -83,6 +92,37 @@
         @endif
     </tbody>
 </table>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="comentariosModal">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="comentariosModalTitle"></h4>
+            </div>
+            <div class="modal-body">
+                <table id="comentariosTable" class="table table-hover" data-empty="Sin comentarios"
+                data-paging-count-format="Mostrando del {PF} al {PL} de {TR} registros"
+                data-filter-container="#filter-form-container" data-sorting="false" data-filtering="false"
+                data-paging="false" data-filter-placeholder="Buscar ..." data-filter-position="left"
+                data-filter-dropdown-title="Buscar por" data-filter-space="OR">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Usuario</th>
+                        <th>Comentario</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            </div>
+            <div class="modal-footer center">
+                <button type="button" class="btn btn-default" data-dismiss="modal"> Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @if (isset($permissions->eliminar) && !isset($seguimiento))
 <div class="modal fade" tabindex="-1" role="dialog" id="deleteModal">
@@ -104,6 +144,8 @@
         </div>
     </div>
 </div>
+
+
 @endif
 
 

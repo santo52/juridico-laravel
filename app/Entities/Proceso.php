@@ -5,6 +5,7 @@ namespace App\Entities;
 use Illuminate\Database\Eloquent\Model;
 use App\Builder\ProcesoBuilder;
 use App\Entities\Cliente;
+use Illuminate\Support\Facades\DB;
 
 class Proceso extends Model
 {
@@ -27,7 +28,8 @@ class Proceso extends Model
 
     public static function getAll()
     {
-        return self::leftjoin('tipo_proceso as tp', 'tp.id_tipo_proceso', 'proceso.id_tipo_proceso')
+        return self::select('*', DB::raw("(select count(*) from proceso_bitacora pb where pb.id_proceso = proceso.id_proceso ) as totalComentarios"))
+            ->leftjoin('tipo_proceso as tp', 'tp.id_tipo_proceso', 'proceso.id_tipo_proceso')
             ->leftjoin('entidad_demandada as ed', 'ed.id_entidad_demandada', 'proceso.id_entidad_demandada')
             ->leftjoin('municipio as m', 'm.id_municipio', 'proceso.id_municipio')
             ->leftjoin('entidad_justicia as ej', 'ej.id_entidad_justicia', 'proceso.id_entidad_justicia')
@@ -45,12 +47,14 @@ class Proceso extends Model
             ->first();
     }
 
-    public function getNombreCompletoCliente() {
+    public function getNombreCompletoCliente()
+    {
         $cliente = Cliente::find($this->id_cliente);
         return $cliente->getNombreCompleto();
     }
 
-    public function getNombreCompletoResponsable() {
+    public function getNombreCompletoResponsable()
+    {
         $usuario = Usuario::find($this->id_usuario_responsable);
         return $usuario->getNombreCompleto();
     }

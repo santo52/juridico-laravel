@@ -23,14 +23,14 @@
                 Información del proceso
             </a>
         </li>
-        <li role="presentation" class="active">
+        <li role="presentation">
             <a href="#comentarios-proceso" aria-controls="comentarios-proceso" role="tab" data-toggle="tab">
                 Comentarios
             </a>
         </li>
         @if(isset($etapas) && count($etapas))
         @foreach ($etapas as $key => $item)
-        <li @if($proceso->id_etapa_proceso == $item->id_etapa_proceso) class="actives" @elseif($item->porcentaje == 100)
+        <li @if($proceso->id_etapa_proceso == $item->id_etapa_proceso) class="active" @elseif($item->porcentaje == 100)
             class="finalized" @endif role="presentation"
             data-id="{{$item->id_etapa_proceso}}" data-position="{{$key}}"
             onclick="seguimientoProceso.changeEtapa(this)">
@@ -159,7 +159,7 @@
                     class="form-control required">@if($proceso){{$proceso->observaciones_caso}}@endif</textarea>
             </div>
         </div>
-        <div role="tabpanel" class="tab-pane active" id="comentarios-proceso">
+        <div role="tabpanel" class="tab-pane" id="comentarios-proceso">
             <div class="juridico right-buttons">
                 <div>
                     <a href="javascript:void(0)" onclick="seguimientoProceso.addComentarioModal()"
@@ -208,7 +208,7 @@
         </div>
         @if(isset($etapas) && count($etapas))
         @foreach ($etapas as $item)
-        <div role="tabpanel" class="tab-pane @if($proceso->id_etapa_proceso == $item->id_etapa_proceso) actives @endif"
+        <div role="tabpanel" class="tab-pane @if($proceso->id_etapa_proceso == $item->id_etapa_proceso) active @endif"
             id="etapa-{{$item->id_etapa_proceso}}">
 
             <div class="juridico right-buttons">

@@ -1450,6 +1450,28 @@ var Proceso = /*#__PURE__*/function () {
       });
       return false;
     }
+  }, {
+    key: "openComments",
+    value: function openComments(id) {
+      $.ajax({
+        url: '/seguimiento-procesos/comentarios/' + id,
+        beforeSend: function beforeSend() {
+          return $('#comentariosTable tbody').html('');
+        },
+        success: function success(data) {
+          if (data.length) {
+            var html = data.map(function (item) {
+              return "\n                        <tr>\n                            <td>".concat(item.fechaCreacion, "</td>\n                            <td>").concat(item.nombreUsuario, "</td>\n                            <td>").concat(item.comentario, "</td>\n                        </tr>\n                    ");
+            });
+            $('#comentariosTable tbody').html(html);
+            $('#comentariosModalTitle').text('Comentarios proceso n° ' + data[0].numero_proceso);
+          }
+
+          $('#comentariosTable').footable();
+          $('#comentariosModal').modal();
+        }
+      });
+    }
   }]);
 
   return Proceso;

@@ -18,7 +18,7 @@ class Proceso {
             url: '/proceso/tipo-proceso/documentos',
             data: new URLSearchParams(params),
             success: data => {
-                if(!data.length) {
+                if (!data.length) {
                     $('#documentos-proceso-tab').hide()
                     return
                 }
@@ -148,6 +148,32 @@ class Proceso {
         })
 
         return false
+    }
+
+    openComments(id) {
+        $.ajax({
+            url: '/seguimiento-procesos/comentarios/' + id,
+            beforeSend: () => $('#comentariosTable tbody').html(''),
+            success: data => {
+                if (data.length) {
+                    const html = data.map(item => `
+                        <tr>
+                            <td>${item.fechaCreacion}</td>
+                            <td>${item.nombreUsuario}</td>
+                            <td>${item.comentario}</td>
+                        </tr>
+                    `)
+
+                    $('#comentariosTable tbody').html(html)
+                    $('#comentariosModalTitle').text('Comentarios proceso n° ' + data[0].numero_proceso)
+                }
+
+                $('#comentariosTable').footable();
+                $('#comentariosModal').modal()
+            }
+        })
+
+
     }
 }
 

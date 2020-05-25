@@ -1096,3 +1096,12 @@ ul.nav-tabs {
     }
 }
 
+.badge.badge-sm {
+    position: relative;
+    font-size: 9px;
+    min-width: 15px;
+    padding: 3px 4px;
+    top: -10px;
+    left: -4px;
+    display: inline-block;
+}

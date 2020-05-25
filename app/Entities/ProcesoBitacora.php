@@ -34,4 +34,5 @@ class ProcesoBitacora extends Model
     public function canEdit() {
         return $this->sesion_id === Session::getId();
     }
+
 }

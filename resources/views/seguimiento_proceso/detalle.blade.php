@@ -23,9 +23,14 @@
                 Información del proceso
             </a>
         </li>
+        <li role="presentation" class="active">
+            <a href="#comentarios-proceso" aria-controls="comentarios-proceso" role="tab" data-toggle="tab">
+                Comentarios
+            </a>
+        </li>
         @if(isset($etapas) && count($etapas))
         @foreach ($etapas as $key => $item)
-        <li @if($proceso->id_etapa_proceso == $item->id_etapa_proceso) class="active" @elseif($item->porcentaje == 100)
+        <li @if($proceso->id_etapa_proceso == $item->id_etapa_proceso) class="actives" @elseif($item->porcentaje == 100)
             class="finalized" @endif role="presentation"
             data-id="{{$item->id_etapa_proceso}}" data-position="{{$key}}"
             onclick="seguimientoProceso.changeEtapa(this)">
@@ -150,13 +155,60 @@
             </div>
             <div class="form-group">
                 <label for="observaciones_caso" class="control-label">Observaciones del caso</label>
-                <textarea disabled rows="4" style="resize: vertical; min-height: 100px"
+                <textarea disabled rows="4"
                     class="form-control required">@if($proceso){{$proceso->observaciones_caso}}@endif</textarea>
             </div>
         </div>
+        <div role="tabpanel" class="tab-pane active" id="comentarios-proceso">
+            <div class="juridico right-buttons">
+                <div>
+                    <a href="javascript:void(0)" onclick="seguimientoProceso.addComentarioModal()"
+                        class="btn btn-default">
+                        Agregar un comentario
+                    </a>
+                </div>
+            </div>
+            <table id="comentariosTable" class="table table-hover" data-empty="Sin actuaciones"
+                data-paging-count-format="Mostrando del {PF} al {PL} de {TR} registros"
+                data-filter-container="#filter-form-container" data-sorting="false" data-filtering="false"
+                data-paging="false" data-filter-placeholder="Buscar ..." data-filter-position="left"
+                data-filter-dropdown-title="Buscar por" data-filter-space="OR">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Usuario</th>
+                        <th>Comentario</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($comentarios as $comentario)
+                    <tr id="comentarioRow{{$comentario->id_proceso_bitacora}}">
+                        <td>{{$comentario->getFechaCreacion()}}</td>
+                        <td>{{$comentario->getNombreCompleto()}}</td>
+                        <td>{{$comentario->comentario}}</td>
+                        <td>
+                            @if($comentario->canEdit())
+                            <div class="flex justify-center table-actions">
+                                <a onClick="seguimientoProceso.addComentarioModal('{{$comentario->id_proceso_bitacora}}')"
+                                    class="btn text-primary" type="button">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </a>
+                                <a onclick="seguimientoProceso.openDeleteComentario('{{$comentario->id_proceso_bitacora}}')"
+                                    href="javascript:void(0)" class="btn text-danger" type="button">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </a>
+                            </div>
+                            @endif
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
         @if(isset($etapas) && count($etapas))
         @foreach ($etapas as $item)
-        <div role="tabpanel" class="tab-pane @if($proceso->id_etapa_proceso == $item->id_etapa_proceso) active @endif"
+        <div role="tabpanel" class="tab-pane @if($proceso->id_etapa_proceso == $item->id_etapa_proceso) actives @endif"
             id="etapa-{{$item->id_etapa_proceso}}">
 
             <div class="juridico right-buttons">
@@ -168,8 +220,8 @@
                     </a>
                 </div>
             </div>
-            <table id="tipoProcesoTable" class="table table-hover" data-empty="Sin actuaciones"
-                data-paging-count-format="Mostrando del {PF} al {PL} de {TR} registros"
+            <table id="actuacionesTable{{$item->id_etapa_proceso}}" class="table table-hover"
+                data-empty="Sin actuaciones" data-paging-count-format="Mostrando del {PF} al {PL} de {TR} registros"
                 data-filter-container="#filter-form-container" data-sorting="false" data-filtering="false"
                 data-paging="false" data-filter-placeholder="Buscar ..." data-filter-position="left"
                 data-filter-dropdown-title="Buscar por" data-filter-space="OR">
@@ -216,7 +268,7 @@
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" onclick="etapaProceso.asociarActuacionModal('hide')"
+                <button type="button" class="close" onclick="seguimientoProceso.closeActuacionModal()"
                     aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Asociar actuación a etapa de proceso</h4>
             </div>
@@ -261,13 +313,60 @@
                     </div>
                 </div>
                 <div class="modal-footer center">
-                    <input type="hidden" id="deleteValue" />
                     <button type="button" class="btn btn-default"
-                        onclick="etapaProceso.asociarActuacionModal('hide')">Cancelar</button>
+                        onclick="seguimientoProceso.closeActuacionModal()">Cancelar</button>
                     <button type="submit" class="btn btn-success">Asociar</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" tabindex="-1" role="dialog" id="comentariosModal">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" onclick="seguimientoProceso.closeComentarioModal()"
+                    aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Comentario proceso</h4>
+            </div>
+            <form onsubmit="seguimientoProceso.saveComentario(event)">
+                <div class="modal-body">
+                    <input type="hidden" class="required" name="id_proceso_bitacora" id="idProcesoBitacora" />
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">Comentario</label>
+                        <textarea class="form-control required" id="comentarioProceso" name="comentario"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer center">
+                    <button type="button" class="btn btn-default"
+                        onclick="seguimientoProceso.closeComentarioModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Asociar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="deleteModal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Eliminar comentario</h4>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro que desea eliminar el comentario del proceso?</p>
+            </div>
+            <div class="modal-footer center">
+                <input type="hidden" id="deleteValue" />
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" onClick="seguimientoProceso.deleteComentario()" class="btn btn-danger">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection

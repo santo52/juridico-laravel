@@ -296,7 +296,7 @@
             </div>
             <div class="form-group">
                 <label for="celular_contacto" class="control-label">Otros datos de contacto</label>
-                <textarea rows="4" style="resize: vertical; min-height: 100px" class="form-control"
+                <textarea rows="4" class="form-control"
                     id="otra_informacion_contacto"
                     name="otra_informacion_contacto">@if($cliente){{$cliente->numero_documento_contacto}}{{$cliente->informacion_adicional}}@endif</textarea>
             </div>

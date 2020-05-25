@@ -3,6 +3,7 @@
 namespace App\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Entities\Usuario;
 
 class ProcesoEtapaBitacora extends Model
 {
@@ -16,6 +17,15 @@ class ProcesoEtapaBitacora extends Model
 
     protected $fillable = [
         'id_proceso_etapa_bitacora', 'id_usuario', 'comentario',
-        'fecha_creacion', 'fecha_actualizacion', 'proceso_etapa'
+        'fecha_creacion', 'fecha_actualizacion', 'proceso_etapa', 'sesion_id'
     ];
+
+    public function getFechaCreacion() {
+        return date('Y-m-d h:i:s', strtotime($this->fecha_creacion));
+    }
+
+    public function getNombreCompleto() {
+        $usuario = Usuario::find($this->id_usuario);
+        return $usuario->getNombreCompleto();
+    }
 }

@@ -9,6 +9,7 @@ use App\Entities\ProcesoEtapa;
 use App\Entities\ProcesoEtapaActuacion;
 use App\Entities\TipoProceso;
 use App\Entities\EtapaProceso;
+use App\Entities\ProcesoBitacora;
 use App\Entities\Usuario;
 
 
@@ -46,8 +47,11 @@ class SeguimientoProcesoController extends Controller
             $etapas[$key] = $this->addProcesoEtapa($proceso->id_proceso, $value);
         }
 
+        $comentarios = ProcesoBitacora::orderBy('fecha_creacion', 'desc')->get();
+
         return $this->renderSection('seguimiento_proceso.detalle', [
             'proceso' => $proceso,
+            'comentarios' => $comentarios,
             'etapas' => $etapas
         ]);
     }
@@ -92,7 +96,6 @@ class SeguimientoProcesoController extends Controller
         ])->first();
 
         if (!empty($procesoEtapaActuacion)) {
-            $actuacion->procesoEtapaActuacion = $procesoEtapaActuacion;
             $actuacion->responsable = $procesoEtapaActuacion->getResponsable();
             $actuacion->fechaInicio = $procesoEtapaActuacion->getFechaInicioString();
             $actuacion->fechaVencimiento = $procesoEtapaActuacion->getFechaVencimientoString();

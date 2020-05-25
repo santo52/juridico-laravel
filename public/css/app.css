@@ -65,6 +65,11 @@ body #dvOpacidad {
   z-index: 10000;
 }
 
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
 /************** DEFINICIONES **************/
 
 /*****************************************************************************/

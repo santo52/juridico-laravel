@@ -12,7 +12,7 @@ class SeguimientoProceso {
         $('#agregarActuacionDespuesDe').show().val('').addClass('required').selectpicker('refresh')
 
         $.ajax({
-            url: '/etapas-de-proceso/actuacion/all/' + id_etapa_proceso,
+            url: '/seguimiento-procesos/etapas-de-proceso/actuacion/all/' + id_etapa_proceso,
             success: actuaciones => {
                 if (actuaciones.length) {
                     const html = actuaciones.map(actuacion => `<option value="${actuacion.id_actuacion}">${actuacion.nombre_actuacion}</option>`)
@@ -27,7 +27,7 @@ class SeguimientoProceso {
         })
 
         $.ajax({
-            url: '/etapas-de-proceso/get/' + id_etapa_proceso,
+            url: '/seguimiento-procesos/etapas-de-proceso/get/' + id_etapa_proceso,
             success: ({ actuaciones }) => {
                 const html = actuaciones.map(data => `<option value="${data.id_actuacion}">${data.nombre_actuacion}</option>`)
                 $('#actuacionesList').html(html).val('').selectpicker('refresh')
@@ -43,7 +43,7 @@ class SeguimientoProceso {
 
             const formData = new FormData(e.target)
             $.ajax({
-                url: '/etapas-de-proceso/actuacion/insert',
+                url: '/seguimiento-procesos/etapas-de-proceso/actuacion/insert',
                 data: new URLSearchParams(formData),
                 success: data => {
                     location.reload()
@@ -70,6 +70,91 @@ class SeguimientoProceso {
                 data: new URLSearchParams(params)
             })
         }
+    }
+
+    addComentarioModal(id) {
+        $('#comentariosModal').modal();
+        $('#idProcesoBitacora').val(id || '')
+        $('#comentarioProceso').val('')
+        $.ajax({
+            url: '/seguimiento-procesos/comentario/get/' + id,
+            success: data => {
+                $('#comentarioProceso').val(data.comentario)
+            }
+        })
+    }
+
+    closeComentarioModal() {
+        $('#comentariosModal').modal('hide');
+    }
+
+    closeActuacionModal() {
+        $('#actuacionModal').modal('hide');
+    }
+
+    openDeleteComentario(id) {
+        $('#deleteModal').modal()
+        $('#deleteValue').val(id)
+    }
+
+    deleteComentario() {
+        const id = $('#deleteValue').val()
+        $.ajax({
+            url: '/seguimiento-procesos/comentario/delete/' + id,
+            success: ({ deleted }) => {
+                if(deleted) {
+                    $('#comentarioRow' + id).remove();
+                }
+            }
+        })
+
+        $('#deleteModal').modal('hide')
+    }
+
+    saveComentario(e) {
+        e.preventDefault()
+        e.stopPropagation()
+
+        const formData = new FormData(e.target)
+        formData.append('id_proceso', getId());
+        $.ajax({
+            url: '/seguimiento-procesos/comentario/upsert',
+            data: new URLSearchParams(formData),
+            success: ({ saved }) => {
+                if(saved) {
+                    const $table = $('#comentariosTable')
+                    const $row = $('#comentarioRow' + saved.id_proceso_bitacora)
+                    const html = `
+                        <tr id="comentarioRow${saved.id_proceso_bitacora}">
+                            <td>${saved.fechaCreacion}</td>
+                            <td>${saved.nombreUsuario}</td>
+                            <td>${saved.comentario}</td>
+                            <td>
+                            <div class="flex justify-center table-actions">
+                                <a onClick="seguimientoProceso.addComentarioModal('${saved.id_proceso_bitacora}')" class="btn text-primary" type="button">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </a>
+                                <a onclick="proceso.openDeleteComentario('${saved.id_proceso_bitacora}')" href="javascript:void(0)" class="btn text-danger" type="button">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </a>
+                            </div>
+                            </td>
+                        </tr>
+                    `
+
+                    if($row.length) {
+                        $row.replaceWith(html)
+                    } else {
+                        $table.find('tbody').prepend(html)
+                    }
+
+                    $table.footable();
+                }
+                this.closeComentarioModal()
+            }
+        })
+
+        return false
     }
 }
 

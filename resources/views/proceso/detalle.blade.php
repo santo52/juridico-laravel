@@ -65,7 +65,7 @@
                     <label class="control-label">Teléfono cliente</label>
                     <div class="input-group">
                         <span class="input-group-addon" id="indicativo_cliente">+1</span>
-                        <input disabled type="text" class="form-control required" id="telefono_cliente">
+                        <input disabled type="text" class="form-control" id="telefono_cliente">
                     </div>
                 </div>
             </div>
@@ -79,7 +79,7 @@
                     <label class="control-label">Teléfono intermediario</label>
                     <div class="input-group">
                         <span class="input-group-addon" id="indicativo_intermediario">+1</span>
-                        <input disabled type="text" class="form-control required" id="telefono_intermediario">
+                        <input disabled type="text" class="form-control" id="telefono_intermediario">
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-4">

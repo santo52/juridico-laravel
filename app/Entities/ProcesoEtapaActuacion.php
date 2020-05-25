@@ -16,6 +16,8 @@ class ProcesoEtapaActuacion extends Model
 
     const UPDATED_AT = 'fecha_actualizacion';
 
+    private $diasVencimiento;
+
     protected $fillable = [
         'id_proceso_etapa_actuacion', 'id_proceso_etapa', 'id_actuacion', 'fecha_inicio',
         'fecha_fin', 'fecha_radicado', 'numero_radicado', 'fecha_vencimiento', 'id_usuario_responsable',
@@ -34,6 +36,7 @@ class ProcesoEtapaActuacion extends Model
     {
         $actuacion = Actuacion::find($this->id_actuacion);
         $dias = $actuacion && $actuacion->dias_vencimiento ? $actuacion->dias_vencimiento : 1;
+        $this->diasVencimiento = $dias;
         return date('Y-m-d h:i:s', strtotime("+{$dias} days {$this->fecha_inicio}"));
     }
 
@@ -45,6 +48,29 @@ class ProcesoEtapaActuacion extends Model
     public function getEstado()
     {
         return $this->finalizado == 1 ? 'Finalizado' : 'En proceso';
+    }
+
+    public function getEstadoColor()
+    {
+        $hoy = date('Y-m-d');
+        $vencimiento = strtotime($this->getFechaVencimientoString());
+
+        if ($this->finalizado == 0) {
+            if ($hoy === date('Y-m-d', $vencimiento)) {
+                return 'rojo';
+            } else {
+
+                $limitDays = $this->diasVencimiento * 0.75 * 24;
+                $limitDate = strtotime("+{$limitDays} hours {$this->fecha_inicio}");
+                if(strtotime('now') > $limitDate) {
+                    return 'amarillo';
+                }
+
+                return 'verde';
+            }
+        }
+
+        return 'gris';
     }
 
     public function getResponsable()

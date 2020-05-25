@@ -55,35 +55,36 @@ class SeguimientoProcesoController extends Controller
     private function addProcesoEtapa($id_proceso, $etapa)
     {
 
-        $hasData = false;
         $procesoEtapa = ProcesoEtapa::where([
             'id_proceso' => $id_proceso,
             'id_etapa_proceso' => $etapa->id_etapa_proceso
         ])->first();
 
         $actuaciones = $etapa->actuaciones;
+        $idProcesoEtapa = false;
 
         if (!empty($procesoEtapa)) {
             $etapa->porcentaje = $procesoEtapa->porcentaje;
-            $hasData = true;
-            foreach ($actuaciones as $key => $actuacion) {
-                $actuaciones[$key] = $this->addProcesoEtapaActuacion($procesoEtapa->id_proceso_etapa, $actuacion);
-            }
+            $idProcesoEtapa = $procesoEtapa->id_proceso_etapa;
+        }
+
+        foreach ($actuaciones as $key => $actuacion) {
+            $actuaciones[$key] = $this->addProcesoEtapaActuacion($idProcesoEtapa, $actuacion);
         }
 
         $etapa->actuaciones = $actuaciones;
-        $etapa->hasData =  $hasData;
         return $etapa;
     }
 
     private function addProcesoEtapaActuacion($id_proceso_etapa, $actuacion)
     {
-        $hasData = false;
         $actuacion->fechaInicio = 'Sin iniciar';
         $actuacion->fechaVencimiento = 'Sin iniciar';
         $actuacion->fechaFin = 'Sin iniciar';
         $actuacion->responsable = 'Sin asignar';
         $actuacion->estado = 'Pendiente';
+        $actuacion->estadoColor = 'gris';
+        $actuacion->tiempoMaximo = $actuacion->getTiempoMaximo();
 
         $procesoEtapaActuacion = ProcesoEtapaActuacion::where([
             'id_proceso_etapa' => $id_proceso_etapa,
@@ -91,17 +92,15 @@ class SeguimientoProcesoController extends Controller
         ])->first();
 
         if (!empty($procesoEtapaActuacion)) {
-            $hasData = true;
             $actuacion->procesoEtapaActuacion = $procesoEtapaActuacion;
-            $actuacion->tiempoMaximo = $actuacion->getTiempoMaximo();
             $actuacion->responsable = $procesoEtapaActuacion->getResponsable();
             $actuacion->fechaInicio = $procesoEtapaActuacion->getFechaInicioString();
             $actuacion->fechaVencimiento = $procesoEtapaActuacion->getFechaVencimientoString();
             $actuacion->fechaFin = $procesoEtapaActuacion->getFechaFinString();
             $actuacion->estado = $procesoEtapaActuacion->getEstado();
+            $actuacion->estadoColor = $procesoEtapaActuacion->getEstadoColor();
         }
 
-        $actuacion->hasData = $hasData;
         return $actuacion;
     }
 
@@ -116,4 +115,5 @@ class SeguimientoProcesoController extends Controller
      * amarillo: 76% al día anterior.
      * terminado en gris,
      */
+
 }

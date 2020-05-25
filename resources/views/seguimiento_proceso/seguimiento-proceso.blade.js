@@ -71,17 +71,6 @@ class SeguimientoProceso {
             })
         }
     }
-
-
-
-
-
-
-
-
-
-
-
 }
 
 

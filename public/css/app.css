@@ -1515,3 +1515,32 @@ ul.nav-tabs > li.active > a {
   color: gray;
 }
 
+.actuacion-row td.estado span {
+  display: inline-block;
+  padding: 2px 5px;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.actuacion-row-rojo td.estado span {
+  border-color: red;
+  color: red;
+}
+
+.actuacion-row-verde td.estado span {
+  border-color: green;
+  color: green;
+}
+
+.actuacion-row-amarillo td.estado span {
+  border-color: #f1c40f;
+  color: #f1c40f;
+}
+
+.actuacion-row-gris td.estado span {
+  border-color: #bdc3c7;
+  color: #bdc3c7;
+}
+

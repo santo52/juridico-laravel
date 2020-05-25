@@ -189,7 +189,7 @@
                 </thead>
                 <tbody>
                     @foreach ($item->actuaciones as $actuacion)
-                    <tr>
+                    <tr class="actuacion-row actuacion-row-{{$actuacion->estadoColor}}">
                         <td>{{$actuacion->id_actuacion}}</td>
                         <td>{{strtolower($actuacion->nombre_actuacion)}}</td>
                         <td>{{$actuacion->dias_vencimiento}} días</td>
@@ -198,15 +198,14 @@
                         <td>{{$actuacion->fechaVencimiento}}</td>
                         <td>{{$actuacion->fechaFin}}</td>
                         <td>{{$actuacion->responsable}}</td>
-                        <td>{{$actuacion->estado}}</td>
+                        <td class="estado">
+                            <span>{{$actuacion->estado}}</span>
+                        </td>
                         <td></td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
-
-
-
         </div>
         @endforeach
         @endif
@@ -271,19 +270,4 @@
         </div>
     </div>
 </div>
-@endsection
-
-@section('javascript')
-<script>
-    $(document).ready(function(){
-        const id = getId()
-        fileDocument.init({
-            url: 'proceso/upload',
-            path: 'uploads/documentos',
-            id
-        })
-
-        !id && $('#documentos-proceso-tab').hide()
-    })
-</script>
 @endsection

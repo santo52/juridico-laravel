@@ -1,5 +1,13 @@
 class Perfil {
 
+    pdf(){
+        window.open('/perfil/pdf')
+    }
+
+    excel(){
+        window.open('/perfil/excel')
+    }
+
     openDelete(id) {
         $('#deleteModal').modal()
         $('#deleteValue').val(id)

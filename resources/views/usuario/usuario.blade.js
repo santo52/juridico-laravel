@@ -1,5 +1,13 @@
 class Usuario {
 
+    pdf(){
+        window.open('/usuario/pdf')
+    }
+
+    excel(){
+        window.open('/usuario/excel')
+    }
+
     changeMunicipio(self){
         const municipio = $(self).val()
         $.ajax({

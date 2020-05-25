@@ -1,5 +1,13 @@
 class Proceso {
 
+    pdf(){
+        window.open('/proceso/pdf')
+    }
+
+    excel(){
+        window.open('/proceso/excel')
+    }
+
     openDelete(id) {
         $('#deleteModal').modal()
         $('#deleteValue').val(id)

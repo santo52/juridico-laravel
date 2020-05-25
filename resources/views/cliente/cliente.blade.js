@@ -135,6 +135,14 @@ class Cliente {
         })
     }
 
+    pdf(){
+        window.open('/cliente/pdf')
+    }
+
+    excel(){
+        window.open('/cliente/excel')
+    }
+
 }
 
 const cliente = new Cliente()

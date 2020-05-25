@@ -1,5 +1,13 @@
 class Plantilla {
 
+    pdf(){
+        window.open('/plantillas/pdf')
+    }
+
+    excel(){
+        window.open('/plantillas/excel')
+    }
+
     openDelete(id) {
         $('#deleteModal').modal()
         $('#deleteValue').val(id)

@@ -1,5 +1,13 @@
 class Menu {
 
+    pdf(){
+        window.open('/opciones/menu/pdf')
+    }
+
+    excel(){
+        window.open('/opciones/menu/excel')
+    }
+
     renderParents(parents) {
         let html = [];
         html.push('<option value="0">Sin padre</option>')

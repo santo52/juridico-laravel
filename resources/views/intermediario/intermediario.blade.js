@@ -1,5 +1,13 @@
 class Intermediario {
 
+    pdf(){
+        window.open('/intermediario/pdf')
+    }
+
+    excel(){
+        window.open('/intermediario/excel')
+    }
+
     changeMunicipio(self){
         const municipio = $(self).val()
         $.ajax({

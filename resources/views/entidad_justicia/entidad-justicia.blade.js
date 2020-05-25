@@ -1,5 +1,13 @@
 class EntidadJusticia {
 
+    pdf(){
+        window.open('/entidades-de-justicia/pdf')
+    }
+
+    excel(){
+        window.open('/entidades-de-justicia/excel')
+    }
+
     createEditModal(id) {
 
         const title = id ? 'Editar entidad de justicia' : 'Crear entidad de justicia'

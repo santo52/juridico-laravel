@@ -1,5 +1,13 @@
 class Documento {
 
+    pdf(){
+        window.open('/documento/pdf')
+    }
+
+    excel(){
+        window.open('/documento/excel')
+    }
+
     createEditModal(id) {
 
         const title = id ? 'Editar documento' : 'Crear documento'

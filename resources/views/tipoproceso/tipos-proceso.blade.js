@@ -1,6 +1,13 @@
 class TipoProceso {
 
-    //createEtapaModal
+    pdf(){
+        window.open('/etapas-de-proceso/pdf')
+    }
+
+    excel(){
+        window.open('/etapas-de-proceso/excel')
+    }
+
     createEtapaOpen(){
         $('#tipoProcesoEtapaPopover').popover('show')
     }

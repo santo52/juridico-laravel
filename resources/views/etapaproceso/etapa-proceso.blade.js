@@ -1,5 +1,13 @@
 class EtapaProceso {
 
+    pdf(){
+        window.open('/etapas-de-proceso/pdf')
+    }
+
+    excel(){
+        window.open('/etapas-de-proceso/excel')
+    }
+
     createActuacion(){
         $('#createModal').modal('hide')
         $('.modal-backdrop').remove()

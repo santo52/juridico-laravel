@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Entities\Menu;
 use Illuminate\Support\Facades\Auth;
 use App\Entities\Accion;
+use App\Exports\MenuExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MenuController extends Controller
 {
@@ -107,6 +109,22 @@ class MenuController extends Controller
         $menu->estado = 0;
         $deleted = $menu->save();
         return response()->json(['deleted' => $deleted, $menu]);
+    }
+
+    public function createExcel() {
+        return Excel::download(new MenuExport, 'menus.xlsx');
+    }
+
+    public function createPDF() {
+        $parents = Menu::getMenuWithChildren('orden_menu');
+        foreach($parents as $key => $parent) {
+            if($parents[$key]['parent_id'] === 0){
+                $parents[$key]['parent_id'] = 'Ninguno';
+                $parents[$key]['ruta_menu'] = 'N/A';
+            }
+        }
+        $pdf = \PDF::loadView('menu.pdf', ["parents" => $parents])->setPaper('a4');
+        return $pdf->download('archivo.pdf');
     }
 
 }

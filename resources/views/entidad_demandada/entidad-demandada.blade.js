@@ -1,5 +1,13 @@
 class EntidadDemandada {
 
+    pdf(){
+        window.open('/entidades-demandadas/pdf')
+    }
+
+    excel(){
+        window.open('/entidades-demandadas/excel')
+    }
+
     createEditModal(id) {
 
         const title = id ? 'Editar entidad demandada' : 'Crear entidad demandada'

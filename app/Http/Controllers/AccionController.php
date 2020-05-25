@@ -36,5 +36,4 @@ class AccionController extends Controller
 
         return response()->json(['deleted' => $deleted]);
     }
-
 }

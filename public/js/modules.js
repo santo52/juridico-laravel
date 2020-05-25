@@ -293,6 +293,16 @@ var Cliente = /*#__PURE__*/function () {
         }
       });
     }
+  }, {
+    key: "pdf",
+    value: function pdf() {
+      window.open('/cliente/pdf');
+    }
+  }, {
+    key: "excel",
+    value: function excel() {
+      window.open('/cliente/excel');
+    }
   }]);
 
   return Cliente;
@@ -306,6 +316,16 @@ var Documento = /*#__PURE__*/function () {
   }
 
   _createClass(Documento, [{
+    key: "pdf",
+    value: function pdf() {
+      window.open('/documento/pdf');
+    }
+  }, {
+    key: "excel",
+    value: function excel() {
+      window.open('/documento/excel');
+    }
+  }, {
     key: "createEditModal",
     value: function createEditModal(id) {
       var title = id ? 'Editar documento' : 'Crear documento';
@@ -384,6 +404,16 @@ var EntidadDemandada = /*#__PURE__*/function () {
   }
 
   _createClass(EntidadDemandada, [{
+    key: "pdf",
+    value: function pdf() {
+      window.open('/entidades-demandadas/pdf');
+    }
+  }, {
+    key: "excel",
+    value: function excel() {
+      window.open('/entidades-demandadas/excel');
+    }
+  }, {
     key: "createEditModal",
     value: function createEditModal(id) {
       var title = id ? 'Editar entidad demandada' : 'Crear entidad demandada';
@@ -460,6 +490,16 @@ var EntidadJusticia = /*#__PURE__*/function () {
   }
 
   _createClass(EntidadJusticia, [{
+    key: "pdf",
+    value: function pdf() {
+      window.open('/entidades-de-justicia/pdf');
+    }
+  }, {
+    key: "excel",
+    value: function excel() {
+      window.open('/entidades-de-justicia/excel');
+    }
+  }, {
     key: "createEditModal",
     value: function createEditModal(id) {
       var title = id ? 'Editar entidad de justicia' : 'Crear entidad de justicia';
@@ -540,6 +580,16 @@ var EtapaProceso = /*#__PURE__*/function () {
   }
 
   _createClass(EtapaProceso, [{
+    key: "pdf",
+    value: function pdf() {
+      window.open('/etapas-de-proceso/pdf');
+    }
+  }, {
+    key: "excel",
+    value: function excel() {
+      window.open('/etapas-de-proceso/excel');
+    }
+  }, {
     key: "createActuacion",
     value: function createActuacion() {
       $('#createModal').modal('hide');
@@ -785,6 +835,16 @@ var Intermediario = /*#__PURE__*/function () {
   }
 
   _createClass(Intermediario, [{
+    key: "pdf",
+    value: function pdf() {
+      window.open('/intermediario/pdf');
+    }
+  }, {
+    key: "excel",
+    value: function excel() {
+      window.open('/intermediario/excel');
+    }
+  }, {
     key: "changeMunicipio",
     value: function changeMunicipio(self) {
       var municipio = $(self).val();
@@ -903,6 +963,16 @@ var Menu = /*#__PURE__*/function () {
   }
 
   _createClass(Menu, [{
+    key: "pdf",
+    value: function pdf() {
+      window.open('/opciones/menu/pdf');
+    }
+  }, {
+    key: "excel",
+    value: function excel() {
+      window.open('/opciones/menu/excel');
+    }
+  }, {
     key: "renderParents",
     value: function renderParents(parents) {
       var html = [];
@@ -1099,6 +1169,16 @@ var Perfil = /*#__PURE__*/function () {
   }
 
   _createClass(Perfil, [{
+    key: "pdf",
+    value: function pdf() {
+      window.open('/perfil/pdf');
+    }
+  }, {
+    key: "excel",
+    value: function excel() {
+      window.open('/perfil/excel');
+    }
+  }, {
     key: "openDelete",
     value: function openDelete(id) {
       $('#deleteModal').modal();
@@ -1260,6 +1340,16 @@ var Plantilla = /*#__PURE__*/function () {
   }
 
   _createClass(Plantilla, [{
+    key: "pdf",
+    value: function pdf() {
+      window.open('/plantillas/pdf');
+    }
+  }, {
+    key: "excel",
+    value: function excel() {
+      window.open('/plantillas/excel');
+    }
+  }, {
     key: "openDelete",
     value: function openDelete(id) {
       $('#deleteModal').modal();
@@ -1320,6 +1410,16 @@ var Proceso = /*#__PURE__*/function () {
   }
 
   _createClass(Proceso, [{
+    key: "pdf",
+    value: function pdf() {
+      window.open('/proceso/pdf');
+    }
+  }, {
+    key: "excel",
+    value: function excel() {
+      window.open('/proceso/excel');
+    }
+  }, {
     key: "openDelete",
     value: function openDelete(id) {
       $('#deleteModal').modal();
@@ -1668,8 +1768,17 @@ var TipoProceso = /*#__PURE__*/function () {
   }
 
   _createClass(TipoProceso, [{
+    key: "pdf",
+    value: function pdf() {
+      window.open('/etapas-de-proceso/pdf');
+    }
+  }, {
+    key: "excel",
+    value: function excel() {
+      window.open('/etapas-de-proceso/excel');
+    }
+  }, {
     key: "createEtapaOpen",
-    //createEtapaModal
     value: function createEtapaOpen() {
       $('#tipoProcesoEtapaPopover').popover('show');
     }
@@ -1894,6 +2003,16 @@ var Usuario = /*#__PURE__*/function () {
   }
 
   _createClass(Usuario, [{
+    key: "pdf",
+    value: function pdf() {
+      window.open('/usuario/pdf');
+    }
+  }, {
+    key: "excel",
+    value: function excel() {
+      window.open('/usuario/excel');
+    }
+  }, {
     key: "changeMunicipio",
     value: function changeMunicipio(self) {
       var municipio = $(self).val();

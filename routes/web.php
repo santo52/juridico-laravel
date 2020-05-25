@@ -111,9 +111,9 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/plantillas/delete/{id}', 'PlantillaDocumentoController@delete');
     Route::post('/plantillas/{id}', 'PlantillaDocumentoController@get');
 
-    Route::post('/seguimiento-procesos/listar', 'ProcesoController@seguimientoListar');
-    Route::post('/seguimiento-procesos/set-etapa', 'ProcesoController@setEtapa');
-    Route::post('/seguimiento-procesos/{id}', 'ProcesoController@seguimientoDetalle');
+    Route::post('/seguimiento-procesos/listar', 'SeguimientoProcesoController@index');
+    Route::post('/seguimiento-procesos/set-etapa', 'SeguimientoProcesoController@setEtapa');
+    Route::post('/seguimiento-procesos/{id}', 'SeguimientoProcesoController@detalle');
 
 
 

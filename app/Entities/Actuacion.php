@@ -24,4 +24,9 @@ class Actuacion extends Model
         return new ActuacionCollection($models);
     }
 
+    public function getDiasVencimiento() {
+        $type = $this->dias_vencimiento == 1 ? 'día' : 'días';
+        return $this->dias_vencimiento . ' ' . $type;
+    }
+
 }

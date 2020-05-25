@@ -74,7 +74,7 @@
             <td>{{$actuacion['nombre_actuacion']}}</td>
             <td>{{$actuacion['genera_alertas']}}</td>
             <td>{{$actuacion['aplica_control_vencimiento']}}</td>
-            <td>{{$actuacion['dias_vencimiento']}}</td>
+            <td>{{$actuacion->getDiasVencimiento()}}</td>
             <td>{{$actuacion['requiere_estudio_favorabilidad']}}</td>
             <td>{{$actuacion['actuacion_tiene_cobro']}}</td>
             <td>{{$actuacion['valor_actuacion']}}</td>

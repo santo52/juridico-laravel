@@ -44,7 +44,7 @@
             <th style="text-align:left;padding-left: 5px;" >{{$item->nombre_actuacion}}</th>
             <th>{{$item->genera_alertas}}</th>
             <th>{{$item->aplica_control_vencimiento}}</th>
-            <th>{{$item->dias_vencimiento}}</th>
+            <th>{{$item->getDiasVencimiento()}}</th>
             <th>{{$item->requiere_estudio_favorabilidad}}</th>
             <th>{{$item->actuacion_tiene_cobro}}</th>
             <th style="text-align:left;padding-left: 5px;">{{$item->valor_actuacion}}</th>

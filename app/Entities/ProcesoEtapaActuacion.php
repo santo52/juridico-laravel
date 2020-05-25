@@ -4,6 +4,7 @@ namespace App\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Entities\Usuario;
+use App\Entities\Actuacion;
 
 class ProcesoEtapaActuacion extends Model
 {
@@ -31,7 +32,9 @@ class ProcesoEtapaActuacion extends Model
 
     public function getFechaVencimientoString()
     {
-        return date('Y-m-d h:i:s', strtotime("+{$this->dias_vencimiento} days {$this->fecha_inicio}"));
+        $actuacion = Actuacion::find($this->id_actuacion);
+        $dias = $actuacion && $actuacion->dias_vencimiento ? $actuacion->dias_vencimiento : 1;
+        return date('Y-m-d h:i:s', strtotime("+{$dias} days {$this->fecha_inicio}"));
     }
 
     public function getFechaFinString()

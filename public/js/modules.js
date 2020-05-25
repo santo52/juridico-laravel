@@ -186,14 +186,21 @@ var Cliente = /*#__PURE__*/function () {
     key: "onChangeIntermediario",
     value: function onChangeIntermediario(self) {
       var intermediario = $(self).val();
+      $('#documento_intermediario').val('');
+      $('#indicativo_intermediario').text('');
+      $('#telefono_intermediario').val('');
+      $('#email_intermediario').val('');
       $.ajax({
         url: '/intermediario/get/' + intermediario,
         success: function success(_ref) {
           var intermediario = _ref.intermediario;
-          $('#documento_intermediario').val(intermediario.numero_documento);
-          $('#indicativo_intermediario').text('+' + intermediario.indicativo);
-          $('#telefono_intermediario').val(intermediario.telefono);
-          $('#email_intermediario').val(intermediario.correo_electronico);
+
+          if (intermediario) {
+            $('#documento_intermediario').val(intermediario.numero_documento);
+            $('#indicativo_intermediario').text('+' + intermediario.indicativo);
+            $('#telefono_intermediario').val(intermediario.telefono);
+            $('#email_intermediario').val(intermediario.correo_electronico);
+          }
         }
       });
     }

@@ -211,8 +211,9 @@
             <div class="form-group row">
                 <div class="col-xs-12 col-sm-3">
                     <label for="id_intermediario" class="control-label">Intermediario</label>
-                    <select data-live-search="true" class="form-control required" id="id_intermediario"
-                        name="id_intermediario" title="Seleccionar" onChange="cliente.onChangeIntermediario(this)">
+                    <select data-live-search="true" class="form-control" id="id_intermediario"
+                        name="id_intermediario" onChange="cliente.onChangeIntermediario(this)">
+                        <option @if($cliente && $cliente->id_intermediario == 0) selected @endif value="0">Sin intermediario</option>
                         @foreach ($intermediarios as $item)
                         <option @if($cliente && $cliente->id_intermediario === $item->id_intermediario) selected @endif
                             value="{{$item->id_intermediario}}">{{$item->getNombreCompleto()}}

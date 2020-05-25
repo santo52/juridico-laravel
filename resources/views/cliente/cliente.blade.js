@@ -1,11 +1,11 @@
 class Cliente {
 
-    changeMunicipio(self){
+    changeMunicipio(self) {
         const municipio = $(self).val()
         $.ajax({
             url: '/cliente/municipio/' + municipio,
             success: data => {
-                if(data.indicativo){
+                if (data.indicativo) {
                     $('#indicativo').show().text('+' + data.indicativo)
                 } else {
                     $('#indicativo').hide()
@@ -28,13 +28,19 @@ class Cliente {
 
     onChangeIntermediario(self) {
         const intermediario = $(self).val()
+        $('#documento_intermediario').val('')
+        $('#indicativo_intermediario').text('')
+        $('#telefono_intermediario').val('')
+        $('#email_intermediario').val('')
         $.ajax({
             url: '/intermediario/get/' + intermediario,
             success: ({ intermediario }) => {
-                $('#documento_intermediario').val(intermediario.numero_documento)
-                $('#indicativo_intermediario').text('+' + intermediario.indicativo)
-                $('#telefono_intermediario').val(intermediario.telefono)
-                $('#email_intermediario').val(intermediario.correo_electronico)
+                if (intermediario) {
+                    $('#documento_intermediario').val(intermediario.numero_documento)
+                    $('#indicativo_intermediario').text('+' + intermediario.indicativo)
+                    $('#telefono_intermediario').val(intermediario.telefono)
+                    $('#email_intermediario').val(intermediario.correo_electronico)
+                }
             }
         })
     }
@@ -75,12 +81,12 @@ class Cliente {
                     $('#correoElectronico').val(cliente.correo_electronico)
                     $('#etapaEstado').prop('checked', cliente.estado_cliente == 1).change()
 
-                    if(cliente.indicativo) {
+                    if (cliente.indicativo) {
                         $('#indicativo').text('+' + cliente.indicativo)
                     } else {
                         $('#indicativo').hide()
                     }
- }
+                }
             })
         }
     }
@@ -99,7 +105,7 @@ class Cliente {
                 data: new URLSearchParams(formData),
                 success: data => {
 
-                    if(data.clientExists) {
+                    if (data.clientExists) {
                         $('#numero_documento').parent().addClass('has-error')
                         const text = 'Ya existe un cliente con este número de documento'
                         showErrorPopover($('#numero_documento'), text, 'top')

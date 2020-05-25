@@ -110,13 +110,11 @@ class ActuacionController extends Controller
             'programar_audiencia' => empty($request->get('programarAudiencia')) ? 2 : 1,
             'control_entrega_documentos' => empty($request->get('controlEntregaDocumentos')) ? 2 : 1,
             'generar_documentos' => empty($request->get('generarDocumentos')) ? 2 : 1,
-            'estado_actuacion' => empty($request->get('estado')) ? 2 : 1,
-            'id_usuario_actualizacion' => Auth::id()
+            'estado_actuacion' => empty($request->get('estado')) ? 2 : 1
         ];
 
         if (!$id) {
             $data['eliminado'] = 0;
-            $data['id_usuario_creacion'] = Auth::id();
         }
 
         return Actuacion::updateOrCreate(['id_actuacion' => $id], $data);

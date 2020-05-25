@@ -48,8 +48,7 @@
             <td>{{$cliente['id_cliente']}}</td>
             <td>{{$cliente['abreviatura_tipo_documento']}}</td>
             <td>{{$cliente['numero_documento']}}</td>
-            <td>{{$cliente['primer_apellido']}} {{$cliente['segundo_apellido']}}
-                {{$cliente['primer_nombre']}} {{$cliente['segundo_nombre']}}</td>
+            <td>{{$cliente->getNombreCompleto()}}</td>
             <td>
                 @if($cliente['indicativo'])<span style="margin-right:2px;">(+{{$cliente['indicativo']}})</span>@endif{{$cliente['telefono']}}
             </td>

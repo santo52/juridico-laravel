@@ -3,6 +3,7 @@
 namespace App\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Entities\Persona;
 
 class Cliente extends Model
 {
@@ -21,4 +22,9 @@ class Cliente extends Model
         "id_usuario_creacion", "fecha_actualizacion", "id_usuario_actualizacion", "eliminado",
         'celular2', 'id_tipo_documento_beneficiario'
     ];
+
+    public function getNombreCompleto() {
+        $persona = Persona::find($this->id_persona);
+        return $persona->getNombreCompleto();
+    }
 }

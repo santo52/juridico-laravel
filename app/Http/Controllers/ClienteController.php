@@ -151,11 +151,6 @@ class ClienteController extends Controller
         $contacto = $this->upsertContacto($request);
         $dataPersona = $request->all();
         $dataPersona['id_contacto'] = $contacto->id_contacto;
-        $dataPersona['id_usuario_actualizacion'] = Auth::id();
-
-        if(empty($id)){
-            $dataPersona['id_usuario_creacion'] = Auth::id();
-        }
 
         $persona = Persona::updateOrCreate(['id_persona' => $request->get('id_persona')], $dataPersona);
         $dataCliente =  $dataPersona;

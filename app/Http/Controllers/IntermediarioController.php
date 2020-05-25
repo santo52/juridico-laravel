@@ -84,10 +84,6 @@ class IntermediarioController extends Controller
 
         $dataPersona = $request->all();
         $dataPersona['numero_documento'] = $documento;
-        $dataPersona['id_usuario_actualizacion'] = Auth::id();
-        if(empty($id)) {
-            $dataPersona['id_usuario_creacion'] = Auth::id();
-        }
 
         $persona = Persona::updateOrCreate(['numero_documento' => $documento ], $dataPersona);
 

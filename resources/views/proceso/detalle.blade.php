@@ -51,9 +51,7 @@
                         title="Seleccionar" onchange="proceso.changeCliente(this)">
                         @foreach ($clientes as $item)
                         <option @if($proceso && $proceso->id_cliente == $item->id_cliente) selected @endif
-                            value="{{$item->id_cliente}}">
-                            {{$item->primer_nombre}} {{$item->segundo_nombre}} {{$item->primer_apellido}}
-                            {{$item->segundo_apellido}}
+                            value="{{$item->id_cliente}}">{{$item->getNombreCompleto()}}
                         </option>
                         @endforeach
                     </select>
@@ -121,14 +119,7 @@
                         class="form-control required" title="Seleccionar">
                         @foreach ($usuarios as $item)
                         <option @if($proceso && $proceso->id_usuario_responsable == $item->id_usuario) selected @endif
-                            value="{{$item->id_usuario}}">
-                            @if($item->primer_apellido || $item->segundo_apellido || $item->primer_nombre ||
-                            $item->segundo_nombre)
-                            {{ $item->primer_nombre }} {{ $item->segundo_nombre }} {{ $item->primer_apellido }}
-                            {{ $item->segundo_apellido }}
-                            @else
-                            {{$item->nombre_usuario}}
-                            @endif
+                            value="{{$item->id_usuario}}">{{$item->getNombreCompleto()}}
                         </option>
                         @endforeach
                     </select>

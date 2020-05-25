@@ -21,7 +21,7 @@ class EtapaProcesoController extends Controller
 
     public function getActuaciones($id)
     {
-        $actuaciones = EtapaProceso::getActuaciones($id);
+        $actuaciones = EtapaProceso::getActuaciones($id)->get();
         return response()->json($actuaciones);
     }
 
@@ -97,11 +97,6 @@ class EtapaProcesoController extends Controller
             $data['estado_etapa_proceso'] = 1;
             $data['id_etapa_proceso'] = $etapas->id_etapa_proceso;
             $id = $etapas->id_etapa_proceso;
-        }
-
-        $data['id_usuario_actualizacion'] = Auth::id();
-        if (empty($id)) {
-            $data['id_usuario_creacion'] = Auth::id();
         }
 
         $saved = EtapaProceso::updateOrCreate(['id_etapa_proceso' => $id], $data);

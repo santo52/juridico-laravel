@@ -29,7 +29,21 @@ class EtapaProceso extends Model
                 'a.eliminado' => 0,
                 'estado_actuacion' => '1',
                 'etapa_proceso.id_etapa_proceso' => $id
-            ])->orderBy('aep.order')
-            ->get();
+            ])->orderBy('aep.order');
+    }
+
+    public function getTiempoMaximo(){
+        return $this->tiempo_maximo_proxima_actuacion . ' ' . $this->getUnidadTiempoMaximo();
+    }
+
+    public function getUnidadTiempoMaximo(){
+        $value = $this->unidad_tiempo_proxima_actuacion;
+        switch($value) {
+            case 1: return 'días';
+            case 2: return 'semanas';
+            case 3: return 'meses';
+            case 4: return 'años';
+            default: return 'días';
+        }
     }
 }

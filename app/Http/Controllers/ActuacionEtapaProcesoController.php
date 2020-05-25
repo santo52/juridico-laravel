@@ -75,11 +75,6 @@ class ActuacionEtapaProcesoController extends Controller
             $id = $etapas->id_etapa_proceso;
         }
 
-        $data['id_usuario_actualizacion'] = Auth::id();
-        if(empty($id)) {
-            $data['id_usuario_creacion'] = Auth::id();
-        }
-
         $saved = EtapaProceso::updateOrCreate(['id_etapa_proceso' => $id], $data);
         return response()->json([ 'saved' => $saved ]);
     }

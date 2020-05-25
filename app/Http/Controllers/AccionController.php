@@ -16,15 +16,11 @@ class AccionController extends Controller
     public function upsert(Request $request) {
         $id = $request->get('id_accion');
         $data = $request->all();
-        if(empty($id)) {
-            $data['id_usuario_creacion'] = Auth::id();
-        }
 
         if(empty($data['id_menu'])) {
             $data['id_menu'] = 0;
         }
 
-        $data['id_usuario_actualizacion'] = Auth::id();
         $saved = Accion::updateOrCreate(['id_accion' => $id], $data);
         return response()->json($saved);
     }

@@ -3,6 +3,7 @@
 namespace App\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Builder\ProcesoDocumentoBuilder;
 
 class ProcesoDocumento extends Model
 {
@@ -16,4 +17,9 @@ class ProcesoDocumento extends Model
         "id_proceso_documento", "id_proceso", "id_documento", "ruta_fisica_archivo", "ruta_http_archivo", "nombre_archivo",
         "id_usuario_creacion"
     ];
+
+    public function newEloquentBuilder($builder)
+    {
+        return new ProcesoDocumentoBuilder($builder, $this);
+    }
 }

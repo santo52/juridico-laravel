@@ -20,13 +20,16 @@ use App\Entities\Usuario;
 use App\Entities\Municipio;
 use App\Entities\Cliente;
 use App\Entities\EtapaProceso;
+use App\Entities\ProcesoEtapa;
+use App\Entities\ProcesoEtapaActuacion;
 
 class ProcesoController extends Controller
 {
     public function index()
     {
+        $procesos = Proceso::getAll()->orderBy('id_proceso', 'desc')->get();
         return $this->renderSection('proceso.listar', [
-            'procesos' => Proceso::getAll()
+            'procesos' => $procesos
         ]);
     }
 
@@ -166,7 +169,6 @@ class ProcesoController extends Controller
         }
 
         $dataProceso = $request->all();
-        $dataProceso['id_usuario_actualizacion'] = Auth::id();
         $dataProceso['numero_proceso'] = $numero_proceso;
         $dataProceso['id_carpeta'] = $id_carpeta;
         $dataProceso['dar_informacion_caso'] = !empty($request->get('dar_informacion_caso')) ? 1 : 0;
@@ -175,12 +177,16 @@ class ProcesoController extends Controller
         }
 
         $saved = Proceso::updateOrCreate(['id_proceso' => $id], $dataProceso);
+        // return response()->json([$saved->getAttribute('id_proceso'), get_class_methods($saved)]);
+        if ($saved) {
+            if (empty($id)) {
+                ProcesoDocumento::where([
+                    'id_proceso' => 0,
+                    'id_usuario_creacion' => Auth::id()
+                ])->update(['id_proceso' => $saved->id_proceso]);
+            }
 
-        if (empty($id)) {
-            ProcesoDocumento::where([
-                'id_proceso' => 0,
-                'id_usuario_creacion' => Auth::id()
-            ])->update(['id_proceso' => $saved->id_proceso]);
+            $saved->createFirstActuacion();
         }
 
         return response()->json(['saved' => $saved, $request->all(), Auth::id(), $id]);
@@ -202,19 +208,10 @@ class ProcesoController extends Controller
 
     public function deleteFile(Request $request)
     {
-        $procesoDocumento = ProcesoDocumento::where([
+        $deleted = ProcesoDocumento::where([
             'id_proceso' => $request->get('id'),
             'id_documento' => $request->get('file_id')
-        ]);
-
-        $file = $procesoDocumento->first();
-        $deleted = $procesoDocumento->delete();
-        if ($file) {
-            $id = $file->id_proceso_documento;
-            $ext = $this->getExtention($file->nombre_archivo);
-            Storage::disk('documentos')->delete("proceso/{$id}{$ext}");
-        }
-
+        ])->deleteFile();
         return response()->json(['deleted' => $deleted]);
     }
 
@@ -237,48 +234,4 @@ class ProcesoController extends Controller
         $path = Storage::disk('documentos')->putFileAs('proceso', $file, $saveAs);
         return response()->json(['filename' => $filename, 'path' => $path]);
     }
-
-    public function seguimientoListar()
-    {
-        return $this->renderSection('proceso.listar', [
-            'procesos' => Proceso::getAll(),
-            'seguimiento' => true
-        ]);
-    }
-
-    public function seguimientoDetalle($id)
-    {
-        $proceso = Proceso::get($id);
-        if(empty($proceso)) {
-            return response()->json([ 'redirect' => 'seguimiento-procesos' ]);
-        }
-
-        $etapas = TipoProceso::getEtapas($proceso->id_tipo_proceso);
-        foreach($etapas as $key => $value) {
-            $etapas[$key]['actuaciones'] = EtapaProceso::getActuaciones($value->id_etapa_proceso);
-        }
-
-        return $this->renderSection('seguimiento_proceso.detalle', [
-            'proceso' => $proceso,
-            'etapas' => $etapas
-        ]);
-    }
-
-    public function setEtapa(Request $request) {
-        $proceso = Proceso::find($request->get('id_proceso'));
-        $updated = $proceso->update([ 'id_etapa_proceso' => $request->get('id_etapa_proceso')]);
-        return response()->json([ 'updated' => $updated ]);
-    }
-
-    // 23 caracteres id proceso
-    /**
-     * 12 caracteres id carpeta
-     *
-     * actuaciones
-     *
-     * rojo: desde el dia de vencimiento hacia atras
-     * verde: 0% hasta el 75%;
-     * amarillo: 76% al día anterior.
-     * terminado en gris,
-     */
 }

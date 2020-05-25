@@ -100,11 +100,6 @@ class UsuarioController extends Controller
 
         $dataPersona = $request->all();
         $dataPersona['numero_documento'] = $documento;
-        $dataPersona['id_usuario_actualizacion'] = Auth::id();
-        if(empty($id)) {
-            $dataPersona['id_usuario_creacion'] = Auth::id();
-        }
-
         if(empty($dataPersona['id_tipo_documento'])) {
             $dataPersona['id_tipo_documento'] = 1;
         }

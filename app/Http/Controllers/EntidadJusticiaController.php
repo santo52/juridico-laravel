@@ -69,10 +69,6 @@ class EntidadJusticiaController extends Controller
 
         $data['aplica_primera_instancia'] = empty($data['primera_instancia']) ? 2 : 1;
         $data['aplica_segunda_instancia'] = empty($data['segunda_instancia']) ? 2 : 1;
-        $data['id_usuario_actualizacion'] = Auth::id();
-        if(empty($id)) {
-            $data['id_usuario_creacion'] = Auth::id();
-        }
 
         $saved = EntidadJusticia::updateOrCreate(['id_entidad_justicia' => $id], $data);
         return response()->json([ 'saved' => $saved ]);

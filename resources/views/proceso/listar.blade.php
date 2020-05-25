@@ -46,11 +46,10 @@
         <tr id="tipoProcesoRow{{$proceso['id_proceso']}}">
             <td>{{$proceso['id_proceso']}}</td>
             <td>{{$proceso['numero_documento']}}</td>
-            <td>{{$proceso['primer_apellido']}} {{$proceso['segundo_apellido']}}
-                {{$proceso['primer_nombre']}} {{$proceso['segundo_nombre']}}</td>
+            <td>{{$proceso->getNombreCompletoCliente()}}</td>
             <td>{{$proceso['nombre_tipo_proceso']}}</td>
             <td>{{$proceso['nombre_entidad_demandada']}}</td>
-            <td>{{$proceso['nombre_usuario']}}</td>
+            <td>{{$proceso->getNombreCompletoResponsable()}}</td>
             <td>{{$proceso['valor_estudio']}}</td>
             <td>{{$proceso['fecha_retiro_servicio']}}</td>
             <td>

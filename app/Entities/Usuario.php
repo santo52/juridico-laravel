@@ -4,7 +4,7 @@ namespace App\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-
+use App\Entities\Persona;
 class Usuario extends Authenticatable
 {
     protected $table = 'usuario';
@@ -24,5 +24,10 @@ class Usuario extends Authenticatable
     protected $hidden = [
         'contrasena', 'password'
     ];
+
+    public function getNombreCompleto() {
+        $persona = Persona::find($this->id_persona);
+        return $persona ? $persona->getNombreCompleto() : $this->nombre_usuario;
+    }
 }
 

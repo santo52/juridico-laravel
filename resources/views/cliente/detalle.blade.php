@@ -215,9 +215,7 @@
                         name="id_intermediario" title="Seleccionar" onChange="cliente.onChangeIntermediario(this)">
                         @foreach ($intermediarios as $item)
                         <option @if($cliente && $cliente->id_intermediario === $item->id_intermediario) selected @endif
-                            value="{{$item->id_intermediario}}">
-                            {{$item->primer_nombre}} {{$item->segundo_nombre}} {{$item->primer_apellido}}
-                            {{$item->segundo_apellido}}
+                            value="{{$item->id_intermediario}}">{{$item->getNombreCompleto()}}
                         </option>
                         @endforeach
                     </select>
@@ -305,10 +303,10 @@
         </div>
         <div class="form-group">
             <label for="estado_cliente" class="control-label">Estado</label>
-                <div class="checkbox-form">
-                    <input type="checkbox" data-on="Activo" data-off="Inactivo" data-width="90"
-                        class="form-control" id="estado_cliente" name="estado" @if($cliente && $cliente->estado_cliente == 1) checked @endif />
-                </div>
+            <div class="checkbox-form">
+                <input type="checkbox" data-on="Activo" data-off="Inactivo" data-width="90" class="form-control"
+                    id="estado_cliente" name="estado" @if($cliente && $cliente->estado_cliente == 1) checked @endif />
+            </div>
         </div>
         <div class="form-group">
             <button type="submit" class="btn btn-success" style="width:100%">Guardar Cambios</button>

@@ -67,11 +67,6 @@ class EntidadDemandadaController extends Controller
             $id = $entidades->id_entidad_demandada;
         }
 
-        $data['id_usuario_actualizacion'] = Auth::id();
-        if(empty($id)) {
-            $data['id_usuario_creacion'] = Auth::id();
-        }
-
         $saved = EntidadDemandada::updateOrCreate(['id_entidad_demandada' => $id], $data);
         return response()->json([ 'saved' => $saved ]);
     }

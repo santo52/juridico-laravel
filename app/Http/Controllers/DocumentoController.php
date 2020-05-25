@@ -67,11 +67,6 @@ class DocumentoController extends Controller
             $id = $documentos->id_documento;
         }
 
-        $data['id_usuario_actualizacion'] = Auth::id();
-        if(empty($id)) {
-            $data['id_usuario_creacion'] = Auth::id();
-        }
-
         $saved = Documento::updateOrCreate(['id_documento' => $id], $data);
         return response()->json([ 'saved' => $saved ]);
     }

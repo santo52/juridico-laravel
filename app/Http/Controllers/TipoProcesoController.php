@@ -63,13 +63,7 @@ class TipoProcesoController extends Controller
             $id = $tipos->id_tipo_proceso;
         }
 
-        $data['id_usuario_actualizacion'] = Auth::id();
-        if (empty($id)) {
-            $data['id_usuario_creacion'] = Auth::id();
-        }
-
         $saved = TipoProceso::updateOrCreate(['id_tipo_proceso' => $id], $data);
-
 
         if (empty($id)) {
             EtapasProcesoTipoProceso::where([

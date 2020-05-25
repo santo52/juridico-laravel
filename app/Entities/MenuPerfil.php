@@ -20,8 +20,8 @@ class MenuPerfil extends Model
     ];
 
 
-    public function newEloquentBuilder($builder) {
-      return new MenuPerfilBuilder($builder);
-   }
-
+    public function newEloquentBuilder($builder)
+    {
+        return new MenuPerfilBuilder($builder);
+    }
 }

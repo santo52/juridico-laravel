@@ -45,8 +45,7 @@
             <td>{{$intermediario['id_intermediario']}}</td>
             <td>{{$intermediario['abreviatura_tipo_documento']}}</td>
             <td>{{$intermediario['numero_documento']}}</td>
-            <td>{{$intermediario['primer_apellido']}} {{$intermediario['segundo_apellido']}}
-                {{$intermediario['primer_nombre']}} {{$intermediario['segundo_nombre']}}</td>
+            <td>{{$intermediario->getNombreCompleto()}}</td>
             <td>
                 @if($intermediario['indicativo'])<span style="margin-right:2px;">(+{{$intermediario['indicativo']}})</span>@endif{{$intermediario['telefono']}}
             </td>

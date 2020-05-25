@@ -28,6 +28,6 @@ class TipoProceso extends Model
             'ep.eliminado' => 0,
             'estado_etapa_proceso' => '1',
             'tipo_proceso.id_tipo_proceso' => $id
-        ])->orderBy('eptp.order')->get();
+        ])->orderBy('eptp.order');
     }
 }

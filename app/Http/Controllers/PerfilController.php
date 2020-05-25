@@ -86,10 +86,6 @@ class PerfilController extends Controller
             $id = $perfil->id_perfil;
         }
 
-        if (empty($id)) {
-            $data['id_usuario_creacion'] = Auth::id();
-        }
-        $data['id_usuario_actualizacion'] = Auth::id();
         $saved = Perfil::updateOrCreate(['id_perfil' => $id], $data);
 
         MenuPerfil::where([
@@ -107,9 +103,6 @@ class PerfilController extends Controller
 
     public function insertMenu(Request $request) {
         $data = $request->all();
-
-        $data['id_usuario_creacion'] = Auth::id();
-        $data['id_usuario_actualizacion'] = Auth::id();
         $menuPerfil = MenuPerfil::create($data);
         $saved = $menuPerfil->save();
 

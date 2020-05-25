@@ -44,8 +44,7 @@
             <td>{{$usuario['id_usuario']}}</td>
             <td>{{$usuario['abreviatura_tipo_documento']}}</td>
             <td>{{$usuario['numero_documento']}}</td>
-            <td>{{$usuario['primer_apellido']}} {{$usuario['segundo_apellido']}}
-                {{$usuario['primer_nombre']}} {{$usuario['segundo_nombre']}}</td>
+            <td>{{$usuario->getNombreCompleto()}}</td>
             <td>
                 @if($usuario['indicativo'])<span style="margin-right:2px;">(+{{$usuario['indicativo']}})</span>@endif{{$usuario['telefono']}}
             </td>

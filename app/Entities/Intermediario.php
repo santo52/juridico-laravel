@@ -3,6 +3,7 @@
 namespace App\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Entities\Persona;
 
 class Intermediario extends Model
 {
@@ -17,4 +18,9 @@ class Intermediario extends Model
     protected $fillable = [
         "id_intermediario", "id_persona", "estado_intermediario", "fecha_creacion", "id_usuario_creacion", "fecha_actualizacion", "id_usuario_actualizacion", "eliminado", "retencion"
     ];
+
+    public function getNombreCompleto(){
+        $persona = Persona::find($this->id_persona);
+        return $persona->getNombreCompleto();
+    }
 }

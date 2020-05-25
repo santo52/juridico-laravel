@@ -6,7 +6,7 @@
 
     <!--  -->
 
-    <input type="hidden" id="position" value="{{$proceso->id_etapa_proceso}}"/>
+    <input type="hidden" id="position" value="{{$proceso->id_etapa_proceso}}" />
 
     @if($proceso->dar_informacion_caso != 1)
     <div class="alert alert-danger" role="alert">
@@ -25,7 +25,10 @@
         </li>
         @if(isset($etapas) && count($etapas))
         @foreach ($etapas as $key => $item)
-        <li @if($proceso->id_etapa_proceso == $item->id_etapa_proceso) class="active" @endif  role="presentation" data-id="{{$item->id_etapa_proceso}}" data-position="{{$key}}" onclick="seguimientoProceso.changeEtapa(this)">
+        <li @if($proceso->id_etapa_proceso == $item->id_etapa_proceso) class="active" @elseif($item->porcentaje == 100)
+            class="finalized" @endif role="presentation"
+            data-id="{{$item->id_etapa_proceso}}" data-position="{{$key}}"
+            onclick="seguimientoProceso.changeEtapa(this)">
             <a href="#etapa-{{$item->id_etapa_proceso}}" aria-controls="etapa-{{$item->id_etapa_proceso}}" role="tab"
                 data-toggle="tab">
                 {{ucwords(strtolower($item->nombre_etapa_proceso))}}
@@ -36,7 +39,8 @@
     </ul>
 
     <div class="tab-content">
-        <div role="tabpanel" class="tab-pane @if($proceso->id_etapa_proceso == 0) active @endif" id="informacion-proceso">
+        <div role="tabpanel" class="tab-pane @if($proceso->id_etapa_proceso == 0) active @endif"
+            id="informacion-proceso">
             <div class="form-group row">
                 @if($proceso)
                 <div class="col-xs-12 col-sm-4">
@@ -152,11 +156,14 @@
         </div>
         @if(isset($etapas) && count($etapas))
         @foreach ($etapas as $item)
-        <div role="tabpanel" class="tab-pane @if($proceso->id_etapa_proceso == $item->id_etapa_proceso) active @endif" id="etapa-{{$item->id_etapa_proceso}}">
+        <div role="tabpanel" class="tab-pane @if($proceso->id_etapa_proceso == $item->id_etapa_proceso) active @endif"
+            id="etapa-{{$item->id_etapa_proceso}}">
 
             <div class="juridico right-buttons">
                 <div>
-                    <a href="javascript:void(0)" onclick="seguimientoProceso.addActuacion('{{$item->id_etapa_proceso}}')" class="btn btn-default">
+                    <a href="javascript:void(0)"
+                        onclick="seguimientoProceso.addActuacion('{{$item->id_etapa_proceso}}')"
+                        class="btn btn-default">
                         Asociar actuación
                     </a>
                 </div>
@@ -183,27 +190,15 @@
                 <tbody>
                     @foreach ($item->actuaciones as $actuacion)
                     <tr>
-                    <td>{{$actuacion->id_actuacion}}</td>
+                        <td>{{$actuacion->id_actuacion}}</td>
                         <td>{{strtolower($actuacion->nombre_actuacion)}}</td>
                         <td>{{$actuacion->dias_vencimiento}} días</td>
-                        <td>{{$actuacion->tiempo_maximo_proxima_actuacion}}
-                            @if($actuacion->unidad_tiempo_proxima_actuacion == 1)
-                                días
-                            @elseif($actuacion->unidad_tiempo_proxima_actuacion == 2)
-                                semanas
-                            @elseif($actuacion->unidad_tiempo_proxima_actuacion == 3)
-                                meses
-                            @elseif($actuacion->unidad_tiempo_proxima_actuacion == 4)
-                                años
-                            @else
-                                días
-                            @endif
-                        </td>
-                        <td>Sin iniciar</td>
-                        <td>Sin iniciar</td>
-                        <td>Sin iniciar</td>
-                        <td>Sin asignar</td>
-                        <td>Pendiente</td>
+                        <td>{{$actuacion->tiempoMaximo}}</td>
+                        <td>{{$actuacion->fechaInicio}}</td>
+                        <td>{{$actuacion->fechaVencimiento}}</td>
+                        <td>{{$actuacion->fechaFin}}</td>
+                        <td>{{$actuacion->responsable}}</td>
+                        <td>{{$actuacion->estado}}</td>
                         <td></td>
                     </tr>
                     @endforeach
@@ -232,7 +227,8 @@
                     <input type="hidden" class="required" name="order" id="orderActuacion" />
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">Nombre actuación</label>
-                        <select data-live-search="true" class="form-control required" id="actuacionesList" name="id_actuacion" title="Seleccionar actuación"></select>
+                        <select data-live-search="true" class="form-control required" id="actuacionesList"
+                            name="id_actuacion" title="Seleccionar actuación"></select>
                     </div>
                     {{-- <div class="form-group">
                         <label for="recipient-name" class="control-label">¿Primera actuación?</label>
@@ -243,16 +239,19 @@
                     </div> --}}
                     <div class="form-group" id="agregarActuacionDespuesDe">
                         <label for="recipient-name" class="control-label">Agregar después de</label>
-                        <select data-live-search="true" class="form-control required" id="actuacionesAfterList" name="after" title="Seleccionar actuación"></select>
+                        <select data-live-search="true" class="form-control required" id="actuacionesAfterList"
+                            name="after" title="Seleccionar actuación"></select>
                     </div>
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">* Tiempo máximo hasta la próxima
                             actuación</label>
 
                         <div class="input-group">
-                            <input type="text" style="width:95%; height:35px" class="form-control required"  name="tiempo_maximo_proxima_actuacion" id="tiempoMaximoProximaActuacion">
+                            <input type="text" style="width:95%; height:35px" class="form-control required"
+                                name="tiempo_maximo_proxima_actuacion" id="tiempoMaximoProximaActuacion">
                             <div class="input-group-btn">
-                                <select class="form-control required" id="UnidadTiempoProximaActuacion"  name="unidad_tiempo_proxima_actuacion" >
+                                <select class="form-control required" id="UnidadTiempoProximaActuacion"
+                                    name="unidad_tiempo_proxima_actuacion">
                                     <option value="1">Días</option>
                                     <option value="2">Semanas</option>
                                     <option value="3">Meses</option>

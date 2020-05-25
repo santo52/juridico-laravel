@@ -85,13 +85,8 @@ class MenuController extends Controller
             $id = $menus->id_menu;
         }
 
-        $data['id_usuario_actualizacion'] = Auth::id();
         if(empty($data['parent_id'])) {
             $data['parent_id'] = 0;
-        }
-
-        if(empty($id)) {
-            $data['id_usuario_creacion'] = Auth::id();
         }
 
         $data['ruta_menu'] = $data['parent_id'] !== 0 ? $data['ruta_menu'] : '';

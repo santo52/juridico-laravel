@@ -190,11 +190,11 @@
                         <td>
                             @if($comentario->canEdit())
                             <div class="flex justify-center table-actions">
-                                <a onClick="seguimientoProceso.addComentarioModal('{{$comentario->id_proceso_bitacora}}')"
+                                <a data-toggle="tooltip" title="Editar" onClick="seguimientoProceso.addComentarioModal('{{$comentario->id_proceso_bitacora}}')"
                                     class="btn text-primary" type="button">
                                     <span class="glyphicon glyphicon-pencil"></span>
                                 </a>
-                                <a onclick="seguimientoProceso.openDeleteComentario('{{$comentario->id_proceso_bitacora}}')"
+                                <a data-toggle="tooltip" title="Eliminar" onclick="seguimientoProceso.openDeleteComentario('{{$comentario->id_proceso_bitacora}}')"
                                     href="javascript:void(0)" class="btn text-danger" type="button">
                                     <span class="glyphicon glyphicon-remove"></span>
                                 </a>

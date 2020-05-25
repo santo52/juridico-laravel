@@ -66,25 +66,31 @@
             <td>
                 <div class="flex justify-center table-actions">
                     @isset ($permissions->editar)
-                    <a @isset($seguimiento) href="#seguimiento-procesos/{{$proceso['id_proceso']}}" @else
+                    <a data-toggle="tooltip" title="Editar" @isset($seguimiento) href="#seguimiento-procesos/{{$proceso['id_proceso']}}" @else
                         href="#proceso/{{$proceso['id_proceso']}}" @endisset class="btn text-primary" type="button">
                         <span class="glyphicon glyphicon-pencil"></span>
                     </a>
                     @endisset
 
                     @if (isset($permissions->eliminar) && !isset($seguimiento))
-                    <a href="javascript:void(0)" class="btn text-danger" type="button"
+                    <a data-toggle="tooltip" title="Eliminar" href="javascript:void(0)" class="btn text-danger" type="button"
                         onclick="proceso.openDelete('{{$proceso['id_proceso']}}')">
                         <span class="glyphicon glyphicon-remove"></span>
                     </a>
                     @endif
                     @if(isset($seguimiento))
-                    <a href="javascript:void(0)" class="btn text-primary" type="button"
+                    <a data-toggle="tooltip" title="Información cliente" href="#cliente/{{$proceso['id_cliente']}}" class="btn text-warning" type="button">
+                        <span class="glyphicon glyphicon-user"></span>
+                    </a>
+                    @endif
+                    @if(isset($seguimiento))
+                    <a data-toggle="tooltip" title="Comentarios" href="javascript:void(0)" class="btn text-primary" type="button"
                         onclick="proceso.openComments('{{$proceso['id_proceso']}}')">
                         <span class="glyphicon glyphicon-comment"></span>
                         <span class="badge badge-sm">{{$proceso['totalComentarios']}}</span>
                     </a>
                     @endif
+
                 </div>
             </td>
         </tr>

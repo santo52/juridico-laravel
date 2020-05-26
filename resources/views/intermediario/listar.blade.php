@@ -11,7 +11,7 @@
 <div class="row">
     <div class="col-xs-12 flex juridico" id="filter-form-container">
         <div class="pull-left flex" style="padding-right:20px">
-            <div>
+            {{-- <div>
                 <a href="javascript:void(0)" onClick="intermediario.pdf()" class="btn download-file-action">
                     <img style="width: 100%" src="{!! asset('images/pdf.svg') !!}" />
                 </a>
@@ -20,7 +20,7 @@
                 <a href="javascript:void(0)" onClick="intermediario.excel()" class="btn download-file-action">
                     <img style="width: 100%" src="{!! asset('images/xlsx.svg') !!}" />
                 </a>
-            </div>
+            </div> --}}
             <div>
                 <a href="javascript:void(0)" onClick="window.print()" class="btn download-file-action">
                     <img style="width: 100%" src="{!! asset('images/print.svg') !!}" />

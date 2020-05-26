@@ -58,4 +58,9 @@ class Persona extends Model
         $municipio = Municipio::find($this->id_municipio);
         return $municipio ? $municipio->nombre_municipio : '';
     }
+
+    public function getIndicativo() {
+        $municipio = Municipio::find($this->id_municipio);
+        return $municipio ? $municipio->indicativo : '';
+    }
 }

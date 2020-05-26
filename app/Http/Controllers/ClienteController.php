@@ -191,9 +191,12 @@ class ClienteController extends Controller
     }
 
     public function createPDF() {
-        //    return Excel::download(new ActuacionExport, 'actuaciones.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
-        $actuaciones = Actuacion::where('eliminado', 0)->get()->toHuman();
-        $pdf = \PDF::loadView('cliente.pdf', ["actuaciones" => $actuaciones])->setPaper('a4', 'landscape');
+        $clientes = Cliente::where('eliminado', 0)->get();
+        foreach($clientes as $key => $value) {
+            $clientes[$key]->persona = $value->getPersona();
+        }
+
+        $pdf = \PDF::loadView('cliente.pdf', ["clientes" => $clientes])->setPaper('a4', 'landscape');
         return $pdf->download('cliente.pdf');
     }
 

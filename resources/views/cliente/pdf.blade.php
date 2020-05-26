@@ -41,18 +41,18 @@
         @foreach ($clientes as $cliente)
         <tr>
             <td>{{$cliente['id_cliente']}}</td>
-            <td>{{$cliente['abreviatura_tipo_documento']}}</td>
-            <td>{{$cliente['numero_documento']}}</td>
+            <td>{{$cliente->persona->getSiglasTipoDocumento()}}</td>
+            <td>{{$cliente->persona->numero_documento}}</td>
             <td>{{$cliente->getNombreCompleto()}}</td>
-            <td>@if($cliente['indicativo'])<span style="margin-right:2px;">(+{{$cliente['indicativo']}})</span>@endif{{$cliente['telefono']}}</td>
-            <td>{{$cliente['celular']}}</td>
-            <td>{{$cliente['celular2']}}</td>
-            <td>{{$cliente['correo_electronico']}}</td>
-            <td>{{$cliente['fecha_creacion']}}</td>
-            <td>{{$cliente['nombre_persona_recomienda']}}</td>
-            <td>{{$cliente['nombre_municipio']}}</td>
-            <td>{{$cliente['direccion']}}</td>
-            <td>{{$cliente['estado_vital_cliente']}}</td>
+            <td>@if($cliente->persona->getIndicativo())<span style="margin-right:2px;">(+{{$cliente['indicativo']}})</span>@endif{{$cliente->persona->telefono}}</td>
+            <td>{{$cliente->persona->celular}}</td>
+            <td>{{$cliente->celular2}}</td>
+            <td>{{$cliente->persona->correo_electronico}}</td>
+            <td>{{$cliente->getFechaCreacion('d/m/Y h:i A')}}</td>
+            <td>{{$cliente->nombre_persona_recomienda}}</td>
+            <td>{{$cliente->persona->getMunicipio()}}</td>
+            <td>{{$cliente->persona->direccion}}</td>
+            <td>{{$cliente->getEstadoVital()}}</td>
             <td>{{$cliente['estado_cliente'] == 2 ? 'Inactivo' : 'Activo'}}</td>
         </tr>
         @endforeach

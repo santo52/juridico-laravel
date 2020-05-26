@@ -19,45 +19,43 @@
 
 <table>
     <thead>
-        <tr>
-            <th>Nombre de la actuación</th>
-            <th>¿Genera alertas?</th>
-            <th>¿Aplica control de vencimiento?</th>
-            <th>Días de vencimiento</th>
-            <th>¿Requiere estudio de favorabilidad?</th>
-            <th>¿La actuación tiene cobro?</th>
-            <th>Valor de la actuación</th>
-            <th>Actuación para creación de cliente</th>
-            <th>¿Mostrar datos de radicado?</th>
-            <th>¿Mostrar datos de juzgado?</th>
-            <th>¿Mostrar datos de respuesta?</th>
-            <th>¿Mostrar datos de apelación?</th>
-            <th>¿Mostrar datos de cobros?</th>
-            <th>¿Programar audiencia?</th>
-            <th>Control de entrega de documentos</th>
-            <th>¿Generar documentos?</th>
+        <tr >
+            <th>ID</th>
+            <th>Tipo documento</th>
+            <th>Número de documento</th>
+            <th>Nombres Completos</th>
+            <th>Número telefónico</th>
+            <th>Celular</th>
+            <th>Celular 2</th>
+            <th>Correo electrónico</th>
+            <th>Fecha de creación</th>
+            <th>Nombre de quien recomienda</th>
+            <th>Municipio</th>
+            <th>Dirección</th>
+            <th>Estado vital</th>
+            <th>Estado</th>
         </tr>
     </thead>
     <tbody>
-        @foreach ($actuaciones as $item)
+        @if (count($clientes) > 0)
+        @foreach ($clientes as $cliente)
         <tr>
-            <th style="text-align:left;padding-left: 5px;" >{{$item->nombre_actuacion}}</th>
-            <th>{{$item->genera_alertas}}</th>
-            <th>{{$item->aplica_control_vencimiento}}</th>
-            <th>{{$item->getDiasVencimiento()}}</th>
-            <th>{{$item->requiere_estudio_favorabilidad}}</th>
-            <th>{{$item->actuacion_tiene_cobro}}</th>
-            <th style="text-align:left;padding-left: 5px;">{{$item->valor_actuacion}}</th>
-            <th>{{$item->actuacion_creacion_cliente}}</th>
-            <th>{{$item->mostrar_datos_radicado}}</th>
-            <th>{{$item->mostrar_datos_juzgado}}</th>
-            <th>{{$item->mostrar_datos_respuesta}}</th>
-            <th>{{$item->mostrar_datos_apelacion}}</th>
-            <th>{{$item->mostrar_datos_cobros}}</th>
-            <th>{{$item->programar_audiencia}}</th>
-            <th>{{$item->control_entrega_documentos}}</th>
-            <th>{{$item->generar_documentos}}</th>
+            <td>{{$cliente['id_cliente']}}</td>
+            <td>{{$cliente['abreviatura_tipo_documento']}}</td>
+            <td>{{$cliente['numero_documento']}}</td>
+            <td>{{$cliente->getNombreCompleto()}}</td>
+            <td>@if($cliente['indicativo'])<span style="margin-right:2px;">(+{{$cliente['indicativo']}})</span>@endif{{$cliente['telefono']}}</td>
+            <td>{{$cliente['celular']}}</td>
+            <td>{{$cliente['celular2']}}</td>
+            <td>{{$cliente['correo_electronico']}}</td>
+            <td>{{$cliente['fecha_creacion']}}</td>
+            <td>{{$cliente['nombre_persona_recomienda']}}</td>
+            <td>{{$cliente['nombre_municipio']}}</td>
+            <td>{{$cliente['direccion']}}</td>
+            <td>{{$cliente['estado_vital_cliente']}}</td>
+            <td>{{$cliente['estado_cliente'] == 2 ? 'Inactivo' : 'Activo'}}</td>
         </tr>
         @endforeach
+        @endif
     </tbody>
 </table>

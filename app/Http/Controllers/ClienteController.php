@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Exports\ClienteExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 use App\Entities\Cliente;
 use App\Entities\TipoDocumento;
@@ -182,6 +184,17 @@ class ClienteController extends Controller
         $client = Cliente::find($id);
         $client->update([ 'eliminado' => 1 ]);
         return response()->json([ 'deleted' => true ]);
+    }
+
+    public function createExcel() {
+        return Excel::download(new ClienteExport, 'clientes.xlsx');
+    }
+
+    public function createPDF() {
+        //    return Excel::download(new ActuacionExport, 'actuaciones.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
+        $actuaciones = Actuacion::where('eliminado', 0)->get()->toHuman();
+        $pdf = \PDF::loadView('cliente.pdf', ["actuaciones" => $actuaciones])->setPaper('a4', 'landscape');
+        return $pdf->download('cliente.pdf');
     }
 
 

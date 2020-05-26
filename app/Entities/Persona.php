@@ -3,6 +3,8 @@
 namespace App\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Entities\TipoDocumento;
+use App\Entities\Municipio;
 
 class Persona extends Model
 {
@@ -27,5 +29,33 @@ class Persona extends Model
         if($this->segundo_apellido) $nombreCompleto[] = ucwords(strtolower($this->segundo_apellido));
 
         return implode(' ', $nombreCompleto);
+    }
+
+    public function getTipoDocumento() {
+        $tipoDocumento = TipoDocumento::find($this->id_tipo_documento);
+        if($tipoDocumento) {
+            return $tipoDocumento->nombre_tipo_documento;
+        }
+
+        return 'Sin tipo de documento';
+    }
+
+    public function getSiglasTipoDocumento() {
+        $tipoDocumento = TipoDocumento::find($this->id_tipo_documento);
+        if($tipoDocumento) {
+            return $tipoDocumento->abreviatura_tipo_documento;
+        }
+
+        return 'Ninguno';
+    }
+
+    public function getDepartamento() {
+        $municipio = Municipio::find($this->id_municipio);
+        return $municipio ? $municipio->getDepartamento() : '';
+    }
+
+    public function getMunicipio() {
+        $municipio = Municipio::find($this->id_municipio);
+        return $municipio ? $municipio->nombre_municipio : '';
     }
 }

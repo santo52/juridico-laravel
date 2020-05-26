@@ -23,8 +23,30 @@ class Cliente extends Model
         'celular2', 'id_tipo_documento_beneficiario'
     ];
 
+    public function getPersona() {
+        return Persona::find($this->id_persona);
+    }
+
     public function getNombreCompleto() {
         $persona = Persona::find($this->id_persona);
         return $persona->getNombreCompleto();
+    }
+
+    public function getTipoDocumento() {
+        $persona = Persona::find($this->id_persona);
+        return $persona->getTipoDocumento();
+    }
+
+    public function getSiglasTipoDocumento() {
+        $persona = Persona::find($this->id_persona);
+        return $persona->getSiglasTipoDocumento();
+    }
+
+    public function getFechaCreacion($format = 'Y-m-d h:i:s') {
+        return date($format, strtotime($this->fecha_creacion));
+    }
+
+    public function getEstadoVital() {
+        return $this->estado_vital_cliente == 1 ? 'Vivo' : 'Fallecido';
     }
 }

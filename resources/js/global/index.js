@@ -678,9 +678,10 @@ const fileDocument = {
         if (!filename) {
             const name = $item.data('name')
             const title = $item.data('title')
+            const required = $item.data('required')
             $item.removeClass('not-empty')
                 .html(`<input type="file" ${name ? `name="${name}"` : ''} />`)
-                .append(`<span class="empty-message">Subir ${title ? title : 'el documento'}</span>`)
+                .append(`<span class="empty-message">Subir ${title ? title : 'el documento'}${required ? ' <b>(requerido)</b>' : ''}</span>`)
             $item.children('input[type=file]').on('change', () => fileDocument.onChange($item))
         }
 

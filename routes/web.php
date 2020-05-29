@@ -145,6 +145,7 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/seguimiento-procesos/listar', 'SeguimientoProcesoController@index');
     Route::post('/seguimiento-procesos/set-etapa', 'SeguimientoProcesoController@setEtapa');
     Route::post('/seguimiento-procesos/{id}', 'SeguimientoProcesoController@detalle');
+    Route::post('/seguimiento-procesos/actuacion/crear/{idProcesoEtapa}/{id}', 'SeguimientoProcesoController@crearActuacion');
     Route::post('/seguimiento-procesos/actuacion/{id}', 'SeguimientoProcesoController@actuacion');
     Route::post('/seguimiento-procesos/comentario/upsert', 'ProcesoBitacoraController@upsert');
     Route::post('/seguimiento-procesos/comentario/get/{id}', 'ProcesoBitacoraController@get');

@@ -11,6 +11,8 @@ use App\Entities\TipoProceso;
 use App\Entities\EtapaProceso;
 use App\Entities\ProcesoBitacora;
 use App\Entities\Usuario;
+use App\Entities\Actuacion;
+
 
 
 class SeguimientoProcesoController extends Controller
@@ -76,6 +78,7 @@ class SeguimientoProcesoController extends Controller
             $actuaciones[$key] = $this->addProcesoEtapaActuacion($idProcesoEtapa, $actuacion);
         }
 
+        $etapa->id_proceso_etapa = $idProcesoEtapa;
         $etapa->actuaciones = $actuaciones;
         return $etapa;
     }
@@ -109,9 +112,32 @@ class SeguimientoProcesoController extends Controller
     }
 
     public function actuacion($id) {
-        $procesoEtapaActuacion = ProcesoEtapaActuacion::find($id);
+        $procesoEtapa = ProcesoEtapaActuacion::
+        leftjoin('proceso_etapa as pe', 'pe.id_proceso_etapa', 'proceso_etapa_actuacion.id_proceso_etapa')
+        ->find($id);
+
+        if(empty($procesoEtapa)) {
+            return response()->json([ 'redirect' => 'seguimiento-procesos' ]);
+        }
+
+        $actuacion = Actuacion::find($procesoEtapa->id_actuacion);
         return $this->renderSection('seguimiento_proceso.actuacion', [
-            'procesoEtapaActuacion' => $procesoEtapaActuacion
+            'procesoEtapa' => $procesoEtapa,
+            'actuacion' => $actuacion
+        ]);
+    }
+
+    public function crearActuacion($idProcesoEtapa, $id) {
+        $actuacion = Actuacion::find($id);
+        $procesoEtapa = ProcesoEtapa::find($idProcesoEtapa);
+
+        if(empty($procesoEtapa) || empty($actuacion)) {
+            return response()->json([ 'redirect' => 'seguimiento-procesos' ]);
+        }
+
+        return $this->renderSection('seguimiento_proceso.actuacion', [
+            'procesoEtapa' => $procesoEtapa,
+            'actuacion' => $actuacion
         ]);
     }
 

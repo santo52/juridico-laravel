@@ -128,7 +128,7 @@
                 </div>
 
                 <div class="col-xs-12 col-sm-4">
-                    <label for="id_acto_administrativo_retiro" class="control-label">Acto administrativo del retiro
+                    <label for="acto_administrativo" class="control-label">Acto administrativo del retiro
                         (actuación)</label>
                     <input type="text" disabled class="form-control" value="" />
                 </div>
@@ -231,7 +231,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Nombre de la actuación</th>
-                        <th data-breakpoints="all">Días de vencimiento</th>
+                        <th data-breakpoints="all">Tiempo de vencimiento</th>
                         <th data-breakpoints="all">Tiempo máximo próxima actuación</th>
                         <th data-breakpoints="all">Fecha de inicio</th>
                         <th>Fecha de vencimiento</th>
@@ -246,7 +246,13 @@
                     <tr class="actuacion-row actuacion-row-{{$actuacion->estadoColor}}">
                         <td>{{$actuacion->id_actuacion}}</td>
                         <td>{{strtolower($actuacion->nombre_actuacion)}}</td>
-                        <td>{{$actuacion->dias_vencimiento}} días</td>
+                        <td>{{$actuacion->dias_vencimiento}}
+                            @if($actuacion->dias_vencimiento_unidad == 1)
+                                días
+                            @else
+                                meses
+                            @endif
+                        </td>
                         <td>{{$actuacion->tiempoMaximo}}</td>
                         <td>{{$actuacion->fechaInicio}}</td>
                         <td>{{$actuacion->fechaVencimiento}}</td>
@@ -257,14 +263,22 @@
                         </td>
                         <td>
                             @isset($actuacion->id_proceso_etapa_actuacion)
-                            <a href="#seguimiento-procesos/actuacion/{{$actuacion->id_proceso_etapa_actuacion}}" data-toggle="tooltip" title="Editar actuación"
-                                class="btn text-primary" type="button">
+                            <a href="#seguimiento-procesos/actuacion/{{$actuacion->id_proceso_etapa_actuacion}}"
+                                data-toggle="tooltip" title="Editar actuación" class="btn text-primary" type="button">
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </a>
                             @else
-                            <span style="cursor:default; color:#777 !important;" class="btn text-muted" type="button">
+                            @isset($item->id_proceso_etapa)
+                            <a href="#seguimiento-procesos/actuacion/crear/{{$item->id_proceso_etapa}}/{{$actuacion->id_actuacion}}"
+                                data-toggle="tooltip" title="Editar actuación" class="btn text-primary" type="button">
                                 <span class="glyphicon glyphicon-pencil"></span>
-                            </span>
+                            </a>
+                            @else
+                            <a href="javascript:void(0)" onclick="location.reload()"
+                                data-toggle="tooltip" title="Editar actuación" class="btn text-primary" type="button">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </a>
+                            @endisset
                             @endisset
                         </td>
                     </tr>

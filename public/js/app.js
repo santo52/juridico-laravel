@@ -927,7 +927,8 @@ var fileDocument = {
     if (!filename) {
       var name = $item.data('name');
       var title = $item.data('title');
-      $item.removeClass('not-empty').html("<input type=\"file\" ".concat(name ? "name=\"".concat(name, "\"") : '', " />")).append("<span class=\"empty-message\">Subir ".concat(title ? title : 'el documento', "</span>"));
+      var required = $item.data('required');
+      $item.removeClass('not-empty').html("<input type=\"file\" ".concat(name ? "name=\"".concat(name, "\"") : '', " />")).append("<span class=\"empty-message\">Subir ".concat(title ? title : 'el documento').concat(required ? ' <b>(requerido)</b>' : '', "</span>"));
       $item.children('input[type=file]').on('change', function () {
         return fileDocument.onChange($item);
       });

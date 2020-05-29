@@ -44,7 +44,6 @@
             <th>Nombre cliente</th>
             <th>Tipo de proceso</th>
             <th>Entidad demandada</th>
-            <th>Usuario responsable</th>
             <th data-breakpoints="all" data-filterable="false">Valor del estudio</th>
             <th data-breakpoints="all" data-filterable="false">Fecha de retiro del servicio</th>
             <th data-breakpoints="all">Última entidad de servicio</th>
@@ -65,17 +64,11 @@
             <td>{{$proceso->getNombreCompletoCliente()}}</td>
             <td>{{$proceso['nombre_tipo_proceso']}}</td>
             <td>{{$proceso['nombre_entidad_demandada']}}</td>
-            <td>{{$proceso->getNombreCompletoResponsable()}}</td>
             <td>{{$proceso['valor_estudio']}}</td>
-            <td>{{$proceso['fecha_retiro_servicio']}}</td>
-            <td>
-                @if($proceso['id_ultima_entidad_servicio'])
-                {{$proceso['id_ultima_entidad_servicio']}}</td>
-            @else
-            {{$proceso['nombre_entidad_justicia']}}
-            @endif
+            <td>{{$proceso->getFechaRetiroServicio()}}</td>
+            <td>{{$proceso['ultima_entidad_retiro']}}</td>
             <td>{{$proceso['nombre_municipio']}}</td>
-            <td>{{$proceso['id_acto_administrativo_retiro']}}</td>
+            <td>{{$proceso['acto_administrativo']}}</td>
             <td>{{$proceso['normatividad_aplicada_caso']}}</td>
             <td>{{$proceso['observaciones_caso']}}</td>
             <td>{{$proceso['estado_proceso'] == 2 ? 'Inactivo' : 'Activo'}}</td>

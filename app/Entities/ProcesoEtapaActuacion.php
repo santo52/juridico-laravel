@@ -24,8 +24,9 @@ class ProcesoEtapaActuacion extends Model
         'fecha_fin', 'fecha_radicado', 'numero_radicado', 'fecha_vencimiento', 'id_usuario_responsable',
         'fecha_respuesta', 'id_entidad_justicia', 'nombre_juez', 'numero_proceso', 'finalizado',
         'instancia', 'resultado', 'fecha_notificacion', 'tipo_resultado', 'motivo', 'comentario',
-        'entidad_profirio_respuesta', 'fecha_audiencia', 'lugar_audiencia', 'apela_resultado',
-        'fecha_creacion', 'fecha_actualizacion', 'id_usuario_creacion', 'id_usuario_actualizacion'
+        'entidad_profirio_respuesta', 'fecha_audiencia', 'lugar_audiencia', 'apela_resultado', "valor_pago",
+        'fecha_creacion', 'fecha_actualizacion', 'id_usuario_creacion', 'id_usuario_actualizacion',
+        "id_usuario_asigna"
     ];
 
     public function getFechaInicioString()
@@ -36,7 +37,9 @@ class ProcesoEtapaActuacion extends Model
     public function getFechaVencimientoString()
     {
         $actuacion = Actuacion::find($this->id_actuacion);
+        $multiplicador = $actuacion->dias_vencimiento_unidad == 2 ? 30 : 1;
         $dias = $actuacion && $actuacion->dias_vencimiento ? $actuacion->dias_vencimiento : 0;
+        $dias *= $multiplicador;
         $this->diasVencimiento = $dias;
         return date('d/m/Y h:i A', strtotime("+{$dias} days {$this->fecha_inicio}"));
     }
@@ -78,6 +81,12 @@ class ProcesoEtapaActuacion extends Model
     {
         $usuario = Usuario::find($this->id_usuario_responsable);
         return $usuario ? $usuario->getNombreCompleto() : 'Sin responsable';
+    }
+
+    public function getAsignadoPor()
+    {
+        $usuario = Usuario::find($this->id_usuario_asigna);
+        return $usuario ? $usuario->getNombreCompleto() : 'Por el sistema';
     }
 
     public function getSeguimientoId() {

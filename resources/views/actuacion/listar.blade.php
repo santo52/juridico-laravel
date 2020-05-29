@@ -46,21 +46,21 @@
         <tr class="bg-success">
             <th>ID</th>
             <th>Nombre de la actuación</th>
-            <th data-breakpoints="all" data-filterable="false">¿Genera alertas?</th>
-            <th data-breakpoints="all" data-filterable="false">¿Aplica control de vencimiento?</th>
-            <th data-filterable="false">Días de vencimiento</th>
-            <th data-breakpoints="all" data-filterable="false">¿Aplica procedibilidad?</th>
-            <th data-breakpoints="all" data-filterable="false">¿La actuación tiene cobro?</th>
-            <th data-filterable="false">Valor de la actuación</th>
-            <th data-breakpoints="all" data-filterable="false">¿Mostrar datos de radicado?</th>
-            <th data-breakpoints="all" data-filterable="false">¿Mostrar datos de juzgado?</th>
-            <th data-breakpoints="all" data-filterable="false">¿Mostrar datos de respuesta?</th>
-            <th data-breakpoints="all" data-filterable="false">¿Mostrar datos de apelación?</th>
-            <th data-breakpoints="all" data-filterable="false">¿Mostrar datos de cobros?</th>
-            <th data-breakpoints="all" data-filterable="false">¿Programar audiencia?</th>
-            <th data-breakpoints="xs sm" data-filterable="false">Control de entrega de documentos</th>
-            <th data-breakpoints="all" data-filterable="false">¿Generar documentos?</th>
-            <th data-breakpoints="xs">Estado</th>
+            {{-- <th data-breakpoints="all" data-filterable="false">¿Genera alertas?</th> --}}
+            {{-- <th data-breakpoints="all" data-filterable="false">¿Aplica control de vencimiento?</th> --}}
+            <th data-filterable="false">Tiempo de vencimiento</th>
+            {{-- <th data-breakpoints="all" data-filterable="false">¿Aplica procedibilidad?</th> --}}
+            <th data-filterable="false">¿La actuación tiene cobro?</th>
+            {{-- <th data-filterable="false">Valor de la actuación</th> --}}
+            {{-- <th data-breakpoints="all" data-filterable="false">¿Mostrar datos de radicado?</th> --}}
+            {{-- <th data-breakpoints="all" data-filterable="false">¿Mostrar datos de juzgado?</th> --}}
+            {{-- <th data-breakpoints="all" data-filterable="false">¿Mostrar datos de respuesta?</th> --}}
+            {{-- <th data-breakpoints="all" data-filterable="false">¿Mostrar datos de apelación?</th> --}}
+            {{-- <th data-breakpoints="all" data-filterable="false">¿Mostrar datos de cobros?</th> --}}
+            {{-- <th data-breakpoints="all" data-filterable="false">¿Programar audiencia?</th> --}}
+            {{-- <th data-breakpoints="xs sm" data-filterable="false">Control de entrega de documentos</th> --}}
+            {{-- <th data-breakpoints="all" data-filterable="false">¿Generar documentos?</th> --}}
+            <th>Estado</th>
             @if (isset($permissions->editar) || isset($permissions->eliminar) )
             <th data-filterable="false" data-sortable="false"></th>
             @endif
@@ -72,21 +72,21 @@
         <tr id="actRow{{$actuacion['id_actuacion']}}">
             <td>{{$actuacion['id_actuacion']}}</td>
             <td>{{$actuacion['nombre_actuacion']}}</td>
-            <td>{{$actuacion['genera_alertas']}}</td>
-            <td>{{$actuacion['aplica_control_vencimiento']}}</td>
+            {{-- <td>{{$actuacion['genera_alertas']}}</td> --}}
+            {{-- <td>{{$actuacion['aplica_control_vencimiento']}}</td> --}}
             <td>{{$actuacion->getDiasVencimiento()}}</td>
-            <td>{{$actuacion['requiere_estudio_favorabilidad']}}</td>
-            <td>{{$actuacion['actuacion_tiene_cobro']}}</td>
-            <td>{{$actuacion['valor_actuacion']}}</td>
-            <td>{{$actuacion['mostrar_datos_radicado']}}</td>
-            <td>{{$actuacion['mostrar_datos_juzgado']}}</td>
-            <td>{{$actuacion['mostrar_datos_respuesta']}}</td>
-            <td>{{$actuacion['mostrar_datos_apelacion']}}</td>
-            <td>{{$actuacion['mostrar_datos_cobros']}}</td>
-            <td>{{$actuacion['programar_audiencia']}}</td>
-            <td>{{$actuacion['control_entrega_documentos']}}</td>
-            <td>{{$actuacion['generar_documentos']}}</td>
-            <td>{{$actuacion['estado_actuacion']}}</td>
+            {{-- <td>{{$actuacion['requiere_estudio_favorabilidad']}}</td> --}}
+            <td>{{$actuacion->actuacion_tiene_cobro == 1 ? 'Sí' : 'No'}}</td>
+            {{-- <td>{{$actuacion['valor_actuacion']}}</td> --}}
+            {{-- <td>{{$actuacion['mostrar_datos_radicado']}}</td> --}}
+            {{-- <td>{{$actuacion['mostrar_datos_juzgado']}}</td> --}}
+            {{-- <td>{{$actuacion['mostrar_datos_respuesta']}}</td> --}}
+            {{-- <td>{{$actuacion['mostrar_datos_apelacion']}}</td> --}}
+            {{-- <td>{{$actuacion['mostrar_datos_cobros']}}</td> --}}
+            {{-- <td>{{$actuacion['programar_audiencia']}}</td> --}}
+            {{-- <td>{{$actuacion['control_entrega_documentos']}}</td> --}}
+            {{-- <td>{{$actuacion['generar_documentos']}}</td> --}}
+            <td>{{$actuacion->estado_actuacion == 1 ? 'Activo' : 'Inactivo'}}</td>
             @if (isset($permissions->editar) || isset($permissions->eliminar) )
             <td>
                 <div class="flex justify-center table-actions">

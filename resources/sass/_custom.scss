@@ -4,7 +4,7 @@
         width: 100px;
         float: right;
 
-        > div {
+        >div {
             position: absolute;
             right: 0;
             top: -55px;
@@ -12,14 +12,14 @@
     }
 
     .download-file-action {
-        height:35px;
+        height: 35px;
         width: 35px;
         padding: 5px;
     }
 }
 
+.file-document-empty,
 .file-document {
-
     width: 100%;
     margin-bottom: 10px;
     padding: 15px;
@@ -27,9 +27,25 @@
     overflow: hidden;
     border-radius: 5px;
     text-align: center;
+}
+
+.file-document-empty {
+    background: #f8f8f8;
+    border: 1px solid #eee;
+    color: #ccc;
+}
+
+.file-document {
+
     border: 1px dashed #1f9a7e;
     color: #1f9a7e;
     background: #fff;
+
+    &.empty {
+        background: #f8f8f8;
+        border: 1px solid #eee;
+        color: #ccc;
+    }
 
     input[type=file] {
         position: absolute;
@@ -75,6 +91,7 @@
             .file-document-icon {
                 width: 35px;
                 margin-right: 10px;
+
                 img {
                     width: 100%;
                 }
@@ -83,10 +100,11 @@
             .file-document-content {
                 color: #191919;
                 flex-grow: 1;
+
                 .progress {
-                    margin-bottom:0;
-                    margin-top:5px;
-                    height:10px
+                    margin-bottom: 0;
+                    margin-top: 5px;
+                    height: 10px
                 }
             }
 
@@ -97,6 +115,7 @@
                 padding: 15px;
                 padding-bottom: 6px;
                 cursor: pointer;
+
                 &:hover {
                     color: gray;
                 }
@@ -117,7 +136,7 @@
         font-weight: bold;
     }
 
-    &-rojo{
+    &-rojo {
         td.estado span {
             border-color: red;
             color: red;
@@ -143,5 +162,37 @@
             border-color: #bdc3c7;
             color: #bdc3c7;
         }
+    }
+}
+
+.documents-container {
+    .navbar {
+        width: 50%;
+    }
+    .navbar-header {
+        margin: auto;
+        position: relative;
+        width: 100%;
+    }
+
+    .button-add {
+        position: absolute;
+        right: 0;
+        position: absolute;
+        right: 0;
+        top: 7px;
+
+        button {
+            height: 25px;
+            width: 25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+        }
+    }
+
+    @media screen and (max-width: 550px) {
+        flex-direction: column;
     }
 }

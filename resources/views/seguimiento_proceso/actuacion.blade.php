@@ -19,368 +19,131 @@
         </li>
     </ul> --}}
 
-    <h1>Por definir</h1>
-
     <form onsubmit="seguimientoActuacion.upsert(event)">
-        {{-- <input type="hidden" name="id_proceso_etapa_actuacion"
-            value="{{$procesoEtapaActuacion->id_proceso_etapa_actuacion}}" />
-        <input type="hidden" id="id_proceso" value="{{$procesoEtapaActuacion->getSeguimientoId()}}" />
+
+        <input type="hidden" id="id_proceso" value="{{$procesoEtapa->id_proceso}}" />
+
         <div class="form-group row">
             <div class="col-xs-12 col-sm-6">
-                <label for="fecha_inicio" class="control-label">Fecha de inicio</label>
-                <input type="text" class="form-control" value="{{$procesoEtapaActuacion->getFechaInicioString() }}"
-                    disabled />
+                <label for="fecha_inicio" class="control-label">Fecha de inicio de la actuación</label>
+                <input type="text" class="form-control" value="{{$procesoEtapa->getFechaInicioString() }}" disabled />
             </div>
             <div class="col-xs-12 col-sm-6">
                 <label for="fecha_fin" class="control-label">Fecha fin</label>
-                <input type="text" class="form-control" value="{{$procesoEtapaActuacion->getFechaFinString() }}"
-                    disabled />
+                <input type="text" class="form-control" value="{{$procesoEtapa->getFechaFinString() }}" disabled />
             </div>
         </div>
         <div class="form-group row">
             <div class="col-xs-12 col-sm-6">
-                <label for="fecha_inicio" class="control-label">Fecha de radicado</label>
-                <input type="text" class="form-control" value="{{$procesoEtapaActuacion->getFechaInicioString() }}"/>
+                <label class="control-label">Asignado por</label>
+                <input type="text" class="form-control" value="{{$procesoEtapa->getAsignadoPor() }}" disabled />
             </div>
             <div class="col-xs-12 col-sm-6">
-                <label for="fecha_fin" class="control-label">Número de radicado</label>
-                <input type="text" class="form-control" value="{{$procesoEtapaActuacion->getFechaFinString() }}" />
-            </div>
-        </div>
-
-        <div class="separator margin"></div>
-
-        <div class="form-group row">
-            <div class="col-xs-12 col-sm-6">
-                <label for="fecha_inicio" class="control-label">Fecha de vencimiento</label>
-                <input type="text" class="form-control" value="{{$procesoEtapaActuacion->getFechaVencimientoString() }}"/>
-            </div>
-            <div class="col-xs-12 col-sm-6">
-                <label for="fecha_fin" class="control-label">Fecha de respuesta</label>
-                <input type="text" class="form-control" value="{{$procesoEtapaActuacion->getFechaFinString() }}" />
+                <label class="control-label">Persona responsable</label>
+                <input type="text" class="form-control" value="{{$procesoEtapa->getResponsable() }}" disabled />
             </div>
         </div>
         <div class="form-group row">
             <div class="col-xs-12 col-sm-6">
-                <label for="fecha_inicio" class="control-label">Entidad / Especialidad</label>
-                <input type="text" class="form-control" value="{{$procesoEtapaActuacion->getFechaVencimientoString() }}"/>
-            </div>
-            <div class="col-xs-12 col-sm-6">
-                <label for="fecha_fin" class="control-label">Nombre Juez / Magistrado</label>
-                <input type="text" class="form-control" value="{{$procesoEtapaActuacion->getFechaFinString() }}" />
-            </div>
-        </div>
-        <div class="form-group row">
-            <div class="col-xs-12 col-sm-6">
-                <label for="fecha_inicio" class="control-label">Número de proceso</label>
-                <input type="text" class="form-control" value="{{$procesoEtapaActuacion->getFechaVencimientoString() }}"/>
-            </div>
-            <div class="col-xs-12 col-sm-6">
-                <label for="fecha_fin" class="control-label">Instancia</label>
-                <input type="text" class="form-control" value="{{$procesoEtapaActuacion->getFechaFinString() }}" />
-            </div>
-        </div>
-
-        <div class="separator margin"></div>
-
-        <div class="form-group row">
-            <div class="col-xs-12 col-sm-6">
-                <label for="fecha_inicio" class="control-label">Resultado</label>
-                <input type="text" class="form-control" value="{{$procesoEtapaActuacion->getFechaVencimientoString() }}"/>
-            </div>
-            <div class="col-xs-12 col-sm-6">
-                <label for="fecha_fin" class="control-label">Fecha de notificación</label>
-                <input type="text" class="form-control" value="{{$procesoEtapaActuacion->getFechaFinString() }}" />
-            </div>
-        </div>
-        <div class="form-group row">
-            <div class="col-xs-12 col-sm-4">
-                <label for="fecha_inicio" class="control-label">Tipo de resultado</label>
-                <input type="text" class="form-control" value="{{$procesoEtapaActuacion->getFechaVencimientoString() }}"/>
-            </div>
-            <div class="col-xs-12 col-sm-4">
-                <label for="fecha_fin" class="control-label">Número</label>
-                <input type="text" class="form-control" value="{{$procesoEtapaActuacion->getFechaFinString() }}" />
-            </div>
-            <div class="col-xs-12 col-sm-4">
-                <label for="fecha_fin" class="control-label">Entidad profirió respuesta</label>
-                <input type="text" class="form-control" value="{{$procesoEtapaActuacion->getFechaFinString() }}" />
-            </div>
-        </div>
-
-        <div class="separator margin"></div>
-
-        <div class="form-group row">
-            <div class="col-xs-12 col-sm-6">
-                <label for="fecha_inicio" class="control-label">Fecha y hora audiencia</label>
-                <input type="text" class="form-control" value="{{$procesoEtapaActuacion->getFechaVencimientoString() }}"/>
-            </div>
-            <div class="col-xs-12 col-sm-6">
-                <label for="fecha_fin" class="control-label">Lugar audiencia</label>
-                <input type="text" class="form-control" value="{{$procesoEtapaActuacion->getFechaFinString() }}" />
-            </div>
-        </div>
-
-        <div class="separator margin"></div>
-
-        <div class="form-group row">
-            <div class="col-xs-12 col-sm-6">
-                <label for="fecha_inicio" class="control-label">Se apela resultado</label>
-                <input type="text" class="form-control" value="{{$procesoEtapaActuacion->getFechaVencimientoString() }}"/>
-            </div>
-            <div class="col-xs-12 col-sm-6">
-                <label for="fecha_fin" class="control-label">Motivo</label>
-                <input type="text" class="form-control" value="{{$procesoEtapaActuacion->getFechaFinString() }}" />
-            </div>
-        </div>
-
-        <div class="separator margin"></div>
-
-        <div class="form-group row">
-            <div class="col-xs-12">
-                <label for="fecha_inicio" class="control-label">Comentario</label>
-                <textarea class="form-control"></textarea>
-            </div>
-        </div> --}}
-
-        {{--  <div role="tabpanel" class="tab-pane active" id="informacion-proceso">
-            <div class="form-group row">
-                @if($proceso)
-                <div class="col-xs-12 col-sm-4">
-                    <label for="telefono" class="control-label">Fecha de creación</label>
-                    <input type="text" class="form-control" @if($proceso) value="{{$proceso->fecha_creacion }}" @endif
-        disabled />
-</div>
-@endif
-<div class="col-xs-12 @if($proceso) col-sm-4 @else col-sm-6 @endif">
-    <label for="telefono" class="control-label">Número de proceso</label>
-    <input type="text" class="form-control required" id="numero_proceso" name="numero_proceso" @if($proceso)
-        value="{{$proceso->numero_proceso }}" @endif />
-</div>
-<div class="col-xs-12 @if($proceso) col-sm-4 @else col-sm-6 @endif">
-    <label for="telefono" class="control-label">Identificación de la carpeta física</label>
-    <input type="text" class="form-control required" id="id_carpeta" name="id_carpeta" @if($proceso)
-        value="{{$proceso->id_carpeta }}" @endif />
-</div>
-</div>
-<div class="separator margin"></div>
-<div class="form-group row">
-    <div class="col-xs-12 col-sm-4">
-        <label for="id_cliente" class="control-label">Cliente</label>
-        <select id="id_cliente" name="id_cliente" data-live-search="true" class="form-control required"
-            title="Seleccionar" onchange="proceso.changeCliente(this)">
-            @foreach ($clientes as $item)
-            <option @if($proceso && $proceso->id_cliente == $item->id_cliente) selected @endif
-                value="{{$item->id_cliente}}">{{$item->getNombreCompleto()}}
-            </option>
-            @endforeach
-        </select>
-    </div>
-    <div class="col-xs-12 col-sm-4">
-        <label class="control-label">Cédula cliente</label>
-        <input type="text" class="form-control" id="documento_cliente" @if($proceso) value="{{$proceso->celular }}"
-            @endif disabled />
-    </div>
-    <div class="col-xs-12 col-sm-4">
-        <label class="control-label">Teléfono cliente</label>
-        <div class="input-group">
-            <span class="input-group-addon" id="indicativo_cliente">+1</span>
-            <input disabled type="text" class="form-control" id="telefono_cliente">
-        </div>
-    </div>
-</div>
-<div class="form-group row">
-    <div class="col-xs-12 col-sm-4">
-        <label class="control-label">Nombre intermediario</label>
-        <input type="text" class="form-control" id="nombre_intermediario" @if($proceso) value="{{$proceso->celular }}"
-            @endif disabled />
-    </div>
-    <div class="col-xs-12 col-sm-4">
-        <label class="control-label">Teléfono intermediario</label>
-        <div class="input-group">
-            <span class="input-group-addon" id="indicativo_intermediario">+1</span>
-            <input disabled type="text" class="form-control" id="telefono_intermediario">
-        </div>
-    </div>
-    <div class="col-xs-12 col-sm-4">
-        <label class="control-label">Correo electrónico intermediario</label>
-        <input type="text" class="form-control" id="email_intermediario" @if($proceso) value="{{$proceso->celular }}"
-            @endif disabled />
-    </div>
-</div>
-<div class="separator margin"></div>
-<div class="form-group row">
-    <div class="col-xs-12 col-sm-6">
-        <label for="id_tipo_proceso" class="control-label">Tipo de proceso</label>
-        <select id="id_tipo_proceso" name="id_tipo_proceso" data-live-search="true" class="form-control required"
-            title="Seleccionar" onchange="proceso.changeTipoProceso(this)">
-            @foreach ($tiposProceso as $item)
-            <option @if($proceso && $proceso->id_tipo_proceso == $item->id_tipo_proceso) selected @endif
-                value="{{$item->id_tipo_proceso}}">{{$item->nombre_tipo_proceso}}</option>
-            @endforeach
-        </select>
-    </div>
-    <div class="col-xs-12 col-sm-6">
-        <label for="id_entidad_demandada" class="control-label">Entidad demandada</label>
-        <select id="id_entidad_demandada" name="id_entidad_demandada" data-live-search="true"
-            class="form-control required" title="Seleccionar">
-            @foreach ($entidadesDemandadas as $item)
-            <option @if($proceso && $proceso->id_entidad_demandada == $item->id_entidad_demandada) selected
+                <label for="fecha_inicio" class="control-label">Valor del cobro</label>
+                @if($actuacion->actuacion_tiene_cobro == 1)
+                <input type="text" name="valor_pago" class="form-control" value="{{$procesoEtapa->valor_pago }}" />
+                @else
+                <input type="text" name="valor_pago" class="form-control" value="No genera cobro" disabled />
                 @endif
-                value="{{$item->id_entidad_demandada}}">{{$item->nombre_entidad_demandada}}</option>
-            @endforeach
-        </select>
-    </div>
-</div>
-<div class="form-group row">
-    <div class="col-xs-12 col-sm-4">
-        <label for="id_usuario_responsable" class="control-label">Usuario responsable</label>
-        <select name="id_usuario_responsable" id="id_usuario_responsable" data-live-search="true"
-            class="form-control required" title="Seleccionar">
-            @foreach ($usuarios as $item)
-            <option @if($proceso && $proceso->id_usuario_responsable == $item->id_usuario) selected @endif
-                value="{{$item->id_usuario}}">{{$item->getNombreCompleto()}}
-            </option>
-            @endforeach
-        </select>
-    </div>
-    <div class="col-xs-12 col-sm-4">
-        <label for="valor_estudio" class="control-label">Valor del estudio (si aplica)</label>
-        <input type="text" class="form-control" id="valor_estudio" name="valor_estudio" @if($proceso)
-            value="{{$proceso->valor_estudio }}" @endif />
-    </div>
-
-    <div class="col-xs-12 col-sm-4">
-        <label for="fecha_retiro_servicio" class="control-label">Fecha de retiro del servicio</label>
-        <input name="fecha_retiro_servicio" id="fecha_retiro_servicio" data-date-format="yyyy-mm-dd"
-            class="form-control datepicker-here required" @if($proceso) value="{{$proceso->fecha_retiro_servicio }}"
-            @endif />
-    </div>
-</div>
-<div class="form-group row">
-    <div class="col-xs-12 col-sm-6">
-        <label for="id_entidad_justicia" class="control-label">Última entidad de servicio (entidad de
-            justicia)</label>
-        <select name="id_entidad_justicia" id="id_entidad_justicia" data-live-search="true"
-            class="form-control required" title="Seleccionar">
-            @foreach ($entidadesJusticia as $item)
-            <option @if($proceso && $proceso->id_entidad_justicia == $item->id_entidad_justicia) selected
-                @endif
-                value="{{$item->id_entidad_justicia}}">{{$item->nombre_entidad_justicia}}</option>
-            @endforeach
-        </select>
-    </div>
-
-    <div class="col-xs-12 col-sm-6">
-        <label for="id_acto_administrativo_retiro" class="control-label">Acto administrativo del retiro
-            (actuación)</label>
-        <select name="id_acto_administrativo_retiro" id="id_acto_administrativo_retiro" data-live-search="true"
-            class="form-control required" title="Seleccionar">
-            @foreach ($actuaciones as $item)
-            <option @if($proceso && $proceso->id_acto_administrativo_retiro == $item->id_actuacion) selected
-                @endif
-                value="{{$item->id_actuacion}}">{{$item->nombre_actuacion}}</option>
-            @endforeach
-        </select>
-    </div>
-</div>
-<div class="form-group row">
-    <div class="col-xs-12 col-sm-4">
-        <label for="id_pais" class="control-label">Pais</label>
-        <select id="id_pais" data-live-search="true" class="form-control required" title="Seleccionar">
-            @foreach ($paises as $item)
-            <option @if($proceso) @if($proceso->id_pais == $item->id_pais) selected @endif @else selected
-                @endif
-                value="{{$item->id_pais}}">{{$item->nombre_pais}}</option>
-            @endforeach
-        </select>
-    </div>
-    <div class="col-xs-12 col-sm-4">
-        <label for="id_departamento" class="control-label">Departamento</label>
-        <select id="id_departamento" data-live-search="true" class="form-control required" title="Seleccionar"
-            onchange="proceso.changeDepartamento(this)">
-            @foreach ($departamentos as $item)
-            <option @if($proceso && $proceso->id_departamento == $item->id_departamento) selected @endif
-                value="{{$item->id_departamento}}">{{$item->nombre_departamento}}</option>
-            @endforeach
-        </select>
-    </div>
-    <div class="col-xs-12 col-sm-4">
-        <label for="id_municipio" class="control-label">Municipio</label>
-        <select data-live-search="true" class="form-control required" title="Seleccionar" id="id_municipio"
-            name="id_municipio">
-            @foreach ($municipios as $item)
-            <option @if($proceso && $proceso->id_municipio == $item->id_municipio) selected @endif
-                value="{{$item->id_municipio}}">{{$item->nombre_municipio}}</option>
-            @endforeach
-        </select>
-    </div>
-</div>
-<div class="form-group row">
-    <div class="col-xs-12 col-sm-4">
-        <label for="normatividad_aplicada_caso" class="control-label">Normatividad aplicada al caso</label>
-        <input type="text" class="form-control required" id="normatividad_aplicada_caso"
-            name="normatividad_aplicada_caso" @if($proceso) value="{{$proceso->normatividad_aplicada_caso }}" @endif />
-    </div>
-    <div class="col-xs-12 col-sm-4">
-        <label for="dar_informacion_caso" class="control-label">¿Se autoriza a dar información del
-            caso?</label>
-        <div class="checkbox-form">
-            <input type="checkbox" data-on="Si" data-off="No" data-width="90" class="form-control"
-                id="dar_informacion_caso" name="dar_informacion_caso" @if($proceso && $proceso->dar_informacion_caso
-            == 1) checked @endif />
-        </div>
-    </div>
-</div>
-<div class="form-group">
-    <label for="observaciones_caso" class="control-label">Observaciones del caso</label>
-    <textarea name="observaciones_caso" id="observaciones_caso" rows="4" style="resize: vertical; min-height: 100px"
-        class="form-control required">@if($proceso){{$proceso->observaciones_caso}}@endif</textarea>
-</div>
-</div>
-<div role="tabpanel" class="tab-pane" id="documentos-proceso">
-
-
-
-    <div class="flex space-between">
-        <nav class="navbar navbar-default flex-grow">
-            <div class="container-fluid">
-                <div class="navbar-header" style="width:100%">
-                    <h5>Documentos requeridos</h5>
-                    <div class="separator"></div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <label for="resultado" class="control-label">Resultado</label>
+                @if($actuacion->tipo_resultado == 1)
+                <div class="input-file">
+                    <input type="file" name="resultado_actuacion" />
                 </div>
-                <div class="separator margin white"></div>
-                <div id="documentos-requeridos">
-                    @foreach ($documentos as $item)
-                    <div class="file-document" data-filename="{{$item->filename}}" data-id="{{$item->id_documento}}"
-                        data-title="{{$item->nombre_documento}}" @if($item->
-                        obligatoriedad_documento == 1)
-                        data-required="true" @else data-required="true" @endif></div>
-                    @endforeach
-                </div>
+                @else
+                <input type="text" name="resultado_actuacion" class="form-control"
+                    value="{{ $procesoEtapa->resultado_actuacion }}" />
+                @endif
             </div>
-        </nav>
-        <div style="width: 10px"></div>
-        <nav class="navbar navbar-default flex-grow">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <h5>Documentos generados</h5>
-                </div>
-            </div>
-        </nav>
-    </div>
+        </div>
 
-</div>
-<button class="btn btn-success" style="width: 100%">Guardar proceso</button>
---}}
-</form>
+        <div class="separator margin"></div>
+
+        @if($actuacion->tipo_actuacion == 3)
+        <div class="form-group row">
+            <div class="col-xs-12 col-sm-6">
+                <label for="fecha_inicio" class="control-label">Fecha actuación rama</label>
+                <input name="fecha_actuacion_rama" id="fecha_actuacion_rama" data-date-format="yyyy-mm-dd"
+                    class="form-control datepicker-here" @if($procesoEtapa)
+                    value="{{$procesoEtapa->fecha_actuacion_rama }}" @endif />
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <label for="fecha_inicio" class="control-label">Fecha notificación rama</label>
+                <input name="fecha_notificacion_rama" id="fecha_notificacion_rama" data-date-format="yyyy-mm-dd"
+                    class="form-control datepicker-here" @if($procesoEtapa)
+                    value="{{$procesoEtapa->fecha_notificacion_rama }}" @endif />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-xs-12 col-sm-6">
+                <label for="fecha_inicio" class="control-label">Fecha inicio termino rama</label>
+                <input name="fecha_inicio_termino_rama" id="fecha_inicio_termino_rama" data-date-format="yyyy-mm-dd"
+                    class="form-control datepicker-here" @if($procesoEtapa)
+                    value="{{$procesoEtapa->fecha_inicio_termino_rama }}" @endif />
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <label for="fecha_inicio" class="control-label">Anotación rama</label>
+                <input name="anotacion_rama" id="anotacion_rama" class="form-control" @if($procesoEtapa)
+                    value="{{$procesoEtapa->anotacion_rama }}" @endif />
+            </div>
+        </div>
+        <div class="separator margin"></div>
+
+        @endif
+
+        <div class="flex space-between documents-container">
+            <nav class="navbar navbar-default flex-grow">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <h5>Documentos</h5>
+                    </div>
+                    <div id="documentos-requeridos">
+                        @if(!isset($documentos) || !count($documentos))
+                        <div class="file-document-empty">No requiere documentos</div>
+                        @else
+                        @foreach ($documentos as $item)
+                        <div class="file-document" data-filename="{{$item->filename}}" data-id="{{$item->id_documento}}"
+                            data-title="{{$item->nombre_documento}}" @if($item->obligatoriedad_documento == 1)
+                            data-required="true" @else data-required="true" @endif></div>
+                        @endforeach
+                        @endif
+
+                    </div>
+                </div>
+            </nav>
+            <div style="width:30px;"></div>
+            <nav class="navbar navbar-default flex-grow">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <h5>Documentos generados</h5>
+                        <span class="button-add">
+                            <button class="btn btn-success">+</button>
+                        </span>
+                    </div>
+                    <div>
+                        <div class="file-document-empty">No se han agregado documentos</div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+
+        <button class="btn btn-success" style="width: 100%">Guardar actuación</button>
+    </form>
 </div>
 @endsection
 
 @section('javascript')
 <script>
     $(document).ready(function(){
-        proceso.changeCliente('#id_cliente')
         const id = getId()
         fileDocument.init({
             url: 'proceso/upload',
@@ -388,12 +151,16 @@
             id
         })
 
-        !id && $('#documentos-proceso-tab').hide()
-
         const idSeguimiento = $('#id_proceso').val()
+        const $list = $('#breadcrumb').find('li')
 
-        $('#breadcrumb')
-        .find('li')
+        if(location.hash.includes('crear')) {
+            $list.eq(3).children('a').attr('href', 'javascript:void(0)')
+            $list.eq(4).remove()
+            $list.eq(5).remove()
+        }
+
+        $list
         .eq(2)
         .children('a')
         .attr('href', '#seguimiento-procesos/' + idSeguimiento)

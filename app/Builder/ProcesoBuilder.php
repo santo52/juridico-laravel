@@ -34,12 +34,16 @@ class ProcesoBuilder extends Builder
         return false;
     }
 
-    public function createActuacion($etapa, $actuacion, $id_responsable = false)
+    public function createActuacion($etapa, $actuacion, $id_responsable = false, $id_usuario_asigna = false)
     {
         if (!empty($this->values) && !empty($etapa) && !empty($actuacion)) {
 
             if (!$id_responsable) {
-                $id_responsable = $this->values->id_usuario_responsable;
+                $id_responsable = Auth::id();
+            }
+
+            if (!$id_usuario_asigna) {
+                $id_usuario_asigna = Auth::id();
             }
 
             $procesoEtapa = ProcesoEtapa::where([
@@ -68,7 +72,8 @@ class ProcesoBuilder extends Builder
                         'id_proceso_etapa' => $procesoEtapa->id_proceso_etapa,
                         'id_actuacion' => $actuacion->id_actuacion,
                         'fecha_inicio' => $date,
-                        'id_usuario_responsable' => $id_responsable
+                        'id_usuario_responsable' => $id_responsable,
+                        'id_usuario_asigna' => $id_usuario_asigna
                     ]);
                 }
 

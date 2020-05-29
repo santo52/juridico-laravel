@@ -43,7 +43,7 @@ class ActuacionController extends Controller
         ]);
 
         if ($actuacion->exists()) {
-            return response()->json(['exists' => truez]);
+            return response()->json(['exists' => true]);
         }
 
         $saved = $this->upsert($request);
@@ -93,25 +93,31 @@ class ActuacionController extends Controller
 
     private function prepareActuacion(Request $request, $id = false) {
 
-        $data = [
-            'nombre_actuacion' => trim($request->get('nombreActuacion')),
-            'genera_alertas' => empty($request->get('generaAlertas')) ? 2 : 1,
-            'aplica_control_vencimiento' => empty($request->get('aplicaControlVencimiento')) ? 2 : 1,
-            'dias_vencimiento' => $request->get('diasVencimiento'),
-            'requiere_estudio_favorabilidad' => empty($request->get('requiereEstudioFavorabilidad')) ? 2 : 1,
-            'actuacion_tiene_cobro' => empty($request->get('actuacionTieneCobro')) ? 2 : 1,
-            'valor_actuacion' => $request->get('valorActuacion'),
-            'actuacion_creacion_cliente' => empty($request->get('actuacionCreacionCliente')) ? 2 : 1,
-            'mostrar_datos_radicado' => empty($request->get('mostrarDatosRadicado')) ? 2 : 1,
-            'mostrar_datos_juzgado' => empty($request->get('mostrarDatosJuzgado')) ? 2 : 1,
-            'mostrar_datos_respuesta' => empty($request->get('mostrarDatosRespuesta')) ? 2 : 1,
-            'mostrar_datos_apelacion' => empty($request->get('mostrarDatosApelacion')) ? 2 : 1,
-            'mostrar_datos_cobros' => empty($request->get('mostrarDatosCobros')) ? 2 : 1,
-            'programar_audiencia' => empty($request->get('programarAudiencia')) ? 2 : 1,
-            'control_entrega_documentos' => empty($request->get('controlEntregaDocumentos')) ? 2 : 1,
-            'generar_documentos' => empty($request->get('generarDocumentos')) ? 2 : 1,
-            'estado_actuacion' => empty($request->get('estado')) ? 2 : 1
-        ];
+        $data = $request->all();
+        $data['nombre_actuacion'] = trim($request->get('nombreActuacion'));
+        $data['actuacion_tiene_cobro'] =  empty($request->get('actuacionTieneCobro')) ? 2 : 1;
+        $data['estado_actuacion'] =  empty($request->get('estado')) ? 2 : 1;
+
+        // $data = [
+        //     'nombre_actuacion' => trim($request->get('nombreActuacion')),
+        //     'genera_alertas' => empty($request->get('generaAlertas')) ? 2 : 1,
+        //     'aplica_control_vencimiento' => empty($request->get('aplicaControlVencimiento')) ? 2 : 1,
+        //     'dias_vencimiento' => $request->get('diasVencimiento'),
+        //     'requiere_estudio_favorabilidad' => empty($request->get('requiereEstudioFavorabilidad')) ? 2 : 1,
+        //     'actuacion_tiene_cobro' => empty($request->get('actuacionTieneCobro')) ? 2 : 1,
+        //     'actuacion_creacion_cliente' => empty($request->get('actuacionCreacionCliente')) ? 2 : 1,
+        //     'mostrar_datos_radicado' => empty($request->get('mostrarDatosRadicado')) ? 2 : 1,
+        //     'mostrar_datos_juzgado' => empty($request->get('mostrarDatosJuzgado')) ? 2 : 1,
+        //     'mostrar_datos_respuesta' => empty($request->get('mostrarDatosRespuesta')) ? 2 : 1,
+        //     'mostrar_datos_apelacion' => empty($request->get('mostrarDatosApelacion')) ? 2 : 1,
+        //     'mostrar_datos_cobros' => empty($request->get('mostrarDatosCobros')) ? 2 : 1,
+        //     'programar_audiencia' => empty($request->get('programarAudiencia')) ? 2 : 1,
+        //     'control_entrega_documentos' => empty($request->get('controlEntregaDocumentos')) ? 2 : 1,
+        //     'generar_documentos' => empty($request->get('generarDocumentos')) ? 2 : 1,
+        //     'estado_actuacion' => empty($request->get('estado')) ? 2 : 1,
+        //     'dias_vencimiento_unidad' => $request->get('dias_vencimiento_unidad'),
+        //     'dias_vencimiento_tipo' => $request->get('dias_vencimiento_unidad')
+        // ];
 
         if (!$id) {
             $data['eliminado'] = 0;
@@ -127,8 +133,7 @@ class ActuacionController extends Controller
         $list = $actuacion
             ->where('eliminado', 0)
             ->orderBy('id_actuacion', 'desc')
-            ->get()
-            ->toHuman();
+            ->get();
 
         return $this->renderSection('actuacion.listar', [
             'actuaciones' => $list,
@@ -205,7 +210,7 @@ class ActuacionController extends Controller
 
     public function createPDF() {
         //    return Excel::download(new ActuacionExport, 'actuaciones.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
-        $actuaciones = Actuacion::where('eliminado', 0)->get()->toHuman();
+        $actuaciones = Actuacion::where('eliminado', 0)->get();
         $pdf = \PDF::loadView('actuacion.pdf', ["actuaciones" => $actuaciones])->setPaper('a4', 'landscape');
         return $pdf->download('archivo.pdf');
     }

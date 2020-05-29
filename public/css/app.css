@@ -141,7 +141,7 @@ textarea {
 }
 
 hr {
-  border-top: 1px solid #808080;
+  border-top: 1px solid #eee;
 }
 
 /***************** GENERAL ****************/
@@ -1180,6 +1180,19 @@ ul.nav-tabs > li.active > a {
   display: inline-block;
 }
 
+.input-file {
+  border: 1px solid #cccccc;
+  height: 34px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.input-file input {
+  width: 100%;
+  opacity: 0;
+  height: 100%;
+}
+
 .flex {
   display: flex;
 }
@@ -1442,6 +1455,7 @@ ul.nav-tabs > li.active > a {
   padding: 5px;
 }
 
+.file-document-empty,
 .file-document {
   width: 100%;
   margin-bottom: 10px;
@@ -1450,9 +1464,24 @@ ul.nav-tabs > li.active > a {
   overflow: hidden;
   border-radius: 5px;
   text-align: center;
+}
+
+.file-document-empty {
+  background: #f8f8f8;
+  border: 1px solid #eee;
+  color: #ccc;
+}
+
+.file-document {
   border: 1px dashed #1f9a7e;
   color: #1f9a7e;
   background: #fff;
+}
+
+.file-document.empty {
+  background: #f8f8f8;
+  border: 1px solid #eee;
+  color: #ccc;
 }
 
 .file-document input[type=file] {
@@ -1557,5 +1586,38 @@ ul.nav-tabs > li.active > a {
 .actuacion-row-gris td.estado span {
   border-color: #bdc3c7;
   color: #bdc3c7;
+}
+
+.documents-container .navbar {
+  width: 50%;
+}
+
+.documents-container .navbar-header {
+  margin: auto;
+  position: relative;
+  width: 100%;
+}
+
+.documents-container .button-add {
+  position: absolute;
+  right: 0;
+  position: absolute;
+  right: 0;
+  top: 7px;
+}
+
+.documents-container .button-add button {
+  height: 25px;
+  width: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+}
+
+@media screen and (max-width: 550px) {
+  .documents-container {
+    flex-direction: column;
+  }
 }
 

@@ -2,9 +2,9 @@
 
 namespace App\Entities;
 
-use Illuminate\Database\Eloquent\Model;
+use \App\BaseModel;
 
-class EtapasProcesoTipoProceso extends Model
+class EtapasProcesoTipoProceso extends BaseModel
 {
     protected $table = 'etapas_proceso_tipo_proceso';
 

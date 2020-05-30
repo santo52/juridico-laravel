@@ -1,9 +1,9 @@
 <?php
 namespace App\Entities;
 
-use Illuminate\Database\Eloquent\Model;
+use \App\BaseModel;
 
-class AccionMenuPerfil extends Model
+class AccionMenuPerfil extends BaseModel
 {
     protected $table = 'accion_menu_perfil';
 

@@ -2,9 +2,9 @@
 
 namespace App\Entities;
 
-use Illuminate\Database\Eloquent\Model;
+use \App\BaseModel;
 
-class GrupoVariable extends Model
+class GrupoVariable extends BaseModel
 {
     protected $table = 'grupos_variables';
 

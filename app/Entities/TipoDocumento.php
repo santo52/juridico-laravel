@@ -2,9 +2,9 @@
 
 namespace App\Entities;
 
-use Illuminate\Database\Eloquent\Model;
+use \App\BaseModel;
 
-class TipoDocumento extends Model
+class TipoDocumento extends BaseModel
 {
     protected $table = 'tipo_documento';
 

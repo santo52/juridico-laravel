@@ -2,9 +2,9 @@
 
 namespace App\Entities;
 
-use Illuminate\Database\Eloquent\Model;
+use \App\BaseModel;
 
-class ActuacionPlantillaDocumento extends Model
+class ActuacionPlantillaDocumento extends BaseModel
 {
     protected $table = 'actuacion_plantilla_documento';
 

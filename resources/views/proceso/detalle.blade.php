@@ -60,13 +60,16 @@
                 <div class="col-xs-12 col-sm-4">
                     <label class="control-label">Cédula cliente</label>
                     <input type="text" class="form-control" id="documento_cliente" @if($proceso)
-                        value="{{$proceso->celular }}" @endif disabled />
+                        value="{{$proceso->cliente->persona->numero_documento }}" @endif disabled />
                 </div>
                 <div class="col-xs-12 col-sm-4">
                     <label class="control-label">Teléfono cliente</label>
                     <div class="input-group">
                         <span class="input-group-addon" id="indicativo_cliente">+1</span>
-                        <input disabled type="text" class="form-control" id="telefono_cliente">
+                        <input disabled type="text" class="form-control" id="telefono_cliente"
+                        @if($proceso)
+                        value="{{$proceso->cliente->persona->telefono }}" @endif
+                        >
                     </div>
                 </div>
             </div>
@@ -74,19 +77,22 @@
                 <div class="col-xs-12 col-sm-4">
                     <label class="control-label">Nombre intermediario</label>
                     <input type="text" class="form-control" id="nombre_intermediario" @if($proceso)
-                        value="{{$proceso->celular }}" @endif disabled />
+                        value="{{$proceso->cliente->intermediario->getNombreCompleto() }}" @endif disabled />
                 </div>
                 <div class="col-xs-12 col-sm-4">
                     <label class="control-label">Teléfono intermediario</label>
                     <div class="input-group">
                         <span class="input-group-addon" id="indicativo_intermediario">+1</span>
-                        <input disabled type="text" class="form-control" id="telefono_intermediario">
+                        <input disabled type="text" class="form-control" id="telefono_intermediario"
+                        @if($proceso)
+                        value="{{$proceso->cliente->intermediario->persona->telefono }}" @endif
+                        >
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-4">
                     <label class="control-label">Correo electrónico intermediario</label>
                     <input type="text" class="form-control" id="email_intermediario" @if($proceso)
-                        value="{{$proceso->celular }}" @endif disabled />
+                        value="{{$proceso->cliente->intermediario->persona->correo_electronico}}" @endif disabled />
                 </div>
             </div>
             <div class="separator margin"></div>
@@ -158,7 +164,7 @@
                 <label for="id_pais" class="control-label">Pais</label>
                 <select id="id_pais" data-live-search="true" class="form-control required" title="Seleccionar">
                     @foreach ($paises as $item)
-                    <option @if($proceso) @if($proceso->id_pais == $item->id_pais) selected @endif @else selected
+                    <option @if($proceso) @if($proceso->municipio->departamento->id_pais == $item->id_pais) selected @endif @else selected
                         @endif
                         value="{{$item->id_pais}}">{{$item->nombre_pais}}</option>
                     @endforeach
@@ -169,7 +175,7 @@
                 <select id="id_departamento" data-live-search="true" class="form-control required" title="Seleccionar"
                     onchange="proceso.changeDepartamento(this)">
                     @foreach ($departamentos as $item)
-                    <option @if($proceso && $proceso->id_departamento == $item->id_departamento) selected @endif
+                    <option @if($proceso && $proceso->municipio->id_departamento == $item->id_departamento) selected @endif
                         value="{{$item->id_departamento}}">{{$item->nombre_departamento}}</option>
                     @endforeach
                 </select>
@@ -179,7 +185,7 @@
                 <select data-live-search="true" class="form-control required" title="Seleccionar" id="id_municipio"
                     name="id_municipio">
                     @foreach ($municipios as $item)
-                    <option @if($proceso && $proceso->id_municipio == $item->id_municipio) selected @endif
+                    <option @if($proceso && $proceso->municipio->id_municipio == $item->id_municipio) selected @endif
                         value="{{$item->id_municipio}}">{{$item->nombre_municipio}}</option>
                     @endforeach
                 </select>

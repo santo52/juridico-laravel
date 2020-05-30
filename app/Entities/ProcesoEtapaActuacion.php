@@ -2,12 +2,12 @@
 
 namespace App\Entities;
 
-use Illuminate\Database\Eloquent\Model;
+use \App\BaseModel;
 use App\Entities\Usuario;
 use App\Entities\Actuacion;
 use App\Entities\ProcesoEtapa;
 
-class ProcesoEtapaActuacion extends Model
+class ProcesoEtapaActuacion extends BaseModel
 {
     protected $table = 'proceso_etapa_actuacion';
 
@@ -29,6 +29,26 @@ class ProcesoEtapaActuacion extends Model
         "id_usuario_asigna"
     ];
 
+    public function procesoEtapa()
+    {
+        return $this->hasOne('App\Entities\ProcesoEtapa', 'id_proceso_etapa', 'id_proceso_etapa');
+    }
+
+    public function actuacion()
+    {
+        return $this->hasOne('App\Entities\Actuacion', 'id_actuacion', 'id_actuacion');
+    }
+
+    public function usuarioResponsable()
+    {
+        return $this->hasOne('App\Entities\Usuario', 'id_usuario', 'id_usuario_responsable');
+    }
+
+    public function usuarioAsigna()
+    {
+        return $this->hasOne('App\Entities\Usuario', 'id_usuario', 'id_usuario_asigna');
+    }
+
     public function getFechaInicioString()
     {
         return date('d/m/Y h:i A', strtotime($this->fecha_inicio));
@@ -36,7 +56,7 @@ class ProcesoEtapaActuacion extends Model
 
     public function getFechaVencimientoString()
     {
-        $actuacion = Actuacion::find($this->id_actuacion);
+        $actuacion = $this->actuacion;
         $multiplicador = $actuacion->dias_vencimiento_unidad == 2 ? 30 : 1;
         $dias = $actuacion && $actuacion->dias_vencimiento ? $actuacion->dias_vencimiento : 0;
         $dias *= $multiplicador;
@@ -79,19 +99,17 @@ class ProcesoEtapaActuacion extends Model
 
     public function getResponsable()
     {
-        $usuario = Usuario::find($this->id_usuario_responsable);
+        $usuario = $this->usuarioResponsable;
         return $usuario ? $usuario->getNombreCompleto() : 'Sin responsable';
     }
 
     public function getAsignadoPor()
     {
-        $usuario = Usuario::find($this->id_usuario_asigna);
+        $usuario = $this->usuarioAsigna;
         return $usuario ? $usuario->getNombreCompleto() : 'Por el sistema';
     }
 
     public function getSeguimientoId() {
-        return 20;
-        $procesoEtapa = ProcesoEtapa::find($this->id_proceso_etapa);
-        return $procesoEtapa->id_proceso;
+        return $this->procesoEtapa->id_proceso;
     }
 }

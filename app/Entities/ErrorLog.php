@@ -2,9 +2,9 @@
 
 namespace App\Entities;
 
-use Illuminate\Database\Eloquent\Model;
+use \App\BaseModel;
 
-class ErrorLog extends Model
+class ErrorLog extends BaseModel
 {
     protected $table = 'error_log';
 

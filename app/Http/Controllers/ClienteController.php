@@ -48,7 +48,7 @@ class ClienteController extends Controller
         $cliente = Cliente::
             select(
                 'cliente.id_cliente', 'p.numero_documento', 'p.celular', 'p.telefono', 'cliente.celular2', 'mu.indicativo',
-                'pi.numero_documento as numero_documento_intermediario', 'pi.celular as celular_intermediario',
+                'pi.numero_documento as numero_documento_intermediario', 'pi.celular as celular_intermediario', 'p.id_lugar_expedicion',
                 'pi.primer_nombre as intermediario_p_nombre', 'pi.segundo_nombre as intermediario_s_nombre',
                 'pi.primer_apellido as intermediario_p_apellido', 'pi.segundo_apellido as intermediario_s_apellido',
                 'pi.telefono as telefono_intermediario', 'pi.celular as celular_intermediario', 'cliente.id_tipo_documento_beneficiario',
@@ -71,7 +71,7 @@ class ClienteController extends Controller
 
         $cliente = Cliente::
             select(
-                'cliente.id_cliente', 'cliente.id_persona', 'cliente.id_intermediario', 'cliente.id_contacto', 'estado_vital_cliente',
+                'cliente.id_cliente', 'cliente.id_persona', 'cliente.id_intermediario', 'cliente.id_contacto', 'estado_vital_cliente', 'p.id_lugar_expedicion',
                 'fecha_fallecimiento', 'nombre_persona_recomienda', 'numero_documento_beneficiario', 'nombre_beneficiario', 'parentesco_beneficiario',
                 'estado_cliente', 'cliente.fecha_creacion', 'cliente.eliminado', 'p.id_tipo_documento', 'p.numero_documento', 'p.primer_apellido',
                 'p.segundo_apellido', 'p.primer_nombre', 'p.segundo_nombre', 'p.direccion', 'p.barrio', 'p.id_municipio', 'p.celular', 'p.telefono',
@@ -192,10 +192,6 @@ class ClienteController extends Controller
 
     public function createPDF() {
         $clientes = Cliente::where('eliminado', 0)->get();
-        foreach($clientes as $key => $value) {
-            $clientes[$key]->persona = $value->getPersona();
-        }
-
         $pdf = \PDF::loadView('cliente.pdf', ["clientes" => $clientes])->setPaper('a4', 'landscape');
         return $pdf->download('cliente.pdf');
     }

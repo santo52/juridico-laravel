@@ -2,10 +2,10 @@
 
 namespace App\Entities;
 
-use Illuminate\Database\Eloquent\Model;
+use \App\BaseModel;
 use App\Builder\ProcesoDocumentoBuilder;
 
-class ProcesoDocumento extends Model
+class ProcesoDocumento extends BaseModel
 {
     protected $table = 'proceso_documento';
 

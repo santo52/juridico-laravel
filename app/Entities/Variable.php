@@ -2,9 +2,9 @@
 
 namespace App\Entities;
 
-use Illuminate\Database\Eloquent\Model;
+use \App\BaseModel;
 
-class Variable extends Model
+class Variable extends BaseModel
 {
     protected $table = 'variables';
 
@@ -13,6 +13,6 @@ class Variable extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        "id_variable", "nombre_variable", "valor_variable", "estado_variable", "orden"
+        "id_variable", "nombre_variable", "valor_variable", "estado_variable", "orden", "function_variable"
     ];
 }

@@ -41,7 +41,7 @@ class ClienteExport implements FromArray, WithHeadings
 
     private function getDataCliente($cliente) {
 
-        $persona = $cliente->getPersona();
+        $persona = $cliente->persona;
 
         return [
             $cliente->id_cliente,

@@ -2,9 +2,9 @@
 
 namespace App\Entities;
 
-use Illuminate\Database\Eloquent\Model;
+use \App\BaseModel;
 
-class Pais extends Model
+class Pais extends BaseModel
 {
     protected $table = 'pais';
 
@@ -15,4 +15,9 @@ class Pais extends Model
     protected $fillable = [
         "id_pais", "nombre_pais"
     ];
+
+    public function departamentos()
+    {
+        return $this->belongsTo('App\Entities\Departamento');
+    }
 }

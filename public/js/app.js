@@ -864,11 +864,6 @@ function asyncFootableOnSort(e, callback) {
 
   callback(type);
 }
-/*
-<input type="file" />
-                            <span class="empty-message">Subir el documento</span>
-*/
-
 
 var fileDocument = {
   data: '',
@@ -939,6 +934,13 @@ var fileDocument = {
   onRemove: function onRemove(self) {
     var $parent = $(self);
     var file_id = $parent.data('id');
+    var customOnRemove = $parent.data('remove');
+
+    if (customOnRemove) {
+      eval(customOnRemove);
+      return false;
+    }
+
     $parent.removeClass('not-empty').data('filename', '');
     this.removeFile($parent);
 

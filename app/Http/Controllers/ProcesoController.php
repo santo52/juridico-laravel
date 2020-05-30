@@ -126,15 +126,15 @@ class ProcesoController extends Controller
                 'estado_usuario' => '1'
             ])->get();
 
-        $documentos = $proceso ? $this->getDocumentos($id, $proceso->id_tipo_proceso) : [];
+        // $documentos = $proceso ? $this->getDocumentos($id, $proceso->id_tipo_proceso) : [];
         $paises = Pais::all();
         $departamentos = Departamento::all();
-        $municipios = $proceso ? Municipio::where('id_departamento', $proceso->id_departamento)->get() : [];
+        $municipios = $proceso ? Municipio::where('id_departamento', $proceso->municipio->id_departamento)->get() : [];
 
         return $this->renderSection('proceso.detalle', [
             'proceso' => $proceso,
             'tiposProceso' => $tiposProceso,
-            'documentos' => $documentos,
+            // 'documentos' => $documentos,
             'entidadesDemandadas' => $entidadesDemandadas,
             'entidadesJusticia' => $entidadesJusticia,
             'actuaciones' => $actuaciones,
@@ -174,6 +174,10 @@ class ProcesoController extends Controller
         $dataProceso['dar_informacion_caso'] = !empty($request->get('dar_informacion_caso')) ? 1 : 0;
         if (empty($id)) {
             $dataProceso['id_usuario_creacion'] = Auth::id();
+        }
+
+        if (empty($request->get('valor_estudio'))) {
+            $dataProceso['valor_estudio'] = 0;
         }
 
         $saved = Proceso::updateOrCreate(['id_proceso' => $id], $dataProceso);

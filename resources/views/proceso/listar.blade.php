@@ -58,45 +58,45 @@
     <tbody>
         @if (count($procesos) > 0)
         @foreach ($procesos as $proceso)
-        <tr id="tipoProcesoRow{{$proceso['id_proceso']}}">
-            <td>{{$proceso['id_proceso']}}</td>
-            <td>{{$proceso['numero_documento']}}</td>
+        <tr id="tipoProcesoRow{{$proceso->id_proceso}}">
+            <td>{{$proceso->id_proceso}}</td>
+            <td>{{$proceso->cliente->persona->numero_documento}}</td>
             <td>{{$proceso->getNombreCompletoCliente()}}</td>
-            <td>{{$proceso['nombre_tipo_proceso']}}</td>
-            <td>{{$proceso['nombre_entidad_demandada']}}</td>
-            <td>{{$proceso['valor_estudio']}}</td>
+            <td>{{$proceso->tipoProceso->nombre_tipo_proceso}}</td>
+            <td>{{$proceso->entidadDemandada->nombre_entidad_demandada}}</td>
+            <td>{{$proceso->valor_estudio}}</td>
             <td>{{$proceso->getFechaRetiroServicio()}}</td>
-            <td>{{$proceso['ultima_entidad_retiro']}}</td>
-            <td>{{$proceso['nombre_municipio']}}</td>
-            <td>{{$proceso['acto_administrativo']}}</td>
-            <td>{{$proceso['normatividad_aplicada_caso']}}</td>
-            <td>{{$proceso['observaciones_caso']}}</td>
-            <td>{{$proceso['estado_proceso'] == 2 ? 'Inactivo' : 'Activo'}}</td>
+            <td>{{$proceso->ultima_entidad_retiro}}</td>
+            <td>{{$proceso->municipio->nombre_municipio}}</td>
+            <td>{{$proceso->acto_administrativo}}</td>
+            <td>{{$proceso->normatividad_aplicada_caso}}</td>
+            <td>{{$proceso->observaciones_caso}}</td>
+            <td>{{$proceso->estado_proceso == 2 ? 'Inactivo' : 'Activo'}}</td>
             <td>
                 <div class="flex justify-center table-actions">
                     @isset ($permissions->editar)
-                    <a data-toggle="tooltip" title="Editar" @isset($seguimiento) href="#seguimiento-procesos/{{$proceso['id_proceso']}}" @else
-                        href="#proceso/{{$proceso['id_proceso']}}" @endisset class="btn text-primary" type="button">
+                    <a data-toggle="tooltip" title="Editar" @isset($seguimiento) href="#seguimiento-procesos/{{$proceso->id_proceso}}" @else
+                        href="#proceso/{{$proceso->id_proceso}}" @endisset class="btn text-primary" type="button">
                         <span class="glyphicon glyphicon-pencil"></span>
                     </a>
                     @endisset
 
                     @if (isset($permissions->eliminar) && !isset($seguimiento))
                     <a data-toggle="tooltip" title="Eliminar" href="javascript:void(0)" class="btn text-danger" type="button"
-                        onclick="proceso.openDelete('{{$proceso['id_proceso']}}')">
+                        onclick="proceso.openDelete('{{$proceso->id_proceso}}')">
                         <span class="glyphicon glyphicon-remove"></span>
                     </a>
                     @endif
                     @if(isset($seguimiento))
-                    <a data-toggle="tooltip" title="Información cliente" href="#cliente/{{$proceso['id_cliente']}}" class="btn text-warning" type="button">
+                    <a data-toggle="tooltip" title="Información cliente" href="#cliente/{{$proceso->id_cliente}}" class="btn text-warning" type="button">
                         <span class="glyphicon glyphicon-user"></span>
                     </a>
                     @endif
                     @if(isset($seguimiento))
                     <a data-toggle="tooltip" title="Comentarios" href="javascript:void(0)" class="btn text-primary" type="button"
-                        onclick="proceso.openComments('{{$proceso['id_proceso']}}')">
+                        onclick="proceso.openComments('{{$proceso->id_proceso}}')">
                         <span class="glyphicon glyphicon-comment"></span>
-                        <span class="badge badge-sm">{{$proceso['totalComentarios']}}</span>
+                        <span class="badge badge-sm">{{$proceso->totalComentarios}}</span>
                     </a>
                     @endif
 

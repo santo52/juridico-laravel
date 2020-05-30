@@ -2,10 +2,10 @@
 
 namespace App\Entities;
 
-use Illuminate\Database\Eloquent\Model;
+use \App\BaseModel;
 use App\Entities\Departamento;
 
-class Municipio extends Model
+class Municipio extends BaseModel
 {
     protected $table = 'municipio';
 
@@ -17,8 +17,13 @@ class Municipio extends Model
         "id_municipio", "id_departamento", "nombre_municipio", 'indicativo'
     ];
 
+    public function departamento()
+    {
+        return $this->hasOne('App\Entities\Departamento', 'id_departamento', 'id_departamento');
+    }
+
     public function getDepartamento() {
-        $departamento = Departamento::find($this->id_departamento);
+        $departamento = $this->departamento;
         return $departamento ? $departamento->nombre_departamento : '';
     }
 }

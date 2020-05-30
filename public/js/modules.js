@@ -1,4 +1,4 @@
-function _createForOfIteratorHelper(o) { if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (o = _unsupportedIterableToArray(o))) { var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var it, normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
@@ -1586,9 +1586,75 @@ var Proceso = /*#__PURE__*/function () {
 
 var proceso = new Proceso();
 
-var SeguimientoActuacion = function SeguimientoActuacion() {
-  _classCallCheck(this, SeguimientoActuacion);
-};
+var SeguimientoActuacion = /*#__PURE__*/function () {
+  function SeguimientoActuacion() {
+    _classCallCheck(this, SeguimientoActuacion);
+  }
+
+  _createClass(SeguimientoActuacion, [{
+    key: "openTemplateModal",
+    value: function openTemplateModal() {
+      var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+      $('#plantillasModal').modal();
+    }
+  }, {
+    key: "closeTemplateModal",
+    value: function closeTemplateModal() {
+      $('#plantillasModal').modal('hide');
+    }
+  }, {
+    key: "deletePlantilla",
+    value: function deletePlantilla(id) {
+      $.ajax({
+        url: '/seguimiento-procesos/actuacion/plantilla/delete/' + id,
+        success: function success(_ref16) {
+          var deleted = _ref16.deleted,
+              data = _ref16.data;
+
+          if (deleted) {
+            $('#plantillaDocumento').append("<option value=\"".concat(data.plantilla_documento.id_plantilla_documento, "\">").concat(data.plantilla_documento.nombre_plantilla_documento, "</option>")).selectpicker('refresh');
+            $(".file-document[data-id=".concat(data.id_proceso_etapa_actuacion_plantillas, "]")).remove();
+          }
+        }
+      });
+    }
+  }, {
+    key: "savePlantilla",
+    value: function savePlantilla(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var formData = new FormData(e.target);
+      formData.append('id_proceso', $('#id_proceso').val());
+      formData.append('id_proceso_etapa', $('#id_proceso_etapa').val());
+      formData.append('id_proceso_etapa_actuacion', $('#id_proceso_etapa_actuacion').val());
+      $.ajax({
+        url: '/seguimiento-procesos/actuacion/plantilla/upsert',
+        data: new URLSearchParams(formData),
+        success: function success(_ref17) {
+          var saved = _ref17.saved,
+              url = _ref17.url;
+
+          if (saved) {
+            var value = $('#plantillaDocumento').val();
+            $("#plantillaDocumento option[value=".concat(value, "]")).remove();
+            $('#plantillaDocumento').selectpicker('refresh');
+            var html = "<div class=\"file-document\" data-title=\"".concat(saved.plantilla_documento.nombre_plantilla_documento, "\"\n                    data-remove=\"seguimientoActuacion.deletePlantilla('").concat(saved.id_proceso_etapa_actuacion_plantillas, "')\"\n                    data-id=\"").concat(saved.id_proceso_etapa_actuacion_plantillas, "\"\n                    data-filename=\"").concat(url, "\"></div>");
+            $('#documentos-generados').append(html);
+            var id = getId();
+            fileDocument.init({
+              url: 'proceso/upload',
+              path: 'uploads/documentos',
+              id: id
+            });
+          }
+        }
+      });
+      return false;
+    }
+  }]);
+
+  return SeguimientoActuacion;
+}();
 
 var seguimientoActuacion = new SeguimientoActuacion();
 
@@ -1626,8 +1692,8 @@ var SeguimientoProceso = /*#__PURE__*/function () {
       });
       $.ajax({
         url: '/seguimiento-procesos/etapas-de-proceso/get/' + id_etapa_proceso,
-        success: function success(_ref16) {
-          var actuaciones = _ref16.actuaciones;
+        success: function success(_ref18) {
+          var actuaciones = _ref18.actuaciones;
           var html = actuaciones.map(function (data) {
             return "<option value=\"".concat(data.id_actuacion, "\">").concat(data.nombre_actuacion, "</option>");
           });
@@ -1710,8 +1776,8 @@ var SeguimientoProceso = /*#__PURE__*/function () {
       var id = $('#deleteValue').val();
       $.ajax({
         url: '/seguimiento-procesos/comentario/delete/' + id,
-        success: function success(_ref17) {
-          var deleted = _ref17.deleted;
+        success: function success(_ref19) {
+          var deleted = _ref19.deleted;
 
           if (deleted) {
             $('#comentarioRow' + id).remove();
@@ -1732,8 +1798,8 @@ var SeguimientoProceso = /*#__PURE__*/function () {
       $.ajax({
         url: '/seguimiento-procesos/comentario/upsert',
         data: new URLSearchParams(formData),
-        success: function success(_ref18) {
-          var saved = _ref18.saved;
+        success: function success(_ref20) {
+          var saved = _ref20.saved;
 
           if (saved) {
             var $table = $('#comentariosTable');
@@ -1914,8 +1980,8 @@ var TipoProceso = /*#__PURE__*/function () {
       var title = id ? 'Editar tipo de proceso' : 'Nuevo tipo de proceso';
       $('#createTitle').text(title);
       $('#tipoNombre').val('');
-      this.renderModalData(id).then(function (_ref19) {
-        var tipoProceso = _ref19.tipoProceso;
+      this.renderModalData(id).then(function (_ref21) {
+        var tipoProceso = _ref21.tipoProceso;
 
         if (tipoProceso) {
           $('#tipoNombre').val(tipoProceso.nombre_tipo_proceso);
@@ -2053,8 +2119,8 @@ var Usuario = /*#__PURE__*/function () {
       if (id) {
         $.ajax({
           url: '/usuario/get/' + id,
-          success: function success(_ref20) {
-            var usuario = _ref20.usuario;
+          success: function success(_ref22) {
+            var usuario = _ref22.usuario;
             $('#tipoDocumento').val(usuario.id_tipo_documento).selectpicker('refresh');
             $('#numeroDocumento').val(usuario.numero_documento);
             $('#primerApellido').val(usuario.primer_apellido);

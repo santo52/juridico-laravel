@@ -2,9 +2,9 @@
 
 namespace App\Entities;
 
-use Illuminate\Database\Eloquent\Model;
+use App\BaseModel;
 
-class PlantillaDocumento extends Model
+class PlantillaDocumento extends BaseModel
 {
     protected $table = 'plantilla_documento';
 

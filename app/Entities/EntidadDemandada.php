@@ -2,9 +2,9 @@
 
 namespace App\Entities;
 
-use Illuminate\Database\Eloquent\Model;
+use \App\BaseModel;
 
-class EntidadDemandada extends Model
+class EntidadDemandada extends BaseModel
 {
     protected $table = 'entidad_demandada';
 

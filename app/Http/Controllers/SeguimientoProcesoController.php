@@ -4,16 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+
 use App\Entities\Proceso;
 use App\Entities\ProcesoEtapa;
 use App\Entities\ProcesoEtapaActuacion;
 use App\Entities\TipoProceso;
 use App\Entities\EtapaProceso;
 use App\Entities\ProcesoBitacora;
-use App\Entities\Usuario;
+use App\Entities\ProcesoEtapaActuacionPlantillas;
 use App\Entities\Actuacion;
-
-
+use App\Entities\PlantillaDocumento;
 
 class SeguimientoProcesoController extends Controller
 {
@@ -111,34 +111,71 @@ class SeguimientoProcesoController extends Controller
         return $actuacion;
     }
 
-    public function actuacion($id) {
-        $procesoEtapa = ProcesoEtapaActuacion::
-        leftjoin('proceso_etapa as pe', 'pe.id_proceso_etapa', 'proceso_etapa_actuacion.id_proceso_etapa')
-        ->find($id);
+    public function actuacion($id)
+    {
+        $procesoEtapa = ProcesoEtapaActuacion::leftjoin('proceso_etapa as pe', 'pe.id_proceso_etapa', 'proceso_etapa_actuacion.id_proceso_etapa')
+            ->find($id);
 
-        if(empty($procesoEtapa)) {
-            return response()->json([ 'redirect' => 'seguimiento-procesos' ]);
+        if (empty($procesoEtapa)) {
+            return response()->json(['redirect' => 'seguimiento-procesos']);
         }
 
         $actuacion = Actuacion::find($procesoEtapa->id_actuacion);
+        $list = ProcesoEtapaActuacionPlantillas::where('id_proceso_etapa_actuacion', $id)->get();
+
+        $whereNotIn = [];
+
+        foreach ($list as $item) {
+            $whereNotIn[] = $item->id_plantilla_documento;
+        }
+
+        $plantillas = PlantillaDocumento::where(['eliminado' => 0, 'estado_plantilla_documento' => '1'])
+            ->whereNotIn('id_plantilla_documento', $whereNotIn)
+            ->get();
+
         return $this->renderSection('seguimiento_proceso.actuacion', [
             'procesoEtapa' => $procesoEtapa,
-            'actuacion' => $actuacion
+            'actuacion' => $actuacion,
+            'plantillas' => $plantillas,
+            'documentosGenerados' => $list
         ]);
     }
 
-    public function crearActuacion($idProcesoEtapa, $id) {
+    public function crearActuacion($idProcesoEtapa, $id)
+    {
         $actuacion = Actuacion::find($id);
         $procesoEtapa = ProcesoEtapa::find($idProcesoEtapa);
+        $plantillas = PlantillaDocumento::where(['eliminado' => 0, 'estado_plantilla_documento' => '1'])->get();
 
-        if(empty($procesoEtapa) || empty($actuacion)) {
-            return response()->json([ 'redirect' => 'seguimiento-procesos' ]);
+        if (empty($procesoEtapa) || empty($actuacion)) {
+            return response()->json(['redirect' => 'seguimiento-procesos']);
         }
 
         return $this->renderSection('seguimiento_proceso.actuacion', [
             'procesoEtapa' => $procesoEtapa,
-            'actuacion' => $actuacion
+            'actuacion' => $actuacion,
+            'plantillas' => $plantillas
         ]);
+    }
+
+    public function actuacionPlantillaUpsert(Request $request)
+    {
+
+        if (empty($request->get('id_plantilla_documento'))) {
+            return response()->json(['saved' => false]);
+        }
+
+        $id = $request->get('id_proceso_etapa_actuacion_plantillas');
+        $added = ProcesoEtapaActuacionPlantillas::updateOrCreate(['id_proceso_etapa_actuacion_plantillas' => $id], $request->all());
+        $url = $added->saveDocument();
+
+        return response()->json(['saved' => $added, 'url' => $url]);
+    }
+
+    public function actuacionPlantillaDelete($id) {
+        $procesoPlantilla = ProcesoEtapaActuacionPlantillas::with('plantillaDocumento')->find($id);
+        $deleted = $procesoPlantilla->deleteDocument();
+        return response()->json([ 'deleted' => $deleted, 'data' => $procesoPlantilla ]);
     }
 
 }

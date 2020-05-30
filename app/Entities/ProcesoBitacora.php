@@ -2,11 +2,11 @@
 
 namespace App\Entities;
 
-use Illuminate\Database\Eloquent\Model;
+use \App\BaseModel;
 use App\Entities\Usuario;
 use Illuminate\Support\Facades\Session;
 
-class ProcesoBitacora extends Model
+class ProcesoBitacora extends BaseModel
 {
     protected $table = 'proceso_bitacora';
 
@@ -21,14 +21,17 @@ class ProcesoBitacora extends Model
         'fecha_creacion', 'fecha_actualizacion', 'id_proceso', 'sesion_id'
     ];
 
+    public function usuario() {
+        return $this->hasOne('App\Entities\Usuario', 'id_usuario', 'id_usuario');
+    }
+
     public function getFechaCreacion() {
         $timestamp = strtotime($this->fecha_creacion);
         return date('d/m/Y h:i A', $timestamp);
     }
 
     public function getNombreCompleto() {
-        $usuario = Usuario::find($this->id_usuario);
-        return $usuario->getNombreCompleto();
+        return $this->usuario->getNombreCompleto();
     }
 
     public function canEdit() {

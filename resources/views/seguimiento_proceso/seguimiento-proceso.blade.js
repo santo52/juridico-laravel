@@ -1,6 +1,5 @@
 class SeguimientoProceso {
 
-
     addActuacion(id_etapa_proceso) {
         $('#actuacionModal').modal()
         $('#idEtapaProceso').val(id_etapa_proceso)

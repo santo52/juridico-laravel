@@ -2,10 +2,10 @@
 
 namespace App\Entities;
 
-use Illuminate\Database\Eloquent\Model;
+use \App\BaseModel;
 use App\Builder\MenuPerfilBuilder;
 
-class MenuPerfil extends Model
+class MenuPerfil extends BaseModel
 {
     protected $table = 'menu_perfil';
 

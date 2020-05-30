@@ -64,7 +64,7 @@
                     <select class="form-control required" id="id_lugar_expedicion" name="id_lugar_expedicion"
                         title="Seleccionar">
                         @foreach ($ciudades as $item)
-                        <option @if($cliente && $item->id_municipio === $cliente->id_municipio) selected
+                        <option @if($cliente && $item->id_municipio === $cliente->id_lugar_expedicion) selected
                             @endif value="{{$item->id_municipio}}">{{$item->nombre_municipio}}</option>
                         @endforeach
                     </select>

@@ -147,12 +147,12 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/seguimiento-procesos/{id}', 'SeguimientoProcesoController@detalle');
     Route::post('/seguimiento-procesos/actuacion/crear/{idProcesoEtapa}/{id}', 'SeguimientoProcesoController@crearActuacion');
     Route::post('/seguimiento-procesos/actuacion/{id}', 'SeguimientoProcesoController@actuacion');
+    Route::post('/seguimiento-procesos/actuacion/plantilla/upsert', 'SeguimientoProcesoController@actuacionPlantillaUpsert');
+    Route::post('/seguimiento-procesos/actuacion/plantilla/delete/{id}', 'SeguimientoProcesoController@actuacionPlantillaDelete');
     Route::post('/seguimiento-procesos/comentario/upsert', 'ProcesoBitacoraController@upsert');
     Route::post('/seguimiento-procesos/comentario/get/{id}', 'ProcesoBitacoraController@get');
     Route::post('/seguimiento-procesos/comentario/delete/{id}', 'ProcesoBitacoraController@delete');
     Route::post('/seguimiento-procesos/comentarios/{id}', 'ProcesoBitacoraController@getByProceso');
-
-
 
 
     // Route::post('/proceso/upsert', 'ProcesoController@upsert');

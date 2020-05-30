@@ -2,11 +2,11 @@
 
 namespace App\Entities;
 
-use Illuminate\Database\Eloquent\Model;
+use \App\BaseModel;
 use App\Collection\ActuacionCollection;
 
 
-class Actuacion extends Model
+class Actuacion extends BaseModel
 {
     protected $table = 'actuacion';
 

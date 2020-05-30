@@ -19,9 +19,13 @@
         </li>
     </ul> --}}
 
+
+
     <form onsubmit="seguimientoActuacion.upsert(event)">
 
         <input type="hidden" id="id_proceso" value="{{$procesoEtapa->id_proceso}}" />
+        <input type="hidden" id="id_proceso_etapa" value="{{$procesoEtapa->id_proceso_etapa}}" />
+        <input type="hidden" id="id_proceso_etapa_actuacion" value="{{$procesoEtapa->id_proceso_etapa_actuacion}}" />
 
         <div class="form-group row">
             <div class="col-xs-12 col-sm-6">
@@ -125,11 +129,21 @@
                     <div class="navbar-header">
                         <h5>Documentos generados</h5>
                         <span class="button-add">
-                            <button class="btn btn-success">+</button>
+                            <button type="button" class="btn btn-success"
+                                onclick="seguimientoActuacion.openTemplateModal()">+</button>
                         </span>
                     </div>
-                    <div>
+                    <div id="documentos-generados">
+                        @if(count($documentosGenerados))
+                        @foreach ($documentosGenerados as $item)
+                        <div class="file-document" data-title="{{$item->getNombrePlantilla()}}"
+                            data-remove="seguimientoActuacion.deletePlantilla('{{$item->id_proceso_etapa_actuacion_plantillas}}')"
+                            data-id="{{$item->id_proceso_etapa_actuacion_plantillas}}"
+                            data-filename="{!! asset("uploads/plantillas/actuacion-proceso/{$item->id_proceso_etapa_actuacion_plantillas}.pdf") !!}"></div>
+                        @endforeach
+                        @else
                         <div class="file-document-empty">No se han agregado documentos</div>
+                        @endif
                     </div>
                 </div>
             </nav>
@@ -139,6 +153,39 @@
         <button class="btn btn-success" style="width: 100%">Guardar actuación</button>
     </form>
 </div>
+
+
+<div class="modal fade" tabindex="-1" role="dialog" id="plantillasModal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" onclick="seguimientoActuacion.closeTemplateModal()"
+                    aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Documentos generados</h4>
+            </div>
+            <form onsubmit="seguimientoActuacion.savePlantilla(event)">
+                <div class="modal-body">
+                    <input type="hidden" class="required" name="id_proceso_bitacora" id="idProcesoBitacora" />
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">Lista de plantillas</label>
+                        <select class="form-control" id="plantillaDocumento" name="id_plantilla_documento" title="Seleccionar">
+                            @foreach($plantillas as $plantilla)
+                            <option value="{{$plantilla->id_plantilla_documento}}">
+                                {{$plantilla->nombre_plantilla_documento}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer center">
+                    <button type="button" class="btn btn-default"
+                        onclick="seguimientoActuacion.closeTemplateModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Agregar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('javascript')

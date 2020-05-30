@@ -2,9 +2,9 @@
 
 namespace App\Entities;
 
-use Illuminate\Database\Eloquent\Model;
+use \App\BaseModel;
 
-class Perfil extends Model
+class Perfil extends BaseModel
 {
     protected $table = 'perfil';
 

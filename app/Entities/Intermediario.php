@@ -2,10 +2,10 @@
 
 namespace App\Entities;
 
-use Illuminate\Database\Eloquent\Model;
+use \App\BaseModel;
 use App\Entities\Persona;
 
-class Intermediario extends Model
+class Intermediario extends BaseModel
 {
     protected $table = 'intermediario';
 
@@ -19,8 +19,12 @@ class Intermediario extends Model
         "id_intermediario", "id_persona", "estado_intermediario", "fecha_creacion", "id_usuario_creacion", "fecha_actualizacion", "id_usuario_actualizacion", "eliminado", "retencion"
     ];
 
+    public function persona()
+    {
+        return $this->hasOne('App\Entities\Persona', 'id_persona', 'id_persona');
+    }
+
     public function getNombreCompleto(){
-        $persona = Persona::find($this->id_persona);
-        return $persona->getNombreCompleto();
+        return $this->persona->getNombreCompleto();
     }
 }

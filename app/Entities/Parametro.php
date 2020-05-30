@@ -2,9 +2,9 @@
 
 namespace App\Entities;
 
-use Illuminate\Database\Eloquent\Model;
+use \App\BaseModel;
 
-class Parametro extends Model
+class Parametro extends BaseModel
 {
     protected $table = 'parametro';
 

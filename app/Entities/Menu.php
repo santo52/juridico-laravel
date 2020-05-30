@@ -2,11 +2,11 @@
 
 namespace App\Entities;
 
-use Illuminate\Database\Eloquent\Model;
+use \App\BaseModel;
 use App\Collection\MenuCollection;
 use Illuminate\Support\Facades\Auth;
 
-class Menu extends Model
+class Menu extends BaseModel
 {
     protected $table = 'menu';
 

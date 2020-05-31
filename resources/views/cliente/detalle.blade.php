@@ -93,6 +93,28 @@
                 </div>
             </div>
             <div class="form-group row">
+                <div class="col-xs-12 col-sm-3">
+                    <label for="telefono" class="control-label">Número telefónico cliente</label>
+                    <input type="text" class="form-control required" id="telefono" name="telefono" @if($cliente)
+                        value="{{$cliente->telefono }}" @endif />
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <label for="celular" class="control-label">Número celular cliente</label>
+                    <input type="text" class="form-control required" id="celular" name="celular" @if($cliente)
+                        value="{{$cliente->celular }}" @endif />
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <label for="celular2" class="control-label">Número celular 2 cliente</label>
+                    <input type="text" class="form-control" id="celular2" name="celular2" @if($cliente)
+                        value="{{$cliente->celular2 }}" @endif />
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <label for="correo_electronico" class="control-label">Correo electrónico cliente</label>
+                    <input type="email" class="form-control required" id="correo_electronico" name="correo_electronico"
+                        @if($cliente) value="{{$cliente->correo_electronico }}" @endif />
+                </div>
+            </div>
+            <div class="form-group row">
                 <div class="col-xs-12 col-sm-6">
                     <label for="estado_vital_cliente" class="control-label">Estado vital</label>
                     <select class="form-control required" id="estado_vital_cliente" name="estado_vital_cliente">
@@ -187,24 +209,24 @@
             </div>
             <div class="form-group row">
                 <div class="col-xs-12 col-sm-3">
-                    <label for="telefono" class="control-label">Número telefónico</label>
-                    <input type="text" class="form-control required" id="telefono" name="telefono" @if($cliente)
-                        value="{{$cliente->telefono }}" @endif />
+                    <label for="telefono_beneficiario" class="control-label">Número telefónico beneficiario</label>
+                    <input type="text" class="form-control required" id="telefono_beneficiario" name="telefono_beneficiario" @if($cliente)
+                        value="{{$cliente->telefono_beneficiario }}" @endif />
                 </div>
                 <div class="col-xs-12 col-sm-3">
-                    <label for="celular" class="control-label">Número celular</label>
-                    <input type="text" class="form-control required" id="celular" name="celular" @if($cliente)
-                        value="{{$cliente->celular }}" @endif />
+                    <label for="celular_beneficiario" class="control-label">Número celular beneficiario</label>
+                    <input type="text" class="form-control required" id="celular_beneficiario" name="celular_beneficiario" @if($cliente)
+                        value="{{$cliente->celular_beneficiario }}" @endif />
                 </div>
                 <div class="col-xs-12 col-sm-3">
-                    <label for="celular2" class="control-label">Número celular 2</label>
-                    <input type="text" class="form-control" id="celular2" name="celular2" @if($cliente)
-                        value="{{$cliente->celular2 }}" @endif />
+                    <label for="celular2_beneficiario" class="control-label">Número celular 2 beneficiario</label>
+                    <input type="text" class="form-control" id="celular2_beneficiario" name="celular2_beneficiario" @if($cliente)
+                        value="{{$cliente->celular2_beneficiario }}" @endif />
                 </div>
                 <div class="col-xs-12 col-sm-3">
-                    <label for="correo_electronico" class="control-label">Correo electrónico</label>
-                    <input type="email" class="form-control required" id="correo_electronico" name="correo_electronico"
-                        @if($cliente) value="{{$cliente->correo_electronico }}" @endif />
+                    <label for="correo_electronico_beneficiario" class="control-label">Correo electrónico beneficiario</label>
+                    <input type="email" class="form-control required" id="correo_electronico_beneficiario" name="correo_electronico_beneficiario"
+                        @if($cliente) value="{{$cliente->correo_electronico_beneficiario }}" @endif />
                 </div>
             </div>
             <div class="separator margin"></div>

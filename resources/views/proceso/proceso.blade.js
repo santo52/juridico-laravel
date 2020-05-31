@@ -131,11 +131,19 @@ class Proceso {
                 $('#indicativo_cliente').text('+' + cliente.indicativo)
 
                 $('#nombre_intermediario').val(
-                    (cliente.intermediario_p_nombre || '') + ' ' +
-                    (cliente.intermediario_s_nombre || '') + ' ' +
                     (cliente.intermediario_p_apellido || '') + ' ' +
-                    (cliente.intermediario_s_apellido || '')
+                    (cliente.intermediario_s_apellido || '') + ' ' +
+                    (cliente.intermediario_p_nombre || '') + ' ' +
+                    (cliente.intermediario_s_nombre || '')
                 )
+
+                $('#nombre_beneficiario').val(cliente.nombre_beneficiario)
+                $('#indicativo_beneficiario').val(cliente.indicativo_beneficiario)
+                $('#telefono_beneficiario').val(cliente.telefono_beneficiario)
+                $('#email_beneficiario').val(cliente.email_beneficiario)
+
+                $('#email_cliente').val(cliente.correo_electronico_cliente)
+                $('#estado_vital_cliente').val(cliente.estado_vital == 1 ? 'vivo' : 'fallecido')
                 $('#telefono_intermediario').val(telefonoIntermediario.join(' | '))
                 $('#indicativo_intermediario').val(cliente.indicativo_intermediario)
                 $('#email_intermediario').val(cliente.correo_electronico_intermediario)

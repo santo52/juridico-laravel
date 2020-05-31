@@ -172,6 +172,7 @@ class ProcesoController extends Controller
         $dataProceso['numero_proceso'] = $numero_proceso;
         $dataProceso['id_carpeta'] = $id_carpeta;
         $dataProceso['dar_informacion_caso'] = !empty($request->get('dar_informacion_caso')) ? 1 : 0;
+        $dataProceso['caducidad'] = !empty($request->get('caducidad')) ? 1 : 0;
         if (empty($id)) {
             $dataProceso['id_usuario_creacion'] = Auth::id();
         }

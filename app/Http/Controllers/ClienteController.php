@@ -71,13 +71,13 @@ class ClienteController extends Controller
 
         $cliente = Cliente::
             select(
-                'cliente.id_cliente', 'cliente.id_persona', 'cliente.id_intermediario', 'cliente.id_contacto', 'estado_vital_cliente', 'p.id_lugar_expedicion',
+                'cliente.*', 'estado_vital_cliente', 'p.id_lugar_expedicion',
                 'fecha_fallecimiento', 'nombre_persona_recomienda', 'numero_documento_beneficiario', 'nombre_beneficiario', 'parentesco_beneficiario',
-                'estado_cliente', 'cliente.fecha_creacion', 'cliente.eliminado', 'p.id_tipo_documento', 'p.numero_documento', 'p.primer_apellido',
+                'estado_cliente', 'p.id_tipo_documento', 'p.numero_documento', 'p.primer_apellido',
                 'p.segundo_apellido', 'p.primer_nombre', 'p.segundo_nombre', 'p.direccion', 'p.barrio', 'p.id_municipio', 'p.celular', 'p.telefono',
                 'p.correo_electronico', 'mu.id_departamento', 'de.id_pais', 'mu.indicativo', 'pi.numero_documento as numero_documento_intermediario',
-                'pi.telefono as telefono_intermediario', 'pi.celular as celular_intermediario', 'mui.indicativo as indicativo_intermediario', 'cliente.celular2',
-                'pi.correo_electronico as correo_electronico_intermediario', 'co.numero_documento as numero_documento_contacto', 'co.nombre_contacto', 'cliente.id_tipo_documento_beneficiario',
+                'pi.telefono as telefono_intermediario', 'pi.celular as celular_intermediario', 'mui.indicativo as indicativo_intermediario',
+                'pi.correo_electronico as correo_electronico_intermediario', 'co.numero_documento as numero_documento_contacto', 'co.nombre_contacto',
                 'co.parentesco as parentesco_contacto', 'co.direccion as direccion_contacto', 'co.barrio as barrio_contacto', 'co.celular as celular_contacto',
                 'co.telefono as telefono_contacto', 'co.correo_electronico as correo_electronico_contacto', 'co.informacion_adicional', 'co.id_municipio as id_municipio_contacto'
             )
@@ -157,7 +157,6 @@ class ClienteController extends Controller
         $persona = Persona::updateOrCreate(['id_persona' => $request->get('id_persona')], $dataPersona);
         $dataCliente =  $dataPersona;
         $dataCliente['id_persona'] = $persona->id_persona;
-
 
         $dataCliente['estado_cliente'] = empty($request->get('estado')) ? 2 : 1;
         $saved = Cliente::updateOrCreate(['id_cliente' => $id], $dataCliente);

@@ -35,18 +35,18 @@
                 @endif
                 <div class="col-xs-12 @if($proceso) col-sm-4 @else col-sm-6 @endif">
                     <label for="telefono" class="control-label">Número de proceso</label>
-                    <input type="text" class="form-control required" id="numero_proceso" name="numero_proceso"
-                        @if($proceso) value="{{$proceso->numero_proceso }}" @endif />
+                    <input type="text" class="form-control" id="numero_proceso" @if($proceso)
+                        value="{{$proceso->numero_proceso }}" @endif disabled />
                 </div>
                 <div class="col-xs-12 @if($proceso) col-sm-4 @else col-sm-6 @endif">
                     <label for="telefono" class="control-label">Identificación de la carpeta física</label>
-                    <input type="text" class="form-control required" id="id_carpeta" name="id_carpeta" @if($proceso)
+                    <input type="text" class="form-control" id="id_carpeta" name="id_carpeta" @if($proceso)
                         value="{{$proceso->id_carpeta }}" @endif />
                 </div>
             </div>
             <div class="separator margin"></div>
             <div class="form-group row">
-                <div class="col-xs-12 col-sm-4">
+                <div class="col-xs-12 col-sm-6">
                     <label for="id_cliente" class="control-label">Cliente</label>
                     <select id="id_cliente" name="id_cliente" data-live-search="true" class="form-control required"
                         title="Seleccionar" onchange="proceso.changeCliente(this)">
@@ -57,23 +57,34 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-xs-12 col-sm-4">
+                <div class="col-xs-12 col-sm-6">
                     <label class="control-label">Cédula cliente</label>
                     <input type="text" class="form-control" id="documento_cliente" @if($proceso)
                         value="{{$proceso->cliente->persona->numero_documento }}" @endif disabled />
                 </div>
+
+            </div>
+            <div class="form-group row">
                 <div class="col-xs-12 col-sm-4">
                     <label class="control-label">Teléfono cliente</label>
                     <div class="input-group">
                         <span class="input-group-addon" id="indicativo_cliente">+1</span>
-                        <input disabled type="text" class="form-control" id="telefono_cliente"
-                        @if($proceso)
-                        value="{{$proceso->cliente->persona->telefono }}" @endif
-                        >
+                        <input disabled type="text" class="form-control" id="telefono_cliente" @if($proceso)
+                            value="{{$proceso->cliente->persona->telefono }}" @endif>
                     </div>
                 </div>
+                <div class="col-xs-12 col-sm-4">
+                    <label class="control-label">Estado vital cliente</label>
+                    <input type="text" class="form-control" id="estado_vital_cliente" @if($proceso)
+                        value="{{$proceso->cliente->getEstadoVital() }}" @endif disabled />
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <label class="control-label">Correo electrónico cliente</label>
+                    <input type="text" class="form-control" id="email_cliente" @if($proceso)
+                        value="{{$proceso->cliente->persona->correo_electronico }}" @endif disabled />
+                </div>
             </div>
-            <div class="form-group row">
+            {{-- <div class="form-group row">
                 <div class="col-xs-12 col-sm-4">
                     <label class="control-label">Nombre intermediario</label>
                     <input type="text" class="form-control" id="nombre_intermediario" @if($proceso)
@@ -83,10 +94,8 @@
                     <label class="control-label">Teléfono intermediario</label>
                     <div class="input-group">
                         <span class="input-group-addon" id="indicativo_intermediario">+1</span>
-                        <input disabled type="text" class="form-control" id="telefono_intermediario"
-                        @if($proceso)
-                        value="{{$proceso->cliente->intermediario->persona->telefono }}" @endif
-                        >
+                        <input disabled type="text" class="form-control" id="telefono_intermediario" @if($proceso)
+                            value="{{$proceso->cliente->intermediario->persona->telefono }}" @endif>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-4">
@@ -94,7 +103,64 @@
                     <input type="text" class="form-control" id="email_intermediario" @if($proceso)
                         value="{{$proceso->cliente->intermediario->persona->correo_electronico}}" @endif disabled />
                 </div>
+            </div> --}}
+
+            <div class="form-group row">
+                <div class="col-xs-12 col-sm-4">
+                    <label for="id_pais" class="control-label">Pais</label>
+                    <select id="id_pais" data-live-search="true" class="form-control required" title="Seleccionar">
+                        @foreach ($paises as $item)
+                        <option @if($proceso) @if($proceso->municipio->departamento->id_pais == $item->id_pais) selected
+                            @endif @else selected
+                            @endif
+                            value="{{$item->id_pais}}">{{$item->nombre_pais}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <label for="id_departamento" class="control-label">Departamento</label>
+                    <select id="id_departamento" data-live-search="true" class="form-control required" title="Seleccionar"
+                        onchange="proceso.changeDepartamento(this)">
+                        @foreach ($departamentos as $item)
+                        <option @if($proceso && $proceso->municipio->id_departamento == $item->id_departamento) selected
+                            @endif
+                            value="{{$item->id_departamento}}">{{$item->nombre_departamento}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <label for="id_municipio" class="control-label">Municipio</label>
+                    <select data-live-search="true" class="form-control required" title="Seleccionar" id="id_municipio"
+                        name="id_municipio">
+                        @foreach ($municipios as $item)
+                        <option @if($proceso && $proceso->municipio->id_municipio == $item->id_municipio) selected @endif
+                            value="{{$item->id_municipio}}">{{$item->nombre_municipio}}</option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
+
+            <div class="form-group row">
+                <div class="col-xs-12 col-sm-4">
+                    <label class="control-label">Nombre completo beneficiario</label>
+                    <input type="text" class="form-control" id="nombre_beneficiario" @if($proceso)
+                        value="{{$proceso->cliente->nombre_beneficiario }}" @endif disabled />
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <label class="control-label">Teléfono beneficiario</label>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="indicativo_beneficiario">+1</span>
+                        <input disabled type="text" class="form-control" id="telefono_beneficiario" @if($proceso)
+                            value="{{$proceso->cliente->telefono_beneficiario }}" @endif>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <label class="control-label">Correo electrónico beneficiario</label>
+                    <input type="text" class="form-control" id="email_beneficiario" @if($proceso)
+                        value="{{$proceso->cliente->correo_electronico_beneficiario }}" @endif disabled />
+                </div>
+            </div>
+
             <div class="separator margin"></div>
             <div class="form-group row">
                 <div class="col-xs-12 col-sm-6">
@@ -148,7 +214,7 @@
             <div class="col-xs-12 col-sm-6">
                 <label for="ultima_entidad_retiro" class="control-label">Última entidad de servicio (entidad de
                     justicia)</label>
-                <input type="text" class="form-control" id="ultima_entidad_retiro" name="ultima_entidad_retiro"
+                <input type="text" class="form-control required" id="ultima_entidad_retiro" name="ultima_entidad_retiro"
                     @if($proceso) value="{{$proceso->ultima_entidad_retiro }}" @endif />
             </div>
 
@@ -159,38 +225,7 @@
                     @if($proceso) value="{{$proceso->acto_administrativo }}" @endif />
             </div>
         </div>
-        <div class="form-group row">
-            <div class="col-xs-12 col-sm-4">
-                <label for="id_pais" class="control-label">Pais</label>
-                <select id="id_pais" data-live-search="true" class="form-control required" title="Seleccionar">
-                    @foreach ($paises as $item)
-                    <option @if($proceso) @if($proceso->municipio->departamento->id_pais == $item->id_pais) selected @endif @else selected
-                        @endif
-                        value="{{$item->id_pais}}">{{$item->nombre_pais}}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="col-xs-12 col-sm-4">
-                <label for="id_departamento" class="control-label">Departamento</label>
-                <select id="id_departamento" data-live-search="true" class="form-control required" title="Seleccionar"
-                    onchange="proceso.changeDepartamento(this)">
-                    @foreach ($departamentos as $item)
-                    <option @if($proceso && $proceso->municipio->id_departamento == $item->id_departamento) selected @endif
-                        value="{{$item->id_departamento}}">{{$item->nombre_departamento}}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="col-xs-12 col-sm-4">
-                <label for="id_municipio" class="control-label">Municipio</label>
-                <select data-live-search="true" class="form-control required" title="Seleccionar" id="id_municipio"
-                    name="id_municipio">
-                    @foreach ($municipios as $item)
-                    <option @if($proceso && $proceso->municipio->id_municipio == $item->id_municipio) selected @endif
-                        value="{{$item->id_municipio}}">{{$item->nombre_municipio}}</option>
-                    @endforeach
-                </select>
-            </div>
-        </div>
+
         <div class="form-group row">
             <div class="col-xs-12 col-sm-4">
                 <label for="normatividad_aplicada_caso" class="control-label">Normatividad aplicada al caso</label>
@@ -205,6 +240,15 @@
                     <input type="checkbox" data-on="Si" data-off="No" data-width="90" class="form-control"
                         id="dar_informacion_caso" name="dar_informacion_caso" @if($proceso &&
                         $proceso->dar_informacion_caso
+                    == 1) checked @endif />
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <label for="caducidad" class="control-label">Caducidad</label>
+                <div class="checkbox-form">
+                    <input type="checkbox" data-on="Si" data-off="No" data-width="90" class="form-control"
+                        id="caducidad" name="caducidad" @if($proceso &&
+                        $proceso->caducidad
                     == 1) checked @endif />
                 </div>
             </div>

@@ -23,7 +23,7 @@ class Proceso extends BaseModel
         "acto_administrativo", "id_municipio", "normatividad_aplicada_caso",
         "observaciones_caso", "codigo_indice_archivos", "estado_proceso", "fecha_creacion",
         "id_usuario_creacion", "fecha_actualizacion", "id_usuario_actualizacion", 'eliminado',
-        'id_entidad_justicia', 'dar_informacion_caso', 'id_etapa_proceso'
+        'id_entidad_justicia', 'dar_informacion_caso', 'id_etapa_proceso', 'caducidad'
     ];
 
     public function newEloquentBuilder($builder)

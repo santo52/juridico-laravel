@@ -46,7 +46,7 @@ class Persona extends BaseModel
 
     public function lugarExpedicionDocumento()
     {
-        return $this->hasOne('App\Entities\Municipio', 'id_lugar_expedicion', 'id_lugar_expedicion');
+        return $this->hasOne('App\Entities\Municipio', 'id_municipio', 'id_lugar_expedicion');
     }
 
     public function getNombreCompleto()

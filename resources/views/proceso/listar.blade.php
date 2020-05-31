@@ -42,8 +42,10 @@
             <th>ID</th>
             <th>Documento cliente</th>
             <th>Nombre cliente</th>
-            <th>Tipo de proceso</th>
+            <th data-breakpoints="xs sm">Tipo de proceso</th>
             <th>Entidad demandada</th>
+            <th>Responsable</th>
+            <th data-breakpoints="all" data-filterable="false">Etapa actual</th>
             <th data-breakpoints="all" data-filterable="false">Valor del estudio</th>
             <th data-breakpoints="all" data-filterable="false">Fecha de retiro del servicio</th>
             <th data-breakpoints="all">Última entidad de servicio</th>
@@ -64,6 +66,8 @@
             <td>{{$proceso->getNombreCompletoCliente()}}</td>
             <td>{{$proceso->tipoProceso->nombre_tipo_proceso}}</td>
             <td>{{$proceso->entidadDemandada->nombre_entidad_demandada}}</td>
+            <td>{{$proceso->responsable ? $proceso->responsable->getNombreCompleto() : 'Sin responsable'}}</td>
+            <td>{{$proceso->etapa ? $proceso->etapa->nombre_etapa_proceso : 'Sin iniciar'}}</td>
             <td>{{$proceso->valor_estudio}}</td>
             <td>{{$proceso->getFechaRetiroServicio()}}</td>
             <td>{{$proceso->ultima_entidad_retiro}}</td>

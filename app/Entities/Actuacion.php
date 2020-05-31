@@ -40,8 +40,14 @@ class Actuacion extends BaseModel
             5 => 'Entidad de justicia en segunda instancia',
             6 => 'Cuantía de la demanda (dinero, pesos)',
             7 => 'Estimación de pretensiones (dinero, pesos)',
-            8 => 'Histórico de sentencias',
+            // 8 => 'Histórico de sentencias',
+            9 => 'Fecha',
         ];
+    }
+
+    public function getTipoResultado(){
+        $tiposResultado = self::getTiposResultado();
+        return $tiposResultado[$this->tipo_resultado];
     }
 
     public function getDiasVencimiento() {

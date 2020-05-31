@@ -162,7 +162,7 @@ class ProcesoController extends Controller
     {
         $id = $request->get('id_proceso');
         $numero_proceso = strtoupper($request->get('numero_proceso'));
-        $id_carpeta = strtoupper($request->get('numero_proceso'));
+        $id_carpeta = strtoupper($request->get('id_carpeta'));
 
         if ($this->procesoExists($id, $numero_proceso)) {
             return response()->json(['procesoExists' => true]);
@@ -175,6 +175,7 @@ class ProcesoController extends Controller
         $dataProceso['caducidad'] = !empty($request->get('caducidad')) ? 1 : 0;
         if (empty($id)) {
             $dataProceso['id_usuario_creacion'] = Auth::id();
+            $dataProceso['id_usuario_responsable'] = Auth::id();
         }
 
         if (empty($request->get('valor_estudio'))) {

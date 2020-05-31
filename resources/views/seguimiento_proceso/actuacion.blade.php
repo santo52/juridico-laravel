@@ -4,6 +4,13 @@
 
 <div>
 
+
+    <div class="alert alert-warning" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Importante:</span>
+        <b>Esta actuación no se cerrará hasta que todos los campos  esten llenos y los documentos esten cargados</b>
+    </div>
+
     <!-- Nav tabs -->
     {{-- <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="active">
@@ -57,11 +64,15 @@
                 @endif
             </div>
             <div class="col-xs-12 col-sm-6">
-                <label for="resultado" class="control-label">Resultado</label>
+                <label for="resultado" class="control-label">Resultado <span style="font-weight: initial;font-size: 1rem;">({{$actuacion->getTipoResultado()}})<span></label>
                 @if($actuacion->tipo_resultado == 1)
                 <div class="input-file">
                     <input type="file" name="resultado_actuacion" />
                 </div>
+                @elseif($actuacion->tipo_resultado == 9)
+                <input name="resultado_actuacion" id="resultado_actuacion" data-date-format="yyyy-mm-dd"
+                    class="form-control datepicker-here" @if($procesoEtapa)
+                    value="{{$procesoEtapa->resultado_actuacion }}" @endif />
                 @else
                 <input type="text" name="resultado_actuacion" class="form-control"
                     value="{{ $procesoEtapa->resultado_actuacion }}" />
@@ -149,7 +160,11 @@
             </nav>
         </div>
 
-
+        <div class="alert alert-warning" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Importante:</span>
+            <b>Esta actuación no se cerrará hasta que todos los campos  esten llenos y los documentos esten cargados</b>
+        </div>
         <button class="btn btn-success" style="width: 100%">Guardar actuación</button>
     </form>
 </div>

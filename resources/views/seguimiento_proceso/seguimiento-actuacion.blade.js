@@ -7,6 +7,17 @@ class SeguimientoActuacion {
         $('#plantillasModal').modal('hide')
     }
 
+    upsert(e) {
+        e.preventDefault()
+        e.stopPropagation()
+
+        if(validateForm(e)) {
+            alert()
+        }
+
+        return false
+    }
+
     deletePlantilla(id) {
         $.ajax({
             url: '/seguimiento-procesos/actuacion/plantilla/delete/' + id,
@@ -16,7 +27,12 @@ class SeguimientoActuacion {
                         .append(`<option value="${data.plantilla_documento.id_plantilla_documento}">${data.plantilla_documento.nombre_plantilla_documento}</option>`)
                         .selectpicker('refresh')
 
-                    $(`.file-document[data-id=${data.id_proceso_etapa_actuacion_plantillas}]`).remove()
+                    $(`#documentos-generados .file-document[data-id=${data.id_proceso_etapa_actuacion_plantillas}]`).remove()
+
+
+                    if(!$('#documentos-generados .file-document').length) {
+                        $('#documentos-generados').append(`<div class="file-document-empty">No se han agregado documentos</div>`);
+                    }
                 }
             }
         })
@@ -46,6 +62,7 @@ class SeguimientoActuacion {
                     data-filename="${url}"></div>`
 
                     $('#documentos-generados').append(html)
+                    $('#documentos-generados .file-document-empty').remove()
 
                     const id = getId()
                     fileDocument.init({

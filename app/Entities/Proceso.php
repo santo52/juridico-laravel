@@ -18,17 +18,39 @@ class Proceso extends BaseModel
 
     protected $fillable = [
         "id_proceso", "id_cliente", "id_carpeta", "numero_proceso",
-        "id_tipo_proceso", "id_entidad_demandada",
+        "id_tipo_proceso", "id_entidad_demandada", "id_usuario_responsable",
         "valor_estudio", "fecha_retiro_servicio", "ultima_entidad_retiro",
         "acto_administrativo", "id_municipio", "normatividad_aplicada_caso",
         "observaciones_caso", "codigo_indice_archivos", "estado_proceso", "fecha_creacion",
         "id_usuario_creacion", "fecha_actualizacion", "id_usuario_actualizacion", 'eliminado',
-        'id_entidad_justicia', 'dar_informacion_caso', 'id_etapa_proceso', 'caducidad'
+        'id_entidad_justicia', 'dar_informacion_caso', 'id_etapa_proceso', 'caducidad',
+        'entidad_justicia_primera_instancia', 'entidad_justicia_segunda_instancia', 'cuantia_demandada',
+        'estimacion_pretenciones', 'valor_final_sentencia'
     ];
 
     public function newEloquentBuilder($builder)
     {
         return new ProcesoBuilder($builder, $this);
+    }
+
+    public function entidadJusticiaPrimeraInstancia()
+    {
+        return $this->hasOne('App\Entities\EntidadJusticia', 'id_entidad_justicia', 'entidad_justicia_primera_instancia');
+    }
+
+    public function entidadJusticiaSegundaInstancia()
+    {
+        return $this->hasOne('App\Entities\EntidadJusticia', 'id_entidad_justicia', 'entidad_justicia_segunda_instancia');
+    }
+
+    public function responsable()
+    {
+        return $this->hasOne('App\Entities\Usuario', 'id_usuario', 'id_usuario_responsable');
+    }
+
+    public function etapa()
+    {
+        return $this->hasOne('App\Entities\EtapaProceso', 'id_etapa_proceso', 'id_etapa_proceso');
     }
 
     public function cliente()
@@ -58,14 +80,14 @@ class Proceso extends BaseModel
 
     public static function getAll()
     {
-        return self::with('tipoProceso', 'entidadDemandada', 'municipio', 'entidadJusticia', 'cliente.persona')
+        return self::with('tipoProceso', 'entidadDemandada', 'municipio', 'entidadJusticia', 'cliente.persona', 'responsable', 'etapa')
             ->select('*', DB::raw("(select count(*) from proceso_bitacora pb where pb.id_proceso = proceso.id_proceso ) as totalComentarios"))
             ->where('proceso.eliminado', 0);
     }
 
     public static function get($id)
     {
-        return self::with('municipio.departamento', 'cliente.persona', 'cliente.intermediario.persona')
+        return self::with('municipio.departamento', 'cliente.persona', 'cliente.intermediario.persona', 'responsable', 'etapa', 'entidadJusticiaPrimeraInstancia', 'entidadJusticiaSegundaInstancia')
             ->where('id_proceso', $id)
             ->first();
     }

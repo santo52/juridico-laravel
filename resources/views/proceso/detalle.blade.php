@@ -24,242 +24,308 @@
         @if ($proceso)
         <input type="hidden" name="id_proceso" value="{{$proceso->id_proceso}}" />
         @endif
-        <div role="tabpanel" class="tab-pane active" id="informacion-proceso">
-            <div class="form-group row">
-                @if($proceso)
-                <div class="col-xs-12 col-sm-4">
-                    <label for="telefono" class="control-label">Fecha de creación</label>
-                    <input type="text" class="form-control" @if($proceso) value="{{$proceso->fecha_creacion }}" @endif
-                        disabled />
-                </div>
-                @endif
-                <div class="col-xs-12 @if($proceso) col-sm-4 @else col-sm-6 @endif">
-                    <label for="telefono" class="control-label">Número de proceso</label>
-                    <input type="text" class="form-control" id="numero_proceso" @if($proceso)
-                        value="{{$proceso->numero_proceso }}" @endif disabled />
-                </div>
-                <div class="col-xs-12 @if($proceso) col-sm-4 @else col-sm-6 @endif">
-                    <label for="telefono" class="control-label">Identificación de la carpeta física</label>
-                    <input type="text" class="form-control" id="id_carpeta" name="id_carpeta" @if($proceso)
-                        value="{{$proceso->id_carpeta }}" @endif />
-                </div>
-            </div>
-            <div class="separator margin"></div>
-            <div class="form-group row">
-                <div class="col-xs-12 col-sm-6">
-                    <label for="id_cliente" class="control-label">Cliente</label>
-                    <select id="id_cliente" name="id_cliente" data-live-search="true" class="form-control required"
-                        title="Seleccionar" onchange="proceso.changeCliente(this)">
-                        @foreach ($clientes as $item)
-                        <option @if($proceso && $proceso->id_cliente == $item->id_cliente) selected @endif
-                            value="{{$item->id_cliente}}">{{$item->getNombreCompleto()}}
-                        </option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-xs-12 col-sm-6">
-                    <label class="control-label">Cédula cliente</label>
-                    <input type="text" class="form-control" id="documento_cliente" @if($proceso)
-                        value="{{$proceso->cliente->persona->numero_documento }}" @endif disabled />
-                </div>
 
+        {{-- <div class="col-xs-12 col-sm-4">
+            <label for="telefono" class="control-label">Fecha de creación</label>
+            <input type="text" class="form-control" @if($proceso) value="{{$proceso->fecha_creacion }}" @endif disabled
+        />
+</div> --}}
+<div role="tabpanel" class="tab-pane active" id="informacion-proceso">
+    <div class="form-group row">
+        <div class="col-xs-12 col-sm-6">
+            <label for="id_cliente" class="control-label">Cliente</label>
+            <select id="id_cliente" name="id_cliente" data-live-search="true" class="form-control required"
+                title="Seleccionar" onchange="proceso.changeCliente(this)">
+                @foreach ($clientes as $item)
+                <option @if($proceso && $proceso->id_cliente == $item->id_cliente) selected @endif
+                    value="{{$item->id_cliente}}">{{$item->getNombreCompleto()}}
+                </option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <label class="control-label">Cédula cliente</label>
+            <input type="text" class="form-control" id="documento_cliente" @if($proceso)
+                value="{{$proceso->cliente->persona->numero_documento }}" @endif disabled />
+        </div>
+
+    </div>
+    <div class="form-group row">
+        <div class="col-xs-12 col-sm-4">
+            <label class="control-label">Estado vital cliente</label>
+            <input type="text" class="form-control" id="estado_vital_cliente" @if($proceso)
+                value="{{$proceso->cliente->getEstadoVital() }}" @endif disabled />
+        </div>
+        <div class="col-xs-12 col-sm-4">
+            <label class="control-label">Teléfono cliente</label>
+            <div class="input-group">
+                <span class="input-group-addon" id="indicativo_cliente">+1</span>
+                <input disabled type="text" class="form-control" id="telefono_cliente" @if($proceso)
+                    value="{{$proceso->cliente->persona->telefono }}" @endif>
             </div>
-            <div class="form-group row">
-                <div class="col-xs-12 col-sm-4">
-                    <label class="control-label">Teléfono cliente</label>
-                    <div class="input-group">
-                        <span class="input-group-addon" id="indicativo_cliente">+1</span>
-                        <input disabled type="text" class="form-control" id="telefono_cliente" @if($proceso)
-                            value="{{$proceso->cliente->persona->telefono }}" @endif>
-                    </div>
-                </div>
-                <div class="col-xs-12 col-sm-4">
-                    <label class="control-label">Estado vital cliente</label>
-                    <input type="text" class="form-control" id="estado_vital_cliente" @if($proceso)
-                        value="{{$proceso->cliente->getEstadoVital() }}" @endif disabled />
-                </div>
-                <div class="col-xs-12 col-sm-4">
-                    <label class="control-label">Correo electrónico cliente</label>
-                    <input type="text" class="form-control" id="email_cliente" @if($proceso)
-                        value="{{$proceso->cliente->persona->correo_electronico }}" @endif disabled />
-                </div>
+        </div>
+        <div class="col-xs-12 col-sm-4">
+            <label class="control-label">Correo electrónico cliente</label>
+            <input type="text" class="form-control" id="email_cliente" @if($proceso)
+                value="{{$proceso->cliente->persona->correo_electronico }}" @endif disabled />
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-xs-12 col-sm-4">
+            <label for="id_pais" class="control-label">Pais</label>
+            <select id="id_pais" data-live-search="true" class="form-control required" title="Seleccionar">
+                @foreach ($paises as $item)
+                <option @if($proceso) @if($proceso->municipio->departamento->id_pais == $item->id_pais) selected
+                    @endif @else selected
+                    @endif
+                    value="{{$item->id_pais}}">{{$item->nombre_pais}}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-xs-12 col-sm-4">
+            <label for="id_departamento" class="control-label">Departamento</label>
+            <select id="id_departamento" data-live-search="true" class="form-control required" title="Seleccionar"
+                onchange="proceso.changeDepartamento(this)">
+                @foreach ($departamentos as $item)
+                <option @if($proceso && $proceso->municipio->id_departamento == $item->id_departamento) selected
+                    @endif
+                    value="{{$item->id_departamento}}">{{$item->nombre_departamento}}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-xs-12 col-sm-4">
+            <label for="id_municipio" class="control-label">Municipio</label>
+            <select data-live-search="true" class="form-control required" title="Seleccionar" id="id_municipio"
+                name="id_municipio">
+                @foreach ($municipios as $item)
+                <option @if($proceso && $proceso->municipio->id_municipio == $item->id_municipio) selected
+                    @endif
+                    value="{{$item->id_municipio}}">{{$item->nombre_municipio}}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-xs-12 col-sm-4">
+            <label class="control-label">Nombre completo beneficiario</label>
+            <input type="text" class="form-control" id="nombre_beneficiario" @if($proceso)
+                value="{{$proceso->cliente->nombre_beneficiario }}" @endif disabled />
+        </div>
+        <div class="col-xs-12 col-sm-4">
+            <label class="control-label">Teléfono beneficiario</label>
+            <div class="input-group">
+                <span class="input-group-addon" id="indicativo_beneficiario">+1</span>
+                <input disabled type="text" class="form-control" id="telefono_beneficiario" @if($proceso)
+                    value="{{$proceso->cliente->telefono_beneficiario }}" @endif>
             </div>
-            {{-- <div class="form-group row">
+        </div>
+        <div class="col-xs-12 col-sm-4">
+            <label class="control-label">Correo electrónico beneficiario</label>
+            <input type="text" class="form-control" id="email_beneficiario" @if($proceso)
+                value="{{$proceso->cliente->correo_electronico_beneficiario }}" @endif disabled />
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-xs-12 col-sm-4">
+            <label for="dar_informacion_caso" class="control-label">¿Se autoriza a dar información del
+                caso?</label>
+            <div class="checkbox-form">
+                <input type="checkbox" data-on="Si" data-off="No" data-width="90" class="form-control"
+                    id="dar_informacion_caso" name="dar_informacion_caso" @if($proceso && $proceso->dar_informacion_caso
+                == 1) checked @endif />
+            </div>
+        </div>
+    </div>
+
+    {{-- <div class="form-group row">
                 <div class="col-xs-12 col-sm-4">
                     <label class="control-label">Nombre intermediario</label>
                     <input type="text" class="form-control" id="nombre_intermediario" @if($proceso)
                         value="{{$proceso->cliente->intermediario->getNombreCompleto() }}" @endif disabled />
-                </div>
-                <div class="col-xs-12 col-sm-4">
-                    <label class="control-label">Teléfono intermediario</label>
-                    <div class="input-group">
-                        <span class="input-group-addon" id="indicativo_intermediario">+1</span>
-                        <input disabled type="text" class="form-control" id="telefono_intermediario" @if($proceso)
-                            value="{{$proceso->cliente->intermediario->persona->telefono }}" @endif>
-                    </div>
-                </div>
-                <div class="col-xs-12 col-sm-4">
-                    <label class="control-label">Correo electrónico intermediario</label>
-                    <input type="text" class="form-control" id="email_intermediario" @if($proceso)
-                        value="{{$proceso->cliente->intermediario->persona->correo_electronico}}" @endif disabled />
-                </div>
-            </div> --}}
-
-            <div class="form-group row">
-                <div class="col-xs-12 col-sm-4">
-                    <label for="id_pais" class="control-label">Pais</label>
-                    <select id="id_pais" data-live-search="true" class="form-control required" title="Seleccionar">
-                        @foreach ($paises as $item)
-                        <option @if($proceso) @if($proceso->municipio->departamento->id_pais == $item->id_pais) selected
-                            @endif @else selected
-                            @endif
-                            value="{{$item->id_pais}}">{{$item->nombre_pais}}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-xs-12 col-sm-4">
-                    <label for="id_departamento" class="control-label">Departamento</label>
-                    <select id="id_departamento" data-live-search="true" class="form-control required" title="Seleccionar"
-                        onchange="proceso.changeDepartamento(this)">
-                        @foreach ($departamentos as $item)
-                        <option @if($proceso && $proceso->municipio->id_departamento == $item->id_departamento) selected
-                            @endif
-                            value="{{$item->id_departamento}}">{{$item->nombre_departamento}}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-xs-12 col-sm-4">
-                    <label for="id_municipio" class="control-label">Municipio</label>
-                    <select data-live-search="true" class="form-control required" title="Seleccionar" id="id_municipio"
-                        name="id_municipio">
-                        @foreach ($municipios as $item)
-                        <option @if($proceso && $proceso->municipio->id_municipio == $item->id_municipio) selected @endif
-                            value="{{$item->id_municipio}}">{{$item->nombre_municipio}}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <div class="col-xs-12 col-sm-4">
-                    <label class="control-label">Nombre completo beneficiario</label>
-                    <input type="text" class="form-control" id="nombre_beneficiario" @if($proceso)
-                        value="{{$proceso->cliente->nombre_beneficiario }}" @endif disabled />
-                </div>
-                <div class="col-xs-12 col-sm-4">
-                    <label class="control-label">Teléfono beneficiario</label>
-                    <div class="input-group">
-                        <span class="input-group-addon" id="indicativo_beneficiario">+1</span>
-                        <input disabled type="text" class="form-control" id="telefono_beneficiario" @if($proceso)
-                            value="{{$proceso->cliente->telefono_beneficiario }}" @endif>
-                    </div>
-                </div>
-                <div class="col-xs-12 col-sm-4">
-                    <label class="control-label">Correo electrónico beneficiario</label>
-                    <input type="text" class="form-control" id="email_beneficiario" @if($proceso)
-                        value="{{$proceso->cliente->correo_electronico_beneficiario }}" @endif disabled />
-                </div>
-            </div>
-
-            <div class="separator margin"></div>
-            <div class="form-group row">
-                <div class="col-xs-12 col-sm-6">
-                    <label for="id_tipo_proceso" class="control-label">Tipo de proceso</label>
-                    <select id="id_tipo_proceso" name="id_tipo_proceso" data-live-search="true"
-                        class="form-control required" title="Seleccionar" onchange="proceso.changeTipoProceso(this)">
-                        @foreach ($tiposProceso as $item)
-                        <option @if($proceso && $proceso->id_tipo_proceso == $item->id_tipo_proceso) selected @endif
-                            value="{{$item->id_tipo_proceso}}">{{$item->nombre_tipo_proceso}}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-xs-12 col-sm-6">
-                    <label for="id_entidad_demandada" class="control-label">Entidad demandada</label>
-                    <select id="id_entidad_demandada" name="id_entidad_demandada" data-live-search="true"
-                        class="form-control required" title="Seleccionar">
-                        @foreach ($entidadesDemandadas as $item)
-                        <option @if($proceso && $proceso->id_entidad_demandada == $item->id_entidad_demandada) selected
-                            @endif
-                            value="{{$item->id_entidad_demandada}}">{{$item->nombre_entidad_demandada}}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-            <div class="form-group row">
-                {{-- <div class="col-xs-12 col-sm-4">
-                    <label for="id_usuario_responsable" class="control-label">Usuario responsable</label>
-                    <select name="id_usuario_responsable" id="id_usuario_responsable" data-live-search="true"
-                        class="form-control required" title="Seleccionar">
-                        @foreach ($usuarios as $item)
-                        <option @if($proceso && $proceso->id_usuario_responsable == $item->id_usuario) selected @endif
-                            value="{{$item->id_usuario}}">{{$item->getNombreCompleto()}}
-                </option>
-                @endforeach
-                </select>
-            </div> --}}
-            <div class="col-xs-12 col-sm-6">
-                <label for="valor_estudio" class="control-label">Valor del estudio (si aplica)</label>
-                <input type="text" class="form-control" id="valor_estudio" name="valor_estudio" @if($proceso)
-                    value="{{$proceso->valor_estudio }}" @endif />
-            </div>
-
-            <div class="col-xs-12 col-sm-6">
-                <label for="fecha_retiro_servicio" class="control-label">Fecha de retiro del servicio</label>
-                <input name="fecha_retiro_servicio" id="fecha_retiro_servicio" data-date-format="yyyy-mm-dd"
-                    class="form-control datepicker-here" @if($proceso) value="{{$proceso->fecha_retiro_servicio }}"
-                    @endif />
-            </div>
-        </div>
-        <div class="form-group row">
-            <div class="col-xs-12 col-sm-6">
-                <label for="ultima_entidad_retiro" class="control-label">Última entidad de servicio (entidad de
-                    justicia)</label>
-                <input type="text" class="form-control required" id="ultima_entidad_retiro" name="ultima_entidad_retiro"
-                    @if($proceso) value="{{$proceso->ultima_entidad_retiro }}" @endif />
-            </div>
-
-            <div class="col-xs-12 col-sm-6">
-                <label for="acto_administrativo" class="control-label">Acto administrativo del retiro
-                    (actuación)</label>
-                <input type="text" class="form-control" id="acto_administrativo" name="acto_administrativo"
-                    @if($proceso) value="{{$proceso->acto_administrativo }}" @endif />
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <div class="col-xs-12 col-sm-4">
-                <label for="normatividad_aplicada_caso" class="control-label">Normatividad aplicada al caso</label>
-                <input type="text" class="form-control required" id="normatividad_aplicada_caso"
-                    name="normatividad_aplicada_caso" @if($proceso) value="{{$proceso->normatividad_aplicada_caso }}"
-                    @endif />
-            </div>
-            <div class="col-xs-12 col-sm-4">
-                <label for="dar_informacion_caso" class="control-label">¿Se autoriza a dar información del
-                    caso?</label>
-                <div class="checkbox-form">
-                    <input type="checkbox" data-on="Si" data-off="No" data-width="90" class="form-control"
-                        id="dar_informacion_caso" name="dar_informacion_caso" @if($proceso &&
-                        $proceso->dar_informacion_caso
-                    == 1) checked @endif />
-                </div>
-            </div>
-            <div class="col-xs-12 col-sm-4">
-                <label for="caducidad" class="control-label">Caducidad</label>
-                <div class="checkbox-form">
-                    <input type="checkbox" data-on="Si" data-off="No" data-width="90" class="form-control"
-                        id="caducidad" name="caducidad" @if($proceso &&
-                        $proceso->caducidad
-                    == 1) checked @endif />
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="observaciones_caso" class="control-label">Observaciones del caso</label>
-            <textarea name="observaciones_caso" id="observaciones_caso" rows="4"
-                style="resize: vertical; min-height: 100px"
-                class="form-control required">@if($proceso){{$proceso->observaciones_caso}}@endif</textarea>
-        </div>
 </div>
+<div class="col-xs-12 col-sm-4">
+    <label class="control-label">Teléfono intermediario</label>
+    <div class="input-group">
+        <span class="input-group-addon" id="indicativo_intermediario">+1</span>
+        <input disabled type="text" class="form-control" id="telefono_intermediario" @if($proceso)
+            value="{{$proceso->cliente->intermediario->persona->telefono }}" @endif>
+    </div>
+</div>
+<div class="col-xs-12 col-sm-4">
+    <label class="control-label">Correo electrónico intermediario</label>
+    <input type="text" class="form-control" id="email_intermediario" @if($proceso)
+        value="{{$proceso->cliente->intermediario->persona->correo_electronico}}" @endif disabled />
+</div>
+</div> --}}
+<div class="separator margin"></div>
+
+<div class="form-group">
+    <label for="observaciones_caso" class="control-label">Descripción del proceso</label>
+    <textarea name="observaciones_caso" id="observaciones_caso" rows="4" style="resize: vertical; min-height: 100px"
+        class="form-control required">@if($proceso){{$proceso->observaciones_caso}}@endif</textarea>
+</div>
+
+<div class="form-group row">
+    <div class="col-xs-12 col-sm-6">
+        <label for="id_tipo_proceso" class="control-label">Tipo de proceso</label>
+        <select id="id_tipo_proceso" name="id_tipo_proceso" data-live-search="true" class="form-control required"
+            title="Seleccionar" onchange="proceso.changeTipoProceso(this)">
+            @foreach ($tiposProceso as $item)
+            <option @if($proceso && $proceso->id_tipo_proceso == $item->id_tipo_proceso) selected @endif
+                value="{{$item->id_tipo_proceso}}">{{$item->nombre_tipo_proceso}}</option>
+            @endforeach
+        </select>
+    </div>
+    <div class="col-xs-12 col-sm-6">
+        <label for="id_entidad_demandada" class="control-label">Entidad demandada</label>
+        <select id="id_entidad_demandada" name="id_entidad_demandada" data-live-search="true"
+            class="form-control required" title="Seleccionar">
+            @foreach ($entidadesDemandadas as $item)
+            <option @if($proceso && $proceso->id_entidad_demandada == $item->id_entidad_demandada) selected
+                @endif
+                value="{{$item->id_entidad_demandada}}">{{$item->nombre_entidad_demandada}}</option>
+            @endforeach
+        </select>
+    </div>
+</div>
+<div class="form-group row">
+    <div class="col-xs-12 col-sm-4">
+        <label for="normatividad_aplicada_caso" class="control-label">Normatividad aplicada al caso</label>
+        <input type="text" class="form-control required" id="normatividad_aplicada_caso"
+            name="normatividad_aplicada_caso" @if($proceso) value="{{$proceso->normatividad_aplicada_caso }}" @endif />
+    </div>
+    <div class="col-xs-12 col-sm-4">
+        <label for="id_carpeta" class="control-label">Identificación de la carpeta física</label>
+        <input type="text" class="form-control" id="id_carpeta" name="id_carpeta" @if($proceso)
+            value="{{$proceso->id_carpeta }}" @endif />
+    </div>
+    <div class="col-xs-12 col-sm-4">
+        <label for="caducidad" class="control-label">Caducidad</label>
+        <div class="checkbox-form">
+            <input type="checkbox" data-on="Si" data-off="No" data-width="90" class="form-control" id="caducidad"
+                name="caducidad" @if($proceso && $proceso->caducidad
+            == 1) checked @endif />
+        </div>
+    </div>
+</div>
+@if($proceso)
+<div class="separator margin"></div>
+
+<div class="form-group row">
+    <div class="col-xs-12 col-sm-4">
+        <label class="control-label">Usuario responsable</label>
+        <input type="text" class="form-control" @if($proceso)
+            value="{{$proceso->responsable ? $proceso->responsable->getNombreCompleto() : 'Sin responsable' }}" @endif
+            disabled />
+    </div>
+    <div class="col-xs-12 col-sm-4">
+        <label class="control-label">Etapa actual</label>
+        <input type="text" class="form-control" @if($proceso)
+            value="{{$proceso->etapa ? $proceso->etapa->nombre_etapa_proceso : 'Sin iniciar' }}" @endif disabled />
+    </div>
+    <div class="col-xs-12 col-sm-4">
+        <label for="telefono" class="control-label">Número de radicado</label>
+        <input type="text" class="form-control" id="numero_proceso" @if($proceso)
+            value="{{$proceso->numero_proceso ? $proceso->numero_proceso : 'Sin asignar' }}" @endif disabled />
+    </div>
+</div>
+<div class="form-group row">
+    <div class="col-xs-12 col-sm-6">
+        <label for="normatividad_aplicada_caso" class="control-label">Entidad de Justicia en primera instancia</label>
+        <input type="text" class="form-control" @if($proceso->entidadJusticiaPrimeraInstancia)
+        value="{{$proceso->entidadJusticiaPrimeraInstancia->nombre_entidad_justicia}}" @endif
+        disabled />
+    </div>
+    <div class="col-xs-12 col-sm-6">
+        <label for="dar_informacion_caso" class="control-label">Entidad de Justicia en segunda instancia</label>
+        <input type="text" class="form-control" @if($proceso->entidadJusticiaSegundaInstancia)
+        value="{{$proceso->entidadJusticiaSegundaInstancia->nombre_entidad_justicia}}" @endif
+        disabled />
+    </div>
+
+</div>
+
+<div class="form-group row">
+    <div class="col-xs-12 col-sm-6">
+        <label for="normatividad_aplicada_caso" class="control-label"> Cuantía de la demanda</label>
+        <input type="text" class="form-control" @if($proceso->cuantia_demandada) value="$
+        {{number_format($proceso->cuantia_demandada, 0, ',', '.')}}" @endif
+        disabled />
+    </div>
+    <div class="col-xs-12 col-sm-6">
+        <label for="dar_informacion_caso" class="control-label"> Estimación de pretensiones </label>
+        <input type="text" class="form-control" @if($proceso->estimacion_pretenciones) value="$
+        {{number_format($proceso->estimacion_pretenciones, 0, ',', '.')}}" @endif
+        disabled />
+    </div>
+</div>
+@endif
+
+
+<div class="separator margin"></div>
+
+<div class="form-group row">
+    <div class="col-xs-12 col-sm-4">
+        <label for="fecha_retiro_servicio" class="control-label">Fecha de Radicación del cumplimiento</label>
+        <input name="fecha_retiro_servicio" id="fecha_retiro_servicio" data-date-format="yyyy-mm-dd"
+            class="form-control datepicker-here" @if($proceso) value="{{$proceso->fecha_retiro_servicio }}" @endif />
+    </div>
+
+    <div class="col-xs-12 col-sm-4">
+        <label for="fecha_retiro_servicio" class="control-label">Fecha de Pago</label>
+        <input name="fecha_retiro_servicio" id="fecha_retiro_servicio" data-date-format="yyyy-mm-dd"
+            class="form-control datepicker-here" @if($proceso) value="{{$proceso->fecha_retiro_servicio }}" @endif />
+    </div>
+
+    <div class="col-xs-12 col-sm-4">
+        <label for="fecha_retiro_servicio" class="control-label">Ubicación Física del Archivo Muerto</label>
+        <input name="fecha_retiro_servicio" id="fecha_retiro_servicio" data-date-format="yyyy-mm-dd"
+            class="form-control datepicker-here" @if($proceso) value="{{$proceso->fecha_retiro_servicio }}" @endif />
+    </div>
+</div>
+
+<div class="separator margin"></div>
+
+
+<div class="form-group row">
+    <div class="col-xs-12 col-sm-6">
+        <label for="valor_estudio" class="control-label">Gastos iniciales del contrato</label>
+        <input type="text" class="form-control numeric required" id="valor_estudio" name="valor_estudio" @if($proceso)
+            value="{{$proceso->valor_estudio }}" @endif />
+    </div>
+    <div class="col-xs-12 col-sm-6">
+        <label for="acto_administrativo" class="control-label">Acto administrativo del retiro
+            (actuación)</label>
+        <input type="text" class="form-control" id="acto_administrativo" name="acto_administrativo" @if($proceso)
+            value="{{$proceso->acto_administrativo }}" @endif />
+    </div>
+
+
+</div>
+<div class="form-group row">
+    <div class="col-xs-12 col-sm-4">
+        <label for="fecha_retiro_servicio" class="control-label">Fecha de retiro del servicio</label>
+        <input name="fecha_retiro_servicio" id="fecha_retiro_servicio" data-date-format="yyyy-mm-dd"
+            class="form-control datepicker-here" @if($proceso) value="{{$proceso->fecha_retiro_servicio }}" @endif />
+    </div>
+    <div class="col-xs-12 col-sm-4">
+        <label for="ultima_entidad_retiro" class="control-label">Última entidad de servicio (entidad de
+            justicia)</label>
+        <input type="text" class="form-control required" id="ultima_entidad_retiro" name="ultima_entidad_retiro"
+            @if($proceso) value="{{$proceso->ultima_entidad_retiro }}" @endif />
+    </div>
+    <div class="col-xs-12 col-sm-4">
+        <label for="valor_final_sentencia" class="control-label">Valor final sentencia</label>
+        <input type="text" class="form-control numeric" id="valor_final_sentencia" name="valor_final_sentencia"
+            @if($proceso) value="{{$proceso->valor_final_sentencia }}" @endif />
+    </div>
+</div>
+
+<div class="separator margin"></div>
+
+
+
 {{-- <div role="tabpanel" class="tab-pane" id="documentos-proceso">
 
 

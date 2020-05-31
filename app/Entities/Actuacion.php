@@ -31,6 +31,19 @@ class Actuacion extends BaseModel
         return new ActuacionCollection($models);
     }
 
+    public static function getTiposResultado() {
+        return [
+            1 => 'Documento',
+            2 => 'Dato alfanumerico',
+            3 => 'Número del Radicado',
+            4 => 'Entidad de Justicia en primera instancia',
+            5 => 'Entidad de justicia en segunda instancia',
+            6 => 'Cuantía de la demanda (dinero, pesos)',
+            7 => 'Estimación de pretensiones (dinero, pesos)',
+            8 => 'Histórico de sentencias',
+        ];
+    }
+
     public function getDiasVencimiento() {
         if($this->dias_vencimiento == 1){
             $unidad = $this->dias_vencimiento_unidad == 1 ? 'día' : 'mes';

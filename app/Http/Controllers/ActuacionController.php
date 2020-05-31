@@ -18,16 +18,29 @@ use App\Exports\ActuacionExport;
 class ActuacionController extends Controller
 {
 
-    public function create() {
+    private function getTiposResultados($id_actuacion) {
+        $idTiposResultadoProhibidos = [3,4,5,6,7,8];
+        $actuaciones = Actuacion::
+        where([['id_actuacion', '<>', $id_actuacion]])
+        ->whereIn('tipo_resultado', $idTiposResultadoProhibidos)->get();
 
-        /* @TODO Permisos para acceder a cada una de las opciones */
+        $tiposResultado = Actuacion::getTiposResultado();
+        foreach($actuaciones as $actuacion) {
+            unset($tiposResultado[$actuacion->tipo_resultado]);
+        }
+
+        return $tiposResultado;
+    }
+
+    public function create() {
 
         $documentos = Documento::where('estado_documento', 1)->get();
         $plantillasDocumento = PlantillaDocumento::where('estado_plantilla_documento', 1)->get();
 
         return $this->renderSection('actuacion.detalle', [
             'documentos' => $documentos,
-            'plantillasDocumento' => $plantillasDocumento
+            'plantillasDocumento' => $plantillasDocumento,
+            'tiposResultado' => $this->getTiposResultados(0)
         ]);
     }
 
@@ -61,11 +74,11 @@ class ActuacionController extends Controller
         }
 
         $documents = explode(',', $request->get('documents'));
-        $templates = explode(',', $request->get('templates'));
+        // $templates = explode(',', $request->get('templates'));
 
         if ($id) {
             ActuacionDocumento::where('id_actuacion', $actuacion->id_actuacion)->delete();
-            ActuacionPlantillaDocumento::where('id_actuacion', $actuacion->id_actuacion)->delete();
+            // ActuacionPlantillaDocumento::where('id_actuacion', $actuacion->id_actuacion)->delete();
         }
 
         //Relacion con Actuacion documento
@@ -78,15 +91,15 @@ class ActuacionController extends Controller
             }
         }
 
-        //Relacion con Actuacion plantilla documento
-        foreach ($templates as $template) {
-            if($template) {
-                ActuacionPlantillaDocumento::create([
-                    'id_actuacion' => $actuacion->id_actuacion,
-                    'id_plantilla_documento' => $template
-                ])->save();
-            }
-        }
+        // //Relacion con Actuacion plantilla documento
+        // foreach ($templates as $template) {
+        //     if($template) {
+        //         ActuacionPlantillaDocumento::create([
+        //             'id_actuacion' => $actuacion->id_actuacion,
+        //             'id_plantilla_documento' => $template
+        //         ])->save();
+        //     }
+        // }
 
         return true;
     }
@@ -142,7 +155,7 @@ class ActuacionController extends Controller
     }
 
 
-    public function edit(Request $request, $id) {
+    public function edit($id) {
 
         $actuacion = Actuacion::find($id);
         if (empty($actuacion)) {
@@ -170,6 +183,7 @@ class ActuacionController extends Controller
             'actuacion' => $actuacion,
             'actuacionDocumentos' => $actuacionDocumentos,
             'actuacionPlantillasDocumento' => $actuacionPlantillasDocumento,
+            'tiposResultado' => $this->getTiposResultados($id)
         ]);
     }
 

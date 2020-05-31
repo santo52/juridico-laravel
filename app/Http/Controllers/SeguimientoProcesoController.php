@@ -147,6 +147,7 @@ class SeguimientoProcesoController extends Controller
     public function actuacion($id)
     {
         $procesoEtapa = ProcesoEtapaActuacion::leftjoin('proceso_etapa as pe', 'pe.id_proceso_etapa', 'proceso_etapa_actuacion.id_proceso_etapa')
+            ->leftjoin('proceso as p', 'p.id_proceso', 'pe.id_proceso')
             ->find($id);
 
         if (empty($procesoEtapa)) {
@@ -180,7 +181,8 @@ class SeguimientoProcesoController extends Controller
     public function crearActuacion($idProcesoEtapa, $id)
     {
         $actuacion = Actuacion::find($id);
-        $procesoEtapa = ProcesoEtapa::find($idProcesoEtapa);
+        $procesoEtapa = ProcesoEtapa::leftjoin('proceso as p', 'p.id_proceso', 'proceso_etapa.id_proceso')
+            ->find($idProcesoEtapa);
         $plantillas = PlantillaDocumento::where(['eliminado' => 0, 'estado_plantilla_documento' => '1'])->get();
 
         if (empty($procesoEtapa) || empty($actuacion)) {
@@ -248,6 +250,43 @@ class SeguimientoProcesoController extends Controller
         $ext = $this->getExtention($filename);
         $saveAs = "{$procesoDocumento->id_proceso_etapa_actuacion_documento}{$ext}";
         $path = Storage::disk('documentos')->putFileAs('proceso', $file, $saveAs);
-        return response()->json(['filename' => $filename, 'path' => $path ]);
+        return response()->json(['filename' => $filename, 'path' => $path]);
+    }
+
+    public function actuacionUpsert(Request $request)
+    {
+
+        $data = $request->all();
+        $id = $data['id_proceso_etapa_actuacion'];
+        $procesoEtapaActuacion = ProcesoEtapaActuacion::find($id);
+        if(empty($procesoEtapaActuacion)) {
+            $data['fecha_inicio'] = date('Y-m-d h:i:s');
+        }
+
+        $proceso = Proceso::find($data['id_proceso']);
+        if($proceso) {
+            if($data['tipo_resultado'] == 3) {
+                $data['numero_radicado'] = $data['resultado_actuacion'];
+                $proceso->update(['numero_proceso' => $data['resultado_actuacion']]);
+            } else if($data['tipo_resultado'] == 4) {
+                $proceso->update(['entidad_justicia_primera_instancia' => $data['resultado_actuacion']]);
+            } else if($data['tipo_resultado'] == 5) {
+                $proceso->update(['entidad_justicia_segunda_instancia' => $data['resultado_actuacion']]);
+            } else if($data['tipo_resultado'] == 6) {
+                $proceso->update(['cuantia_demandada' => $data['resultado_actuacion']]);
+            } else if($data['tipo_resultado'] == 7) {
+                $proceso->update(['estimacion_pretenciones' => $data['resultado_actuacion']]);
+            }
+        }
+
+        if($data['all_fields'] == 'true') {
+            $data['fecha_fin'] = date('Y-m-d h:i:s');
+            if($data['finalizado'] == 0) {
+                $data['finalizado'] = 1;
+            }
+        }
+
+        $saved = ProcesoEtapaActuacion::updateOrCreate(['id_proceso_etapa_actuacion' => $id], $data);
+        return response()->json([ 'saved' => $saved ]);
     }
 }

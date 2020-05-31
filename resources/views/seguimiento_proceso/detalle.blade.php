@@ -9,7 +9,7 @@
     <input type="hidden" id="position" value="{{$proceso->id_etapa_proceso}}" />
 
     @if($proceso->dar_informacion_caso != 1)
-    <div class="alert alert-danger" role="alert">
+    <div class="alert alert-warning" role="alert">
         <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
         <span class="sr-only">Precaución:</span>
         <b>Este cliente NO AUTORIZA dar algún tipo de información sobre el proceso a otras personas</b>
@@ -209,20 +209,20 @@
             </table>
         </div>
         @if(isset($etapas) && count($etapas))
-        @foreach ($etapas as $item)
-        <div role="tabpanel" class="tab-pane @if($proceso->id_etapa_proceso == $item->id_etapa_proceso) active @endif"
-            id="etapa-{{$item->id_etapa_proceso}}">
+        @foreach ($etapas as $itemEtapa)
+        <div role="tabpanel" class="tab-pane @if($proceso->id_etapa_proceso == $itemEtapa->id_etapa_proceso) active @endif"
+            id="etapa-{{$itemEtapa->id_etapa_proceso}}">
 
             <div class="juridico right-buttons">
                 <div>
                     <a href="javascript:void(0)"
-                        onclick="seguimientoProceso.addActuacion('{{$item->id_etapa_proceso}}')"
+                        onclick="seguimientoProceso.addActuacion('{{$itemEtapa->id_etapa_proceso}}')"
                         class="btn btn-default">
                         Asociar actuación
                     </a>
                 </div>
             </div>
-            <table id="actuacionesTable{{$item->id_etapa_proceso}}" class="table table-hover"
+            <table id="actuacionesTable{{$itemEtapa->id_etapa_proceso}}" class="table table-hover"
                 data-empty="Sin actuaciones" data-paging-count-format="Mostrando del {PF} al {PL} de {TR} registros"
                 data-filter-container="#filter-form-container" data-sorting="false" data-filtering="false"
                 data-paging="false" data-filter-placeholder="Buscar ..." data-filter-position="left"
@@ -268,8 +268,8 @@
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </a>
                             @else
-                            @isset($item->id_proceso_etapa)
-                            <a href="#seguimiento-procesos/actuacion/crear/{{$item->id_proceso_etapa}}/{{$actuacion->id_actuacion}}"
+                            @isset($itemEtapa->id_proceso_etapa)
+                            <a href="#seguimiento-procesos/actuacion/crear/{{$itemEtapa->id_proceso_etapa}}/{{$actuacion->id_actuacion}}"
                                 data-toggle="tooltip" title="Editar actuación" class="btn text-primary" type="button">
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </a>

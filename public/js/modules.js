@@ -1615,7 +1615,26 @@ var SeguimientoActuacion = /*#__PURE__*/function () {
       e.stopPropagation();
 
       if (validateForm(e)) {
-        alert();
+        var $reqDocuments = $('.file-document[data-required=true]').toArray();
+        var allDocs = $reqDocuments.every(function (item) {
+          return $(item).data('filename');
+        });
+        var $fieldList = $(e.target).find('input.form-control, select.form-control, textarea.form-control').toArray();
+        var allSaved = $fieldList.every(function (item) {
+          return $(item).attr('disabled') || $(item).val().trim();
+        });
+        var allFields = allDocs && allSaved;
+        var formData = new FormData(e.target);
+        formData.append('all_fields', allFields);
+        $.ajax({
+          url: '/seguimiento-procesos/actuacion/upsert',
+          data: new URLSearchParams(formData),
+          success: function success(data) {
+            if (data.saved) {
+              location.hash = 'seguimiento-procesos/' + $('#id_proceso').val();
+            }
+          }
+        });
       }
 
       return false;

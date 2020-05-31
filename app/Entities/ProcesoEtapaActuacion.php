@@ -26,7 +26,8 @@ class ProcesoEtapaActuacion extends BaseModel
         'instancia', 'resultado', 'fecha_notificacion', 'tipo_resultado', 'motivo', 'comentario',
         'entidad_profirio_respuesta', 'fecha_audiencia', 'lugar_audiencia', 'apela_resultado', "valor_pago",
         'fecha_creacion', 'fecha_actualizacion', 'id_usuario_creacion', 'id_usuario_actualizacion',
-        "id_usuario_asigna"
+        "id_usuario_asigna", 'resultado_actuacion', 'fecha_actuacion_rama', 'fecha_notificacion_rama',
+        'fecha_inicio_termino_rama', 'anotacion_rama'
     ];
 
     public function procesoEtapa()
@@ -94,7 +95,7 @@ class ProcesoEtapaActuacion extends BaseModel
             }
         }
 
-        return 'gris';
+        return 'negro';
     }
 
     public function getResponsable()

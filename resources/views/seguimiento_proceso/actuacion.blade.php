@@ -4,12 +4,13 @@
 
 <div>
 
-
+    @if($procesoEtapa->finalizado == 0)
     <div class="alert alert-warning" role="alert">
         <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
         <span class="sr-only">Importante:</span>
-        <b>Esta actuación no se cerrará hasta que todos los campos  esten llenos y los documentos esten cargados</b>
+        <b>Esta actuación no se cerrará hasta que todos los campos esten llenos y los documentos esten cargados</b>
     </div>
+    @endif
 
     <!-- Nav tabs -->
     {{-- <ul class="nav nav-tabs" role="tablist">
@@ -30,30 +31,35 @@
 
     <form onsubmit="seguimientoActuacion.upsert(event)">
 
-        <input type="hidden" id="id_proceso" value="{{$procesoEtapa->id_proceso}}" />
-        <input type="hidden" id="id_proceso_etapa" value="{{$procesoEtapa->id_proceso_etapa}}" />
-        <input type="hidden" id="id_proceso_etapa_actuacion" value="{{$procesoEtapa->id_proceso_etapa_actuacion}}" />
+        <input type="hidden" name="id_proceso" id="id_proceso" value="{{$procesoEtapa->id_proceso}}" />
+        <input type="hidden" name="id_proceso_etapa" id="id_proceso_etapa"
+            value="{{$procesoEtapa->id_proceso_etapa}}" />
+        <input type="hidden" name="id_proceso_etapa_actuacion" id="id_proceso_etapa_actuacion"
+            value="{{$procesoEtapa->id_proceso_etapa_actuacion}}" />
+        <input type="hidden" name="id_actuacion" id="id_actuacion" value="{{$actuacion->id_actuacion}}" />
+        <input type="hidden" name="tipo_resultado" id="tipo_resultado" value="{{$actuacion->tipo_resultado}}" />
 
         <div class="form-group row">
             <div class="col-xs-12 col-sm-6">
                 <label for="fecha_inicio" class="control-label">Fecha de inicio de la actuación</label>
-                <input type="text" class="form-control" value="{{$procesoEtapa->getFechaInicioString() }}" disabled />
+                <input type="text" class="form-control" @isset($procesoEtapa->actuacion) value="{{$procesoEtapa->getFechaInicioString() }}" @else value="Sin iniciar" @endisset disabled />
             </div>
             <div class="col-xs-12 col-sm-6">
                 <label for="fecha_fin" class="control-label">Fecha fin</label>
-                <input type="text" class="form-control" value="{{$procesoEtapa->getFechaFinString() }}" disabled />
+                <input type="text" class="form-control" @isset($procesoEtapa->actuacion) value="{{$procesoEtapa->getFechaFinString() }}" @else value='Sin iniciar' @endisset disabled />
             </div>
         </div>
         <div class="form-group row">
             <div class="col-xs-12 col-sm-6">
                 <label class="control-label">Asignado por</label>
-                <input type="text" class="form-control" value="{{$procesoEtapa->getAsignadoPor() }}" disabled />
+                <input type="text" class="form-control" @isset($procesoEtapa->actuacion) value="{{$procesoEtapa->getAsignadoPor() }}"  @else value='Sin asignar' @endisset disabled />
             </div>
             <div class="col-xs-12 col-sm-6">
                 <label class="control-label">Persona responsable</label>
-                <input type="text" class="form-control" value="{{$procesoEtapa->getResponsable() }}" disabled />
+                <input type="text" class="form-control" @isset($procesoEtapa->actuacion) value="{{$procesoEtapa->getResponsable() }}" @else value='Sin responsable' @endisset disabled />
             </div>
         </div>
+
         <div class="form-group row">
             <div class="col-xs-12 col-sm-6">
                 <label for="fecha_inicio" class="control-label">Valor del cobro</label>
@@ -64,7 +70,8 @@
                 @endif
             </div>
             <div class="col-xs-12 col-sm-6">
-                <label for="resultado" class="control-label">Resultado <span style="font-weight: initial;font-size: 1rem;">({{$actuacion->getTipoResultado()}})<span></label>
+                <label for="resultado" class="control-label">Resultado <span
+                        style="font-weight: initial;font-size: 1rem;">({{$actuacion->getTipoResultado()}})<span></label>
                 @if($actuacion->tipo_resultado == 1)
                 <div class="input-file">
                     <input type="file" name="resultado_actuacion" />
@@ -113,7 +120,7 @@
         <div class="separator margin"></div>
 
         @endif
-
+        @isset($procesoEtapa->actuacion)
         <div class="flex space-between documents-container">
             <nav class="navbar navbar-default flex-grow">
                 <div class="container-fluid">
@@ -149,8 +156,9 @@
                         @foreach ($documentosGenerados as $item)
                         <div class="file-document" data-title="{{$item->getNombrePlantilla()}}"
                             data-remove="seguimientoActuacion.deletePlantilla('{{$item->id_proceso_etapa_actuacion_plantillas}}')"
-                            data-id="{{$item->id_proceso_etapa_actuacion_plantillas}}"
-                            data-filename="{!! asset("uploads/plantillas/actuacion-proceso/{$item->id_proceso_etapa_actuacion_plantillas}.pdf") !!}"></div>
+                            data-id="{{$item->id_proceso_etapa_actuacion_plantillas}}" data-filename="{!! asset("
+                            uploads/plantillas/actuacion-proceso/{$item->id_proceso_etapa_actuacion_plantillas}.pdf")
+                            !!}"></div>
                         @endforeach
                         @else
                         <div class="file-document-empty">No se han agregado documentos</div>
@@ -159,12 +167,14 @@
                 </div>
             </nav>
         </div>
-
+        @if($procesoEtapa->finalizado == 0)
         <div class="alert alert-warning" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             <span class="sr-only">Importante:</span>
-            <b>Esta actuación no se cerrará hasta que todos los campos  esten llenos y los documentos esten cargados</b>
+            <b>Esta actuación no se cerrará hasta que todos los campos esten llenos y los documentos esten cargados</b>
         </div>
+        @endif
+        @endisset
         <button class="btn btn-success" style="width: 100%">Guardar actuación</button>
     </form>
 </div>
@@ -183,7 +193,8 @@
                     <input type="hidden" class="required" name="id_proceso_bitacora" id="idProcesoBitacora" />
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">Lista de plantillas</label>
-                        <select class="form-control" id="plantillaDocumento" name="id_plantilla_documento" title="Seleccionar">
+                        <select class="form-control" id="plantillaDocumento" name="id_plantilla_documento"
+                            title="Seleccionar">
                             @foreach($plantillas as $plantilla)
                             <option value="{{$plantilla->id_plantilla_documento}}">
                                 {{$plantilla->nombre_plantilla_documento}}</option>

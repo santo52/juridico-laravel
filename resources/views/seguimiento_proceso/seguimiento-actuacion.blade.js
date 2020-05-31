@@ -12,7 +12,27 @@ class SeguimientoActuacion {
         e.stopPropagation()
 
         if(validateForm(e)) {
-            alert()
+
+            const $reqDocuments = $('.file-document[data-required=true]').toArray()
+            const allDocs = $reqDocuments.every(item => $(item).data('filename'));
+
+            const $fieldList = $(e.target).find('input.form-control, select.form-control, textarea.form-control').toArray()
+            const allSaved = $fieldList.every(item => $(item).attr('disabled') || $(item).val().trim());
+
+
+            const allFields = allDocs && allSaved
+            const formData = new FormData(e.target)
+            formData.append('all_fields', allFields)
+
+            $.ajax({
+                url: '/seguimiento-procesos/actuacion/upsert',
+                data: new URLSearchParams(formData),
+                success: data => {
+                    if(data.saved) {
+                        location.hash = 'seguimiento-procesos/' + $('#id_proceso').val()
+                    }
+                }
+            })
         }
 
         return false

@@ -5,6 +5,8 @@ namespace App\Builder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Storage;
 
+use function GuzzleHttp\json_decode;
+
 class ProcesoDocumentoBuilder extends Builder
 {
 
@@ -29,7 +31,7 @@ class ProcesoDocumentoBuilder extends Builder
         $file = $this->first();
         $deleted = $this->delete();
         if ($file) {
-            $id = $file->id_proceso_documento;
+            $id = $file->id_proceso_etapa_actuacion_documento;
             $ext = $this->getExtention($file->nombre_archivo);
             Storage::disk('documentos')->delete("proceso/{$id}{$ext}");
         }

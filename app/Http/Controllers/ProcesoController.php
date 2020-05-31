@@ -203,40 +203,4 @@ class ProcesoController extends Controller
         $client->update(['eliminado' => 1]);
         return response()->json(['deleted' => true]);
     }
-
-    private function getExtention($filename)
-    {
-        $fileSplit = explode('.', $filename);
-        $index = count($fileSplit) - 1;
-        return '.' . $fileSplit[$index];
-    }
-
-    public function deleteFile(Request $request)
-    {
-        $deleted = ProcesoDocumento::where([
-            'id_proceso' => $request->get('id'),
-            'id_documento' => $request->get('file_id')
-        ])->deleteFile();
-        return response()->json(['deleted' => $deleted]);
-    }
-
-    public function uploadFile(Request $request)
-    {
-        $file = $request->file('file');
-        $filename = $file->getClientOriginalName();
-        $procesoDocumento = ProcesoDocumento::updateOrCreate([
-            'id_proceso' => $request->get('id'),
-            'id_documento' => $request->get('file_id')
-        ], [
-            'id_proceso' => $request->get('id'),
-            'id_documento' => $request->get('file_id'),
-            'nombre_archivo' => $filename,
-            'id_usuario_creacion' => Auth::id()
-        ]);
-
-        $ext = $this->getExtention($filename);
-        $saveAs = "{$procesoDocumento->id_proceso_documento}{$ext}";
-        $path = Storage::disk('documentos')->putFileAs('proceso', $file, $saveAs);
-        return response()->json(['filename' => $filename, 'path' => $path]);
-    }
 }

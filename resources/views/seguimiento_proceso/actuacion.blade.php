@@ -193,7 +193,7 @@
     $(document).ready(function(){
         const id = getId()
         fileDocument.init({
-            url: 'proceso/upload',
+            url: 'seguimiento-procesos/upload',
             path: 'uploads/documentos',
             id
         })

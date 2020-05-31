@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Entities\Documento;
-use Illuminate\Support\Facades\Auth;
 
 class DocumentoController extends Controller
 {

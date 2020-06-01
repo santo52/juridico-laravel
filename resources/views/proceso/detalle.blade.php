@@ -211,33 +211,35 @@
 </div>
 @if($proceso)
 <div class="separator margin"></div>
-
 <div class="form-group row">
-    <div class="col-xs-12 col-sm-4">
+    <div class="col-xs-12 col-sm-6">
         <label class="control-label">Usuario responsable</label>
         <input type="text" class="form-control" @if($proceso)
             value="{{$proceso->responsable ? $proceso->responsable->getNombreCompleto() : 'Sin responsable' }}" @endif
             disabled />
     </div>
-    <div class="col-xs-12 col-sm-4">
+    <div class="col-xs-12 col-sm-6">
         <label class="control-label">Etapa actual</label>
         <input type="text" class="form-control" @if($proceso)
             value="{{$proceso->etapa ? $proceso->etapa->nombre_etapa_proceso : 'Sin iniciar' }}" @endif disabled />
     </div>
+</div>
+
+<div class="separator margin"></div>
+
+<div class="form-group row">
     <div class="col-xs-12 col-sm-4">
         <label for="telefono" class="control-label">Número de radicado</label>
         <input type="text" class="form-control" id="numero_proceso" @if($proceso)
             value="{{$proceso->numero_proceso ? $proceso->numero_proceso : 'Sin asignar' }}" @endif disabled />
     </div>
-</div>
-<div class="form-group row">
-    <div class="col-xs-12 col-sm-6">
+    <div class="col-xs-12 col-sm-4">
         <label for="normatividad_aplicada_caso" class="control-label">Entidad de Justicia en primera instancia</label>
         <input type="text" class="form-control" @if($proceso->entidadJusticiaPrimeraInstancia)
         value="{{$proceso->entidadJusticiaPrimeraInstancia->nombre_entidad_justicia}}" @endif
         disabled />
     </div>
-    <div class="col-xs-12 col-sm-6">
+    <div class="col-xs-12 col-sm-4">
         <label for="dar_informacion_caso" class="control-label">Entidad de Justicia en segunda instancia</label>
         <input type="text" class="form-control" @if($proceso->entidadJusticiaSegundaInstancia)
         value="{{$proceso->entidadJusticiaSegundaInstancia->nombre_entidad_justicia}}" @endif
@@ -269,19 +271,19 @@
     <div class="col-xs-12 col-sm-4">
         <label for="fecha_retiro_servicio" class="control-label">Fecha de Radicación del cumplimiento</label>
         <input name="fecha_retiro_servicio" id="fecha_retiro_servicio" data-date-format="yyyy-mm-dd"
-            class="form-control datepicker-here" @if($proceso) value="{{$proceso->fecha_retiro_servicio }}" @endif />
+            class="form-control datepicker-here" @if($proceso) value="{{$proceso->fecha_retiro_servicio }}" @endif disabled />
     </div>
 
     <div class="col-xs-12 col-sm-4">
         <label for="fecha_retiro_servicio" class="control-label">Fecha de Pago</label>
         <input name="fecha_retiro_servicio" id="fecha_retiro_servicio" data-date-format="yyyy-mm-dd"
-            class="form-control datepicker-here" @if($proceso) value="{{$proceso->fecha_retiro_servicio }}" @endif />
+            class="form-control datepicker-here" @if($proceso) value="{{$proceso->fecha_retiro_servicio }}" @endif disabled />
     </div>
 
     <div class="col-xs-12 col-sm-4">
         <label for="fecha_retiro_servicio" class="control-label">Ubicación Física del Archivo Muerto</label>
         <input name="fecha_retiro_servicio" id="fecha_retiro_servicio" data-date-format="yyyy-mm-dd"
-            class="form-control datepicker-here" @if($proceso) value="{{$proceso->fecha_retiro_servicio }}" @endif />
+            class="form-control datepicker-here" @if($proceso) value="{{$proceso->fecha_retiro_servicio }}" @endif disabled />
     </div>
 </div>
 
@@ -295,8 +297,7 @@
             value="{{$proceso->valor_estudio }}" @endif />
     </div>
     <div class="col-xs-12 col-sm-6">
-        <label for="acto_administrativo" class="control-label">Acto administrativo del retiro
-            (actuación)</label>
+        <label for="acto_administrativo" class="control-label">Acto administrativo del retiro</label>
         <input type="text" class="form-control" id="acto_administrativo" name="acto_administrativo" @if($proceso)
             value="{{$proceso->acto_administrativo }}" @endif />
     </div>
@@ -310,15 +311,14 @@
             class="form-control datepicker-here" @if($proceso) value="{{$proceso->fecha_retiro_servicio }}" @endif />
     </div>
     <div class="col-xs-12 col-sm-4">
-        <label for="ultima_entidad_retiro" class="control-label">Última entidad de servicio (entidad de
-            justicia)</label>
+        <label for="ultima_entidad_retiro" class="control-label">Última entidad de servicio</label>
         <input type="text" class="form-control required" id="ultima_entidad_retiro" name="ultima_entidad_retiro"
             @if($proceso) value="{{$proceso->ultima_entidad_retiro }}" @endif />
     </div>
     <div class="col-xs-12 col-sm-4">
         <label for="valor_final_sentencia" class="control-label">Valor final sentencia</label>
         <input type="text" class="form-control numeric" id="valor_final_sentencia" name="valor_final_sentencia"
-            @if($proceso) value="{{$proceso->valor_final_sentencia }}" @endif />
+            @if($proceso) value="{{$proceso->valor_final_sentencia }}" @endif disabled />
     </div>
 </div>
 

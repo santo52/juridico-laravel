@@ -41,13 +41,17 @@ class Actuacion extends BaseModel
         return [
             1 => 'Documento',
             2 => 'Dato alfanumerico',
-            3 => 'Número del Radicado',
-            4 => 'Entidad de Justicia en primera instancia',
-            5 => 'Entidad de justicia en segunda instancia',
-            6 => 'Cuantía de la demanda (dinero, pesos)',
-            7 => 'Estimación de pretensiones (dinero, pesos)',
-            // 8 => 'Histórico de sentencias',
-            9 => 'Fecha',
+            3 => 'Fecha',
+            4 => 'Histórico de sentencias', // Mostrar en historico de sentencias, actualiza fecha y resultado
+            5 => 'Número del Radicado',
+            6 => 'Entidad de Justicia en primera instancia',
+            7 => 'Entidad de justicia en segunda instancia',
+            8 => 'Cuantía de la demanda',
+            9 => 'Estimación de pretensiones',
+            10 => 'Fecha de radicación del cumplimiento',
+            11 => 'Fecha de pago',
+            12 => 'Ubicación física del archivo muerto',
+            13 => 'Valor final sentencia'
         ];
     }
 

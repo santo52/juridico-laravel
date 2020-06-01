@@ -280,17 +280,27 @@ class SeguimientoProcesoController extends Controller
 
         $proceso = Proceso::find($data['id_proceso']);
         if ($proceso) {
-            if ($data['tipo_resultado'] == 3) {
+            if ($data['tipo_resultado'] == 4) {
+                //Guardar historico de sentencias
+            } else if ($data['tipo_resultado'] == 5) {
                 $data['numero_radicado'] = $data['resultado_actuacion'];
                 $proceso->update(['numero_proceso' => $data['resultado_actuacion']]);
-            } else if ($data['tipo_resultado'] == 4) {
-                $proceso->update(['entidad_justicia_primera_instancia' => $data['resultado_actuacion']]);
-            } else if ($data['tipo_resultado'] == 5) {
-                $proceso->update(['entidad_justicia_segunda_instancia' => $data['resultado_actuacion']]);
             } else if ($data['tipo_resultado'] == 6) {
-                $proceso->update(['cuantia_demandada' => $data['resultado_actuacion']]);
+                $proceso->update(['entidad_justicia_primera_instancia' => $data['resultado_actuacion']]);
             } else if ($data['tipo_resultado'] == 7) {
+                $proceso->update(['entidad_justicia_segunda_instancia' => $data['resultado_actuacion']]);
+            } else if ($data['tipo_resultado'] == 8) {
+                $proceso->update(['cuantia_demandada' => $data['resultado_actuacion']]);
+            } else if ($data['tipo_resultado'] == 9) {
                 $proceso->update(['estimacion_pretenciones' => $data['resultado_actuacion']]);
+            } else if ($data['tipo_resultado'] == 10) {
+                //actualizar Fecha de radicación del cumplimiento
+            } else if ($data['tipo_resultado'] == 11) {
+                //actualizar Fecha de pago
+            } else if ($data['tipo_resultado'] == 12) {
+                //actualizar Ubicación física del archivo muerto
+            } else if ($data['tipo_resultado'] == 13) {
+                //actualizar Valor final sentencia
             }
         }
 

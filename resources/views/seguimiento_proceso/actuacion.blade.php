@@ -29,7 +29,7 @@
 
 
 
-    <form onsubmit="seguimientoActuacion.upsert(event)">
+    <form id="formularioActuacion" onsubmit="seguimientoActuacion.guardarActuacion(event)">
 
         <input type="hidden" name="id_proceso" id="id_proceso" value="{{$procesoEtapa->id_proceso}}" />
         <input type="hidden" name="id_proceso_etapa" id="id_proceso_etapa"
@@ -42,21 +42,25 @@
         <div class="form-group row">
             <div class="col-xs-12 col-sm-6">
                 <label for="fecha_inicio" class="control-label">Fecha de inicio de la actuación</label>
-                <input type="text" class="form-control" @isset($procesoEtapa->actuacion) value="{{$procesoEtapa->getFechaInicioString() }}" @else value="Sin iniciar" @endisset disabled />
+                <input type="text" class="form-control" @isset($procesoEtapa->actuacion)
+                value="{{$procesoEtapa->getFechaInicioString() }}" @else value="Sin iniciar" @endisset disabled />
             </div>
             <div class="col-xs-12 col-sm-6">
                 <label for="fecha_fin" class="control-label">Fecha fin</label>
-                <input type="text" class="form-control" @isset($procesoEtapa->actuacion) value="{{$procesoEtapa->getFechaFinString() }}" @else value='Sin iniciar' @endisset disabled />
+                <input type="text" class="form-control" @isset($procesoEtapa->actuacion)
+                value="{{$procesoEtapa->getFechaFinString() }}" @else value='Sin iniciar' @endisset disabled />
             </div>
         </div>
         <div class="form-group row">
             <div class="col-xs-12 col-sm-6">
                 <label class="control-label">Asignado por</label>
-                <input type="text" class="form-control" @isset($procesoEtapa->actuacion) value="{{$procesoEtapa->getAsignadoPor() }}"  @else value='Sin asignar' @endisset disabled />
+                <input type="text" class="form-control" @isset($procesoEtapa->actuacion)
+                value="{{$procesoEtapa->getAsignadoPor() }}" @else value='Sin asignar' @endisset disabled />
             </div>
             <div class="col-xs-12 col-sm-6">
                 <label class="control-label">Persona responsable</label>
-                <input type="text" class="form-control" @isset($procesoEtapa->actuacion) value="{{$procesoEtapa->getResponsable() }}" @else value='Sin responsable' @endisset disabled />
+                <input type="text" class="form-control" @isset($procesoEtapa->actuacion)
+                value="{{$procesoEtapa->getResponsable() }}" @else value='Sin responsable' @endisset disabled />
             </div>
         </div>
 
@@ -212,6 +216,46 @@
     </div>
 </div>
 
+<div class="modal fade" tabindex="-1" role="dialog" id="cerrarActuacion">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Cierre de actuación</h4>
+            </div>
+            <form onsubmit="seguimientoActuacion.finalizarActuacion(event)">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="siguienteEtapaActuacion" class="control-label">Etapa de la siguiente actuación</label>
+                        <select class="form-control required" id="siguienteEtapaActuacion" title="Seleccionar" onchange="seguimientoActuacion.refreshActuaciones(this)">
+                            @foreach ($etapas as $item)
+                            <option value="{{$item->id_etapa_proceso}}" @if($item->id_etapa_proceso === $procesoEtapa->id_etapa_proceso) selected @endif>{{$item->nombre_etapa_proceso}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="siguienteActuacion" class="control-label">Siguiente actuación</label>
+                        <select class="form-control required" id="siguienteActuacion"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="usuarioSiguienteActuacion" class="control-label">Asignado a</label>
+                        <select class="form-control required" id="usuarioSiguienteActuacion" title="Seleccione">
+                            @foreach ($usuarios as $item)
+                            <option value="{{$item->id_usuario}}">{{$item->getNombreCompleto()}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer center">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Cerrar actuación</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('javascript')
@@ -223,6 +267,8 @@
             path: 'uploads/documentos',
             id
         })
+
+        seguimientoActuacion.refreshActuaciones($('#siguienteEtapaActuacion'))
 
         const idSeguimiento = $('#id_proceso').val()
         const $list = $('#breadcrumb').find('li')

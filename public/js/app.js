@@ -1041,7 +1041,7 @@ function validateRequired($form) {
   requiredFields.map(function (item) {
     var value = $(item).val();
 
-    if (!value.trim()) {
+    if (!value || !value.trim()) {
       if (completed) {
         $(item).focus();
         completed = false;

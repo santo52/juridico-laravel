@@ -18,4 +18,8 @@ class ProcesoEtapa extends BaseModel
         'id_proceso_etapa', 'id_etapa_proceso', 'id_proceso', 'porcentaje',
         'fecha_creacion', 'fecha_actualizacion', 'id_usuario_creacion', 'id_usuario_actualizacion'
     ];
+
+    public function procesoEtapaActuaciones() {
+        return $this->hasMany('App\Entities\ProcesoEtapaActuacion', 'id_proceso_etapa', 'id_proceso_etapa');
+    }
 }

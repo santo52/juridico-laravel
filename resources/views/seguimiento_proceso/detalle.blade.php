@@ -210,7 +210,8 @@
         </div>
         @if(isset($etapas) && count($etapas))
         @foreach ($etapas as $itemEtapa)
-        <div role="tabpanel" class="tab-pane @if($proceso->id_etapa_proceso == $itemEtapa->id_etapa_proceso) active @endif"
+        <div role="tabpanel"
+            class="tab-pane @if($proceso->id_etapa_proceso == $itemEtapa->id_etapa_proceso) active @endif"
             id="etapa-{{$itemEtapa->id_etapa_proceso}}">
 
             <div class="juridico right-buttons">
@@ -242,15 +243,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($item->actuaciones as $actuacion)
+                    @foreach ($itemEtapa->actuaciones as $actuacion)
                     <tr class="actuacion-row actuacion-row-{{$actuacion->estadoColor}}">
                         <td>{{$actuacion->id_actuacion}}</td>
                         <td>{{strtolower($actuacion->nombre_actuacion)}}</td>
                         <td>{{$actuacion->dias_vencimiento}}
                             @if($actuacion->dias_vencimiento_unidad == 1)
-                                días
+                            días
                             @else
-                                meses
+                            meses
                             @endif
                         </td>
                         <td>{{$actuacion->tiempoMaximo}}</td>
@@ -274,8 +275,8 @@
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </a>
                             @else
-                            <a href="javascript:void(0)" onclick="location.reload()"
-                                data-toggle="tooltip" title="Editar actuación" class="btn text-primary" type="button">
+                            <a href="javascript:void(0)" onclick="location.reload()" data-toggle="tooltip"
+                                title="Editar actuación" class="btn text-primary" type="button">
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </a>
                             @endisset

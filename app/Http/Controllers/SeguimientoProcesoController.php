@@ -17,8 +17,7 @@ use App\Entities\Actuacion;
 use App\Entities\ActuacionDocumento;
 use App\Entities\PlantillaDocumento;
 use App\Entities\ProcesoEtapaActuacionDocumento;
-
-
+use App\Entities\Usuario;
 
 class SeguimientoProcesoController extends Controller
 {
@@ -62,9 +61,8 @@ class SeguimientoProcesoController extends Controller
     public function setEtapa(Request $request)
     {
         $proceso = Proceso::find($request->get('id_proceso'));
-        $data = $proceso->createFirstActuacion();
-        if ($data) $proceso->update(['id_etapa_proceso' => $request->get('id_etapa_proceso')]);
-        return response()->json(['proceso_etapa_actuacion' => $data]);
+        if ($proceso) $proceso->update(['id_etapa_proceso' => $request->get('id_etapa_proceso')]);
+        return response()->json(['proceso' => $proceso]);
     }
 
     public function detalle($id)
@@ -169,12 +167,20 @@ class SeguimientoProcesoController extends Controller
 
         $documentos = $this->getDocumentos($procesoEtapa->id_proceso_etapa_actuacion, $procesoEtapa->id_actuacion);
 
+        $etapas = TipoProceso::getEtapas($procesoEtapa->id_tipo_proceso)->get();
+        $usuarios = Usuario::where([
+            'estado_usuario' => '1',
+            'eliminado' => 0
+        ])->get();
+
         return $this->renderSection('seguimiento_proceso.actuacion', [
             'procesoEtapa' => $procesoEtapa,
             'actuacion' => $actuacion,
             'plantillas' => $plantillas,
             'documentosGenerados' => $list,
-            'documentos' => $documentos
+            'documentos' => $documentos,
+            'etapas' => $etapas,
+            'usuarios' => $usuarios
         ]);
     }
 
@@ -189,10 +195,18 @@ class SeguimientoProcesoController extends Controller
             return response()->json(['redirect' => 'seguimiento-procesos']);
         }
 
+        $etapas = TipoProceso::getEtapas($procesoEtapa->id_tipo_proceso)->get();
+        $usuarios = Usuario::where([
+            'estado_usuario' => '1',
+            'eliminado' => 0
+        ])->get();
+
         return $this->renderSection('seguimiento_proceso.actuacion', [
             'procesoEtapa' => $procesoEtapa,
             'actuacion' => $actuacion,
-            'plantillas' => $plantillas
+            'plantillas' => $plantillas,
+            'etapas' => $etapas,
+            'usuarios' => $usuarios
         ]);
     }
 
@@ -256,37 +270,72 @@ class SeguimientoProcesoController extends Controller
     public function actuacionUpsert(Request $request)
     {
 
+        $cerrarActuacion = false;
         $data = $request->all();
         $id = $data['id_proceso_etapa_actuacion'];
         $procesoEtapaActuacion = ProcesoEtapaActuacion::find($id);
-        if(empty($procesoEtapaActuacion)) {
+        if (empty($procesoEtapaActuacion)) {
             $data['fecha_inicio'] = date('Y-m-d h:i:s');
         }
 
         $proceso = Proceso::find($data['id_proceso']);
-        if($proceso) {
-            if($data['tipo_resultado'] == 3) {
+        if ($proceso) {
+            if ($data['tipo_resultado'] == 3) {
                 $data['numero_radicado'] = $data['resultado_actuacion'];
                 $proceso->update(['numero_proceso' => $data['resultado_actuacion']]);
-            } else if($data['tipo_resultado'] == 4) {
+            } else if ($data['tipo_resultado'] == 4) {
                 $proceso->update(['entidad_justicia_primera_instancia' => $data['resultado_actuacion']]);
-            } else if($data['tipo_resultado'] == 5) {
+            } else if ($data['tipo_resultado'] == 5) {
                 $proceso->update(['entidad_justicia_segunda_instancia' => $data['resultado_actuacion']]);
-            } else if($data['tipo_resultado'] == 6) {
+            } else if ($data['tipo_resultado'] == 6) {
                 $proceso->update(['cuantia_demandada' => $data['resultado_actuacion']]);
-            } else if($data['tipo_resultado'] == 7) {
+            } else if ($data['tipo_resultado'] == 7) {
                 $proceso->update(['estimacion_pretenciones' => $data['resultado_actuacion']]);
             }
         }
 
-        if($data['all_fields'] == 'true') {
+        if ($data['all_fields'] == 'true') {
             $data['fecha_fin'] = date('Y-m-d h:i:s');
-            if($data['finalizado'] == 0) {
+            $procesoEtapaActuacion = ProcesoEtapaActuacion::find($id);
+            if (empty($procesoEtapaActuacion) || $procesoEtapaActuacion->finalizado == 0) {
+                $cerrarActuacion = true;
                 $data['finalizado'] = 1;
             }
         }
 
         $saved = ProcesoEtapaActuacion::updateOrCreate(['id_proceso_etapa_actuacion' => $id], $data);
-        return response()->json([ 'saved' => $saved ]);
+        if ($saved && $proceso && $cerrarActuacion) {
+
+            //Crear una nueva actuación
+            $idEtapa = $request->get('id_siguiente_etapa_actuacion');
+            $actuacion = Actuacion::find($request->get('id_siguiente_actuacion'));
+            $responsable = $request->get('id_usuario_siguiente_actuacion');
+            $proceso->createActuacion($idEtapa, $actuacion, $responsable);
+        }
+
+        return response()->json(['saved' => $saved]);
+    }
+
+    public function getActuacionesEtapa(Request $request, $idEtapa)
+    {
+        $discard = [];
+        $procesoEtapaActuaciones = ProcesoEtapa::find($request->get('id_proceso_etapa'));
+        if ($procesoEtapaActuaciones) {
+            $discardList = $procesoEtapaActuaciones
+                ->procesoEtapaActuaciones()
+                ->where('finalizado', 1)
+                ->get();
+
+            foreach($discardList as $item) {
+                $discard[] = "'{$item->id_actuacion}'";
+            }
+        }
+
+        $cond = " a.id_actuacion <> '{$request->get('id_actuacion')}' ";
+        if(count($discard)) {
+            $cond .= "and a.id_actuacion not in (" .  implode(',', $discard) . ")";
+        }
+        $actuaciones = EtapaProceso::getActuaciones($idEtapa, $cond)->get();
+        return response()->json($actuaciones);
     }
 }

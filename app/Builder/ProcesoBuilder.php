@@ -27,16 +27,15 @@ class ProcesoBuilder extends Builder
             $etapa = TipoProceso::getEtapas($this->values->id_tipo_proceso)->first();
             if ($etapa) {
                 $actuacion = EtapaProceso::getActuaciones($etapa->id_etapa_proceso)->first();
-
-                return $this->createActuacion($etapa, $actuacion);
+                return $this->createActuacion($etapa->id_etapa_proceso, $actuacion);
             }
         }
         return false;
     }
 
-    public function createActuacion($etapa, $actuacion, $id_responsable = false, $id_usuario_asigna = false)
+    public function createActuacion($id_etapa_proceso, $actuacion, $id_responsable = false, $id_usuario_asigna = false)
     {
-        if (!empty($this->values) && !empty($etapa) && !empty($actuacion)) {
+        if (!empty($this->values) && !empty($id_etapa_proceso) && !empty($actuacion)) {
 
             if (!$id_responsable) {
                 $id_responsable = Auth::id();
@@ -47,13 +46,13 @@ class ProcesoBuilder extends Builder
             }
 
             $procesoEtapa = ProcesoEtapa::where([
-                'id_etapa_proceso' => $etapa->id_etapa_proceso,
+                'id_etapa_proceso' => $id_etapa_proceso,
                 'id_proceso' => $this->values->id_proceso
             ])->first();
 
             if (empty($procesoEtapa)) {
                 $procesoEtapa = ProcesoEtapa::create([
-                    'id_etapa_proceso' => $etapa->id_etapa_proceso,
+                    'id_etapa_proceso' => $id_etapa_proceso,
                     'id_proceso' => $this->values->id_proceso,
                     'porcentaje' => 0
                 ]);
@@ -75,6 +74,14 @@ class ProcesoBuilder extends Builder
                         'id_usuario_responsable' => $id_responsable,
                         'id_usuario_asigna' => $id_usuario_asigna
                     ]);
+                } else {
+                    echo json_encode($procesoEtapaActuacion);
+                    exit();
+                    $procesoEtapaActuacion = ProcesoEtapaActuacion::find($procesoEtapa->id_proceso_etapa_actuacion)
+                        ->update([
+                            'id_usuario_responsable' => $id_responsable,
+                            'id_usuario_asigna' => $id_usuario_asigna
+                        ]);
                 }
 
                 return $procesoEtapaActuacion;
@@ -82,5 +89,18 @@ class ProcesoBuilder extends Builder
         }
 
         return false;
+    }
+
+
+    public function changeActuacion($ignore = false)
+    {
+
+        $cond = "a.id_actuacion <> {$ignore}";
+        $etapas = EtapaProceso::getActuaciones($this->values->id_etapa_proceso, $cond)->first();
+
+        return [
+            'proceso' => $this->values,
+            '$etapas' => $etapas
+        ];
     }
 }

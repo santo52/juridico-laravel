@@ -27,6 +27,12 @@ class Actuacion extends BaseModel
         "tipo_actuacion", "area_responsable", "dias_vencimiento_tipo", "tipo_resultado"
     ];
 
+    public function etapas()
+    {
+        return $this->belongsToMany('App\Entities\EtapaProceso', 'actuacion_etapa_proceso', 'id_actuacion', 'id_etapa_proceso')
+            ->withPivot('tiempo_maximo_proxima_actuacion', 'unidad_tiempo_proxima_actuacion', 'id_usuario_creacion', 'order');
+    }
+
     public function newCollection(array $models = []) {
         return new ActuacionCollection($models);
     }

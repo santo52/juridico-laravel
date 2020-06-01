@@ -33,6 +33,10 @@ class Proceso extends BaseModel
         return new ProcesoBuilder($builder, $this);
     }
 
+    public function procesoEtapa() {
+        return $this->hasMany('App\Entities\ProcesoEtapa', 'id_proceso', 'id_proceso');
+    }
+
     public function entidadJusticiaPrimeraInstancia()
     {
         return $this->hasOne('App\Entities\EntidadJusticia', 'id_entidad_justicia', 'entidad_justicia_primera_instancia');

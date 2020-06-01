@@ -7,11 +7,31 @@ class SeguimientoActuacion {
         $('#plantillasModal').modal('hide')
     }
 
-    upsert(e) {
+    finalizarActuacion(e) {
         e.preventDefault()
         e.stopPropagation()
 
-        if(validateForm(e)) {
+        if (validateForm(e)) {
+
+            const etapa = $('#siguienteEtapaActuacion').val()
+            const actuacion = $('#siguienteActuacion').val()
+            const usuario = $('#usuarioSiguienteActuacion').val()
+
+            $('#formularioActuacion')
+                .append(`<input type="hidden" name="id_siguiente_etapa_actuacion" id="id_siguiente_etapa_actuacion" value="${etapa}" />`)
+                .append(`<input type="hidden" name="id_siguiente_actuacion" id="id_siguiente_actuacion" value="${actuacion}" />`)
+                .append(`<input type="hidden" name="id_usuario_siguiente_actuacion" id="id_usuario_siguiente_actuacion" value="${usuario}" />`)
+                .trigger('submit')
+        }
+
+        return false
+    }
+
+    guardarActuacion(e) {
+        e.preventDefault()
+        e.stopPropagation()
+
+        if (validateForm(e)) {
 
             const $reqDocuments = $('.file-document[data-required=true]').toArray()
             const allDocs = $reqDocuments.every(item => $(item).data('filename'));
@@ -19,23 +39,43 @@ class SeguimientoActuacion {
             const $fieldList = $(e.target).find('input.form-control, select.form-control, textarea.form-control').toArray()
             const allSaved = $fieldList.every(item => $(item).attr('disabled') || $(item).val().trim());
 
+            if (allDocs && allSaved) {
 
-            const allFields = allDocs && allSaved
-            const formData = new FormData(e.target)
-            formData.append('all_fields', allFields)
+                const siguienteEtapaActuacion = $('#id_siguiente_etapa_actuacion').val()
+                const siguienteActuacion = $('#id_siguiente_actuacion').val()
+                const usuarioSiguienteActuacion = $('#id_usuario_siguiente_actuacion').val()
 
-            $.ajax({
-                url: '/seguimiento-procesos/actuacion/upsert',
-                data: new URLSearchParams(formData),
-                success: data => {
-                    if(data.saved) {
-                        location.hash = 'seguimiento-procesos/' + $('#id_proceso').val()
-                    }
+                if (!siguienteActuacion || !usuarioSiguienteActuacion || !siguienteEtapaActuacion) {
+                    $('#cerrarActuacion').modal()
+                    return false
                 }
-            })
+            }
+
+            const params = []
+            params.push({ name: 'all_fields', value: allDocs && allSaved })
+            this.upsert(e, params)
         }
 
         return false
+    }
+
+    upsert(e, params) {
+
+        const formData = new FormData(e.target)
+        params.map(({ name, value }) => {
+            formData.append(name, value)
+        })
+
+        $.ajax({
+            url: '/seguimiento-procesos/actuacion/upsert',
+            data: new URLSearchParams(formData),
+            success: data => {
+                $('#cerrarActuacion').modal('hide')
+                setTimeout(() => {
+                    location.hash = 'seguimiento-procesos/' + $('#id_proceso').val()
+                }, 1000);
+            }
+        })
     }
 
     deletePlantilla(id) {
@@ -50,7 +90,7 @@ class SeguimientoActuacion {
                     $(`#documentos-generados .file-document[data-id=${data.id_proceso_etapa_actuacion_plantillas}]`).remove()
 
 
-                    if(!$('#documentos-generados .file-document').length) {
+                    if (!$('#documentos-generados .file-document').length) {
                         $('#documentos-generados').append(`<div class="file-document-empty">No se han agregado documentos</div>`);
                     }
                 }
@@ -95,6 +135,35 @@ class SeguimientoActuacion {
         })
 
         return false
+    }
+
+    refreshActuaciones(self) {
+        const id_etapa_proceso = $(self).val()
+        if (id_etapa_proceso) {
+            $.ajax({
+                url: '/seguimiento-procesos/etapa/actuaciones/' + id_etapa_proceso,
+                data: new URLSearchParams({
+                    id_actuacion: $('#id_actuacion').val(),
+                    id_proceso_etapa: $('#id_proceso_etapa').val()
+                }),
+                success: data => {
+                    const html = data.map(item => `<option value="${item.id_actuacion}">${item.nombre_actuacion}</option>`)
+                    $('#siguienteActuacion')
+                        .html(html)
+
+                    if (data.length) {
+                        $('#siguienteActuacion').val(data[0].id_actuacion)
+                    }
+
+                    $('#siguienteActuacion')
+                        .selectpicker('refresh')
+                }
+            })
+        } else {
+            $('#siguienteActuacion')
+                .html('')
+                .selectpicker('refresh')
+        }
     }
 }
 

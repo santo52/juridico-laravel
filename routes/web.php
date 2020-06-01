@@ -154,7 +154,7 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/seguimiento-procesos/comentario/get/{id}', 'ProcesoBitacoraController@get');
     Route::post('/seguimiento-procesos/comentario/delete/{id}', 'ProcesoBitacoraController@delete');
     Route::post('/seguimiento-procesos/comentarios/{id}', 'ProcesoBitacoraController@getByProceso');
-
+    Route::post('/seguimiento-procesos/etapa/actuaciones/{idEtapa}', 'SeguimientoProcesoController@getActuacionesEtapa');
 
     // Route::post('/proceso/upsert', 'ProcesoController@upsert');
     // Route::post('/proceso/upload', 'ProcesoController@uploadFile');

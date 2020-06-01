@@ -1609,8 +1609,26 @@ var SeguimientoActuacion = /*#__PURE__*/function () {
       $('#plantillasModal').modal('hide');
     }
   }, {
-    key: "upsert",
-    value: function upsert(e) {
+    key: "finalizarActuacion",
+    value: function finalizarActuacion(e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (validateForm(e)) {
+        var etapa = $('#siguienteEtapaActuacion').val();
+
+        var _actuacion = $('#siguienteActuacion').val();
+
+        var _usuario = $('#usuarioSiguienteActuacion').val();
+
+        $('#formularioActuacion').append("<input type=\"hidden\" name=\"id_siguiente_etapa_actuacion\" id=\"id_siguiente_etapa_actuacion\" value=\"".concat(etapa, "\" />")).append("<input type=\"hidden\" name=\"id_siguiente_actuacion\" id=\"id_siguiente_actuacion\" value=\"".concat(_actuacion, "\" />")).append("<input type=\"hidden\" name=\"id_usuario_siguiente_actuacion\" id=\"id_usuario_siguiente_actuacion\" value=\"".concat(_usuario, "\" />")).trigger('submit');
+      }
+
+      return false;
+    }
+  }, {
+    key: "guardarActuacion",
+    value: function guardarActuacion(e) {
       e.preventDefault();
       e.stopPropagation();
 
@@ -1623,30 +1641,56 @@ var SeguimientoActuacion = /*#__PURE__*/function () {
         var allSaved = $fieldList.every(function (item) {
           return $(item).attr('disabled') || $(item).val().trim();
         });
-        var allFields = allDocs && allSaved;
-        var formData = new FormData(e.target);
-        formData.append('all_fields', allFields);
-        $.ajax({
-          url: '/seguimiento-procesos/actuacion/upsert',
-          data: new URLSearchParams(formData),
-          success: function success(data) {
-            if (data.saved) {
-              location.hash = 'seguimiento-procesos/' + $('#id_proceso').val();
-            }
+
+        if (allDocs && allSaved) {
+          var siguienteEtapaActuacion = $('#id_siguiente_etapa_actuacion').val();
+          var siguienteActuacion = $('#id_siguiente_actuacion').val();
+          var usuarioSiguienteActuacion = $('#id_usuario_siguiente_actuacion').val();
+
+          if (!siguienteActuacion || !usuarioSiguienteActuacion || !siguienteEtapaActuacion) {
+            $('#cerrarActuacion').modal();
+            return false;
           }
+        }
+
+        var params = [];
+        params.push({
+          name: 'all_fields',
+          value: allDocs && allSaved
         });
+        this.upsert(e, params);
       }
 
       return false;
+    }
+  }, {
+    key: "upsert",
+    value: function upsert(e, params) {
+      var formData = new FormData(e.target);
+      params.map(function (_ref16) {
+        var name = _ref16.name,
+            value = _ref16.value;
+        formData.append(name, value);
+      });
+      $.ajax({
+        url: '/seguimiento-procesos/actuacion/upsert',
+        data: new URLSearchParams(formData),
+        success: function success(data) {
+          $('#cerrarActuacion').modal('hide');
+          setTimeout(function () {
+            location.hash = 'seguimiento-procesos/' + $('#id_proceso').val();
+          }, 1000);
+        }
+      });
     }
   }, {
     key: "deletePlantilla",
     value: function deletePlantilla(id) {
       $.ajax({
         url: '/seguimiento-procesos/actuacion/plantilla/delete/' + id,
-        success: function success(_ref16) {
-          var deleted = _ref16.deleted,
-              data = _ref16.data;
+        success: function success(_ref17) {
+          var deleted = _ref17.deleted,
+              data = _ref17.data;
 
           if (deleted) {
             $('#plantillaDocumento').append("<option value=\"".concat(data.plantilla_documento.id_plantilla_documento, "\">").concat(data.plantilla_documento.nombre_plantilla_documento, "</option>")).selectpicker('refresh');
@@ -1671,9 +1715,9 @@ var SeguimientoActuacion = /*#__PURE__*/function () {
       $.ajax({
         url: '/seguimiento-procesos/actuacion/plantilla/upsert',
         data: new URLSearchParams(formData),
-        success: function success(_ref17) {
-          var saved = _ref17.saved,
-              url = _ref17.url;
+        success: function success(_ref18) {
+          var saved = _ref18.saved,
+              url = _ref18.url;
 
           if (saved) {
             var value = $('#plantillaDocumento').val();
@@ -1692,6 +1736,35 @@ var SeguimientoActuacion = /*#__PURE__*/function () {
         }
       });
       return false;
+    }
+  }, {
+    key: "refreshActuaciones",
+    value: function refreshActuaciones(self) {
+      var id_etapa_proceso = $(self).val();
+
+      if (id_etapa_proceso) {
+        $.ajax({
+          url: '/seguimiento-procesos/etapa/actuaciones/' + id_etapa_proceso,
+          data: new URLSearchParams({
+            id_actuacion: $('#id_actuacion').val(),
+            id_proceso_etapa: $('#id_proceso_etapa').val()
+          }),
+          success: function success(data) {
+            var html = data.map(function (item) {
+              return "<option value=\"".concat(item.id_actuacion, "\">").concat(item.nombre_actuacion, "</option>");
+            });
+            $('#siguienteActuacion').html(html);
+
+            if (data.length) {
+              $('#siguienteActuacion').val(data[0].id_actuacion);
+            }
+
+            $('#siguienteActuacion').selectpicker('refresh');
+          }
+        });
+      } else {
+        $('#siguienteActuacion').html('').selectpicker('refresh');
+      }
     }
   }]);
 
@@ -1734,8 +1807,8 @@ var SeguimientoProceso = /*#__PURE__*/function () {
       });
       $.ajax({
         url: '/seguimiento-procesos/etapas-de-proceso/get/' + id_etapa_proceso,
-        success: function success(_ref18) {
-          var actuaciones = _ref18.actuaciones;
+        success: function success(_ref19) {
+          var actuaciones = _ref19.actuaciones;
           var html = actuaciones.map(function (data) {
             return "<option value=\"".concat(data.id_actuacion, "\">").concat(data.nombre_actuacion, "</option>");
           });
@@ -1818,8 +1891,8 @@ var SeguimientoProceso = /*#__PURE__*/function () {
       var id = $('#deleteValue').val();
       $.ajax({
         url: '/seguimiento-procesos/comentario/delete/' + id,
-        success: function success(_ref19) {
-          var deleted = _ref19.deleted;
+        success: function success(_ref20) {
+          var deleted = _ref20.deleted;
 
           if (deleted) {
             $('#comentarioRow' + id).remove();
@@ -1840,8 +1913,8 @@ var SeguimientoProceso = /*#__PURE__*/function () {
       $.ajax({
         url: '/seguimiento-procesos/comentario/upsert',
         data: new URLSearchParams(formData),
-        success: function success(_ref20) {
-          var saved = _ref20.saved;
+        success: function success(_ref21) {
+          var saved = _ref21.saved;
 
           if (saved) {
             var $table = $('#comentariosTable');
@@ -2022,8 +2095,8 @@ var TipoProceso = /*#__PURE__*/function () {
       var title = id ? 'Editar tipo de proceso' : 'Nuevo tipo de proceso';
       $('#createTitle').text(title);
       $('#tipoNombre').val('');
-      this.renderModalData(id).then(function (_ref21) {
-        var tipoProceso = _ref21.tipoProceso;
+      this.renderModalData(id).then(function (_ref22) {
+        var tipoProceso = _ref22.tipoProceso;
 
         if (tipoProceso) {
           $('#tipoNombre').val(tipoProceso.nombre_tipo_proceso);
@@ -2161,8 +2234,8 @@ var Usuario = /*#__PURE__*/function () {
       if (id) {
         $.ajax({
           url: '/usuario/get/' + id,
-          success: function success(_ref22) {
-            var usuario = _ref22.usuario;
+          success: function success(_ref23) {
+            var usuario = _ref23.usuario;
             $('#tipoDocumento').val(usuario.id_tipo_documento).selectpicker('refresh');
             $('#numeroDocumento').val(usuario.numero_documento);
             $('#primerApellido').val(usuario.primer_apellido);

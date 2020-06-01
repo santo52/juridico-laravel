@@ -41,7 +41,7 @@ function validateRequired($form){
     let completed = true
     requiredFields.map(item => {
         const value = $(item).val()
-        if(!value.trim()) {
+        if(!value || !value.trim()) {
             if(completed){
                 $(item).focus();
                 completed = false

@@ -1874,11 +1874,10 @@ var SeguimientoProceso = /*#__PURE__*/function () {
     key: "changeEtapa",
     value: function changeEtapa(self) {
       var $self = $(self);
-      var position = $self.data('position');
+      var procesoetapa = $self.data('procesoetapa');
       var id = $self.data('id');
-      var currentPosition = $('#position').val();
 
-      if (position == 0 && currentPosition == 0) {
+      if (!procesoetapa) {
         var params = new FormData();
         params.append('id_etapa_proceso', id);
         params.append('id_proceso', getId());
@@ -1886,7 +1885,13 @@ var SeguimientoProceso = /*#__PURE__*/function () {
           url: '/seguimiento-procesos/set-etapa',
           data: new URLSearchParams(params),
           success: function success(data) {
-            $('#position').val(1);
+            $self.data('procesoetapa', data.id_proceso_etapa);
+            $list = $('#etapa-' + data.id_etapa_proceso + ' table .seguimiento-sin-url');
+            $list.toArray().map(function (item) {
+              var idActuacion = $(item).data('actuacion');
+              $(item).attr('href', "#seguimiento-procesos/actuacion/crear/".concat(data.id_proceso_etapa, "/").concat(idActuacion));
+            });
+            $list.removeClass('seguimiento-sin-url');
           }
         });
       }

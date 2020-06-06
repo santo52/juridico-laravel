@@ -55,10 +55,10 @@ class SeguimientoProceso {
 
     changeEtapa(self) {
         const $self = $(self)
-        const position = $self.data('position')
+        const procesoetapa = $self.data('procesoetapa')
         const id = $self.data('id')
-        const currentPosition = $('#position').val()
-        if (position == 0 && currentPosition == 0) {
+
+        if (!procesoetapa) {
 
             const params = new FormData();
             params.append('id_etapa_proceso', id)
@@ -68,7 +68,13 @@ class SeguimientoProceso {
                 url: '/seguimiento-procesos/set-etapa',
                 data: new URLSearchParams(params),
                 success: data => {
-                    $('#position').val(1)
+                    $self.data('procesoetapa', data.id_proceso_etapa)
+                    $list = $('#etapa-' + data.id_etapa_proceso + ' table .seguimiento-sin-url')
+                    $list.toArray().map(item => {
+                        const idActuacion = $(item).data('actuacion')
+                        $(item).attr('href', `#seguimiento-procesos/actuacion/crear/${data.id_proceso_etapa}/${idActuacion}`)
+                    })
+                    $list.removeClass('seguimiento-sin-url')
                 }
             })
         }

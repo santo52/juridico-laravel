@@ -60,9 +60,8 @@ class SeguimientoProcesoController extends Controller
 
     public function setEtapa(Request $request)
     {
-        $proceso = Proceso::find($request->get('id_proceso'));
-        if ($proceso) $proceso->update(['id_etapa_proceso' => $request->get('id_etapa_proceso')]);
-        return response()->json(['proceso' => $proceso]);
+        $procesoEtapa = ProcesoEtapa::create($request->all());
+        return response()->json($procesoEtapa);
     }
 
     public function detalle($id)

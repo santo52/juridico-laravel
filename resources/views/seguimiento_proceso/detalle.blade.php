@@ -38,6 +38,7 @@
         <li @if($proceso->id_etapa_proceso == $item->id_etapa_proceso) class="active" @elseif($item->porcentaje == 100)
             class="finalized" @endif role="presentation"
             data-id="{{$item->id_etapa_proceso}}" data-position="{{$key}}"
+            data-procesoetapa="{{$item->id_proceso_etapa}}"
             onclick="seguimientoProceso.changeEtapa(this)">
             <a href="#etapa-{{$item->id_etapa_proceso}}" aria-controls="etapa-{{$item->id_etapa_proceso}}" role="tab"
                 data-toggle="tab">
@@ -444,7 +445,7 @@
         @foreach ($etapas as $itemEtapa)
         <div role="tabpanel"
             class="tab-pane @if($proceso->id_etapa_proceso == $itemEtapa->id_etapa_proceso) active @endif"
-            id="etapa-{{$itemEtapa->id_etapa_proceso}}">
+            id="etapa-{{$itemEtapa->id_etapa_proceso}}" data-procesoetapa="{{$itemEtapa->id_proceso_etapa}}">
 
             <div class="juridico right-buttons">
                 <div>
@@ -502,8 +503,8 @@
                             </a>
                             @else
                             @isset($itemEtapa->id_proceso_etapa)
-                            <a href="#seguimiento-procesos/actuacion/crear/{{$itemEtapa->id_proceso_etapa}}/{{$actuacion->id_actuacion}}"
-                                data-toggle="tooltip" title="Editar actuación" class="btn text-primary" type="button">
+                            <a data-actuacion="{{$actuacion->id_actuacion}}" href="#seguimiento-procesos/actuacion/crear/{{$itemEtapa->id_proceso_etapa}}/{{$actuacion->id_actuacion}}"
+                                data-toggle="tooltip" title="Editar actuación" class="btn text-primary seguimiento-sin-url" type="button">
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </a>
                             @else

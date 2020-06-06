@@ -1466,6 +1466,12 @@ ul.nav-tabs > li.active > a {
   text-align: center;
 }
 
+.file-document-empty.small,
+.file-document.small {
+  padding: 10px;
+  max-height: 33px;
+}
+
 .file-document-empty {
   background: #f8f8f8;
   border: 1px solid #eee;
@@ -1559,6 +1565,25 @@ ul.nav-tabs > li.active > a {
   color: gray;
 }
 
+.file-document.not-empty.small .no-empty-message .remove-file {
+  padding: 5px;
+}
+
+.file-document.not-empty.small .no-empty-message .file-document-icon {
+  margin-top: -5px;
+  width: 20px;
+}
+
+.file-document.not-empty.small .no-empty-message .file-document-content {
+  margin-top: -5px;
+}
+
+.file-document.not-empty.small .no-empty-message .file-document-content .progress {
+  margin-right: -5px;
+  margin-top: 0;
+  height: 6px;
+}
+
 .actuacion-row td.estado span {
   display: inline-block;
   padding: 2px 5px;
@@ -1590,6 +1615,12 @@ ul.nav-tabs > li.active > a {
 
 .documents-container .navbar {
   width: 50%;
+}
+
+@media screen and (max-width: 550px) {
+  .documents-container .navbar {
+    width: 100%;
+  }
 }
 
 .documents-container .navbar-header {

@@ -598,8 +598,20 @@ function asyncFootableOnSort(e, callback) {
 jQuery.fn.fileDocument = function(data) {
     const fileDocument = {
         data: '',
+        disponible: [],
         init(data) {
             this.data = data
+            this.disponible = [
+                'image/jpeg',
+                'image/png',
+                'image/jpg',
+                'application/pdf',
+                'application/vnd.ms-powerpoint',
+                'application/vnd.ms-excel',
+                'application/msword',
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+            ]
         },
 
         getImage(extention) {
@@ -627,7 +639,7 @@ jQuery.fn.fileDocument = function(data) {
                 let $input = $item.find('input')
                 if (!$input.length) {
                     const name = $item.data('name')
-                    $input = $(`<input type="file" ${name ? `name="${name}"` : ''} />`)
+                    $input = $(`<input accept="${this.disponible.join(', ')}" type="file" ${name ? `name="${name}"` : ''} />`)
                 }
 
                 const filenameSplit = filename.split('.')
@@ -668,8 +680,9 @@ jQuery.fn.fileDocument = function(data) {
                 const name = $item.data('name')
                 const title = $item.data('title')
                 const required = $item.data('required')
+
                 $item.removeClass('not-empty')
-                    .html(`<input type="file" ${name ? `name="${name}"` : ''} />`)
+                    .html(`<input accept="${this.disponible.join(', ')}" type="file" ${name ? `name="${name}"` : ''} />`)
                     .append(`<span class="empty-message">Subir ${title ? title : 'el documento'}${required ? ' <b>(requerido)</b>' : ''}</span>`)
                 $item.children('input[type=file]').on('change', () => fileDocument.onChange($item))
             }
@@ -703,6 +716,12 @@ jQuery.fn.fileDocument = function(data) {
         onChange(self) {
             const $parent = $(self)
             const file = $parent.find('input[type=file]')[0].files[0]
+
+            if(!file || !this.disponible.includes(file.type)) {
+                console.log(file ? file.type : null)
+                return false;
+            }
+
             $parent.addClass('not-empty')
             $parent.data('filename', file.name)
 

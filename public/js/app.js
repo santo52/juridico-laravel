@@ -868,8 +868,10 @@ function asyncFootableOnSort(e, callback) {
 jQuery.fn.fileDocument = function (data) {
   var fileDocument = {
     data: '',
+    disponible: [],
     init: function init(data) {
       this.data = data;
+      this.disponible = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf', 'application/vnd.ms-powerpoint', 'application/vnd.ms-excel', 'application/msword', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
     },
     getImage: function getImage(extention) {
       var docs = ['doc', 'docx'];
@@ -895,7 +897,7 @@ jQuery.fn.fileDocument = function (data) {
 
         if (!$input.length) {
           var name = $item.data('name');
-          $input = $("<input type=\"file\" ".concat(name ? "name=\"".concat(name, "\"") : '', " />"));
+          $input = $("<input accept=\"".concat(this.disponible.join(', '), "\" type=\"file\" ").concat(name ? "name=\"".concat(name, "\"") : '', " />"));
         }
 
         var filenameSplit = filename.split('.');
@@ -916,7 +918,7 @@ jQuery.fn.fileDocument = function (data) {
         var name = $item.data('name');
         var title = $item.data('title');
         var required = $item.data('required');
-        $item.removeClass('not-empty').html("<input type=\"file\" ".concat(name ? "name=\"".concat(name, "\"") : '', " />")).append("<span class=\"empty-message\">Subir ".concat(title ? title : 'el documento').concat(required ? ' <b>(requerido)</b>' : '', "</span>"));
+        $item.removeClass('not-empty').html("<input accept=\"".concat(this.disponible.join(', '), "\" type=\"file\" ").concat(name ? "name=\"".concat(name, "\"") : '', " />")).append("<span class=\"empty-message\">Subir ".concat(title ? title : 'el documento').concat(required ? ' <b>(requerido)</b>' : '', "</span>"));
         $item.children('input[type=file]').on('change', function () {
           return fileDocument.onChange($item);
         });
@@ -950,6 +952,12 @@ jQuery.fn.fileDocument = function (data) {
     onChange: function onChange(self) {
       var $parent = $(self);
       var file = $parent.find('input[type=file]')[0].files[0];
+
+      if (!file || !this.disponible.includes(file.type)) {
+        console.log(file ? file.type : null);
+        return false;
+      }
+
       $parent.addClass('not-empty');
       $parent.data('filename', file.name);
       this.addFile($parent);

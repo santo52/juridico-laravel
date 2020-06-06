@@ -78,9 +78,9 @@
                         style="font-weight: initial;font-size: 1rem;">({{$actuacion->getTipoResultado()}})<span></label>
                 @if($actuacion->tipo_resultado == 1)
                 @if($procesoEtapa->id_proceso_etapa_actuacion)
-                    <div id="resultado_actuacion_file" class="file-document" @if($procesoEtapa->resultado_actuacion) data-filename="/uploads/documentos/{{$procesoEtapa->resultado_actuacion}}" @endif data-id="{{$procesoEtapa->id_proceso_etapa_actuacion}}" data-title="resultado"></div>
+                    <div id="resultado_actuacion_file" class="file-document small" @if($procesoEtapa->resultado_actuacion) data-filename="/uploads/documentos/{{$procesoEtapa->resultado_actuacion}}" @endif data-id="{{$procesoEtapa->id_proceso_etapa_actuacion}}" data-title="resultado"></div>
                 @else
-                <div class="file-document-empty" style="height:34px;padding:8px;">Documento resultado</div>
+                <div class="file-document-empty small" style="height:34px;padding:8px;">Documento resultado</div>
                 @endif
                 @elseif($actuacion->tipo_resultado == 9)
                 <input name="resultado_actuacion" id="resultado_actuacion" data-date-format="yyyy-mm-dd"

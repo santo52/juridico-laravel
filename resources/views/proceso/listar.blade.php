@@ -92,7 +92,7 @@
                     </a>
                     @endif
                     @if(isset($seguimiento))
-                    <a data-toggle="tooltip" title="Información cliente" href="#cliente/{{$proceso->id_cliente}}" class="btn text-warning" type="button">
+                    <a data-toggle="tooltip" title="Información cliente" target="_blank" href="#cliente/{{$proceso->id_cliente}}" class="btn text-warning" type="button">
                         <span class="glyphicon glyphicon-user"></span>
                     </a>
                     @endif

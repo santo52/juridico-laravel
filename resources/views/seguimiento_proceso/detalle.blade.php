@@ -182,15 +182,15 @@
                 <div class="col-xs-12 col-sm-4">
                     <label for="normatividad_aplicada_caso" class="control-label">Entidad de Justicia en primera
                         instancia</label>
-                    <input type="text" class="form-control" @if($proceso->entidadJusticiaPrimeraInstancia)
-                    value="{{$proceso->entidadJusticiaPrimeraInstancia->nombre_entidad_justicia}}" @endif
+                    <input type="text" class="form-control"
+                    value="{{$proceso->entidad_justicia_primera_instancia}}"
                     disabled />
                 </div>
                 <div class="col-xs-12 col-sm-4">
                     <label for="dar_informacion_caso" class="control-label">Entidad de Justicia en segunda
                         instancia</label>
-                    <input type="text" class="form-control" @if($proceso->entidadJusticiaSegundaInstancia)
-                    value="{{$proceso->entidadJusticiaSegundaInstancia->nombre_entidad_justicia}}" @endif
+                    <input type="text" class="form-control"
+                    value="{{$proceso->entidad_justicia_segunda_instancia}}"
                     disabled />
                 </div>
 

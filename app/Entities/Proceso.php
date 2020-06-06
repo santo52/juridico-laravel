@@ -38,15 +38,15 @@ class Proceso extends BaseModel
         return $this->hasMany('App\Entities\ProcesoEtapa', 'id_proceso', 'id_proceso');
     }
 
-    public function entidadJusticiaPrimeraInstancia()
-    {
-        return $this->hasOne('App\Entities\EntidadJusticia', 'id_entidad_justicia', 'entidad_justicia_primera_instancia');
-    }
+    // public function entidadJusticiaPrimeraInstancia()
+    // {
+    //     return $this->hasOne('App\Entities\EntidadJusticia', 'id_entidad_justicia', 'entidad_justicia_primera_instancia');
+    // }
 
-    public function entidadJusticiaSegundaInstancia()
-    {
-        return $this->hasOne('App\Entities\EntidadJusticia', 'id_entidad_justicia', 'entidad_justicia_segunda_instancia');
-    }
+    // public function entidadJusticiaSegundaInstancia()
+    // {
+    //     return $this->hasOne('App\Entities\EntidadJusticia', 'id_entidad_justicia', 'entidad_justicia_segunda_instancia');
+    // }
 
     public function responsable()
     {
@@ -92,7 +92,7 @@ class Proceso extends BaseModel
 
     public static function get($id)
     {
-        return self::with('municipio.departamento', 'cliente.persona', 'cliente.intermediario.persona', 'responsable', 'etapa', 'entidadJusticiaPrimeraInstancia', 'entidadJusticiaSegundaInstancia')
+        return self::with('municipio.departamento', 'cliente.persona', 'cliente.intermediario.persona', 'responsable', 'etapa')
             ->where('id_proceso', $id)
             ->first();
     }

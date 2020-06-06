@@ -130,9 +130,8 @@ class ProcesoController extends Controller
         $paises = Pais::all();
         $departamentos = Departamento::all();
         $municipios = $proceso ? Municipio::where('id_departamento', $proceso->municipio->id_departamento)->get() : [];
-        $historico = ProcesoEtapaActuacion::with(['procesoEtapa.proceso' => function ($q) use ($id) {
-            $q->where('id_proceso', $id);
-        }])->where(['historico' => 1, 'finalizado' => 1])
+        $historico = ProcesoEtapaActuacion::leftjoin('proceso_etapa as pe', 'proceso_etapa_actuacion.id_proceso_etapa', 'pe.id_proceso_etapa')
+            ->where(['historico' => 1, 'finalizado' => 1, 'id_proceso' => $id])
             ->orderBy('fecha_resultado', 'desc')
             ->get();
 
@@ -157,6 +156,7 @@ class ProcesoController extends Controller
     {
 
         $conditional[] = ['numero_proceso', $numero_proceso];
+        $conditional[] = ['numero_proceso', '<>' , ''];
         $conditional[] = ['eliminado', 0];
         if ($id) {
             $conditional[] = ['id_proceso', '<>', $id];

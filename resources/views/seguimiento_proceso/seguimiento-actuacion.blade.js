@@ -44,11 +44,12 @@ class SeguimientoActuacion {
             const allFields = allDocs && allSaved && !finalizado && idProcesoEtapaActuacion != ''
             if (allFields) {
 
+                const valorPago = $('#valor_pago').val()
                 const siguienteEtapaActuacion = $('#id_siguiente_etapa_actuacion').val()
                 const siguienteActuacion = $('#id_siguiente_actuacion').val()
                 const usuarioSiguienteActuacion = $('#id_usuario_siguiente_actuacion').val()
 
-                if (!siguienteActuacion || !usuarioSiguienteActuacion || !siguienteEtapaActuacion) {
+                if (parseInt(valorPago) > 0 && (!siguienteActuacion || !usuarioSiguienteActuacion || !siguienteEtapaActuacion)) {
                     $('#cerrarActuacion').modal()
                     return false
                 }
@@ -147,7 +148,9 @@ class SeguimientoActuacion {
                 url: '/seguimiento-procesos/etapa/actuaciones/' + id_etapa_proceso,
                 data: new URLSearchParams({
                     id_actuacion: $('#id_actuacion').val(),
-                    id_proceso_etapa: $('#id_proceso_etapa').val()
+                    id_proceso_etapa: $('#id_proceso_etapa').val(),
+                    id_proceso: $('#id_proceso').val(),
+                    id_etapa_proceso
                 }),
                 success: data => {
                     const html = data.map(item => `<option value="${item.id_actuacion}">${item.nombre_actuacion}</option>`)

@@ -58,6 +58,10 @@ class SeguimientoProcesoController extends Controller
         ]);
     }
 
+    public function getEtapasDisponibles($id) {
+        return response()->json(['etapas' => []]);
+    }
+
     public function setEtapa(Request $request)
     {
         $procesoEtapa = ProcesoEtapa::create($request->all());
@@ -309,6 +313,7 @@ class SeguimientoProcesoController extends Controller
             if (empty($procesoEtapaActuacion) || $procesoEtapaActuacion->finalizado == 0) {
                 $cerrarActuacion = true;
                 $data['finalizado'] = 1;
+                $proceso->update(['id_etapa_proceso' => $request->get('id_siguiente_etapa_actuacion')]);
             }
         }
 
@@ -328,7 +333,10 @@ class SeguimientoProcesoController extends Controller
     public function getActuacionesEtapa(Request $request, $idEtapa)
     {
         $discard = [];
-        $procesoEtapaActuaciones = ProcesoEtapa::find($request->get('id_proceso_etapa'));
+        $procesoEtapaActuaciones = ProcesoEtapa::where([
+            'id_proceso' => $request->get('id_proceso'),
+            'id_etapa_proceso' => $request->get('id_etapa_proceso'),
+        ])->first();
         if ($procesoEtapaActuaciones) {
             $discardList = $procesoEtapaActuaciones
                 ->procesoEtapaActuaciones()
@@ -340,7 +348,8 @@ class SeguimientoProcesoController extends Controller
             }
         }
 
-        $cond = " a.id_actuacion <> '{$request->get('id_actuacion')}' ";
+        // $cond = " a.id_actuacion <> '{$request->get('id_actuacion')}' ";
+        $cond = " 1 = 1 ";
         if(count($discard)) {
             $cond .= "and a.id_actuacion not in (" .  implode(',', $discard) . ")";
         }

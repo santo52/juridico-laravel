@@ -8,6 +8,7 @@ use App\Entities\TipoProceso;
 use App\Entities\ProcesoEtapa;
 use App\Entities\ProcesoEtapaActuacion;
 use App\Entities\EtapaProceso;
+use App\Entities\Proceso;
 use Illuminate\Support\Facades\Auth;
 
 class ProcesoBuilder extends Builder
@@ -79,6 +80,11 @@ class ProcesoBuilder extends Builder
                         'id_usuario_responsable' => $id_responsable,
                         'id_usuario_asigna' => $id_usuario_asigna
                     ]);
+                }
+
+                $proceso = Proceso::find($this->values->id_proceso);
+                if($proceso) {
+                    $proceso->update(['id_etapa_proceso' => $procesoEtapa->id_etapa_proceso]);
                 }
 
                 return $procesoEtapaActuacion;

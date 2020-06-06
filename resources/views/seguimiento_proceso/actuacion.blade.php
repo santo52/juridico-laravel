@@ -39,6 +39,9 @@
         <input type="hidden" name="id_actuacion" id="id_actuacion" value="{{$actuacion->id_actuacion}}" />
         <input type="hidden" name="tipo_resultado" id="tipo_resultado" value="{{$actuacion->tipo_resultado}}" />
         <input type="hidden" id="finalizado" value="{{$procesoEtapa->finalizado}}" />
+        <input type="hidden" id="id_etapa_proceso" value="{{$procesoEtapa->id_etapa_proceso}}" />
+
+
 
         <div class="form-group row">
             <div class="col-xs-12 col-sm-6">
@@ -69,7 +72,7 @@
             <div class="col-xs-12 col-sm-6">
                 <label for="fecha_inicio" class="control-label">Valor del cobro</label>
                 @if($actuacion->actuacion_tiene_cobro == 1)
-                <input type="text" name="valor_pago" class="form-control" value="{{$procesoEtapa->valor_pago }}" />
+                <input type="number" id="valor_pago" name="valor_pago" class="form-control" value="{{$procesoEtapa->valor_pago }}" />
                 @else
                 <input type="text" name="valor_pago" class="form-control" value="No genera cobro" disabled />
                 @endif

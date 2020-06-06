@@ -1678,11 +1678,12 @@ var SeguimientoActuacion = /*#__PURE__*/function () {
         var allFields = allDocs && allSaved && !finalizado && idProcesoEtapaActuacion != '';
 
         if (allFields) {
+          var valorPago = $('#valor_pago').val();
           var siguienteEtapaActuacion = $('#id_siguiente_etapa_actuacion').val();
           var siguienteActuacion = $('#id_siguiente_actuacion').val();
           var usuarioSiguienteActuacion = $('#id_usuario_siguiente_actuacion').val();
 
-          if (!siguienteActuacion || !usuarioSiguienteActuacion || !siguienteEtapaActuacion) {
+          if (parseInt(valorPago) > 0 && (!siguienteActuacion || !usuarioSiguienteActuacion || !siguienteEtapaActuacion)) {
             $('#cerrarActuacion').modal();
             return false;
           }
@@ -1782,7 +1783,9 @@ var SeguimientoActuacion = /*#__PURE__*/function () {
           url: '/seguimiento-procesos/etapa/actuaciones/' + id_etapa_proceso,
           data: new URLSearchParams({
             id_actuacion: $('#id_actuacion').val(),
-            id_proceso_etapa: $('#id_proceso_etapa').val()
+            id_proceso_etapa: $('#id_proceso_etapa').val(),
+            id_proceso: $('#id_proceso').val(),
+            id_etapa_proceso: id_etapa_proceso
           }),
           success: function success(data) {
             var html = data.map(function (item) {

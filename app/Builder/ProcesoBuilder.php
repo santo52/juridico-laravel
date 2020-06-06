@@ -75,13 +75,10 @@ class ProcesoBuilder extends Builder
                         'id_usuario_asigna' => $id_usuario_asigna
                     ]);
                 } else {
-                    echo json_encode($procesoEtapaActuacion);
-                    exit();
-                    $procesoEtapaActuacion = ProcesoEtapaActuacion::find($procesoEtapa->id_proceso_etapa_actuacion)
-                        ->update([
-                            'id_usuario_responsable' => $id_responsable,
-                            'id_usuario_asigna' => $id_usuario_asigna
-                        ]);
+                    $procesoEtapaActuacion->update([
+                        'id_usuario_responsable' => $id_responsable,
+                        'id_usuario_asigna' => $id_usuario_asigna
+                    ]);
                 }
 
                 return $procesoEtapaActuacion;

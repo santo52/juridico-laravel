@@ -38,6 +38,7 @@
             value="{{$procesoEtapa->id_proceso_etapa_actuacion}}" />
         <input type="hidden" name="id_actuacion" id="id_actuacion" value="{{$actuacion->id_actuacion}}" />
         <input type="hidden" name="tipo_resultado" id="tipo_resultado" value="{{$actuacion->tipo_resultado}}" />
+        <input type="hidden" id="finalizado" value="{{$procesoEtapa->finalizado}}" />
 
         <div class="form-group row">
             <div class="col-xs-12 col-sm-6">
@@ -73,6 +74,7 @@
                 <input type="text" name="valor_pago" class="form-control" value="No genera cobro" disabled />
                 @endif
             </div>
+            @if($actuacion->tipo_resultado != 4)
             <div class="col-xs-12 col-sm-6">
                 <label for="resultado" class="control-label">Resultado <span
                         style="font-weight: initial;font-size: 1rem;">({{$actuacion->getTipoResultado()}})<span></label>
@@ -82,15 +84,33 @@
                 @else
                 <div class="file-document-empty small" style="height:34px;padding:8px;">Documento resultado</div>
                 @endif
-                @elseif($actuacion->tipo_resultado == 9)
+                @elseif(in_array($actuacion->tipo_resultado, [3, 10, 11]))
                 <input name="resultado_actuacion" id="resultado_actuacion" data-date-format="yyyy-mm-dd"
                     class="form-control datepicker-here" @if($procesoEtapa)
                     value="{{$procesoEtapa->resultado_actuacion }}" @endif />
+                @elseif(in_array($actuacion->tipo_resultado, [8, 9, 13]))
+                <input type="number" name="resultado_actuacion" class="form-control numeric"
+                    value="{{ $procesoEtapa->resultado_actuacion }}" />
                 @else
                 <input type="text" name="resultado_actuacion" class="form-control"
                     value="{{ $procesoEtapa->resultado_actuacion }}" />
                 @endif
             </div>
+            @else
+            <div class="col-xs-12 col-sm-3">
+                <label for="fecha_resultado" class="control-label">Fecha de resultado <span
+                        style="font-weight: initial;font-size: 1rem;">({{$actuacion->getTipoResultado()}})<span></label>
+                <input name="fecha_resultado" id="fecha_resultado" data-date-format="yyyy-mm-dd"
+                class="form-control datepicker-here" @if($procesoEtapa)
+                value="{{$procesoEtapa->fecha_resultado }}" @endif />
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <label for="resultado" class="control-label">Resultado <span
+                        style="font-weight: initial;font-size: 1rem;">({{$actuacion->getTipoResultado()}})<span></label>
+                <input type="text" name="resultado_actuacion" class="form-control"
+                    value="{{ $procesoEtapa->resultado_actuacion }}" />
+            </div>
+            @endif
         </div>
 
         <div class="separator margin"></div>

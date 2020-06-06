@@ -39,8 +39,9 @@ class SeguimientoActuacion {
             const $fieldList = $(e.target).find('input.form-control, select.form-control, textarea.form-control').toArray()
             const allSaved = $fieldList.every(item => $(item).attr('disabled') || $(item).val().trim());
             const idProcesoEtapaActuacion = $('#id_proceso_etapa_actuacion').val()
+            const finalizado = $('#finalizado').val() == 1
 
-            const allFields = allDocs && allSaved && idProcesoEtapaActuacion
+            const allFields = allDocs && allSaved && !finalizado && idProcesoEtapaActuacion != ''
             if (allFields) {
 
                 const siguienteEtapaActuacion = $('#id_siguiente_etapa_actuacion').val()

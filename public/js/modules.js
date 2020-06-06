@@ -1674,7 +1674,8 @@ var SeguimientoActuacion = /*#__PURE__*/function () {
           return $(item).attr('disabled') || $(item).val().trim();
         });
         var idProcesoEtapaActuacion = $('#id_proceso_etapa_actuacion').val();
-        var allFields = allDocs && allSaved && idProcesoEtapaActuacion;
+        var finalizado = $('#finalizado').val() == 1;
+        var allFields = allDocs && allSaved && !finalizado && idProcesoEtapaActuacion != '';
 
         if (allFields) {
           var siguienteEtapaActuacion = $('#id_siguiente_etapa_actuacion').val();

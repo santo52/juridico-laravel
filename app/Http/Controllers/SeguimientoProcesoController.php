@@ -294,13 +294,13 @@ class SeguimientoProcesoController extends Controller
             } else if ($data['tipo_resultado'] == 9) {
                 $proceso->update(['estimacion_pretenciones' => $data['resultado_actuacion']]);
             } else if ($data['tipo_resultado'] == 10) {
-                $proceso->update(['fecha_radicacion_cumplimineto' => $data['fecha_radicacion_cumplimineto']]);
+                $proceso->update(['fecha_radicacion_cumplimineto' => $data['resultado_actuacion']]);
             } else if ($data['tipo_resultado'] == 11) {
-                $proceso->update(['fecha_pago' => $data['fecha_pago']]);
+                $proceso->update(['fecha_pago' => $data['resultado_actuacion']]);
             } else if ($data['tipo_resultado'] == 12) {
-                $proceso->update(['ubicacion_fisica_archivo_muerto' => $data['ubicacion_fisica_archivo_muerto']]);
+                $proceso->update(['ubicacion_fisica_archivo_muerto' => $data['resultado_actuacion']]);
             } else if ($data['tipo_resultado'] == 13) {
-                $proceso->update(['valor_final_sentencia' => $data['valor_final_sentencia']]);
+                $proceso->update(['valor_final_sentencia' => $data['resultado_actuacion']]);
             }
         }
 

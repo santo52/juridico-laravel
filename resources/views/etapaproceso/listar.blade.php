@@ -171,7 +171,14 @@
                     <input type="hidden" name="id_actuacion_etapa_proceso" id="idActuacionEtapaProceso" />
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">Actuación</label>
-                        <select class="form-control" id="actuacionesList" name="id_actuacion" title="Seleccionar actuación"></select>
+                        <div class="input-group">
+                            <select class="form-control" id="actuacionesList" name="id_actuacion" title="Seleccionar actuación"></select>
+                            <div class="input-group-btn">
+                                <a type="button" href="#actuacion/crear" target="_blank" class="pull-right btn-md btn btn-success" onclick="tipoProceso.createEtapaOpen(this)" data-original-title="" title="">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">Tiempo máximo hasta la próxima

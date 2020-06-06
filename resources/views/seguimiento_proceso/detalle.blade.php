@@ -538,16 +538,16 @@
                     <input type="hidden" class="required" name="order" id="orderActuacion" />
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">Nombre actuación</label>
-                        <select data-live-search="true" class="form-control required" id="actuacionesList"
+                        <div class="input-group">
+                            <select data-live-search="true" class="form-control required" id="actuacionesList"
                             name="id_actuacion" title="Seleccionar actuación"></select>
-                    </div>
-                    {{-- <div class="form-group">
-                        <label for="recipient-name" class="control-label">¿Primera actuación?</label>
-                        <div class="checkbox-form">
-                            <input type="checkbox" data-on="Sí" data-off="No" data-width="90"
-                                class="form-control" id="etapaPrimeraActuacion" onchange="seguimientoProceso.isFirst(this)" />
+                            <div class="input-group-btn">
+                                <a type="button" href="#actuacion/crear" target="_blank" class="pull-right btn-md btn btn-success" onclick="tipoProceso.createEtapaOpen(this)" data-original-title="" title="">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </a>
+                            </div>
                         </div>
-                    </div> --}}
+                    </div>
                     <div class="form-group" id="agregarActuacionDespuesDe">
                         <label for="recipient-name" class="control-label">Agregar después de</label>
                         <select data-live-search="true" class="form-control required" id="actuacionesAfterList"

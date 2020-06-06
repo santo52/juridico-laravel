@@ -25,7 +25,8 @@ class Proceso extends BaseModel
         "id_usuario_creacion", "fecha_actualizacion", "id_usuario_actualizacion", 'eliminado',
         'id_entidad_justicia', 'dar_informacion_caso', 'id_etapa_proceso', 'caducidad',
         'entidad_justicia_primera_instancia', 'entidad_justicia_segunda_instancia', 'cuantia_demandada',
-        'estimacion_pretenciones', 'valor_final_sentencia'
+        'estimacion_pretenciones', 'valor_final_sentencia', 'fecha_radicacion_cumplimineto',
+        'fecha_pago', 'ubicacion_fisica_archivo_muerto'
     ];
 
     public function newEloquentBuilder($builder)
@@ -130,14 +131,19 @@ class Proceso extends BaseModel
         return $municipio ? $municipio->nombre_municipio : '';
     }
 
+    public function getTipoProceso()
+    {
+        return $this->tipoProceso->nombre_tipo_proceso;
+    }
+
     public function getEntidadDemandada()
     {
-        return 'Colombia';
+        return $this->entidadDemandada->nombre_entidad_demandada;
     }
 
     public function getEntidadJusticia()
     {
-        return 'Colombia';
+        return $this->entidadJusticia->nombre_entidad_justicia;
     }
 
     public function getFechaRetiroServicioString()

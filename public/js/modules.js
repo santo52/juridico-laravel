@@ -1426,6 +1426,59 @@ var Proceso = /*#__PURE__*/function () {
       $('#deleteValue').val(id);
     }
   }, {
+    key: "formatTelefonoIntermediario",
+    value: function formatTelefonoIntermediario(data) {
+      var telefonoIntermediario = [];
+
+      if (data.telefono_intermediario) {
+        telefonoIntermediario.push(data.telefono_intermediario);
+      }
+
+      if (data.celular_intermediario) {
+        telefonoIntermediario.push(data.celular_intermediario);
+      }
+
+      return telefonoIntermediario.join(' | ');
+    }
+  }, {
+    key: "formatTelefonoBeneficiario",
+    value: function formatTelefonoBeneficiario(data) {
+      var telefonoBeneficiario = [];
+
+      if (data.telefono_beneficiario) {
+        telefonoBeneficiario.push(data.telefono_beneficiario);
+      }
+
+      if (data.celular_beneficiario) {
+        telefonoBeneficiario.push(data.celular_beneficiario);
+      }
+
+      if (data.celular2_beneficiario) {
+        telefonoBeneficiario.push(data.celular2_beneficiario);
+      }
+
+      return telefonoBeneficiario.join(' | ');
+    }
+  }, {
+    key: "formatTelefonoCliente",
+    value: function formatTelefonoCliente(data) {
+      var telefonoCliente = [];
+
+      if (data.telefono) {
+        telefonoCliente.push(data.telefono);
+      }
+
+      if (data.celular) {
+        telefonoCliente.push(data.celular);
+      }
+
+      if (data.celular2) {
+        telefonoCliente.push(data.celular2);
+      }
+
+      return telefonoCliente.join(' | ');
+    }
+  }, {
     key: "changeTipoProceso",
     value: function changeTipoProceso(self) {
       var id = $(self).val();
@@ -1503,44 +1556,23 @@ var Proceso = /*#__PURE__*/function () {
   }, {
     key: "changeCliente",
     value: function changeCliente(self) {
+      var _this7 = this;
+
       var id = $(self).val();
       $.ajax({
         url: '/cliente/basic/' + id,
         success: function success(cliente) {
-          var telefonoCliente = [];
-          var telefonoIntermediario = [];
-
-          if (cliente.celular) {
-            telefonoCliente.push(cliente.celular);
-          }
-
-          if (cliente.telefono) {
-            telefonoCliente.push(cliente.telefono);
-          }
-
-          if (cliente.celular2) {
-            telefonoCliente.push(cliente.celular2);
-          }
-
-          if (cliente.celular_intermediario) {
-            telefonoIntermediario.push(cliente.celular_intermediario);
-          }
-
-          if (cliente.telefono_intermediario) {
-            telefonoIntermediario.push(cliente.telefono_intermediario);
-          }
-
           $('#documento_cliente').val(cliente.numero_documento);
-          $('#telefono_cliente').val(telefonoCliente.join(' | '));
+          $('#telefono_cliente').val(_this7.formatTelefonoCliente(cliente));
           $('#indicativo_cliente').text('+' + cliente.indicativo);
           $('#nombre_intermediario').val((cliente.intermediario_p_apellido || '') + ' ' + (cliente.intermediario_s_apellido || '') + ' ' + (cliente.intermediario_p_nombre || '') + ' ' + (cliente.intermediario_s_nombre || ''));
           $('#nombre_beneficiario').val(cliente.nombre_beneficiario);
           $('#indicativo_beneficiario').val(cliente.indicativo_beneficiario);
-          $('#telefono_beneficiario').val(cliente.telefono_beneficiario);
-          $('#email_beneficiario').val(cliente.email_beneficiario);
+          $('#telefono_beneficiario').val(_this7.formatTelefonoBeneficiario(cliente));
+          $('#email_beneficiario').val(cliente.correo_electronico_beneficiario);
           $('#email_cliente').val(cliente.correo_electronico_cliente);
-          $('#estado_vital_cliente').val(cliente.estado_vital == 1 ? 'vivo' : 'fallecido');
-          $('#telefono_intermediario').val(telefonoIntermediario.join(' | '));
+          $('#estado_vital_cliente').val(cliente.estado_vital_cliente == 1 ? 'vivo' : 'fallecido');
+          $('#telefono_intermediario').val(_this7.formatTelefonoIntermediario(cliente));
           $('#indicativo_intermediario').val(cliente.indicativo_intermediario);
           $('#email_intermediario').val(cliente.correo_electronico_intermediario);
         }
@@ -1904,7 +1936,7 @@ var SeguimientoProceso = /*#__PURE__*/function () {
   }, {
     key: "saveComentario",
     value: function saveComentario(e) {
-      var _this7 = this;
+      var _this8 = this;
 
       e.preventDefault();
       e.stopPropagation();
@@ -1931,7 +1963,7 @@ var SeguimientoProceso = /*#__PURE__*/function () {
             $table.footable();
           }
 
-          _this7.closeComentarioModal();
+          _this8.closeComentarioModal();
         }
       });
       return false;
@@ -1971,7 +2003,7 @@ var TipoProceso = /*#__PURE__*/function () {
   }, {
     key: "createEtapa",
     value: function createEtapa() {
-      var _this8 = this;
+      var _this9 = this;
 
       var nombre_etapa_proceso = $('#etapaProcesoNombre').val().trim();
 
@@ -1986,7 +2018,7 @@ var TipoProceso = /*#__PURE__*/function () {
           success: function success(data) {
             var id = $('#createValue').val() || 0;
 
-            _this8.renderModalData(id);
+            _this9.renderModalData(id);
 
             $('#tipoProcesoEtapaPopover').popover('hide');
           }
@@ -2038,7 +2070,7 @@ var TipoProceso = /*#__PURE__*/function () {
   }, {
     key: "renderModalData",
     value: function renderModalData() {
-      var _this9 = this;
+      var _this10 = this;
 
       var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
       return $.ajax({
@@ -2050,14 +2082,14 @@ var TipoProceso = /*#__PURE__*/function () {
           $('#listaEtapa').html(htmlListaEtapas.join('')).selectpicker('refresh'); //addRow
 
           var htmlSelectedEtapas = data.selectedEtapas.map(function (e) {
-            return _this9.addRow(e.id_etapa_proceso, e.nombre_etapa_proceso);
+            return _this10.addRow(e.id_etapa_proceso, e.nombre_etapa_proceso);
           });
           $('#tableCreateModal tbody').html(htmlSelectedEtapas.join(''));
           $('#tableCreateModal').footable();
           $("#sortable").sortable({
-            start: _this9.sortableStart,
-            stop: _this9.sortableStop,
-            update: _this9.sortableUpdate
+            start: _this10.sortableStart,
+            stop: _this10.sortableStop,
+            update: _this10.sortableUpdate
           }).disableSelection();
           return data;
         }
@@ -2066,7 +2098,7 @@ var TipoProceso = /*#__PURE__*/function () {
   }, {
     key: "addEtapa",
     value: function addEtapa(self) {
-      var _this10 = this;
+      var _this11 = this;
 
       var id_etapa_proceso = $(self).val();
       var id_tipo_proceso = $('#createValue').val() || 0;
@@ -2082,7 +2114,7 @@ var TipoProceso = /*#__PURE__*/function () {
           id_tipo_proceso: id_tipo_proceso
         }),
         success: function success() {
-          _this10.renderModalData(id_tipo_proceso);
+          _this11.renderModalData(id_tipo_proceso);
         }
       });
     }
@@ -2150,7 +2182,7 @@ var TipoProceso = /*#__PURE__*/function () {
   }, {
     key: "deleteEtapa",
     value: function deleteEtapa(id) {
-      var _this11 = this;
+      var _this12 = this;
 
       var id_tipo_proceso = $('#createValue').val() || 0;
       var params = {
@@ -2161,7 +2193,7 @@ var TipoProceso = /*#__PURE__*/function () {
         url: '/tipos-de-proceso/etapa/delete',
         data: new URLSearchParams(params),
         success: function success(data) {
-          _this11.renderModalData(id_tipo_proceso);
+          _this12.renderModalData(id_tipo_proceso);
         }
       });
     }

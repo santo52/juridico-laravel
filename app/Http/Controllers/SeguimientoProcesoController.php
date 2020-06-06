@@ -281,7 +281,7 @@ class SeguimientoProcesoController extends Controller
         $proceso = Proceso::find($data['id_proceso']);
         if ($proceso) {
             if ($data['tipo_resultado'] == 4) {
-                //Guardar historico de sentencias
+                $data['historico'] = 1;
             } else if ($data['tipo_resultado'] == 5) {
                 $data['numero_radicado'] = $data['resultado_actuacion'];
                 $proceso->update(['numero_proceso' => $data['resultado_actuacion']]);
@@ -294,13 +294,13 @@ class SeguimientoProcesoController extends Controller
             } else if ($data['tipo_resultado'] == 9) {
                 $proceso->update(['estimacion_pretenciones' => $data['resultado_actuacion']]);
             } else if ($data['tipo_resultado'] == 10) {
-                //actualizar Fecha de radicación del cumplimiento
+                $proceso->update(['fecha_radicacion_cumplimineto' => $data['fecha_radicacion_cumplimineto']]);
             } else if ($data['tipo_resultado'] == 11) {
-                //actualizar Fecha de pago
+                $proceso->update(['fecha_pago' => $data['fecha_pago']]);
             } else if ($data['tipo_resultado'] == 12) {
-                //actualizar Ubicación física del archivo muerto
+                $proceso->update(['ubicacion_fisica_archivo_muerto' => $data['ubicacion_fisica_archivo_muerto']]);
             } else if ($data['tipo_resultado'] == 13) {
-                //actualizar Valor final sentencia
+                $proceso->update(['valor_final_sentencia' => $data['valor_final_sentencia']]);
             }
         }
 

@@ -78,7 +78,7 @@
             <td>{{$cliente['nombre_municipio']}}</td>
             {{-- <td>{{$cliente['barrio']}}</td> --}}
             <td>{{$cliente['direccion']}}</td>
-            <td>{{$cliente['estado_vital_cliente']}}</td>
+            <td>{{$cliente->getEstadoVital()}}</td>
             <td>{{$cliente['estado_cliente'] == 2 ? 'Inactivo' : 'Activo'}}</td>
             <td>
                 <div class="flex justify-center table-actions">

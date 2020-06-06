@@ -13,6 +13,55 @@ class Proceso {
         $('#deleteValue').val(id)
     }
 
+    formatTelefonoIntermediario(data){
+        const telefonoIntermediario = []
+
+        if (data.telefono_intermediario) {
+            telefonoIntermediario.push(data.telefono_intermediario)
+        }
+
+        if (data.celular_intermediario) {
+            telefonoIntermediario.push(data.celular_intermediario)
+        }
+
+        return telefonoIntermediario.join(' | ')
+    }
+
+    formatTelefonoBeneficiario(data){
+        const telefonoBeneficiario = []
+        if (data.telefono_beneficiario) {
+            telefonoBeneficiario.push(data.telefono_beneficiario)
+        }
+
+        if (data.celular_beneficiario) {
+            telefonoBeneficiario.push(data.celular_beneficiario)
+        }
+
+        if (data.celular2_beneficiario) {
+            telefonoBeneficiario.push(data.celular2_beneficiario)
+        }
+
+        return telefonoBeneficiario.join(' | ')
+    }
+
+    formatTelefonoCliente(data){
+        const telefonoCliente = []
+
+        if (data.telefono) {
+            telefonoCliente.push(data.telefono)
+        }
+
+        if (data.celular) {
+            telefonoCliente.push(data.celular)
+        }
+
+        if (data.celular2) {
+            telefonoCliente.push(data.celular2)
+        }
+
+        return telefonoCliente.join(' | ')
+    }
+
     changeTipoProceso(self) {
 
         const id = $(self).val()
@@ -104,30 +153,8 @@ class Proceso {
             url: '/cliente/basic/' + id,
             success: cliente => {
 
-                const telefonoCliente = []
-                const telefonoIntermediario = []
-                if (cliente.celular) {
-                    telefonoCliente.push(cliente.celular)
-                }
-
-                if (cliente.telefono) {
-                    telefonoCliente.push(cliente.telefono)
-                }
-
-                if (cliente.celular2) {
-                    telefonoCliente.push(cliente.celular2)
-                }
-
-                if (cliente.celular_intermediario) {
-                    telefonoIntermediario.push(cliente.celular_intermediario)
-                }
-
-                if (cliente.telefono_intermediario) {
-                    telefonoIntermediario.push(cliente.telefono_intermediario)
-                }
-
                 $('#documento_cliente').val(cliente.numero_documento)
-                $('#telefono_cliente').val(telefonoCliente.join(' | '))
+                $('#telefono_cliente').val(this.formatTelefonoCliente(cliente))
                 $('#indicativo_cliente').text('+' + cliente.indicativo)
 
                 $('#nombre_intermediario').val(
@@ -139,12 +166,12 @@ class Proceso {
 
                 $('#nombre_beneficiario').val(cliente.nombre_beneficiario)
                 $('#indicativo_beneficiario').val(cliente.indicativo_beneficiario)
-                $('#telefono_beneficiario').val(cliente.telefono_beneficiario)
-                $('#email_beneficiario').val(cliente.email_beneficiario)
+                $('#telefono_beneficiario').val(this.formatTelefonoBeneficiario(cliente))
+                $('#email_beneficiario').val(cliente.correo_electronico_beneficiario)
 
                 $('#email_cliente').val(cliente.correo_electronico_cliente)
-                $('#estado_vital_cliente').val(cliente.estado_vital == 1 ? 'vivo' : 'fallecido')
-                $('#telefono_intermediario').val(telefonoIntermediario.join(' | '))
+                $('#estado_vital_cliente').val(cliente.estado_vital_cliente == 1 ? 'vivo' : 'fallecido')
+                $('#telefono_intermediario').val(this.formatTelefonoIntermediario(cliente))
                 $('#indicativo_intermediario').val(cliente.indicativo_intermediario)
                 $('#email_intermediario').val(cliente.correo_electronico_intermediario)
             }

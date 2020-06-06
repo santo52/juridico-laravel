@@ -1621,3 +1621,10 @@ ul.nav-tabs > li.active > a {
   }
 }
 
+.juridico-proceso-destacado {
+  margin-bottom: 20px;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+  padding: 20px 20px 10px;
+}
+

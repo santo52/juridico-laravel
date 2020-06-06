@@ -47,7 +47,7 @@ class ClienteController extends Controller
     public function getBasic($id) {
         $cliente = Cliente::
             select(
-                'cliente.id_cliente', 'p.numero_documento', 'p.celular', 'p.telefono', 'cliente.celular2', 'mu.indicativo',
+                'cliente.*', 'p.numero_documento', 'p.correo_electronico as correo_electronico_cliente', 'p.celular', 'p.telefono', 'cliente.celular2', 'mu.indicativo',
                 'pi.numero_documento as numero_documento_intermediario', 'pi.celular as celular_intermediario', 'p.id_lugar_expedicion',
                 'pi.primer_nombre as intermediario_p_nombre', 'pi.segundo_nombre as intermediario_s_nombre',
                 'pi.primer_apellido as intermediario_p_apellido', 'pi.segundo_apellido as intermediario_s_apellido',

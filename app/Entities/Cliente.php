@@ -136,4 +136,48 @@ class Cliente extends BaseModel
     public function getNombreBeneficiario() {
         return $this->nombre_beneficiario;
     }
+
+    public function getNumerosContactoCliente() {
+        $telefono = trim($this->getTelefono());
+        $celular = trim($this->getCelular());
+        $celular2 = trim($this->celular2);
+
+        $compiled = [];
+
+        if($telefono) {
+            $compiled[] = $telefono;
+        }
+
+        if($celular) {
+            $compiled[] = $celular;
+        }
+
+        if($celular2) {
+            $compiled[] = $celular2;
+        }
+
+        return implode(' | ', $compiled);
+    }
+
+    public function getNumerosContactoBeneficiario() {
+        $telefono = trim($this->telefono_beneficiario);
+        $celular = trim($this->celular_beneficiario);
+        $celular2 = trim($this->celular2_beneficiario);
+
+        $compiled = [];
+
+        if($telefono) {
+            $compiled[] = $telefono;
+        }
+
+        if($celular) {
+            $compiled[] = $celular;
+        }
+
+        if($celular2) {
+            $compiled[] = $celular2;
+        }
+
+        return implode(' | ', $compiled);
+    }
 }

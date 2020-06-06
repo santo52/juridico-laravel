@@ -27,7 +27,7 @@ class ProcesoEtapaActuacion extends BaseModel
         'entidad_profirio_respuesta', 'fecha_audiencia', 'lugar_audiencia', 'apela_resultado', "valor_pago",
         'fecha_creacion', 'fecha_actualizacion', 'id_usuario_creacion', 'id_usuario_actualizacion',
         "id_usuario_asigna", 'resultado_actuacion', 'fecha_actuacion_rama', 'fecha_notificacion_rama',
-        'fecha_inicio_termino_rama', 'anotacion_rama'
+        'fecha_inicio_termino_rama', 'anotacion_rama', 'historico', 'fecha_resultado'
     ];
 
     public function procesoEtapa()
@@ -53,6 +53,11 @@ class ProcesoEtapaActuacion extends BaseModel
     public function getFechaInicioString()
     {
         return date('d/m/Y h:i A', strtotime($this->fecha_inicio));
+    }
+
+    public function getFechaResultadoString()
+    {
+        return date('d/m/Y', strtotime($this->fecha_resultado));
     }
 
     public function getFechaVencimientoString()

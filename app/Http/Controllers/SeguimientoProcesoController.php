@@ -348,4 +348,28 @@ class SeguimientoProcesoController extends Controller
         $actuaciones = EtapaProceso::getActuaciones($idEtapa, $cond)->get();
         return response()->json($actuaciones);
     }
+
+    public function uploadFileResultado(Request $request) {
+        $file = $request->file('file');
+        $filename = $file->getClientOriginalName();
+        $ext = $this->getExtention($filename);
+
+        $id = $request->get('id');
+        $filename = $id . '.actuacion';
+        $saveAs = "{$filename}{$ext}";
+
+        $path = Storage::disk('documentos')->putFileAs('proceso', $file, $saveAs);
+
+        $procesoEtapaActuacion = ProcesoEtapaActuacion::find($id);
+        $procesoEtapaActuacion->update([ 'resultado_actuacion' => $path ]);
+
+        return response()->json(['filename' => $filename, 'path' => $path]);
+    }
+
+    public function deleteFileResultado(Request $request) {
+        $id = $request->get('id');
+        $procesoEtapaActuacion = ProcesoEtapaActuacion::find($id);
+        $procesoEtapaActuacion->update([ 'resultado_actuacion' => '' ]);
+        return response()->json(['deleted' => true ]);
+    }
 }

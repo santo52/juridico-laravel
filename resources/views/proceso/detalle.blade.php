@@ -378,7 +378,7 @@
     $(document).ready(function(){
         proceso.changeCliente('#id_cliente')
         const id = getId()
-        fileDocument.init({
+        $('.file-document').fileDocument({
             url: 'proceso/upload',
             path: 'uploads/documentos',
             id

@@ -77,9 +77,11 @@
                 <label for="resultado" class="control-label">Resultado <span
                         style="font-weight: initial;font-size: 1rem;">({{$actuacion->getTipoResultado()}})<span></label>
                 @if($actuacion->tipo_resultado == 1)
-                <div class="input-file">
-                    <input type="file" name="resultado_actuacion" />
-                </div>
+                @if($procesoEtapa->id_proceso_etapa_actuacion)
+                    <div id="resultado_actuacion_file" class="file-document" @if($procesoEtapa->resultado_actuacion) data-filename="/uploads/documentos/{{$procesoEtapa->resultado_actuacion}}" @endif data-id="{{$procesoEtapa->id_proceso_etapa_actuacion}}" data-title="resultado"></div>
+                @else
+                <div class="file-document-empty" style="height:34px;padding:8px;">Documento resultado</div>
+                @endif
                 @elseif($actuacion->tipo_resultado == 9)
                 <input name="resultado_actuacion" id="resultado_actuacion" data-date-format="yyyy-mm-dd"
                     class="form-control datepicker-here" @if($procesoEtapa)
@@ -262,8 +264,14 @@
 <script>
     $(document).ready(function(){
         const id = getId()
-        fileDocument.init({
+        $('#documentos-generados .file-document, #documentos-requeridos .file-document').fileDocument({
             url: 'seguimiento-procesos/upload',
+            path: 'uploads/documentos',
+            id
+        })
+
+        $('#resultado_actuacion_file').fileDocument({
+            url: 'seguimiento-procesos/resultado/upload',
             path: 'uploads/documentos',
             id
         })

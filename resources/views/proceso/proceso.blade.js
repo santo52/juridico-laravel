@@ -92,7 +92,7 @@ class Proceso {
                 $('#documentos-requeridos').html(html)
 
                 const id = getId()
-                fileDocument.init({
+                $('.file-document').fileDocument({
                     url: 'proceso/upload',
                     path: 'uploads/documentos',
                     id

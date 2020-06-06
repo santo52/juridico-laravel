@@ -595,152 +595,157 @@ function asyncFootableOnSort(e, callback) {
     callback(type);
 }
 
-const fileDocument = {
-    data: '',
-    init(data) {
-        this.data = data
-        $(document).ready(function () {
-            const $container = $('.file-document')
-            $container.toArray()
-                .map(item => fileDocument.removeFile(item))
-                .map(item => fileDocument.addFile(item))
-        })
-    },
+jQuery.fn.fileDocument = function(data) {
+    const fileDocument = {
+        data: '',
+        init(data) {
+            this.data = data
+        },
 
-    getImage(extention) {
+        getImage(extention) {
 
-        const docs = ['doc', 'docx']
-        const excel = ['xls', 'xlsx']
-        const pdf = ['pdf']
+            const docs = ['doc', 'docx']
+            const excel = ['xls', 'xlsx']
+            const pdf = ['pdf']
 
-        if (docs.includes(extention)) {
-            return 'word.svg'
-        } else if (excel.includes(extention)) {
-            return 'xlsx.svg'
-        } else if (pdf.includes(extention)) {
-            return 'pdf.svg'
-        } else {
-            return 'image.svg'
-        }
-    },
+            if (docs.includes(extention)) {
+                return 'word.svg'
+            } else if (excel.includes(extention)) {
+                return 'xlsx.svg'
+            } else if (pdf.includes(extention)) {
+                return 'pdf.svg'
+            } else {
+                return 'image.svg'
+            }
+        },
 
-    addFile(self) {
-        const $item = $(self)
-        const filename = $item.data('filename')
-        if (filename) {
+        addFile(self) {
+            const $item = $(self)
+            const filename = $item.data('filename')
+            if (filename) {
 
-            let $input = $item.find('input')
-            if (!$input.length) {
+                let $input = $item.find('input')
+                if (!$input.length) {
+                    const name = $item.data('name')
+                    $input = $(`<input type="file" ${name ? `name="${name}"` : ''} />`)
+                }
+
+                const filenameSplit = filename.split('.')
+                const ext = filenameSplit[(filenameSplit.length - 1)]
+                const image = this.getImage(ext)
+                const title = $item.data('title')
+
+                const html = `
+                    <span class="no-empty-message">
+                        <span class="remove-file glyphicon glyphicon-remove"></span>
+                        <div class="file-document-icon">
+                            <img src="/images/${image}" />
+                        </div>
+                        <div class="file-document-content">
+                            <a target="_blank" href="${filename}" class="file-document-name">${title}</a>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped" role="progressbar"
+                                    aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
+                                    style="width: 100%;"></div>
+                            </div>
+                        </div>
+                    </span>`
+
+
+
+                $item.addClass('not-empty')
+                    .html($input)
+                    .append(html)
+                    .find('.remove-file')
+                    .on('click', () => fileDocument.onRemove($item))
+            }
+        },
+
+        removeFile(self) {
+            const $item = $(self)
+            const filename = $item.data('filename')
+            if (!filename) {
                 const name = $item.data('name')
-                $input = $(`<input type="file" ${name ? `name="${name}"` : ''} />`)
+                const title = $item.data('title')
+                const required = $item.data('required')
+                $item.removeClass('not-empty')
+                    .html(`<input type="file" ${name ? `name="${name}"` : ''} />`)
+                    .append(`<span class="empty-message">Subir ${title ? title : 'el documento'}${required ? ' <b>(requerido)</b>' : ''}</span>`)
+                $item.children('input[type=file]').on('change', () => fileDocument.onChange($item))
             }
 
-            const filenameSplit = filename.split('.')
-            const ext = filenameSplit[(filenameSplit.length - 1)]
-            const image = this.getImage(ext)
-            const title = $item.data('title')
+            return $item
+        },
 
-            const html = `
-                <span class="no-empty-message">
-                    <span class="remove-file glyphicon glyphicon-remove"></span>
-                    <div class="file-document-icon">
-                        <img src="/images/${image}" />
-                    </div>
-                    <div class="file-document-content">
-                        <a target="_blank" href="${filename}" class="file-document-name">${title}</a>
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-striped" role="progressbar"
-                                aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
-                                style="width: 100%;"></div>
-                        </div>
-                    </div>
-                </span>`
+        onRemove(self) {
+            const $parent = $(self)
+            const file_id = $parent.data('id')
+            const customOnRemove = $parent.data('remove')
+            if(customOnRemove) {
+                eval(customOnRemove)
+                return false
+            }
 
-
-
-            $item.addClass('not-empty')
-                .html($input)
-                .append(html)
-                .find('.remove-file')
-                .on('click', () => fileDocument.onRemove($item))
-        }
-    },
-
-    removeFile(self) {
-        const $item = $(self)
-        const filename = $item.data('filename')
-        if (!filename) {
-            const name = $item.data('name')
-            const title = $item.data('title')
-            const required = $item.data('required')
-            $item.removeClass('not-empty')
-                .html(`<input type="file" ${name ? `name="${name}"` : ''} />`)
-                .append(`<span class="empty-message">Subir ${title ? title : 'el documento'}${required ? ' <b>(requerido)</b>' : ''}</span>`)
-            $item.children('input[type=file]').on('change', () => fileDocument.onChange($item))
-        }
-
-        return $item
-    },
-
-    onRemove(self) {
-        const $parent = $(self)
-        const file_id = $parent.data('id')
-        const customOnRemove = $parent.data('remove')
-        if(customOnRemove) {
-            eval(customOnRemove)
-            return false
-        }
-
-        $parent.removeClass('not-empty')
-            .data('filename', '')
-        this.removeFile($parent)
-        if (this.data && this.data.url) {
-            $.ajax({
-                url: this.data.url + '/delete',
-                data: new URLSearchParams({
-                    id: this.data.id,
-                    file_id,
+            $parent.removeClass('not-empty')
+                .data('filename', '')
+            this.removeFile($parent)
+            if (this.data && this.data.url) {
+                $.ajax({
+                    url: this.data.url + '/delete',
+                    data: new URLSearchParams({
+                        id: this.data.id,
+                        file_id,
+                    })
                 })
-            })
-        }
-    },
+            }
+        },
 
-    onChange(self) {
-        const $parent = $(self)
-        const file = $parent.find('input[type=file]')[0].files[0]
-        $parent.addClass('not-empty')
-        $parent.data('filename', file.name)
+        onChange(self) {
+            const $parent = $(self)
+            const file = $parent.find('input[type=file]')[0].files[0]
+            $parent.addClass('not-empty')
+            $parent.data('filename', file.name)
 
-        this.addFile($parent)
-        const $progress = $parent.find('.progress-bar')
+            this.addFile($parent)
+            const $progress = $parent.find('.progress-bar')
 
-        if (this.data && this.data.url) {
-            const { path } = this.data
-            const formData = new FormData();
-            formData.append('file', file)
-            formData.append('id', this.data.id)
-            formData.append('file_id', $parent.data('id'))
+            if (this.data && this.data.url) {
+                const { path } = this.data
+                const formData = new FormData();
+                formData.append('file', file)
+                formData.append('id', this.data.id)
+                formData.append('file_id', $parent.data('id'))
 
-            $.ajax({
-                url: this.data.url,
-                data: formData,
-                processData: false,
-                contentType: false,
-                beforeSend: () => {
-                    $progress.addClass('active').css('width', '20%')
-                },
-                success: data => {
-                    $progress.removeClass('active').css('width', '100%')
-                    $link = $parent.find('.file-document-content a')
-                    if (path) {
-                        $link.attr('href', path + '/' + data.path)
-                        $link.attr('target', '_blank')
-                    } else {
-                        $link.attr('href', 'javascript:void(0)')
-                        $link.removeAttr('target')
+                $.ajax({
+                    url: this.data.url,
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    beforeSend: () => {
+                        $progress.addClass('active').css('width', '20%')
+                    },
+                    success: data => {
+                        $progress.removeClass('active').css('width', '100%')
+                        $link = $parent.find('.file-document-content a')
+                        if (path) {
+                            $link.attr('href', path + '/' + data.path)
+                            $link.attr('target', '_blank')
+                        } else {
+                            $link.attr('href', 'javascript:void(0)')
+                            $link.removeAttr('target')
+                        }
                     }
-                }
-            })
+                })
+            }
         }
     }
+
+    fileDocument.init(data);
+    const $container = $(this)
+    $container.toArray()
+        .map(item => fileDocument.removeFile(item))
+        .map(item => fileDocument.addFile(item))
 }
+
+
+

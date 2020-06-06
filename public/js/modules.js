@@ -1501,7 +1501,7 @@ var Proceso = /*#__PURE__*/function () {
           $('#documentos-proceso-tab').show();
           $('#documentos-requeridos').html(html);
           var id = getId();
-          fileDocument.init({
+          $('.file-document').fileDocument({
             url: 'proceso/upload',
             path: 'uploads/documentos',
             id: id
@@ -1673,8 +1673,10 @@ var SeguimientoActuacion = /*#__PURE__*/function () {
         var allSaved = $fieldList.every(function (item) {
           return $(item).attr('disabled') || $(item).val().trim();
         });
+        var idProcesoEtapaActuacion = $('#id_proceso_etapa_actuacion').val();
+        var allFields = allDocs && allSaved && idProcesoEtapaActuacion;
 
-        if (allDocs && allSaved) {
+        if (allFields) {
           var siguienteEtapaActuacion = $('#id_siguiente_etapa_actuacion').val();
           var siguienteActuacion = $('#id_siguiente_actuacion').val();
           var usuarioSiguienteActuacion = $('#id_usuario_siguiente_actuacion').val();
@@ -1688,7 +1690,7 @@ var SeguimientoActuacion = /*#__PURE__*/function () {
         var params = [];
         params.push({
           name: 'all_fields',
-          value: allDocs && allSaved
+          value: allFields
         });
         this.upsert(e, params);
       }
@@ -1759,7 +1761,7 @@ var SeguimientoActuacion = /*#__PURE__*/function () {
             $('#documentos-generados').append(html);
             $('#documentos-generados .file-document-empty').remove();
             var id = getId();
-            fileDocument.init({
+            $('.file-document').fileDocument({
               url: 'proceso/upload',
               path: 'uploads/documentos',
               id: id

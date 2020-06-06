@@ -865,132 +865,133 @@ function asyncFootableOnSort(e, callback) {
   callback(type);
 }
 
-var fileDocument = {
-  data: '',
-  init: function init(data) {
-    this.data = data;
-    $(document).ready(function () {
-      var $container = $('.file-document');
-      $container.toArray().map(function (item) {
-        return fileDocument.removeFile(item);
-      }).map(function (item) {
-        return fileDocument.addFile(item);
-      });
-    });
-  },
-  getImage: function getImage(extention) {
-    var docs = ['doc', 'docx'];
-    var excel = ['xls', 'xlsx'];
-    var pdf = ['pdf'];
+jQuery.fn.fileDocument = function (data) {
+  var fileDocument = {
+    data: '',
+    init: function init(data) {
+      this.data = data;
+    },
+    getImage: function getImage(extention) {
+      var docs = ['doc', 'docx'];
+      var excel = ['xls', 'xlsx'];
+      var pdf = ['pdf'];
 
-    if (docs.includes(extention)) {
-      return 'word.svg';
-    } else if (excel.includes(extention)) {
-      return 'xlsx.svg';
-    } else if (pdf.includes(extention)) {
-      return 'pdf.svg';
-    } else {
-      return 'image.svg';
-    }
-  },
-  addFile: function addFile(self) {
-    var $item = $(self);
-    var filename = $item.data('filename');
+      if (docs.includes(extention)) {
+        return 'word.svg';
+      } else if (excel.includes(extention)) {
+        return 'xlsx.svg';
+      } else if (pdf.includes(extention)) {
+        return 'pdf.svg';
+      } else {
+        return 'image.svg';
+      }
+    },
+    addFile: function addFile(self) {
+      var $item = $(self);
+      var filename = $item.data('filename');
 
-    if (filename) {
-      var $input = $item.find('input');
+      if (filename) {
+        var $input = $item.find('input');
 
-      if (!$input.length) {
+        if (!$input.length) {
+          var name = $item.data('name');
+          $input = $("<input type=\"file\" ".concat(name ? "name=\"".concat(name, "\"") : '', " />"));
+        }
+
+        var filenameSplit = filename.split('.');
+        var ext = filenameSplit[filenameSplit.length - 1];
+        var image = this.getImage(ext);
+        var title = $item.data('title');
+        var html = "\n                    <span class=\"no-empty-message\">\n                        <span class=\"remove-file glyphicon glyphicon-remove\"></span>\n                        <div class=\"file-document-icon\">\n                            <img src=\"/images/".concat(image, "\" />\n                        </div>\n                        <div class=\"file-document-content\">\n                            <a target=\"_blank\" href=\"").concat(filename, "\" class=\"file-document-name\">").concat(title, "</a>\n                            <div class=\"progress\">\n                                <div class=\"progress-bar progress-bar-striped\" role=\"progressbar\"\n                                    aria-valuenow=\"50\" aria-valuemin=\"0\" aria-valuemax=\"100\"\n                                    style=\"width: 100%;\"></div>\n                            </div>\n                        </div>\n                    </span>");
+        $item.addClass('not-empty').html($input).append(html).find('.remove-file').on('click', function () {
+          return fileDocument.onRemove($item);
+        });
+      }
+    },
+    removeFile: function removeFile(self) {
+      var $item = $(self);
+      var filename = $item.data('filename');
+
+      if (!filename) {
         var name = $item.data('name');
-        $input = $("<input type=\"file\" ".concat(name ? "name=\"".concat(name, "\"") : '', " />"));
+        var title = $item.data('title');
+        var required = $item.data('required');
+        $item.removeClass('not-empty').html("<input type=\"file\" ".concat(name ? "name=\"".concat(name, "\"") : '', " />")).append("<span class=\"empty-message\">Subir ".concat(title ? title : 'el documento').concat(required ? ' <b>(requerido)</b>' : '', "</span>"));
+        $item.children('input[type=file]').on('change', function () {
+          return fileDocument.onChange($item);
+        });
       }
 
-      var filenameSplit = filename.split('.');
-      var ext = filenameSplit[filenameSplit.length - 1];
-      var image = this.getImage(ext);
-      var title = $item.data('title');
-      var html = "\n                <span class=\"no-empty-message\">\n                    <span class=\"remove-file glyphicon glyphicon-remove\"></span>\n                    <div class=\"file-document-icon\">\n                        <img src=\"/images/".concat(image, "\" />\n                    </div>\n                    <div class=\"file-document-content\">\n                        <a target=\"_blank\" href=\"").concat(filename, "\" class=\"file-document-name\">").concat(title, "</a>\n                        <div class=\"progress\">\n                            <div class=\"progress-bar progress-bar-striped\" role=\"progressbar\"\n                                aria-valuenow=\"50\" aria-valuemin=\"0\" aria-valuemax=\"100\"\n                                style=\"width: 100%;\"></div>\n                        </div>\n                    </div>\n                </span>");
-      $item.addClass('not-empty').html($input).append(html).find('.remove-file').on('click', function () {
-        return fileDocument.onRemove($item);
-      });
-    }
-  },
-  removeFile: function removeFile(self) {
-    var $item = $(self);
-    var filename = $item.data('filename');
+      return $item;
+    },
+    onRemove: function onRemove(self) {
+      var $parent = $(self);
+      var file_id = $parent.data('id');
+      var customOnRemove = $parent.data('remove');
 
-    if (!filename) {
-      var name = $item.data('name');
-      var title = $item.data('title');
-      var required = $item.data('required');
-      $item.removeClass('not-empty').html("<input type=\"file\" ".concat(name ? "name=\"".concat(name, "\"") : '', " />")).append("<span class=\"empty-message\">Subir ".concat(title ? title : 'el documento').concat(required ? ' <b>(requerido)</b>' : '', "</span>"));
-      $item.children('input[type=file]').on('change', function () {
-        return fileDocument.onChange($item);
-      });
-    }
+      if (customOnRemove) {
+        eval(customOnRemove);
+        return false;
+      }
 
-    return $item;
-  },
-  onRemove: function onRemove(self) {
-    var $parent = $(self);
-    var file_id = $parent.data('id');
-    var customOnRemove = $parent.data('remove');
+      $parent.removeClass('not-empty').data('filename', '');
+      this.removeFile($parent);
 
-    if (customOnRemove) {
-      eval(customOnRemove);
-      return false;
-    }
+      if (this.data && this.data.url) {
+        $.ajax({
+          url: this.data.url + '/delete',
+          data: new URLSearchParams({
+            id: this.data.id,
+            file_id: file_id
+          })
+        });
+      }
+    },
+    onChange: function onChange(self) {
+      var $parent = $(self);
+      var file = $parent.find('input[type=file]')[0].files[0];
+      $parent.addClass('not-empty');
+      $parent.data('filename', file.name);
+      this.addFile($parent);
+      var $progress = $parent.find('.progress-bar');
 
-    $parent.removeClass('not-empty').data('filename', '');
-    this.removeFile($parent);
+      if (this.data && this.data.url) {
+        var path = this.data.path;
+        var formData = new FormData();
+        formData.append('file', file);
+        formData.append('id', this.data.id);
+        formData.append('file_id', $parent.data('id'));
+        $.ajax({
+          url: this.data.url,
+          data: formData,
+          processData: false,
+          contentType: false,
+          beforeSend: function beforeSend() {
+            $progress.addClass('active').css('width', '20%');
+          },
+          success: function success(data) {
+            $progress.removeClass('active').css('width', '100%');
+            $link = $parent.find('.file-document-content a');
 
-    if (this.data && this.data.url) {
-      $.ajax({
-        url: this.data.url + '/delete',
-        data: new URLSearchParams({
-          id: this.data.id,
-          file_id: file_id
-        })
-      });
-    }
-  },
-  onChange: function onChange(self) {
-    var $parent = $(self);
-    var file = $parent.find('input[type=file]')[0].files[0];
-    $parent.addClass('not-empty');
-    $parent.data('filename', file.name);
-    this.addFile($parent);
-    var $progress = $parent.find('.progress-bar');
-
-    if (this.data && this.data.url) {
-      var path = this.data.path;
-      var formData = new FormData();
-      formData.append('file', file);
-      formData.append('id', this.data.id);
-      formData.append('file_id', $parent.data('id'));
-      $.ajax({
-        url: this.data.url,
-        data: formData,
-        processData: false,
-        contentType: false,
-        beforeSend: function beforeSend() {
-          $progress.addClass('active').css('width', '20%');
-        },
-        success: function success(data) {
-          $progress.removeClass('active').css('width', '100%');
-          $link = $parent.find('.file-document-content a');
-
-          if (path) {
-            $link.attr('href', path + '/' + data.path);
-            $link.attr('target', '_blank');
-          } else {
-            $link.attr('href', 'javascript:void(0)');
-            $link.removeAttr('target');
+            if (path) {
+              $link.attr('href', path + '/' + data.path);
+              $link.attr('target', '_blank');
+            } else {
+              $link.attr('href', 'javascript:void(0)');
+              $link.removeAttr('target');
+            }
           }
-        }
-      });
+        });
+      }
     }
-  }
+  };
+  fileDocument.init(data);
+  var $container = $(this);
+  $container.toArray().map(function (item) {
+    return fileDocument.removeFile(item);
+  }).map(function (item) {
+    return fileDocument.addFile(item);
+  });
 };
 
 function validateForm(e) {

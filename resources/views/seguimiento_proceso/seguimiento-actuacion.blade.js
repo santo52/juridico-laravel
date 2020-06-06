@@ -38,8 +38,10 @@ class SeguimientoActuacion {
 
             const $fieldList = $(e.target).find('input.form-control, select.form-control, textarea.form-control').toArray()
             const allSaved = $fieldList.every(item => $(item).attr('disabled') || $(item).val().trim());
+            const idProcesoEtapaActuacion = $('#id_proceso_etapa_actuacion').val()
 
-            if (allDocs && allSaved) {
+            const allFields = allDocs && allSaved && idProcesoEtapaActuacion
+            if (allFields) {
 
                 const siguienteEtapaActuacion = $('#id_siguiente_etapa_actuacion').val()
                 const siguienteActuacion = $('#id_siguiente_actuacion').val()
@@ -52,7 +54,7 @@ class SeguimientoActuacion {
             }
 
             const params = []
-            params.push({ name: 'all_fields', value: allDocs && allSaved })
+            params.push({ name: 'all_fields', value: allFields })
             this.upsert(e, params)
         }
 
@@ -125,7 +127,7 @@ class SeguimientoActuacion {
                     $('#documentos-generados .file-document-empty').remove()
 
                     const id = getId()
-                    fileDocument.init({
+                    $('.file-document').fileDocument({
                         url: 'proceso/upload',
                         path: 'uploads/documentos',
                         id

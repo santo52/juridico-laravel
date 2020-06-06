@@ -137,6 +137,9 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/plantillas/{id}', 'PlantillaDocumentoController@get');
 
 
+
+    Route::post('/seguimiento-procesos/resultado/upload', 'SeguimientoProcesoController@uploadFileResultado');
+    Route::post('/seguimiento-procesos/resultado/upload/delete', 'SeguimientoProcesoController@deleteFileResultado');
     Route::post('/seguimiento-procesos/upload', 'SeguimientoProcesoController@uploadFile');
     Route::post('/seguimiento-procesos/upload/delete', 'SeguimientoProcesoController@deleteFile');
     Route::post('/seguimiento-procesos/etapas-de-proceso/actuacion/insert', 'EtapaProcesoController@insertActuacion');

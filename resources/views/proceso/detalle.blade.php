@@ -17,11 +17,11 @@
             </a>
         </li>
         {{-- <li role="presentation" id="documentos-tab" @if (!count($documentos)) style="display: none" @endif> --}}
-        <li role="presentation" id="documentos-tab">
+        {{-- <li role="presentation" id="documentos-tab">
             <a href="#documentos" aria-controls="documentos" role="tab" data-toggle="tab">
                 Documentos
             </a>
-        </li>
+        </li> --}}
     </ul>
     <form class="tab-content" onsubmit="proceso.upsert(event)">
         @if ($proceso)

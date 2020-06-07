@@ -15,6 +15,7 @@ use App\Entities\ProcesoBitacora;
 use App\Entities\ProcesoEtapaActuacionPlantillas;
 use App\Entities\Actuacion;
 use App\Entities\ActuacionDocumento;
+use App\Entities\Cobro;
 use App\Entities\PlantillaDocumento;
 use App\Entities\ProcesoEtapaActuacionDocumento;
 use App\Entities\Usuario;
@@ -58,7 +59,8 @@ class SeguimientoProcesoController extends Controller
         ]);
     }
 
-    public function getEtapasDisponibles($id) {
+    public function getEtapasDisponibles($id)
+    {
         return response()->json(['etapas' => []]);
     }
 
@@ -307,9 +309,27 @@ class SeguimientoProcesoController extends Controller
             }
         }
 
+        if($procesoEtapaActuacion){
+            if ($procesoEtapaActuacion->finalizado == 0 && !empty($data['valor_pago'])) {
+                $cobro = Cobro::where('id_proceso_etapa_actuacion', $id)->first();
+                if(!$cobro) {
+                    $id_cliente = $procesoEtapaActuacion->procesoEtapa->proceso->id_cliente;
+                    $nombreActuacion = $procesoEtapaActuacion->actuacion->nombre_actuacion;
+
+                    $dataCobro['fecha_cobro'] = date('Y-m-d');
+                    $dataCobro['id_cliente'] = $id_cliente;
+                    $dataCobro['concepto'] = 'Cobro actuación: ' . $nombreActuacion;
+                }
+
+                $dataCobro['valor'] = $data['valor_pago'];
+                Cobro::updateOrCreate(['id_proceso_etapa_actuacion' => $id], $dataCobro);
+            } else {
+                unset($data['valor_pago']);
+            }
+        }
+
         if ($data['all_fields'] == 'true') {
             $data['fecha_fin'] = date('Y-m-d h:i:s');
-            $procesoEtapaActuacion = ProcesoEtapaActuacion::find($id);
             if (empty($procesoEtapaActuacion) || $procesoEtapaActuacion->finalizado == 0) {
                 $cerrarActuacion = true;
                 $data['finalizado'] = 1;
@@ -327,7 +347,7 @@ class SeguimientoProcesoController extends Controller
             $proceso->createActuacion($idEtapa, $actuacion, $responsable);
         }
 
-        return response()->json(['saved' => $saved]);
+        return response()->json(['saved' => $saved, $request->all()]);
     }
 
     public function getActuacionesEtapa(Request $request, $idEtapa)
@@ -343,21 +363,27 @@ class SeguimientoProcesoController extends Controller
                 ->where('finalizado', 1)
                 ->get();
 
-            foreach($discardList as $item) {
+            foreach ($discardList as $item) {
                 $discard[] = "'{$item->id_actuacion}'";
             }
         }
 
-        // $cond = " a.id_actuacion <> '{$request->get('id_actuacion')}' ";
-        $cond = " 1 = 1 ";
-        if(count($discard)) {
+        $etapaActual = ProcesoEtapa::find($request->get('id_proceso_etapa'));
+        if($etapaActual) {
+            $cond = " not (a.id_actuacion = '{$request->get('id_actuacion')}' and aep.id_etapa_proceso = '{$etapaActual->id_etapa_proceso}') ";
+        } else {
+            $cond = " 1 = 1 ";
+        }
+
+        if (count($discard)) {
             $cond .= "and a.id_actuacion not in (" .  implode(',', $discard) . ")";
         }
         $actuaciones = EtapaProceso::getActuaciones($idEtapa, $cond)->get();
         return response()->json($actuaciones);
     }
 
-    public function uploadFileResultado(Request $request) {
+    public function uploadFileResultado(Request $request)
+    {
         $file = $request->file('file');
         $filename = $file->getClientOriginalName();
         $ext = $this->getExtention($filename);
@@ -369,15 +395,16 @@ class SeguimientoProcesoController extends Controller
         $path = Storage::disk('documentos')->putFileAs('proceso', $file, $saveAs);
 
         $procesoEtapaActuacion = ProcesoEtapaActuacion::find($id);
-        $procesoEtapaActuacion->update([ 'resultado_actuacion' => $path ]);
+        $procesoEtapaActuacion->update(['resultado_actuacion' => $path]);
 
         return response()->json(['filename' => $filename, 'path' => $path]);
     }
 
-    public function deleteFileResultado(Request $request) {
+    public function deleteFileResultado(Request $request)
+    {
         $id = $request->get('id');
         $procesoEtapaActuacion = ProcesoEtapaActuacion::find($id);
-        $procesoEtapaActuacion->update([ 'resultado_actuacion' => '' ]);
-        return response()->json(['deleted' => true ]);
+        $procesoEtapaActuacion->update(['resultado_actuacion' => '']);
+        return response()->json(['deleted' => true]);
     }
 }

@@ -1659,3 +1659,7 @@ ul.nav-tabs > li.active > a {
   padding: 20px 20px 10px;
 }
 
+.datepickers-container {
+  z-index: 2000000000;
+}
+

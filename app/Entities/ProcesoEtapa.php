@@ -26,4 +26,8 @@ class ProcesoEtapa extends BaseModel
     public function procesoEtapaActuaciones() {
         return $this->hasMany('App\Entities\ProcesoEtapaActuacion', 'id_proceso_etapa', 'id_proceso_etapa');
     }
+
+    public function etapaProceso() {
+        return $this->hasOne('App\Entities\EtapaProceso', 'id_etapa_proceso', 'id_etapa_proceso');
+    }
 }

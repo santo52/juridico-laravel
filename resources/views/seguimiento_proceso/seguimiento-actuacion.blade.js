@@ -45,11 +45,12 @@ class SeguimientoActuacion {
             if (allFields) {
 
                 const valorPago = $('#valor_pago').val()
+                const valorPagoExists = $('#valor_pago').length > 0
                 const siguienteEtapaActuacion = $('#id_siguiente_etapa_actuacion').val()
                 const siguienteActuacion = $('#id_siguiente_actuacion').val()
                 const usuarioSiguienteActuacion = $('#id_usuario_siguiente_actuacion').val()
 
-                if (parseInt(valorPago) > 0 && (!siguienteActuacion || !usuarioSiguienteActuacion || !siguienteEtapaActuacion)) {
+                if (valorPagoExists && parseInt(valorPago) > 0 && (!siguienteActuacion || !usuarioSiguienteActuacion || !siguienteEtapaActuacion)) {
                     $('#cerrarActuacion').modal()
                     return false
                 }

@@ -29,6 +29,8 @@ use App\Entities\TipoDocumento;
 use App\Entities\TipoProceso;
 use App\Entities\Usuario;
 use App\Entities\UsuarioSedeOperativa;
+use App\Entities\Cobro;
+use App\Entities\Pago;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -73,5 +75,7 @@ class EventServiceProvider extends ServiceProvider
         TipoProceso::observe(BaseObserver::class);
         Usuario::observe(BaseObserver::class);
         UsuarioSedeOperativa::observe(BaseObserver::class);
+        Cobro::observe(BaseObserver::class);
+        Pago::observe(BaseObserver::class);
     }
 }

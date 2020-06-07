@@ -310,6 +310,316 @@ var Cliente = /*#__PURE__*/function () {
 
 var cliente = new Cliente();
 
+var Cobro = /*#__PURE__*/function () {
+  function Cobro() {
+    _classCallCheck(this, Cobro);
+  }
+
+  _createClass(Cobro, [{
+    key: "pdf",
+    value: function pdf() {
+      window.open('/etapas-de-proceso/pdf');
+    }
+  }, {
+    key: "excel",
+    value: function excel() {
+      window.open('/etapas-de-proceso/excel');
+    }
+  }, {
+    key: "changeFormaPago",
+    value: function changeFormaPago(value) {
+      if (value == 1) {
+        $('#informacion_pago_financiero').hide();
+        $('#id_entidad_financiera').removeClass('required').val('');
+        $('#referencia').removeClass('required').val('');
+      } else {
+        $('#informacion_pago_financiero').show();
+        $('#id_entidad_financiera').addClass('required');
+        $('#referencia').addClass('required');
+      }
+    }
+  }, {
+    key: "pagoModalOpen",
+    value: function pagoModalOpen(id) {
+      var _this = this;
+
+      $('#pagosModal').modal('show');
+      this.changeFormaPago(1);
+      $('#id_cobro_pago').val(id);
+
+      if (id) {
+        $.ajax({
+          url: '/cobros-y-pagos/pago/get/' + id,
+          success: function success(data) {
+            if (data) {
+              $('#fecha_pago').val(data.fecha_pago);
+              $('#forma_pago').val(data.forma_pago).selectpicker('refresh');
+              $('#id_entidad_financiera').val(data.id_entidad_financiera);
+              $('#referencia').val(data.referencia);
+
+              _this.changeFormaPago(data.forma_pago);
+
+              $('#valor_pago').val(data.valor_pago);
+            }
+          }
+        });
+      }
+    }
+  }, {
+    key: "cobroModalOpen",
+    value: function cobroModalOpen(id) {
+      $('#cobrosModal').modal('show');
+      $('#fecha_cobro').val('');
+      $('#accion_cobro').val('');
+      $('#etapa_cobro').val('');
+      $('#concepto_cobro').val('');
+      $('#valor_cobro').val(0);
+      $('#valor_pagado').val(0);
+      $('#valor_por_pagar').val(0);
+
+      if (id) {
+        $.ajax({
+          url: '/cobros-y-pagos/cobro/get/' + id,
+          success: function success(data) {
+            if (data) {
+              var procesoActuacion = data.proceso_etapa_actuacion;
+
+              if (procesoActuacion) {
+                if (procesoActuacion.actuacion) {
+                  var _actuacion = procesoActuacion.actuacion;
+                  $('#accion_cobro').val(_actuacion.nombre_actuacion);
+                }
+
+                if (procesoActuacion.proceso_etapa) {
+                  var procesoEtapa = procesoActuacion.proceso_etapa;
+
+                  if (procesoEtapa.etapa_proceso) {
+                    var _etapaProceso = procesoEtapa.etapa_proceso;
+                    $('#etapa_cobro').val(_etapaProceso.nombre_etapa_proceso);
+                  }
+                }
+              }
+
+              $('#id_cobro').val(data.id_cobro);
+              $('#fecha_cobro').val(data.fecha_cobro);
+              $('#valor_cobro').val(data.valor);
+              $('#concepto_cobro').val(data.concepto);
+              $('#valor_pagado').val(parseFloat(data.valor_cobro || 0));
+              $('#valor_por_pagar').val(data.valor - parseFloat(data.valor_cobro || 0));
+            }
+          }
+        });
+      }
+    }
+  }, {
+    key: "upsert",
+    value: function upsert(e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (validateForm(e)) {
+        var id = $('#id_cobro').val();
+        var formData = new FormData(e.target);
+        id && formData.append('id_cobro', id);
+        $.ajax({
+          url: '/cobros-y-pagos/upsert',
+          data: new URLSearchParams(formData),
+          success: function success(data) {
+            if (data.saved) {
+              location.reload();
+            }
+          }
+        });
+      }
+
+      return false;
+    }
+  }, {
+    key: "upsertPago",
+    value: function upsertPago(e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (validateForm(e)) {
+        var id = $('#id_cobro_pago').val();
+        var formData = new FormData(e.target);
+        id && formData.append('id_cobro', id);
+        $.ajax({
+          url: '/cobros-y-pagos/pago/upsert',
+          data: new URLSearchParams(formData),
+          success: function success(data) {
+            if (data.saved) {
+              location.reload();
+            }
+          }
+        });
+      }
+
+      return false;
+    } // popoverClose() {
+    //     $('#tipoProcesoEtapaPopover').popover('hide')
+    // }
+    // createEtapa() {
+    //     const nombre_etapa_proceso = $('#etapaProcesoNombre').val().trim()
+    //     if(nombre_etapa_proceso) {
+    //         const data = {
+    //             nombre_etapa_proceso,
+    //             estado: 1
+    //         }
+    //         $.ajax({
+    //             url: '/etapas-de-proceso/upsert',
+    //             data: new URLSearchParams(data),
+    //             success: data => {
+    //                 const id = $('#createValue').val() || 0
+    //                 this.renderModalData(id)
+    //                 $('#tipoProcesoEtapaPopover').popover('hide')
+    //             }
+    //         })
+    //     }
+    // }
+    // sortableStart(_, ui ) {
+    //     $(ui.item).find('.footable-last-visible a').hide()
+    // }
+    // sortableStop(_, ui ) {
+    //     $(ui.item).find('.footable-last-visible a').show()
+    // }
+    // sortableUpdate(event, _ ) {
+    //     const $rowList = $(event.target).children('tr') || []
+    //     const orderedList = []
+    //     for(item of $rowList) {
+    //         orderedList.push($(item).data('id'))
+    //     }
+    //     const params = {
+    //         orderedList,
+    //         id_tipo_proceso: $('#createValue').val() || 0
+    //     }
+    //     $.ajax({
+    //         url: '/tipos-de-proceso/etapa/update',
+    //         data: new URLSearchParams(params),
+    //         success: data => {
+    //             console.log(data)
+    //         }
+    //     })
+    // }
+    // renderModalData(id = 0) {
+    //     return $.ajax({
+    //         url: '/tipos-de-proceso/get/' + id,
+    //         success: data => {
+    //             const htmlListaEtapas = data.etapas.map(etapa => `<option value="${etapa.id_etapa_proceso}">${etapa.nombre_etapa_proceso}</option>`)
+    //             $('#listaEtapa').html(htmlListaEtapas.join('')).selectpicker('refresh');
+    //             //addRow
+    //             const htmlSelectedEtapas = data.selectedEtapas.map(e => this.addRow(e.id_etapa_proceso, e.nombre_etapa_proceso))
+    //             $('#tableCreateModal tbody').html(htmlSelectedEtapas.join(''))
+    //             $('#tableCreateModal').footable()
+    //             $("#sortable").sortable({
+    //                 start: this.sortableStart,
+    //                 stop: this.sortableStop,
+    //                 update: this.sortableUpdate,
+    //             }).disableSelection()
+    //             return data
+    //         }
+    //     })
+    // }
+    // addEtapa(self) {
+    //     const id_etapa_proceso = $(self).val()
+    //     const id_tipo_proceso = $('#createValue').val() || 0
+    //     if (!id_etapa_proceso) {
+    //         return false
+    //     }
+    //     $.ajax({
+    //         url: '/tipos-de-proceso/etapa/insert',
+    //         data: new URLSearchParams({ id_etapa_proceso, id_tipo_proceso }),
+    //         success: () => {
+    //             this.renderModalData(id_tipo_proceso)
+    //         }
+    //     })
+    // }
+    // createEditModal(id = 0) {
+    //     $('#createModal').modal()
+    //     $('#createValue').val(id)
+    //     const title = id ? 'Editar tipo de proceso' : 'Nuevo tipo de proceso'
+    //     $('#createTitle').text(title)
+    //     $('#tipoNombre').val('')
+    //     this.renderModalData(id).then(({ tipoProceso }) => {
+    //         if (tipoProceso) {
+    //             $('#tipoNombre').val(tipoProceso.nombre_tipo_proceso)
+    //             $('#tipoEstado').prop('checked', tipoProceso.estado_tipo_proceso == 1).change()
+    //         }
+    //     })
+    // }
+    // openDelete(id) {
+    //     $('#deleteModal').modal()
+    //     $('#deleteValue').val(id)
+    // }
+    // upsert(e) {
+    //     e.preventDefault()
+    //     e.stopPropagation()
+    //     if (validateForm(e)) {
+    //         const id = $('#createValue').val()
+    //         const formData = new FormData(e.target)
+    //         id && formData.append('id_tipo_proceso', id)
+    //         $.ajax({
+    //             url: '/tipos-de-proceso/upsert',
+    //             data: new URLSearchParams(formData),
+    //             success: data => {
+    //                 if (data.saved) {
+    //                     location.reload()
+    //                 } else if (data.exists) {
+    //                     $('#etapaNombre').parent().addClass('has-error')
+    //                 }
+    //             }
+    //         })
+    //     }
+    //     return false
+    // }
+    // delete() {
+    //     const id = $('#deleteValue').val()
+    //     $.ajax({
+    //         url: '/tipos-de-proceso/delete/' + id,
+    //         data: {},
+    //         success: () => {
+    //             location.reload()
+    //         }
+    //     })
+    // }
+    // deleteEtapa(id) {
+    //     const id_tipo_proceso = $('#createValue').val() || 0;
+    //     const params = {
+    //         id_etapa_proceso: id,
+    //         id_tipo_proceso
+    //     }
+    //     $.ajax({
+    //         url: '/tipos-de-proceso/etapa/delete',
+    //         data: new URLSearchParams(params),
+    //         success: data => {
+    //             this.renderModalData(id_tipo_proceso)
+    //         }
+    //     })
+    // }
+    // addRow(id_etapa_proceso, nombre_etapa_proceso) {
+    //     //
+    //     return `
+    //         <tr data-id="${id_etapa_proceso}" class="ui-state-default" style="cursor:move">
+    //             <td>${nombre_etapa_proceso}</td>
+    //             <td width="30px" class="sortable-column-delete" >
+    //                 <div class="flex justify-center table-actions">
+    //                     <a class="text-danger" href="javascript:void(0)" class="btn text-danger" type="button"
+    //                         onclick="tipoProceso.deleteEtapa(${id_etapa_proceso})">
+    //                         <span class="glyphicon glyphicon-remove"></span>
+    //                     </a>
+    //                 </div>
+    //             </td>
+    //         </tr>
+    //     `
+    // }
+
+  }]);
+
+  return Cobro;
+}();
+
+var cobro = new Cobro();
+
 var Documento = /*#__PURE__*/function () {
   function Documento() {
     _classCallCheck(this, Documento);
@@ -600,7 +910,7 @@ var EtapaProceso = /*#__PURE__*/function () {
   }, {
     key: "renderModalData",
     value: function renderModalData(id) {
-      var _this = this;
+      var _this2 = this;
 
       return $.ajax({
         url: '/etapas-de-proceso/get/' + (id || 0),
@@ -612,14 +922,14 @@ var EtapaProceso = /*#__PURE__*/function () {
           });
           $('#actuacionesList').html(htmlActuaciones).selectpicker('refresh');
           var htmlSelected = selectedActuaciones.map(function (a) {
-            return _this.addRow(a.id_actuacion_etapa_proceso, a.nombre_actuacion, a.tiempo_maximo_proxima_actuacion, a.unidad_tiempo_proxima_actuacion);
+            return _this2.addRow(a.id_actuacion_etapa_proceso, a.nombre_actuacion, a.tiempo_maximo_proxima_actuacion, a.unidad_tiempo_proxima_actuacion);
           });
           $('#sortable').html(htmlSelected);
           $('#tableCreateModal').footable();
           $("#sortable").sortable({
-            start: _this.sortableStart,
-            stop: _this.sortableStop,
-            update: _this.sortableUpdate
+            start: _this2.sortableStart,
+            stop: _this2.sortableStop,
+            update: _this2.sortableUpdate
           }).disableSelection();
           return data;
         }
@@ -642,7 +952,7 @@ var EtapaProceso = /*#__PURE__*/function () {
   }, {
     key: "addActuacion",
     value: function addActuacion(e) {
-      var _this2 = this;
+      var _this3 = this;
 
       e.preventDefault();
       e.stopPropagation();
@@ -659,9 +969,9 @@ var EtapaProceso = /*#__PURE__*/function () {
         url: '/etapas-de-proceso/actuacion/insert',
         data: new URLSearchParams(formData),
         success: function success() {
-          _this2.renderModalData(id_etapa_proceso);
+          _this3.renderModalData(id_etapa_proceso);
 
-          _this2.asociarActuacionModal('hide');
+          _this3.asociarActuacionModal('hide');
         }
       });
       return false;
@@ -1002,7 +1312,7 @@ var Menu = /*#__PURE__*/function () {
   }, {
     key: "createModal",
     value: function createModal(id) {
-      var _this3 = this;
+      var _this4 = this;
 
       var title = id ? 'Crear' : 'Editar';
       var that = this;
@@ -1022,7 +1332,7 @@ var Menu = /*#__PURE__*/function () {
           $('#create_ruta_menu').val(data.ruta_menu);
           $('#create_orden_menu').val(data.orden_menu);
           var html = (data.acciones || []).map(function (accion) {
-            return _this3.rowAccion(accion);
+            return _this4.rowAccion(accion);
           });
           that.renderParents(data.parents);
           $('#tableCreateModal tbody').html(html.join(''));
@@ -1129,7 +1439,7 @@ var Menu = /*#__PURE__*/function () {
   }, {
     key: "upsertAccion",
     value: function upsertAccion(e) {
-      var _this4 = this;
+      var _this5 = this;
 
       e.preventDefault();
       e.stopPropagation();
@@ -1139,7 +1449,7 @@ var Menu = /*#__PURE__*/function () {
         url: '/opciones/accion/upsert',
         data: new URLSearchParams(formData),
         success: function success(data) {
-          var html = _this4.rowAccion(data);
+          var html = _this5.rowAccion(data);
 
           var $item = $('#accionRow' + data.id_accion);
 
@@ -1203,7 +1513,7 @@ var Perfil = /*#__PURE__*/function () {
   }, {
     key: "redrawTableModal",
     value: function redrawTableModal(id) {
-      var _this5 = this;
+      var _this6 = this;
 
       return $.ajax({
         url: '/perfil/get/' + (id || 0),
@@ -1213,13 +1523,13 @@ var Perfil = /*#__PURE__*/function () {
           });
           $('#listaMenu').html(html).selectpicker('refresh');
           html = data.selectedMenus.map(function (menu) {
-            return _this5.getRow(menu.id_menu_perfil, menu.nombre_menu, menu.acciones);
+            return _this6.getRow(menu.id_menu_perfil, menu.nombre_menu, menu.acciones);
           });
           $('#tableCreateModal tbody').html(html).children('.footable-empty').remove();
           $('#tableCreateModal').footable();
           $('#tableCreateModal select').selectpicker('refresh');
 
-          _this5.addSelectListener();
+          _this6.addSelectListener();
 
           return data;
         }
@@ -1260,7 +1570,7 @@ var Perfil = /*#__PURE__*/function () {
   }, {
     key: "addMenu",
     value: function addMenu() {
-      var _this6 = this;
+      var _this7 = this;
 
       var id_menu = $('#listaMenu').val();
       var id_perfil = $('#createValue').val() || 0;
@@ -1280,7 +1590,7 @@ var Perfil = /*#__PURE__*/function () {
           var saved = _ref11.saved;
 
           if (saved) {
-            _this6.redrawTableModal(id_perfil);
+            _this7.redrawTableModal(id_perfil);
           }
         }
       });
@@ -1556,23 +1866,23 @@ var Proceso = /*#__PURE__*/function () {
   }, {
     key: "changeCliente",
     value: function changeCliente(self) {
-      var _this7 = this;
+      var _this8 = this;
 
       var id = $(self).val();
       $.ajax({
         url: '/cliente/basic/' + id,
         success: function success(cliente) {
           $('#documento_cliente').val(cliente.numero_documento);
-          $('#telefono_cliente').val(_this7.formatTelefonoCliente(cliente));
+          $('#telefono_cliente').val(_this8.formatTelefonoCliente(cliente));
           $('#indicativo_cliente').text('+' + cliente.indicativo);
           $('#nombre_intermediario').val((cliente.intermediario_p_apellido || '') + ' ' + (cliente.intermediario_s_apellido || '') + ' ' + (cliente.intermediario_p_nombre || '') + ' ' + (cliente.intermediario_s_nombre || ''));
           $('#nombre_beneficiario').val(cliente.nombre_beneficiario);
           $('#indicativo_beneficiario').val(cliente.indicativo_beneficiario);
-          $('#telefono_beneficiario').val(_this7.formatTelefonoBeneficiario(cliente));
+          $('#telefono_beneficiario').val(_this8.formatTelefonoBeneficiario(cliente));
           $('#email_beneficiario').val(cliente.correo_electronico_beneficiario);
           $('#email_cliente').val(cliente.correo_electronico_cliente);
           $('#estado_vital_cliente').val(cliente.estado_vital_cliente == 1 ? 'vivo' : 'fallecido');
-          $('#telefono_intermediario').val(_this7.formatTelefonoIntermediario(cliente));
+          $('#telefono_intermediario').val(_this8.formatTelefonoIntermediario(cliente));
           $('#indicativo_intermediario').val(cliente.indicativo_intermediario);
           $('#email_intermediario').val(cliente.correo_electronico_intermediario);
         }
@@ -1649,11 +1959,11 @@ var SeguimientoActuacion = /*#__PURE__*/function () {
       if (validateForm(e)) {
         var etapa = $('#siguienteEtapaActuacion').val();
 
-        var _actuacion = $('#siguienteActuacion').val();
+        var _actuacion2 = $('#siguienteActuacion').val();
 
         var _usuario = $('#usuarioSiguienteActuacion').val();
 
-        $('#formularioActuacion').append("<input type=\"hidden\" name=\"id_siguiente_etapa_actuacion\" id=\"id_siguiente_etapa_actuacion\" value=\"".concat(etapa, "\" />")).append("<input type=\"hidden\" name=\"id_siguiente_actuacion\" id=\"id_siguiente_actuacion\" value=\"".concat(_actuacion, "\" />")).append("<input type=\"hidden\" name=\"id_usuario_siguiente_actuacion\" id=\"id_usuario_siguiente_actuacion\" value=\"".concat(_usuario, "\" />")).trigger('submit');
+        $('#formularioActuacion').append("<input type=\"hidden\" name=\"id_siguiente_etapa_actuacion\" id=\"id_siguiente_etapa_actuacion\" value=\"".concat(etapa, "\" />")).append("<input type=\"hidden\" name=\"id_siguiente_actuacion\" id=\"id_siguiente_actuacion\" value=\"".concat(_actuacion2, "\" />")).append("<input type=\"hidden\" name=\"id_usuario_siguiente_actuacion\" id=\"id_usuario_siguiente_actuacion\" value=\"".concat(_usuario, "\" />")).trigger('submit');
       }
 
       return false;
@@ -1679,11 +1989,12 @@ var SeguimientoActuacion = /*#__PURE__*/function () {
 
         if (allFields) {
           var valorPago = $('#valor_pago').val();
+          var valorPagoExists = $('#valor_pago').length > 0;
           var siguienteEtapaActuacion = $('#id_siguiente_etapa_actuacion').val();
           var siguienteActuacion = $('#id_siguiente_actuacion').val();
           var usuarioSiguienteActuacion = $('#id_usuario_siguiente_actuacion').val();
 
-          if (parseInt(valorPago) > 0 && (!siguienteActuacion || !usuarioSiguienteActuacion || !siguienteEtapaActuacion)) {
+          if (valorPagoExists && parseInt(valorPago) > 0 && (!siguienteActuacion || !usuarioSiguienteActuacion || !siguienteEtapaActuacion)) {
             $('#cerrarActuacion').modal();
             return false;
           }
@@ -1947,7 +2258,7 @@ var SeguimientoProceso = /*#__PURE__*/function () {
   }, {
     key: "saveComentario",
     value: function saveComentario(e) {
-      var _this8 = this;
+      var _this9 = this;
 
       e.preventDefault();
       e.stopPropagation();
@@ -1974,7 +2285,7 @@ var SeguimientoProceso = /*#__PURE__*/function () {
             $table.footable();
           }
 
-          _this8.closeComentarioModal();
+          _this9.closeComentarioModal();
         }
       });
       return false;
@@ -2014,7 +2325,7 @@ var TipoProceso = /*#__PURE__*/function () {
   }, {
     key: "createEtapa",
     value: function createEtapa() {
-      var _this9 = this;
+      var _this10 = this;
 
       var nombre_etapa_proceso = $('#etapaProcesoNombre').val().trim();
 
@@ -2029,7 +2340,7 @@ var TipoProceso = /*#__PURE__*/function () {
           success: function success(data) {
             var id = $('#createValue').val() || 0;
 
-            _this9.renderModalData(id);
+            _this10.renderModalData(id);
 
             $('#tipoProcesoEtapaPopover').popover('hide');
           }
@@ -2081,7 +2392,7 @@ var TipoProceso = /*#__PURE__*/function () {
   }, {
     key: "renderModalData",
     value: function renderModalData() {
-      var _this10 = this;
+      var _this11 = this;
 
       var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
       return $.ajax({
@@ -2093,14 +2404,14 @@ var TipoProceso = /*#__PURE__*/function () {
           $('#listaEtapa').html(htmlListaEtapas.join('')).selectpicker('refresh'); //addRow
 
           var htmlSelectedEtapas = data.selectedEtapas.map(function (e) {
-            return _this10.addRow(e.id_etapa_proceso, e.nombre_etapa_proceso);
+            return _this11.addRow(e.id_etapa_proceso, e.nombre_etapa_proceso);
           });
           $('#tableCreateModal tbody').html(htmlSelectedEtapas.join(''));
           $('#tableCreateModal').footable();
           $("#sortable").sortable({
-            start: _this10.sortableStart,
-            stop: _this10.sortableStop,
-            update: _this10.sortableUpdate
+            start: _this11.sortableStart,
+            stop: _this11.sortableStop,
+            update: _this11.sortableUpdate
           }).disableSelection();
           return data;
         }
@@ -2109,7 +2420,7 @@ var TipoProceso = /*#__PURE__*/function () {
   }, {
     key: "addEtapa",
     value: function addEtapa(self) {
-      var _this11 = this;
+      var _this12 = this;
 
       var id_etapa_proceso = $(self).val();
       var id_tipo_proceso = $('#createValue').val() || 0;
@@ -2125,7 +2436,7 @@ var TipoProceso = /*#__PURE__*/function () {
           id_tipo_proceso: id_tipo_proceso
         }),
         success: function success() {
-          _this11.renderModalData(id_tipo_proceso);
+          _this12.renderModalData(id_tipo_proceso);
         }
       });
     }
@@ -2193,7 +2504,7 @@ var TipoProceso = /*#__PURE__*/function () {
   }, {
     key: "deleteEtapa",
     value: function deleteEtapa(id) {
-      var _this12 = this;
+      var _this13 = this;
 
       var id_tipo_proceso = $('#createValue').val() || 0;
       var params = {
@@ -2204,7 +2515,7 @@ var TipoProceso = /*#__PURE__*/function () {
         url: '/tipos-de-proceso/etapa/delete',
         data: new URLSearchParams(params),
         success: function success(data) {
-          _this12.renderModalData(id_tipo_proceso);
+          _this13.renderModalData(id_tipo_proceso);
         }
       });
     }

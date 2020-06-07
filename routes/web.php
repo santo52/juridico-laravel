@@ -136,8 +136,6 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/plantillas/delete/{id}', 'PlantillaDocumentoController@delete');
     Route::post('/plantillas/{id}', 'PlantillaDocumentoController@get');
 
-
-
     Route::post('/seguimiento-procesos/resultado/upload', 'SeguimientoProcesoController@uploadFileResultado');
     Route::post('/seguimiento-procesos/resultado/upload/delete', 'SeguimientoProcesoController@deleteFileResultado');
     Route::post('/seguimiento-procesos/upload', 'SeguimientoProcesoController@uploadFile');
@@ -159,6 +157,13 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/seguimiento-procesos/comentario/delete/{id}', 'ProcesoBitacoraController@delete');
     Route::post('/seguimiento-procesos/comentarios/{id}', 'ProcesoBitacoraController@getByProceso');
     Route::post('/seguimiento-procesos/etapa/actuaciones/{idEtapa}', 'SeguimientoProcesoController@getActuacionesEtapa');
+
+    Route::post('/cobros-y-pagos/listar', 'CobroController@index');
+    Route::post('/cobros-y-pagos/upsert', 'CobroController@upsert');
+    Route::post('/cobros-y-pagos/pago/upsert', 'CobroController@upsertPago');
+    Route::post('/cobros-y-pagos/cobro/get/{id}', 'CobroController@getCobro');
+    Route::post('/cobros-y-pagos/pago/get/{id}', 'CobroController@getPago');
+
 
     // Route::post('/proceso/upsert', 'ProcesoController@upsert');
     // Route::post('/proceso/upload', 'ProcesoController@uploadFile');

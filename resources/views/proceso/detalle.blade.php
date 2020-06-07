@@ -311,7 +311,7 @@
                 </div>
                 <div class="col-xs-12 col-sm-4">
                     <label for="valor_final_sentencia" class="control-label">Valor final sentencia</label>
-                    <input type="text" class="form-control numeric" id="valor_final_sentencia"
+                    <input type="text" class="form-control" id="valor_final_sentencia"
                         name="valor_final_sentencia" @if($proceso) value="$ {{number_format($proceso->valor_final_sentencia, 0, ',', '.')}}" @endif
                         disabled />
                 </div>

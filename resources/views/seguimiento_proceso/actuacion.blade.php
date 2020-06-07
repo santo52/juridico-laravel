@@ -249,6 +249,7 @@
             </div>
             <form onsubmit="seguimientoActuacion.finalizarActuacion(event)">
                 <div class="modal-body">
+                    @if(count($etapas))
                     <div class="form-group">
                         <label for="siguienteEtapaActuacion" class="control-label">Etapa de la siguiente actuación</label>
                         <select class="form-control required" id="siguienteEtapaActuacion" title="Seleccionar" onchange="seguimientoActuacion.refreshActuaciones(this)">
@@ -269,6 +270,10 @@
                             @endforeach
                         </select>
                     </div>
+                    @else
+                        Al cerrar esta actuación, se finalizará el proceso.
+                        <input type="hidden" id="finalizar_proceso" name="finalizar_proceso" value="1"/>
+                    @endif
                 </div>
                 <div class="modal-footer center">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>

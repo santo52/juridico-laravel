@@ -75,7 +75,7 @@
             <td>{{$proceso->acto_administrativo}}</td>
             <td>{{$proceso->normatividad_aplicada_caso}}</td>
             <td>{{$proceso->observaciones_caso}}</td>
-            <td>{{$proceso->estado_proceso == 2 ? 'Inactivo' : 'Activo'}}</td>
+            <td>{{$proceso->estado_proceso == 2 ? 'Finalizado' : 'Activo'}}</td>
             <td>
                 <div class="flex justify-center table-actions">
                     @isset ($permissions->editar)

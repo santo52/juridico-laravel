@@ -13,6 +13,13 @@ class SeguimientoActuacion {
 
         if (validateForm(e)) {
 
+            const hasFinalizarProceso = $('#finalizar_proceso').length
+            if (hasFinalizarProceso) {
+                $('#formularioActuacion')
+                    .append(`<input type="hidden" name="finalizar_proceso" value="1" />`)
+                    .trigger('submit')
+            }
+
             const etapa = $('#siguienteEtapaActuacion').val()
             const actuacion = $('#siguienteActuacion').val()
             const usuario = $('#usuarioSiguienteActuacion').val()

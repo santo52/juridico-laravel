@@ -1957,6 +1957,12 @@ var SeguimientoActuacion = /*#__PURE__*/function () {
       e.stopPropagation();
 
       if (validateForm(e)) {
+        var hasFinalizarProceso = $('#finalizar_proceso').length;
+
+        if (hasFinalizarProceso) {
+          $('#formularioActuacion').append("<input type=\"hidden\" name=\"finalizar_proceso\" value=\"1\" />").trigger('submit');
+        }
+
         var etapa = $('#siguienteEtapaActuacion').val();
 
         var _actuacion2 = $('#siguienteActuacion').val();

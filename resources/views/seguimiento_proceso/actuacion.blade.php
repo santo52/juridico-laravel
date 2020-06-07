@@ -185,9 +185,7 @@
                         @foreach ($documentosGenerados as $item)
                         <div class="file-document" data-title="{{$item->getNombrePlantilla()}}"
                             data-remove="seguimientoActuacion.deletePlantilla('{{$item->id_proceso_etapa_actuacion_plantillas}}')"
-                            data-id="{{$item->id_proceso_etapa_actuacion_plantillas}}" data-filename="{!! asset("
-                            uploads/plantillas/actuacion-proceso/{$item->id_proceso_etapa_actuacion_plantillas}.pdf")
-                            !!}"></div>
+                            data-id="{{$item->id_proceso_etapa_actuacion_plantillas}}" data-filename="{!! asset("uploads/plantillas/actuacion-proceso/{$item->id_proceso_etapa_actuacion_plantillas}.pdf")!!}"></div>
                         @endforeach
                         @else
                         <div class="file-document-empty">No se han agregado documentos</div>

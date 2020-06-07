@@ -85,7 +85,7 @@ class SeguimientoProcesoController extends Controller
             $etapas[$key] = $this->addProcesoEtapa($proceso->id_proceso, $value);
         }
 
-        $comentarios = ProcesoBitacora::orderBy('fecha_creacion', 'desc')->get();
+        $comentarios = ProcesoBitacora::where('id_proceso', $id)->orderBy('fecha_creacion', 'desc')->get();
 
         return $this->renderSection('seguimiento_proceso.detalle', [
             'proceso' => $proceso,

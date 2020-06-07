@@ -1985,16 +1985,17 @@ var SeguimientoActuacion = /*#__PURE__*/function () {
         });
         var idProcesoEtapaActuacion = $('#id_proceso_etapa_actuacion').val();
         var finalizado = $('#finalizado').val() == 1;
-        var allFields = allDocs && allSaved && !finalizado && idProcesoEtapaActuacion != '';
+        var valorPago = $('#valor_pago').val();
+        var valorPagoExists = $('#valor_pago').length > 0;
+        var valorPagoPass = valorPago === 'No genera cobro' || parseInt(valorPago) > 0;
+        var allFields = allDocs && allSaved && !finalizado && valorPagoExists && valorPagoPass && idProcesoEtapaActuacion != '';
 
         if (allFields) {
-          var valorPago = $('#valor_pago').val();
-          var valorPagoExists = $('#valor_pago').length > 0;
           var siguienteEtapaActuacion = $('#id_siguiente_etapa_actuacion').val();
           var siguienteActuacion = $('#id_siguiente_actuacion').val();
           var usuarioSiguienteActuacion = $('#id_usuario_siguiente_actuacion').val();
 
-          if (valorPagoExists && parseInt(valorPago) > 0 && (!siguienteActuacion || !usuarioSiguienteActuacion || !siguienteEtapaActuacion)) {
+          if (valorPagoExists && valorPagoPass && (!siguienteActuacion || !usuarioSiguienteActuacion || !siguienteEtapaActuacion)) {
             $('#cerrarActuacion').modal();
             return false;
           }

@@ -41,16 +41,18 @@ class SeguimientoActuacion {
             const idProcesoEtapaActuacion = $('#id_proceso_etapa_actuacion').val()
             const finalizado = $('#finalizado').val() == 1
 
-            const allFields = allDocs && allSaved && !finalizado && idProcesoEtapaActuacion != ''
-            if (allFields) {
+            const valorPago = $('#valor_pago').val()
+            const valorPagoExists = $('#valor_pago').length > 0
+            const valorPagoPass = valorPago === 'No genera cobro' || parseInt(valorPago) > 0
 
-                const valorPago = $('#valor_pago').val()
-                const valorPagoExists = $('#valor_pago').length > 0
+            const allFields = allDocs && allSaved && !finalizado && valorPagoExists && valorPagoPass && idProcesoEtapaActuacion != ''
+
+            if (allFields) {
                 const siguienteEtapaActuacion = $('#id_siguiente_etapa_actuacion').val()
                 const siguienteActuacion = $('#id_siguiente_actuacion').val()
                 const usuarioSiguienteActuacion = $('#id_usuario_siguiente_actuacion').val()
 
-                if (valorPagoExists && parseInt(valorPago) > 0 && (!siguienteActuacion || !usuarioSiguienteActuacion || !siguienteEtapaActuacion)) {
+                if (valorPagoExists && valorPagoPass && (!siguienteActuacion || !usuarioSiguienteActuacion || !siguienteEtapaActuacion)) {
                     $('#cerrarActuacion').modal()
                     return false
                 }

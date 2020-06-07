@@ -74,7 +74,7 @@
                 @if($actuacion->actuacion_tiene_cobro == 1)
                 <input type="number" id="valor_pago" name="valor_pago" class="form-control" value="{{$procesoEtapa->valor_pago }}" />
                 @else
-                <input type="text" name="valor_pago" class="form-control" value="No genera cobro" disabled />
+                <input type="text" id="valor_pago" name="valor_pago" class="form-control" value="No genera cobro" disabled />
                 @endif
             </div>
             @if($actuacion->tipo_resultado != 4)

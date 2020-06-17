@@ -1139,6 +1139,273 @@ var EtapaProceso = /*#__PURE__*/function () {
 
 var etapaProceso = new EtapaProceso();
 
+var Honorario = /*#__PURE__*/function () {
+  function Honorario() {
+    _classCallCheck(this, Honorario);
+  }
+
+  _createClass(Honorario, [{
+    key: "pdf",
+    value: function pdf() {
+      window.open('/honorarios/pdf');
+    }
+  }, {
+    key: "excel",
+    value: function excel() {
+      window.open('/honorarios/excel');
+    }
+  }, {
+    key: "openDelete",
+    value: function openDelete(id) {
+      $('#deleteModal').modal();
+      $('#deleteValue').val(id);
+    }
+  }, {
+    key: "createEditModal",
+    value: function createEditModal() {
+      var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+      $('#createModal').modal();
+      $('#createValue').val(id);
+      var title = id ? 'Editar honorarios' : 'Nuevo cobro de honorarios';
+      $('#createTitle').text(title);
+      $('#tipoNombre').val(''); // this.renderModalData(id).then(({ tipoProceso }) => {
+      //     if (tipoProceso) {
+      //         $('#tipoNombre').val(tipoProceso.nombre_tipo_proceso)
+      //         $('#tipoEstado').prop('checked', tipoProceso.estado_tipo_proceso == 1).change()
+      //     }
+      // })
+    }
+  }, {
+    key: "onChangeClient",
+    value: function onChangeClient(self) {
+      var $self = $(self);
+      var id = $self.val();
+
+      if ($self.is('#documento_cliente')) {
+        $('#nombre_cliente').val(id).selectpicker('refresh');
+      } else {
+        $('#documento_cliente').val(id).selectpicker('refresh');
+      }
+
+      $('#documento_intermediario').val('');
+      $('#nombre_intermediario').val('');
+      $.ajax({
+        url: '/honorarios/cliente/' + id,
+        success: function success(data) {
+          $('#documento_intermediario').val(data.numero_documento_intermediario);
+          var nombreIntermediario = [];
+
+          if (data.intermediario_p_apellido) {
+            nombreIntermediario.push(data.intermediario_p_apellido);
+          }
+
+          if (data.intermediario_s_apellido) {
+            nombreIntermediario.push(data.intermediario_s_apellido);
+          }
+
+          if (data.intermediario_p_nombre) {
+            nombreIntermediario.push(data.intermediario_p_nombre);
+          }
+
+          if (data.intermediario_s_nombre) {
+            nombreIntermediario.push(data.intermediario_s_nombre);
+          }
+
+          $('#nombre_intermediario').val(nombreIntermediario.join(' '));
+        }
+      });
+    }
+  }, {
+    key: "formatTelefonoIntermediario",
+    value: function formatTelefonoIntermediario(data) {
+      var telefonoIntermediario = [];
+
+      if (data.telefono_intermediario) {
+        telefonoIntermediario.push(data.telefono_intermediario);
+      }
+
+      if (data.celular_intermediario) {
+        telefonoIntermediario.push(data.celular_intermediario);
+      }
+
+      return telefonoIntermediario.join(' | ');
+    }
+  }, {
+    key: "formatTelefonoBeneficiario",
+    value: function formatTelefonoBeneficiario(data) {
+      var telefonoBeneficiario = [];
+
+      if (data.telefono_beneficiario) {
+        telefonoBeneficiario.push(data.telefono_beneficiario);
+      }
+
+      if (data.celular_beneficiario) {
+        telefonoBeneficiario.push(data.celular_beneficiario);
+      }
+
+      if (data.celular2_beneficiario) {
+        telefonoBeneficiario.push(data.celular2_beneficiario);
+      }
+
+      return telefonoBeneficiario.join(' | ');
+    }
+  }, {
+    key: "formatTelefonoCliente",
+    value: function formatTelefonoCliente(data) {
+      var telefonoCliente = [];
+
+      if (data.telefono) {
+        telefonoCliente.push(data.telefono);
+      }
+
+      if (data.celular) {
+        telefonoCliente.push(data.celular);
+      }
+
+      if (data.celular2) {
+        telefonoCliente.push(data.celular2);
+      }
+
+      return telefonoCliente.join(' | ');
+    }
+  }, {
+    key: "changeTipoProceso",
+    value: function changeTipoProceso(self) {
+      var id = $(self).val();
+      var params = {
+        id_proceso: getId(),
+        id_tipo_proceso: id
+      };
+      $.ajax({
+        url: '/honorarios/tipo-proceso/documentos',
+        data: new URLSearchParams(params),
+        success: function success(data) {
+          if (!data.length) {
+            $('#documentos-proceso-tab').hide();
+            return;
+          }
+
+          var html = data.map(function (item) {
+            return "\n                <div class=\"file-document\"\n                    data-filename=\"".concat(item.filename ? item.filename : '', "\"\n                    data-id=\"").concat(item.id_documento, "\"\n                    data-title=\"").concat(item.nombre_documento, "\"\n                    data-required=\"").concat(item.obligatoriedad_documento == 1 ? 'true' : 'false', "\">\n                </div>");
+          });
+          $('#documentos-proceso-tab').show();
+          $('#documentos-requeridos').html(html);
+          var id = getId();
+          $('.file-document').fileDocument({
+            url: 'proceso/upload',
+            path: 'uploads/documentos',
+            id: id
+          });
+        }
+      });
+    }
+  }, {
+    key: "changeDepartamento",
+    value: function changeDepartamento(self) {
+      var departamento = $(self).val();
+      $.ajax({
+        url: '/departamento/municipios/' + departamento,
+        success: function success(data) {
+          $('#id_municipio').val('');
+          var html = data.map(function (item) {
+            return "<option value=\"".concat(item.id_municipio, "\">").concat(item.nombre_municipio, "</option>");
+          });
+          $('#id_municipio').html(html).selectpicker('refresh');
+        }
+      });
+    }
+  }, {
+    key: "upsert",
+    value: function upsert(e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (validateForm(e)) {
+        var formData = new FormData(e.target);
+        $.ajax({
+          url: '/honorarios/upsert',
+          data: new URLSearchParams(formData),
+          success: function success(data) {
+            if (data.saved) {
+              location.reload();
+            }
+          }
+        });
+      }
+
+      return false;
+    }
+  }, {
+    key: "changeCliente",
+    value: function changeCliente(self) {
+      var _this4 = this;
+
+      var id = $(self).val();
+      $.ajax({
+        url: '/cliente/basic/' + id,
+        success: function success(cliente) {
+          $('#documento_cliente').val(cliente.numero_documento);
+          $('#telefono_cliente').val(_this4.formatTelefonoCliente(cliente));
+          $('#indicativo_cliente').text('+' + cliente.indicativo);
+          $('#nombre_intermediario').val((cliente.intermediario_p_apellido || '') + ' ' + (cliente.intermediario_s_apellido || '') + ' ' + (cliente.intermediario_p_nombre || '') + ' ' + (cliente.intermediario_s_nombre || ''));
+          $('#nombre_beneficiario').val(cliente.nombre_beneficiario);
+          $('#indicativo_beneficiario').val(cliente.indicativo_beneficiario);
+          $('#telefono_beneficiario').val(_this4.formatTelefonoBeneficiario(cliente));
+          $('#email_beneficiario').val(cliente.correo_electronico_beneficiario);
+          $('#email_cliente').val(cliente.correo_electronico_cliente);
+          $('#estado_vital_cliente').val(cliente.estado_vital_cliente == 1 ? 'vivo' : 'fallecido');
+          $('#telefono_intermediario').val(_this4.formatTelefonoIntermediario(cliente));
+          $('#indicativo_intermediario').val(cliente.indicativo_intermediario);
+          $('#email_intermediario').val(cliente.correo_electronico_intermediario);
+        }
+      });
+    }
+  }, {
+    key: "delete",
+    value: function _delete() {
+      var id = $('#deleteValue').val();
+      $.ajax({
+        url: '/honorarios/delete/' + id,
+        success: function success(_ref8) {
+          var deleted = _ref8.deleted;
+
+          if (deleted) {
+            $('#tipoProcesoRow' + id).remove();
+            $('#deleteModal').modal('hide');
+          }
+        }
+      });
+      return false;
+    }
+  }, {
+    key: "openComments",
+    value: function openComments(id) {
+      $.ajax({
+        url: '/seguimiento-procesos/comentarios/' + id,
+        beforeSend: function beforeSend() {
+          return $('#comentariosTable tbody').html('');
+        },
+        success: function success(data) {
+          if (data.length) {
+            var html = data.map(function (item) {
+              return "\n                        <tr>\n                            <td>".concat(item.fechaCreacion, "</td>\n                            <td>").concat(item.nombreUsuario, "</td>\n                            <td>").concat(item.comentario, "</td>\n                        </tr>\n                    ");
+            });
+            $('#comentariosTable tbody').html(html);
+            $('#comentariosModalTitle').text('Comentarios proceso n° ' + data[0].numero_proceso);
+          }
+
+          $('#comentariosTable').footable();
+          $('#comentariosModal').modal();
+        }
+      });
+    }
+  }]);
+
+  return Honorario;
+}();
+
+var honorario = new Honorario();
+
 var Intermediario = /*#__PURE__*/function () {
   function Intermediario() {
     _classCallCheck(this, Intermediario);
@@ -1192,8 +1459,8 @@ var Intermediario = /*#__PURE__*/function () {
       if (id) {
         $.ajax({
           url: '/intermediario/get/' + id,
-          success: function success(_ref8) {
-            var intermediario = _ref8.intermediario;
+          success: function success(_ref9) {
+            var intermediario = _ref9.intermediario;
             $('#tipoDocumento').val(intermediario.id_tipo_documento).selectpicker('refresh');
             $('#numeroDocumento').val(intermediario.numero_documento);
             $('#primerApellido').val(intermediario.primer_apellido);
@@ -1312,7 +1579,7 @@ var Menu = /*#__PURE__*/function () {
   }, {
     key: "createModal",
     value: function createModal(id) {
-      var _this4 = this;
+      var _this5 = this;
 
       var title = id ? 'Crear' : 'Editar';
       var that = this;
@@ -1332,7 +1599,7 @@ var Menu = /*#__PURE__*/function () {
           $('#create_ruta_menu').val(data.ruta_menu);
           $('#create_orden_menu').val(data.orden_menu);
           var html = (data.acciones || []).map(function (accion) {
-            return _this4.rowAccion(accion);
+            return _this5.rowAccion(accion);
           });
           that.renderParents(data.parents);
           $('#tableCreateModal tbody').html(html.join(''));
@@ -1406,10 +1673,10 @@ var Menu = /*#__PURE__*/function () {
     }
   }, {
     key: "rowAccion",
-    value: function rowAccion(_ref9) {
-      var id_accion = _ref9.id_accion,
-          nombre_accion = _ref9.nombre_accion,
-          observacion = _ref9.observacion;
+    value: function rowAccion(_ref10) {
+      var id_accion = _ref10.id_accion,
+          nombre_accion = _ref10.nombre_accion,
+          observacion = _ref10.observacion;
       return "\n            <tr id=\"accionRow".concat(id_accion, "\">\n                <td>").concat(nombre_accion, "</td>\n                <td>").concat(observacion || '', "</td>\n                <td width=\"30px\">\n                    <div class=\"flex justify-center table-actions\">\n                        <a href=\"javascript:void(0)\" onclick=\"menu.createActionModal(").concat(id_accion, ")\" class=\"btn text-primary\" type=\"button\">\n                            <span class=\"glyphicon glyphicon-pencil\"></span>\n                        </a>\n                        <a href=\"javascript:void(0)\" class=\"btn text-danger\" type=\"button\" onclick=\"menu.deleteActionModal(").concat(id_accion, ")\">\n                            <span class=\"glyphicon glyphicon-remove\"></span>\n                        </a>\n                    </div>\n                </td>\n            </tr>\n        ");
     }
   }, {
@@ -1425,8 +1692,8 @@ var Menu = /*#__PURE__*/function () {
       $.ajax({
         url: '/opciones/accion/delete/' + id,
         data: {},
-        success: function success(_ref10) {
-          var deleted = _ref10.deleted;
+        success: function success(_ref11) {
+          var deleted = _ref11.deleted;
 
           if (deleted) {
             $('#accionRow' + id).remove();
@@ -1439,7 +1706,7 @@ var Menu = /*#__PURE__*/function () {
   }, {
     key: "upsertAccion",
     value: function upsertAccion(e) {
-      var _this5 = this;
+      var _this6 = this;
 
       e.preventDefault();
       e.stopPropagation();
@@ -1449,7 +1716,7 @@ var Menu = /*#__PURE__*/function () {
         url: '/opciones/accion/upsert',
         data: new URLSearchParams(formData),
         success: function success(data) {
-          var html = _this5.rowAccion(data);
+          var html = _this6.rowAccion(data);
 
           var $item = $('#accionRow' + data.id_accion);
 
@@ -1513,7 +1780,7 @@ var Perfil = /*#__PURE__*/function () {
   }, {
     key: "redrawTableModal",
     value: function redrawTableModal(id) {
-      var _this6 = this;
+      var _this7 = this;
 
       return $.ajax({
         url: '/perfil/get/' + (id || 0),
@@ -1523,13 +1790,13 @@ var Perfil = /*#__PURE__*/function () {
           });
           $('#listaMenu').html(html).selectpicker('refresh');
           html = data.selectedMenus.map(function (menu) {
-            return _this6.getRow(menu.id_menu_perfil, menu.nombre_menu, menu.acciones);
+            return _this7.getRow(menu.id_menu_perfil, menu.nombre_menu, menu.acciones);
           });
           $('#tableCreateModal tbody').html(html).children('.footable-empty').remove();
           $('#tableCreateModal').footable();
           $('#tableCreateModal select').selectpicker('refresh');
 
-          _this6.addSelectListener();
+          _this7.addSelectListener();
 
           return data;
         }
@@ -1570,7 +1837,7 @@ var Perfil = /*#__PURE__*/function () {
   }, {
     key: "addMenu",
     value: function addMenu() {
-      var _this7 = this;
+      var _this8 = this;
 
       var id_menu = $('#listaMenu').val();
       var id_perfil = $('#createValue').val() || 0;
@@ -1586,11 +1853,11 @@ var Perfil = /*#__PURE__*/function () {
       $.ajax({
         url: '/perfil/menu/insert',
         data: new URLSearchParams(params),
-        success: function success(_ref11) {
-          var saved = _ref11.saved;
+        success: function success(_ref12) {
+          var saved = _ref12.saved;
 
           if (saved) {
-            _this7.redrawTableModal(id_perfil);
+            _this8.redrawTableModal(id_perfil);
           }
         }
       });
@@ -1600,9 +1867,9 @@ var Perfil = /*#__PURE__*/function () {
     value: function deleteMenu(id) {
       $.ajax({
         url: '/perfil/menu/delete/' + id,
-        success: function success(_ref12) {
-          var deleted = _ref12.deleted,
-              menuItem = _ref12.menuItem;
+        success: function success(_ref13) {
+          var deleted = _ref13.deleted,
+              menuItem = _ref13.menuItem;
 
           if (deleted) {
             $('#menuRow' + id).remove();
@@ -1619,8 +1886,8 @@ var Perfil = /*#__PURE__*/function () {
       var id = $('#deleteValue').val();
       $.ajax({
         url: '/perfil/delete/' + id,
-        success: function success(_ref13) {
-          var deleted = _ref13.deleted;
+        success: function success(_ref14) {
+          var deleted = _ref14.deleted;
 
           if (deleted) {
             $('#deleteModal').modal('hide');
@@ -1696,8 +1963,8 @@ var Plantilla = /*#__PURE__*/function () {
       var id = $('#deleteValue').val();
       $.ajax({
         url: '/plantillas/delete/' + id,
-        success: function success(_ref14) {
-          var deleted = _ref14.deleted;
+        success: function success(_ref15) {
+          var deleted = _ref15.deleted;
 
           if (deleted) {
             $('#tipoplantillaRow' + id).remove();
@@ -1866,23 +2133,23 @@ var Proceso = /*#__PURE__*/function () {
   }, {
     key: "changeCliente",
     value: function changeCliente(self) {
-      var _this8 = this;
+      var _this9 = this;
 
       var id = $(self).val();
       $.ajax({
         url: '/cliente/basic/' + id,
         success: function success(cliente) {
           $('#documento_cliente').val(cliente.numero_documento);
-          $('#telefono_cliente').val(_this8.formatTelefonoCliente(cliente));
+          $('#telefono_cliente').val(_this9.formatTelefonoCliente(cliente));
           $('#indicativo_cliente').text('+' + cliente.indicativo);
           $('#nombre_intermediario').val((cliente.intermediario_p_apellido || '') + ' ' + (cliente.intermediario_s_apellido || '') + ' ' + (cliente.intermediario_p_nombre || '') + ' ' + (cliente.intermediario_s_nombre || ''));
           $('#nombre_beneficiario').val(cliente.nombre_beneficiario);
           $('#indicativo_beneficiario').val(cliente.indicativo_beneficiario);
-          $('#telefono_beneficiario').val(_this8.formatTelefonoBeneficiario(cliente));
+          $('#telefono_beneficiario').val(_this9.formatTelefonoBeneficiario(cliente));
           $('#email_beneficiario').val(cliente.correo_electronico_beneficiario);
           $('#email_cliente').val(cliente.correo_electronico_cliente);
           $('#estado_vital_cliente').val(cliente.estado_vital_cliente == 1 ? 'vivo' : 'fallecido');
-          $('#telefono_intermediario').val(_this8.formatTelefonoIntermediario(cliente));
+          $('#telefono_intermediario').val(_this9.formatTelefonoIntermediario(cliente));
           $('#indicativo_intermediario').val(cliente.indicativo_intermediario);
           $('#email_intermediario').val(cliente.correo_electronico_intermediario);
         }
@@ -1894,8 +2161,8 @@ var Proceso = /*#__PURE__*/function () {
       var id = $('#deleteValue').val();
       $.ajax({
         url: '/proceso/delete/' + id,
-        success: function success(_ref15) {
-          var deleted = _ref15.deleted;
+        success: function success(_ref16) {
+          var deleted = _ref16.deleted;
 
           if (deleted) {
             $('#tipoProcesoRow' + id).remove();
@@ -2021,9 +2288,9 @@ var SeguimientoActuacion = /*#__PURE__*/function () {
     key: "upsert",
     value: function upsert(e, params) {
       var formData = new FormData(e.target);
-      params.map(function (_ref16) {
-        var name = _ref16.name,
-            value = _ref16.value;
+      params.map(function (_ref17) {
+        var name = _ref17.name,
+            value = _ref17.value;
         formData.append(name, value);
       });
       $.ajax({
@@ -2042,9 +2309,9 @@ var SeguimientoActuacion = /*#__PURE__*/function () {
     value: function deletePlantilla(id) {
       $.ajax({
         url: '/seguimiento-procesos/actuacion/plantilla/delete/' + id,
-        success: function success(_ref17) {
-          var deleted = _ref17.deleted,
-              data = _ref17.data;
+        success: function success(_ref18) {
+          var deleted = _ref18.deleted,
+              data = _ref18.data;
 
           if (deleted) {
             $('#plantillaDocumento').append("<option value=\"".concat(data.plantilla_documento.id_plantilla_documento, "\">").concat(data.plantilla_documento.nombre_plantilla_documento, "</option>")).selectpicker('refresh');
@@ -2069,9 +2336,9 @@ var SeguimientoActuacion = /*#__PURE__*/function () {
       $.ajax({
         url: '/seguimiento-procesos/actuacion/plantilla/upsert',
         data: new URLSearchParams(formData),
-        success: function success(_ref18) {
-          var saved = _ref18.saved,
-              url = _ref18.url;
+        success: function success(_ref19) {
+          var saved = _ref19.saved,
+              url = _ref19.url;
 
           if (saved) {
             var value = $('#plantillaDocumento').val();
@@ -2163,8 +2430,8 @@ var SeguimientoProceso = /*#__PURE__*/function () {
       });
       $.ajax({
         url: '/seguimiento-procesos/etapas-de-proceso/get/' + id_etapa_proceso,
-        success: function success(_ref19) {
-          var actuaciones = _ref19.actuaciones;
+        success: function success(_ref20) {
+          var actuaciones = _ref20.actuaciones;
           var html = actuaciones.map(function (data) {
             return "<option value=\"".concat(data.id_actuacion, "\">").concat(data.nombre_actuacion, "</option>");
           });
@@ -2252,8 +2519,8 @@ var SeguimientoProceso = /*#__PURE__*/function () {
       var id = $('#deleteValue').val();
       $.ajax({
         url: '/seguimiento-procesos/comentario/delete/' + id,
-        success: function success(_ref20) {
-          var deleted = _ref20.deleted;
+        success: function success(_ref21) {
+          var deleted = _ref21.deleted;
 
           if (deleted) {
             $('#comentarioRow' + id).remove();
@@ -2265,7 +2532,7 @@ var SeguimientoProceso = /*#__PURE__*/function () {
   }, {
     key: "saveComentario",
     value: function saveComentario(e) {
-      var _this9 = this;
+      var _this10 = this;
 
       e.preventDefault();
       e.stopPropagation();
@@ -2274,8 +2541,8 @@ var SeguimientoProceso = /*#__PURE__*/function () {
       $.ajax({
         url: '/seguimiento-procesos/comentario/upsert',
         data: new URLSearchParams(formData),
-        success: function success(_ref21) {
-          var saved = _ref21.saved;
+        success: function success(_ref22) {
+          var saved = _ref22.saved;
 
           if (saved) {
             var $table = $('#comentariosTable');
@@ -2292,7 +2559,7 @@ var SeguimientoProceso = /*#__PURE__*/function () {
             $table.footable();
           }
 
-          _this9.closeComentarioModal();
+          _this10.closeComentarioModal();
         }
       });
       return false;
@@ -2332,7 +2599,7 @@ var TipoProceso = /*#__PURE__*/function () {
   }, {
     key: "createEtapa",
     value: function createEtapa() {
-      var _this10 = this;
+      var _this11 = this;
 
       var nombre_etapa_proceso = $('#etapaProcesoNombre').val().trim();
 
@@ -2347,7 +2614,7 @@ var TipoProceso = /*#__PURE__*/function () {
           success: function success(data) {
             var id = $('#createValue').val() || 0;
 
-            _this10.renderModalData(id);
+            _this11.renderModalData(id);
 
             $('#tipoProcesoEtapaPopover').popover('hide');
           }
@@ -2399,7 +2666,7 @@ var TipoProceso = /*#__PURE__*/function () {
   }, {
     key: "renderModalData",
     value: function renderModalData() {
-      var _this11 = this;
+      var _this12 = this;
 
       var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
       return $.ajax({
@@ -2411,14 +2678,14 @@ var TipoProceso = /*#__PURE__*/function () {
           $('#listaEtapa').html(htmlListaEtapas.join('')).selectpicker('refresh'); //addRow
 
           var htmlSelectedEtapas = data.selectedEtapas.map(function (e) {
-            return _this11.addRow(e.id_etapa_proceso, e.nombre_etapa_proceso);
+            return _this12.addRow(e.id_etapa_proceso, e.nombre_etapa_proceso);
           });
           $('#tableCreateModal tbody').html(htmlSelectedEtapas.join(''));
           $('#tableCreateModal').footable();
           $("#sortable").sortable({
-            start: _this11.sortableStart,
-            stop: _this11.sortableStop,
-            update: _this11.sortableUpdate
+            start: _this12.sortableStart,
+            stop: _this12.sortableStop,
+            update: _this12.sortableUpdate
           }).disableSelection();
           return data;
         }
@@ -2427,7 +2694,7 @@ var TipoProceso = /*#__PURE__*/function () {
   }, {
     key: "addEtapa",
     value: function addEtapa(self) {
-      var _this12 = this;
+      var _this13 = this;
 
       var id_etapa_proceso = $(self).val();
       var id_tipo_proceso = $('#createValue').val() || 0;
@@ -2443,7 +2710,7 @@ var TipoProceso = /*#__PURE__*/function () {
           id_tipo_proceso: id_tipo_proceso
         }),
         success: function success() {
-          _this12.renderModalData(id_tipo_proceso);
+          _this13.renderModalData(id_tipo_proceso);
         }
       });
     }
@@ -2456,8 +2723,8 @@ var TipoProceso = /*#__PURE__*/function () {
       var title = id ? 'Editar tipo de proceso' : 'Nuevo tipo de proceso';
       $('#createTitle').text(title);
       $('#tipoNombre').val('');
-      this.renderModalData(id).then(function (_ref22) {
-        var tipoProceso = _ref22.tipoProceso;
+      this.renderModalData(id).then(function (_ref23) {
+        var tipoProceso = _ref23.tipoProceso;
 
         if (tipoProceso) {
           $('#tipoNombre').val(tipoProceso.nombre_tipo_proceso);
@@ -2511,7 +2778,7 @@ var TipoProceso = /*#__PURE__*/function () {
   }, {
     key: "deleteEtapa",
     value: function deleteEtapa(id) {
-      var _this13 = this;
+      var _this14 = this;
 
       var id_tipo_proceso = $('#createValue').val() || 0;
       var params = {
@@ -2522,7 +2789,7 @@ var TipoProceso = /*#__PURE__*/function () {
         url: '/tipos-de-proceso/etapa/delete',
         data: new URLSearchParams(params),
         success: function success(data) {
-          _this13.renderModalData(id_tipo_proceso);
+          _this14.renderModalData(id_tipo_proceso);
         }
       });
     }
@@ -2595,8 +2862,8 @@ var Usuario = /*#__PURE__*/function () {
       if (id) {
         $.ajax({
           url: '/usuario/get/' + id,
-          success: function success(_ref23) {
-            var usuario = _ref23.usuario;
+          success: function success(_ref24) {
+            var usuario = _ref24.usuario;
             $('#tipoDocumento').val(usuario.id_tipo_documento).selectpicker('refresh');
             $('#numeroDocumento').val(usuario.numero_documento);
             $('#primerApellido').val(usuario.primer_apellido);

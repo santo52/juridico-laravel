@@ -57,7 +57,6 @@ class Persona extends BaseModel
         if ($this->segundo_apellido) $nombreCompleto[] = ucwords(strtolower($this->segundo_apellido));
         if ($this->primer_nombre) $nombreCompleto[] = ucwords(strtolower($this->primer_nombre));
         if ($this->segundo_nombre) $nombreCompleto[] = ucwords(strtolower($this->segundo_nombre));
-
         return implode(' ', $nombreCompleto);
     }
 

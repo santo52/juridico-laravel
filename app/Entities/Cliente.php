@@ -30,6 +30,10 @@ class Cliente extends BaseModel
         return $this->hasOne('App\Entities\Persona', 'id_persona', 'id_persona');
     }
 
+    public function honorarios() {
+        return $this->hasMany('App\Entities\Honorario', 'id_cliente', 'id_cliente');
+    }
+
     public function contacto()
     {
         return $this->hasOne('App\Entities\Contacto', 'id_contacto', 'id_contacto');

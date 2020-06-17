@@ -31,6 +31,8 @@ use App\Entities\Usuario;
 use App\Entities\UsuarioSedeOperativa;
 use App\Entities\Cobro;
 use App\Entities\Pago;
+use App\Entities\Honorario;
+use App\Entities\PagoHonorario;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -77,5 +79,7 @@ class EventServiceProvider extends ServiceProvider
         UsuarioSedeOperativa::observe(BaseObserver::class);
         Cobro::observe(BaseObserver::class);
         Pago::observe(BaseObserver::class);
+        Honorario::observe(BaseObserver::class);
+        PagoHonorario::observe(BaseObserver::class);
     }
 }

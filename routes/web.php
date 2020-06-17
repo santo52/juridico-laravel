@@ -159,6 +159,7 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/seguimiento-procesos/etapa/actuaciones/{idEtapa}', 'SeguimientoProcesoController@getActuacionesEtapa');
 
     Route::post('/cobros-y-pagos/listar', 'CobroController@index');
+    Route::post('/cobros-y-pagos/{id}', 'CobroController@get');
     Route::post('/cobros-y-pagos/upsert', 'CobroController@upsert');
     Route::post('/cobros-y-pagos/pago/upsert', 'CobroController@upsertPago');
     Route::post('/cobros-y-pagos/cobro/get/{id}', 'CobroController@getCobro');

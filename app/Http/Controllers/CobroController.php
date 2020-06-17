@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Entities\Cobro;
+use App\Entities\Proceso;
 use App\Entities\Pago;
 use App\Entities\EntidadFinanciera;
 
@@ -11,13 +12,40 @@ class CobroController extends Controller
 {
     public function index() {
 
-        $entidadesFinancieras = EntidadFinanciera::where('eliminado', 0)->get();
-        $cobros = Cobro::with('pago', 'procesoEtapaActuacion.procesoEtapa.proceso.cliente')
-        ->where('cobro.eliminado', 0)->get();
-        return $this->renderSection('cobro.listar', [
-            'cobros' => $cobros,
-            'entidadesFinancieras' => $entidadesFinancieras
+        $procesos = Proceso::getAll()->orderBy('id_proceso', 'desc')->get();
+        return $this->renderSection('proceso.listar', [
+            'procesos' => $procesos,
+            'cobros' => true
         ]);
+    }
+
+    public function get($id) {
+        $entidadesFinancieras = EntidadFinanciera::where('eliminado', 0)->get();
+        $cobros = Cobro::whereHas('procesoEtapaActuacion.procesoEtapa.proceso', function($q) use($id){
+            $q->where('id_proceso', $id);
+        })
+        ->with('pago', 'procesoEtapaActuacion', 'procesoEtapaActuacion.procesoEtapa.proceso.cliente')
+        ->where('cobro.eliminado', 0)->get();
+
+        $totalCobrado = 0;
+        $totalPagado = 0;
+
+        foreach($cobros as $cobro) {
+            $totalCobrado += $cobro->valor;
+            if($cobro->pago) {
+                $totalPagado += $cobro->pago->valor_pago;
+            }
+        }
+
+
+        return $this->renderSection('cobro.detalle', [
+            'cobros' => $cobros,
+            'entidadesFinancieras' => $entidadesFinancieras,
+            'totalCobrado' => $totalCobrado,
+            'totalPagado' => $totalPagado,
+        ]);
+
+
     }
 
     public function getCobro($id) {

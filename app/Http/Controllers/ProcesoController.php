@@ -29,7 +29,8 @@ class ProcesoController extends Controller
     {
         $procesos = Proceso::getAll()->orderBy('id_proceso', 'desc')->get();
         return $this->renderSection('proceso.listar', [
-            'procesos' => $procesos
+            'procesos' => $procesos,
+            'creacion' => true
         ]);
     }
 

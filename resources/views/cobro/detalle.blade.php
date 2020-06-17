@@ -1,4 +1,10 @@
 @section('content')
+
+<div class="juridico-proceso-destacado">
+    <p><b>Total cobrado:</b> $ {{number_format($totalCobrado, 0, ',', '.')}}</p>
+    <p><b>Total pagado:</b> $ {{number_format($totalPagado, 0, ',', '.')}}</p>
+</div>
+
 <div class="juridico right-buttons">
     {{-- <div class="flex">
         @isset ($permissions->crear)
@@ -54,11 +60,11 @@
         <tr id="cobroRow{{$cobro['id_cobro']}}">
             <td>{{$cobro['id_cobro']}}</td>
             <td>{{$cobro->getFechaCobro()}}</td>
-            <td>{{$cobro->procesoEtapaActuacion->procesoEtapa->proceso->cliente->getNombreCompleto()}}</td>
+            <td>{{$cobro->procesoEtapaActuacion ? $cobro->procesoEtapaActuacion->procesoEtapa->proceso->cliente->getNombreCompleto() : ''}}</td>
             <td>{{$cobro->getFechaCreacion()}}</td>
             <td>{{$cobro['concepto']}}</td>
-            <td>{{$cobro['valor']}}</td>
-            <td>{{floatval($cobro->pago ? $cobro->pago->valor_pago : 0)}}</td>
+            <td>$ {{number_format($cobro['valor'], 0, ',', '.')}}</td>
+            <td>$ {{number_format(floatval($cobro->pago ? $cobro->pago->valor_pago : 0), 0, ',', '.')}}</td>
             <td>{{$cobro['cerrado'] == 1 ? 'Pagado' : 'Pendiente'}}</td>
             <td>
                 <div class="flex justify-center table-actions">

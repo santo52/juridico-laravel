@@ -85,7 +85,7 @@ class Proceso extends BaseModel
 
     public static function getAll()
     {
-        return self::with('tipoProceso', 'entidadDemandada', 'municipio', 'entidadJusticia', 'cliente.persona', 'responsable', 'etapa')
+        return self::with('tipoProceso', 'entidadDemandada', 'municipio', 'entidadJusticia', 'cliente.persona', 'responsable', 'etapa', 'procesoEtapa.procesoEtapaActuaciones.cobro.pago')
             ->select('*', DB::raw("(select count(*) from proceso_bitacora pb where pb.id_proceso = proceso.id_proceso ) as totalComentarios"))
             ->where('proceso.eliminado', 0);
     }
@@ -159,5 +159,25 @@ class Proceso extends BaseModel
     public function getFechaRetiroServicio()
     {
         return $this->fecha_retiro_servicio ? $this->fecha_retiro_servicio : 'Sin fecha';
+    }
+
+    public function getTotalCobrado() {
+        $total = 0;
+        if($this->procesoEtapa) {
+            foreach($this->procesoEtapa as $item) {
+                $total += $item->getTotalCobrado();
+            }
+        }
+        return $total;
+    }
+
+    public function getTotalPagado() {
+        $total = 0;
+        if($this->procesoEtapa) {
+            foreach($this->procesoEtapa as $item) {
+                $total += $item->getTotalPagado();
+            }
+        }
+        return $total;
     }
 }

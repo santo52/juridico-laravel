@@ -24,10 +24,30 @@ class ProcesoEtapa extends BaseModel
     }
 
     public function procesoEtapaActuaciones() {
-        return $this->hasMany('App\Entities\ProcesoEtapaActuacion', 'id_proceso_etapa', 'id_proceso_etapa');
+        return $this->hasMany('App\Entities\procesoEtapaActuacion', 'id_proceso_etapa', 'id_proceso_etapa');
     }
 
     public function etapaProceso() {
         return $this->hasOne('App\Entities\EtapaProceso', 'id_etapa_proceso', 'id_etapa_proceso');
+    }
+
+    public function getTotalCobrado() {
+        $total = 0;
+        if($this->procesoEtapaActuaciones) {
+            foreach($this->procesoEtapaActuaciones as $item) {
+                $total += $item->getValorCobrado();
+            }
+        }
+        return $total;
+    }
+
+    public function getTotalPagado() {
+        $total = 0;
+        if($this->procesoEtapaActuaciones) {
+            foreach($this->procesoEtapaActuaciones as $item) {
+                $total += $item->getValorPagado();
+            }
+        }
+        return $total;
     }
 }

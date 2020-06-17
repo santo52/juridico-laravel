@@ -30,9 +30,13 @@ class ProcesoEtapaActuacion extends BaseModel
         'fecha_inicio_termino_rama', 'anotacion_rama', 'historico', 'fecha_resultado'
     ];
 
+    public function cobro() {
+        return $this->belongsTo('App\Entities\Cobro', 'id_proceso_etapa_actuacion', 'id_proceso_etapa_actuacion');
+    }
+
     public function procesoEtapa()
     {
-        return $this->hasOne('App\Entities\ProcesoEtapa', 'id_proceso_etapa', 'id_proceso_etapa');
+        return $this->belongsTo('App\Entities\ProcesoEtapa', 'id_proceso_etapa', 'id_proceso_etapa');
     }
 
     public function actuacion()
@@ -117,5 +121,21 @@ class ProcesoEtapaActuacion extends BaseModel
 
     public function getSeguimientoId() {
         return $this->procesoEtapa->id_proceso;
+    }
+
+    public function getValorCobrado() {
+        $cobrado = 0;
+        if($this->cobro) {
+            $cobrado = $this->cobro->valor;
+        }
+        return $cobrado;
+    }
+
+    public function getValorPagado() {
+        $pagado = 0;
+        if($this->cobro && $this->cobro->pago) {
+            $pagado = $this->cobro->pago->valor_pago;
+        }
+        return $pagado;
     }
 }

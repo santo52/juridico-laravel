@@ -3,7 +3,7 @@
 @section('content')
 <div class="juridico right-buttons">
     <div>
-        @if (isset($permissions->crear) && !isset($seguimiento))
+        @if (isset($permissions->crear) && isset($creacion))
         <a href="#proceso/crear" class="btn btn-default">
             Crear
         </a>
@@ -43,17 +43,23 @@
             <th>Documento cliente</th>
             <th>Nombre cliente</th>
             <th data-breakpoints="xs sm">Tipo de proceso</th>
-            <th>Entidad demandada</th>
-            <th>Responsable</th>
+            <th @isset($cobros) data-breakpoints="all" @endisset>Entidad demandada</th>
+            <th @isset($cobros) data-breakpoints="all" @endisset>Responsable</th>
+            @isset($cobros)
+                <th >Valor cobrado</th>
+                <th >Valor pagado</th>
+            @endisset
             <th data-breakpoints="all" data-filterable="false">Etapa actual</th>
-            <th data-breakpoints="all" data-filterable="false">Valor del estudio</th>
+            {{-- <th data-breakpoints="all" data-filterable="false">Valor del estudio</th> --}}
             <th data-breakpoints="all" data-filterable="false">Fecha de retiro del servicio</th>
             <th data-breakpoints="all">Última entidad de servicio</th>
             <th data-breakpoints="all">Municipio</th>
             <th data-breakpoints="all">Acto administrativo del retiro</th>
             <th data-breakpoints="all">Normatividad aplicada al caso</th>
             <th data-breakpoints="all">Observaciones del caso</th>
-            <th data-breakpoints="xs sm">Estado</th>
+            @if(!isset($cobros))
+                <th data-breakpoints="xs sm">Estado</th>
+            @endif
             <th data-filterable="false" data-sortable="false"></th>
         </tr>
     </thead>
@@ -67,36 +73,49 @@
             <td>{{$proceso->tipoProceso->nombre_tipo_proceso}}</td>
             <td>{{$proceso->entidadDemandada->nombre_entidad_demandada}}</td>
             <td>{{$proceso->responsable ? $proceso->responsable->getNombreCompleto() : 'Sin responsable'}}</td>
+            @isset($cobros)
+                <td>$ {{number_format($proceso->getTotalCobrado(), 0, ',', '.')}}</td>
+                <td>$ {{number_format($proceso->getTotalPagado(), 0, ',', '.')}}</td>
+            @endisset
             <td>{{$proceso->etapa ? $proceso->etapa->nombre_etapa_proceso : 'Sin iniciar'}}</td>
-            <td>{{$proceso->valor_estudio}}</td>
+            {{-- <td>{{$proceso->valor_estudio}}</td> --}}
             <td>{{$proceso->getFechaRetiroServicio()}}</td>
             <td>{{$proceso->ultima_entidad_retiro}}</td>
             <td>{{$proceso->municipio->nombre_municipio}}</td>
             <td>{{$proceso->acto_administrativo}}</td>
             <td>{{$proceso->normatividad_aplicada_caso}}</td>
             <td>{{$proceso->observaciones_caso}}</td>
-            <td>{{$proceso->estado_proceso == 2 ? 'Finalizado' : 'Activo'}}</td>
+            @if(!isset($cobros))
+                <td>{{$proceso->estado_proceso == 2 ? 'Finalizado' : 'Activo'}}</td>
+            @endif
             <td>
                 <div class="flex justify-center table-actions">
                     @isset ($permissions->editar)
-                    <a data-toggle="tooltip" title="Editar" @isset($seguimiento) href="#seguimiento-procesos/{{$proceso->id_proceso}}" @else
-                        href="#proceso/{{$proceso->id_proceso}}" @endisset class="btn text-primary" type="button">
-                        <span class="glyphicon glyphicon-pencil"></span>
+                    <a data-toggle="tooltip" title="Editar"
+                        @if(isset($seguimiento))
+                            href="#seguimiento-procesos/{{$proceso->id_proceso}}"
+                        @elseif(isset($cobros))
+                            href="#cobros-y-pagos/{{$proceso->id_proceso}}"
+                        @else
+                            href="#proceso/{{$proceso->id_proceso}}"
+                        @endif
+                        class="btn text-primary" type="button">
+                            <span class="glyphicon glyphicon-pencil"></span>
                     </a>
                     @endisset
 
-                    @if (isset($permissions->eliminar) && !isset($seguimiento))
+                    @if (isset($permissions->eliminar) && isset($creacion))
                     <a data-toggle="tooltip" title="Eliminar" href="javascript:void(0)" class="btn text-danger" type="button"
                         onclick="proceso.openDelete('{{$proceso->id_proceso}}')">
                         <span class="glyphicon glyphicon-remove"></span>
                     </a>
                     @endif
-                    @if(isset($seguimiento))
+                    @if(isset($seguimiento) || isset($cobro))
                     <a data-toggle="tooltip" title="Información cliente" target="_blank" href="#cliente/{{$proceso->id_cliente}}" class="btn text-warning" type="button">
                         <span class="glyphicon glyphicon-user"></span>
                     </a>
                     @endif
-                    @if(isset($seguimiento))
+                    @if(isset($seguimiento) || isset($cobro))
                     <a data-toggle="tooltip" title="Comentarios" href="javascript:void(0)" class="btn text-primary" type="button"
                         onclick="proceso.openComments('{{$proceso->id_proceso}}')">
                         <span class="glyphicon glyphicon-comment"></span>
@@ -143,7 +162,7 @@
     </div>
 </div>
 
-@if (isset($permissions->eliminar) && !isset($seguimiento))
+@if (isset($permissions->eliminar) && isset($creacion))
 <div class="modal fade" tabindex="-1" role="dialog" id="deleteModal">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">

@@ -236,3 +236,23 @@
 .datepickers-container {
     z-index: 2000000000;
 }
+
+
+.contenedor-pendientes {
+    .item-pendientes {
+        border: 1px dashed #ccc;
+        padding: 10px;
+        margin: 10px 0;
+    }
+
+    .pendientes-titulo {
+        display: block;
+        margin: 10px;
+        font-size: 14px;
+    }
+
+    .table.footable .footable-header {
+        background: #0c5235;
+    }
+
+}

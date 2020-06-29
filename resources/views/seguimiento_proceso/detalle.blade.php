@@ -15,10 +15,16 @@
         <b>Este cliente NO AUTORIZA dar algún tipo de información sobre el proceso a otras personas</b>
     </div>
     @endif
-    <div class="juridico-proceso-destacado">
-        <p><b>Radicado:</b> {{$proceso->numero_proceso ? $proceso->numero_proceso : 'Sin asignar' }} </p>
-        <p><b>Cliente:</b> {{$proceso->cliente->getNombreCompleto()}} </p>
-        <p><b>Cédula:</b> {{$proceso->cliente->persona->numero_documento}} </p>
+    <div class="juridico-proceso-destacado flex">
+        <div style="width:50%">
+            <p><b>Radicado:</b> {{$proceso->numero_proceso ? $proceso->numero_proceso : 'Sin asignar' }} </p>
+            <p><b>Cliente:</b> {{$proceso->cliente->getNombreCompleto()}} </p>
+            <p><b>Cédula:</b> {{$proceso->cliente->persona->numero_documento}} </p>
+        </div>
+        <div style="width:50%">
+            <p><b>Tipo de proceso:</b> {{$proceso->getTipoProceso()}} </p>
+            <p><b>Normatividad:</b> {{$proceso->normatividad_aplicada_caso}} </p>
+        </div>
     </div>
 
     <!-- Nav tabs -->

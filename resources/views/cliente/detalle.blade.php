@@ -94,9 +94,12 @@
             </div>
             <div class="form-group row">
                 <div class="col-xs-12 col-sm-3">
-                    <label for="telefono" class="control-label">Telefono fijo cliente</label>
-                    <input type="text" class="form-control required" id="telefono" name="telefono" @if($cliente)
-                        value="{{$cliente->telefono }}" @endif />
+                    <label for="telefono" class="control-label">Teléfono fijo cliente</label>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="indicativo_cliente">+1</span>
+                        <input type="text" class="form-control" name="telefono" id="telefono" @if($cliente)
+                            value="{{$cliente->telefono }}" @endif>
+                    </div>
                 </div>
                 <div class="col-xs-12 col-sm-3">
                     <label for="celular" class="control-label">Teléfono celular 1 cliente</label>

@@ -19,7 +19,7 @@ class ActuacionController extends Controller
 {
 
     private function getTiposResultados($id_actuacion) {
-        $idTiposResultadoProhibidos = [4,5,6,7,8,9,10,11,12,13];
+        $idTiposResultadoProhibidos = [4,5,6,7,8,9,10,11,12,13,14];
         $actuaciones = Actuacion::
         where([['id_actuacion', '<>', $id_actuacion]])
         ->whereIn('tipo_resultado', $idTiposResultadoProhibidos)->get();

@@ -51,7 +51,8 @@ class Actuacion extends BaseModel
             10 => 'Fecha de radicación del cumplimiento',
             11 => 'Fecha de pago',
             12 => 'Ubicación física del archivo muerto',
-            13 => 'Valor final sentencia'
+            13 => 'Valor final sentencia',
+            14 => 'Magistrado ponente'
         ];
     }
 

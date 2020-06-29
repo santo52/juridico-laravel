@@ -86,10 +86,22 @@
                             <div class="col-sm-4">
                                 <label class="lblForm">Tipo de resultado</label>
                                 <select class="form-control required" name="tipo_resultado">
+                                    <optgroup label="Formatos">
                                     @foreach ($tiposResultado as $key => $item)
-                                    <option @if(isset($actuacion) && $actuacion->tipo_resultado == $key) selected @endif
-                                        value="{{$key}}">{{$item}}</option>
+                                        @if($key <= 3 )
+                                        <option @if(isset($actuacion) && $actuacion->tipo_resultado == $key) selected @endif
+                                            value="{{$key}}">{{$item}}</option>
+                                        @endif
                                     @endforeach
+                                    </optgroup>
+                                    <optgroup label="Valores específicos">
+                                        @foreach ($tiposResultado as $key => $item)
+                                            @if($key > 3 )
+                                            <option @if(isset($actuacion) && $actuacion->tipo_resultado == $key) selected @endif
+                                                value="{{$key}}">{{$item}}</option>
+                                            @endif
+                                        @endforeach
+                                        </optgroup>
                                 </select>
                             </div>
                         </div>

@@ -22,7 +22,7 @@ class Cliente extends BaseModel
         "nombre_beneficiario", "parentesco_beneficiario", "estado_cliente", "fecha_creacion",
         "id_usuario_creacion", "fecha_actualizacion", "id_usuario_actualizacion", "eliminado",
         'celular2', 'id_tipo_documento_beneficiario', 'telefono_beneficiario', 'celular_beneficiario',
-        'celular2_beneficiario', 'correo_electronico_beneficiario'
+        'celular2_beneficiario', 'correo_electronico_beneficiario', 'observaciones'
     ];
 
     public function persona()

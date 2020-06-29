@@ -186,6 +186,7 @@
                         beneficiario</label>
                     <select class="form-control" id="id_tipo_documento_beneficiario"
                         name="id_tipo_documento_beneficiario" title="Seleccionar">
+                        <option value="0">SIN TIPO DE DOCUMENTO</option>
                         @foreach ($tiposDocumento as $item)
                         <option @if($cliente && $item->id_tipo_documento === $cliente->id_tipo_documento_beneficiario)
                             selected @endif value="{{$item->id_tipo_documento}}">{{$item->nombre_tipo_documento}}
@@ -213,12 +214,12 @@
             <div class="form-group row">
                 <div class="col-xs-12 col-sm-3">
                     <label for="telefono_beneficiario" class="control-label">Número telefónico beneficiario</label>
-                    <input type="text" class="form-control required" id="telefono_beneficiario" name="telefono_beneficiario" @if($cliente)
+                    <input type="text" class="form-control" id="telefono_beneficiario" name="telefono_beneficiario" @if($cliente)
                         value="{{$cliente->telefono_beneficiario }}" @endif />
                 </div>
                 <div class="col-xs-12 col-sm-3">
                     <label for="celular_beneficiario" class="control-label">Número celular beneficiario</label>
-                    <input type="text" class="form-control required" id="celular_beneficiario" name="celular_beneficiario" @if($cliente)
+                    <input type="text" class="form-control" id="celular_beneficiario" name="celular_beneficiario" @if($cliente)
                         value="{{$cliente->celular_beneficiario }}" @endif />
                 </div>
                 <div class="col-xs-12 col-sm-3">

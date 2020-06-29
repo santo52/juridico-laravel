@@ -17,6 +17,8 @@ Route::middleware(['auth', 'route'])->group(function () {
 
     Route::get('/', 'HomeController@index');
     Route::get('/logout', 'AuthController@logout');
+    Route::post('/cambiar-contrasena/listar', 'HomeController@changePassword');
+    Route::post('/cambiar-contrasena/upsert', 'HomeController@changePasswordUpsert');
 
     Route::get('/actuacion/pdf', 'ActuacionController@createPDF');
     Route::get('/actuacion/excel', 'ActuacionController@createExcel');
@@ -168,6 +170,9 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/honorarios/listar', 'HonorarioController@index');
     Route::post('/honorarios/upsert', 'HonorarioController@upsert');
     Route::post('/honorarios/cliente/{id}', 'ClienteController@getBasic');
+
+
+
 
 
     // Route::post('/proceso/upsert', 'ProcesoController@upsert');

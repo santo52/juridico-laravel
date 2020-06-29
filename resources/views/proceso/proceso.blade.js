@@ -138,6 +138,7 @@ class Proceso {
                         const text = 'Ya existe un proceso con esta identificación'
                         showErrorPopover($('#id_carpeta'), text, 'top')
                     } else if (data.saved) {
+                        alert('Se ha guardado satisfactoriamente!');
                         location.hash = 'proceso/listar'
                     }
                 }

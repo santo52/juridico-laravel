@@ -84,6 +84,7 @@ class Intermediario {
                 data: new URLSearchParams(formData),
                 success: data => {
                     if (data.saved) {
+                        alert('Se ha guardado satisfactoriamente!');
                         location.reload()
                     } else if(data.documentExists || data.invalidDocument) {
                         $('#numeroDocumento').parent().addClass('has-error')

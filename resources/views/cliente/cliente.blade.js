@@ -110,6 +110,7 @@ class Cliente {
                         const text = 'Ya existe un cliente con este número de documento'
                         showErrorPopover($('#numero_documento'), text, 'top')
                     } else if (data.saved) {
+                        alert('Se ha guardado satisfactoriamente!');
                         location.hash = 'cliente/listar'
                     }
                 }

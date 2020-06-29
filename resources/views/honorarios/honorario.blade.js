@@ -182,6 +182,7 @@ class Honorario {
                 data: new URLSearchParams(formData),
                 success: data => {
                     if (data.saved) {
+                        alert('Se ha guardado satisfactoriamente!');
                         location.reload()
                     }
                 }

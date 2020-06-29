@@ -45,7 +45,7 @@
         </table>
     </div>
     <div class="item-pendientes">
-        <span class="pendientes-titulo">Casos con más de un mes sin movimiento</span>
+        <span class="pendientes-titulo">Procesos con más de un mes sin movimiento</span>
         <table class="table" data-empty="Sin pendientes">
             <thead>
                 <th>Cliente</th>

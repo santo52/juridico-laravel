@@ -79,6 +79,7 @@ class Menu {
                 data: new URLSearchParams(formData),
                 success: data => {
                     if (data.saved) {
+                        alert('Se ha guardado satisfactoriamente!');
                         location.reload()
                     } else if (data.exists) {
                         $('#create_nombre_menu').parent().addClass('has-error')

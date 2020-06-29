@@ -86,6 +86,7 @@ class SeguimientoActuacion {
             success: data => {
                 $('#cerrarActuacion').modal('hide')
                 setTimeout(() => {
+                    alert('Se ha guardado satisfactoriamente!');
                     location.hash = 'seguimiento-procesos/' + $('#id_proceso').val()
                 }, 1000);
             }

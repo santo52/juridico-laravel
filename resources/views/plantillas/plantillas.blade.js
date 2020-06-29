@@ -32,6 +32,7 @@ class Plantilla {
                         const text = 'Ya existe un plantilla con este nombre'
                         showErrorPopover($('#nombre_plantilla_documento'), text, 'top')
                     } else if (data.saved) {
+                        alert('Se ha guardado satisfactoriamente!');
                         location.hash = 'plantillas/listar'
                     }
                 }

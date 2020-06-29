@@ -68,7 +68,13 @@
                                     <span class="glyphicon glyphicon-user"></span>&nbsp;
                                     {{Auth::user()->nombre_usuario}}
                                 </a>
-                            </li><?php
+                            </li>
+                            <li>
+                                <a href="#cambiar-contrasena"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;Cambiar contraseña</a>
+                            </li>
+
+
+                            <?php
                                     if (trim(Session::get('nombrePerfil')) != '') {?>
                             <li class="divider"></li>
                             <li>

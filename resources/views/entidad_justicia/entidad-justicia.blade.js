@@ -49,6 +49,7 @@ class EntidadJusticia {
                 data: new URLSearchParams(formData),
                 success: data => {
                     if (data.saved) {
+                        alert('Se ha guardado satisfactoriamente!');
                         location.reload()
                     } else if (data.exists) {
                         $('#etapaNombre').parent().addClass('has-error')

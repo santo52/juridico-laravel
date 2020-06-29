@@ -47,6 +47,7 @@ class Documento {
                 data: new URLSearchParams(formData),
                 success: data => {
                     if (data.saved) {
+                        alert('Se ha guardado satisfactoriamente!');
                         location.reload()
                     } else if (data.exists) {
                         $('#documentoNombre').parent().addClass('has-error')

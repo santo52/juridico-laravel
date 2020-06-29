@@ -20,11 +20,12 @@ class Route
     public function handle($request, Closure $next)
     {
 
+
+
         if ($request->isMethod('post')) {
             $uri = $request->route()->uri;
             $uri = explode('/', $uri)[0];
             $idPerfil = Auth::user()->id_perfil;
-
 
             if ($idPerfil === env('PROFILE_ADMIN_ID', 1)) {
 
@@ -54,7 +55,7 @@ class Route
                     ])->exists();
 
                     //Si no tiene permisos, redirecciona a la raiz
-                    if (!$canShowModule) {
+                    if (!$canShowModule && $uri !== 'cambiar-contrasena') {
                         return response()->json(['redirect' => '']);
                     }
                 }

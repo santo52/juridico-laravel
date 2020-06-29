@@ -91,6 +91,7 @@ var Actuacion = /*#__PURE__*/function () {
             if (data.exists) {
               showErrorPopover($('#nombreActuacion'), 'Ya existe una actuación con este nombre', 'top');
             } else if (data.saved) {
+              alert('Se ha guardado satisfactoriamente!');
               window.history.back();
             }
           }
@@ -146,6 +147,48 @@ var Actuacion = /*#__PURE__*/function () {
 }();
 
 var actuacion = new Actuacion();
+
+var ChangePassword = /*#__PURE__*/function () {
+  function ChangePassword() {
+    _classCallCheck(this, ChangePassword);
+  }
+
+  _createClass(ChangePassword, [{
+    key: "upsert",
+    value: function upsert(e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (validateForm(e)) {
+        var formData = new FormData(e.target);
+        $.ajax({
+          url: '/cambiar-contrasena/upsert',
+          data: new URLSearchParams(formData),
+          success: function success(data) {
+            if (data.invalid) {
+              $('#old-password').parent().addClass('has-error');
+              var text = 'La contraseña anterior es invalida';
+              showErrorPopover($('#old-password'), text, 'top');
+            } else if (data.notconfirmed) {
+              $('#confirm-password').parent().addClass('has-error');
+              var _text = 'La nueva contraseña y la confirmación no coinciden';
+              showErrorPopover($('#confirm-password'), _text, 'top');
+            } else if (data.saved) {
+              alert('Se ha actualizado la contraseña!');
+              location = '/';
+            }
+          }
+        });
+      }
+
+      return false;
+    }
+  }]);
+
+  return ChangePassword;
+}();
+
+var changePassword = new ChangePassword();
 
 var Cliente = /*#__PURE__*/function () {
   function Cliente() {
@@ -267,6 +310,7 @@ var Cliente = /*#__PURE__*/function () {
               var text = 'Ya existe un cliente con este número de documento';
               showErrorPopover($('#numero_documento'), text, 'top');
             } else if (data.saved) {
+              alert('Se ha guardado satisfactoriamente!');
               location.hash = 'cliente/listar';
             }
           }
@@ -673,6 +717,7 @@ var Documento = /*#__PURE__*/function () {
           data: new URLSearchParams(formData),
           success: function success(data) {
             if (data.saved) {
+              alert('Se ha guardado satisfactoriamente!');
               location.reload();
             } else if (data.exists) {
               $('#documentoNombre').parent().addClass('has-error');
@@ -759,6 +804,7 @@ var EntidadDemandada = /*#__PURE__*/function () {
           data: new URLSearchParams(formData),
           success: function success(data) {
             if (data.saved) {
+              alert('Se ha guardado satisfactoriamente!');
               location.reload();
             } else if (data.exists) {
               $('#etapaNombre').parent().addClass('has-error');
@@ -849,6 +895,7 @@ var EntidadJusticia = /*#__PURE__*/function () {
           data: new URLSearchParams(formData),
           success: function success(data) {
             if (data.saved) {
+              alert('Se ha guardado satisfactoriamente!');
               location.reload();
             } else if (data.exists) {
               $('#etapaNombre').parent().addClass('has-error');
@@ -1006,6 +1053,7 @@ var EtapaProceso = /*#__PURE__*/function () {
           data: new URLSearchParams(formData),
           success: function success(data) {
             if (data.saved) {
+              alert('Se ha guardado satisfactoriamente!');
               location.reload();
             } else if (data.exists) {
               $('#etapaNombre').parent().addClass('has-error');
@@ -1327,6 +1375,7 @@ var Honorario = /*#__PURE__*/function () {
           data: new URLSearchParams(formData),
           success: function success(data) {
             if (data.saved) {
+              alert('Se ha guardado satisfactoriamente!');
               location.reload();
             }
           }
@@ -1497,6 +1546,7 @@ var Intermediario = /*#__PURE__*/function () {
           data: new URLSearchParams(formData),
           success: function success(data) {
             if (data.saved) {
+              alert('Se ha guardado satisfactoriamente!');
               location.reload();
             } else if (data.documentExists || data.invalidDocument) {
               $('#numeroDocumento').parent().addClass('has-error');
@@ -1623,6 +1673,7 @@ var Menu = /*#__PURE__*/function () {
           data: new URLSearchParams(formData),
           success: function success(data) {
             if (data.saved) {
+              alert('Se ha guardado satisfactoriamente!');
               location.reload();
             } else if (data.exists) {
               $('#create_nombre_menu').parent().addClass('has-error');
@@ -1949,6 +2000,7 @@ var Plantilla = /*#__PURE__*/function () {
               var text = 'Ya existe un plantilla con este nombre';
               showErrorPopover($('#nombre_plantilla_documento'), text, 'top');
             } else if (data.saved) {
+              alert('Se ha guardado satisfactoriamente!');
               location.hash = 'plantillas/listar';
             }
           }
@@ -2119,9 +2171,10 @@ var Proceso = /*#__PURE__*/function () {
               showErrorPopover($('#numero_proceso'), text, 'top');
             } else if (data.folderExists) {
               $('#id_carpeta').parent().addClass('has-error');
-              var _text = 'Ya existe un proceso con esta identificación';
-              showErrorPopover($('#id_carpeta'), _text, 'top');
+              var _text2 = 'Ya existe un proceso con esta identificación';
+              showErrorPopover($('#id_carpeta'), _text2, 'top');
             } else if (data.saved) {
+              alert('Se ha guardado satisfactoriamente!');
               location.hash = 'proceso/listar';
             }
           }
@@ -2299,6 +2352,7 @@ var SeguimientoActuacion = /*#__PURE__*/function () {
         success: function success(data) {
           $('#cerrarActuacion').modal('hide');
           setTimeout(function () {
+            alert('Se ha guardado satisfactoriamente!');
             location.hash = 'seguimiento-procesos/' + $('#id_proceso').val();
           }, 1000);
         }
@@ -2753,6 +2807,7 @@ var TipoProceso = /*#__PURE__*/function () {
           data: new URLSearchParams(formData),
           success: function success(data) {
             if (data.saved) {
+              alert('Se ha guardado satisfactoriamente!');
               location.reload();
             } else if (data.exists) {
               $('#etapaNombre').parent().addClass('has-error');
@@ -2909,12 +2964,12 @@ var Usuario = /*#__PURE__*/function () {
               showErrorPopover($('#numeroDocumento'), text, 'top');
             } else if (data.invalidPassword) {
               $('#password').parent().addClass('has-error');
-              var _text2 = 'La contraseña debe tener al menos 6 caracteres';
-              showErrorPopover($('#password'), _text2, 'top');
+              var _text3 = 'La contraseña debe tener al menos 6 caracteres';
+              showErrorPopover($('#password'), _text3, 'top');
             } else if (data.userExists) {
               $('#nombre_usuario').parent().addClass('has-error');
-              var _text3 = 'El nombre de usuario ya existe';
-              showErrorPopover($('#nombre_usuario'), _text3, 'top');
+              var _text4 = 'El nombre de usuario ya existe';
+              showErrorPopover($('#nombre_usuario'), _text4, 'top');
             }
           }
         });

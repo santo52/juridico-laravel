@@ -93,50 +93,6 @@
                 </div>
             </div>
             <div class="form-group row">
-                <div class="col-xs-12 col-sm-3">
-                    <label for="telefono" class="control-label">Teléfono fijo cliente</label>
-                    <div class="input-group">
-                        <span class="input-group-addon" id="indicativo_cliente">+1</span>
-                        <input type="text" class="form-control" name="telefono" id="telefono" @if($cliente)
-                            value="{{$cliente->telefono }}" @endif>
-                    </div>
-                </div>
-                <div class="col-xs-12 col-sm-3">
-                    <label for="celular" class="control-label">Teléfono celular 1 cliente</label>
-                    <input type="text" class="form-control required" id="celular" name="celular" @if($cliente)
-                        value="{{$cliente->celular }}" @endif />
-                </div>
-                <div class="col-xs-12 col-sm-3">
-                    <label for="celular2" class="control-label">Teléfono celular 2 cliente</label>
-                    <input type="text" class="form-control" id="celular2" name="celular2" @if($cliente)
-                        value="{{$cliente->celular2 }}" @endif />
-                </div>
-                <div class="col-xs-12 col-sm-3">
-                    <label for="correo_electronico" class="control-label">Correo electrónico cliente</label>
-                    <input type="email" class="form-control required" id="correo_electronico" name="correo_electronico"
-                        @if($cliente) value="{{$cliente->correo_electronico }}" @endif />
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-xs-12 col-sm-6">
-                    <label for="estado_vital_cliente" class="control-label">Estado vital</label>
-                    <select class="form-control required" id="estado_vital_cliente" name="estado_vital_cliente">
-                        <option value="1" @if($cliente) @if($cliente->estado_vital_cliente == 1) selected @endif @else
-                            selected @endif >VIVO</option>
-                        <option value="2" @if($cliente && $cliente->estado_vital_cliente == 2) selected @endif>FALLECIDO
-                        </option>
-                    </select>
-                </div>
-                <div class="col-xs-12 col-sm-6">
-                    <label for="nombre_persona_recomienda" class="control-label">Nombre de la persona que recomendó a la
-                        compañía</label>
-                    <input type="text" class="form-control" id="nombre_persona_recomienda"
-                        name="nombre_persona_recomienda" @if($cliente) value="{{$cliente->nombre_persona_recomienda }}"
-                        @endif />
-                </div>
-            </div>
-            <div class="separator margin"></div>
-            <div class="form-group row">
                 <div class="col-xs-12 col-sm-4">
                     <label for="id_pais" class="control-label">País</label>
                     <select class="form-control required" id="id_pais">
@@ -177,6 +133,50 @@
                     <label for="barrio" class="control-label">Barrio</label>
                     <input type="text" class="form-control" id="barrio" name="barrio" @if($cliente)
                         value="{{$cliente->barrio }}" @endif />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-xs-12 col-sm-3">
+                    <label for="telefono" class="control-label">Teléfono fijo cliente</label>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="indicativo_cliente">+1</span>
+                        <input type="text" class="form-control" name="telefono" id="telefono" @if($cliente)
+                            value="{{$cliente->telefono }}" @endif>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <label for="celular" class="control-label">Teléfono celular 1 cliente</label>
+                    <input type="text" class="form-control required" id="celular" name="celular" @if($cliente)
+                        value="{{$cliente->celular }}" @endif />
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <label for="celular2" class="control-label">Teléfono celular 2 cliente</label>
+                    <input type="text" class="form-control" id="celular2" name="celular2" @if($cliente)
+                        value="{{$cliente->celular2 }}" @endif />
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <label for="correo_electronico" class="control-label">Correo electrónico cliente</label>
+                    <input type="email" class="form-control required" id="correo_electronico" name="correo_electronico"
+                        @if($cliente) value="{{$cliente->correo_electronico }}" @endif />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-xs-12 col-sm-6">
+                    <label for="estado_vital_cliente" class="control-label">Estado vital</label>
+                    <select class="form-control required" id="estado_vital_cliente" name="estado_vital_cliente">
+                        <option value="1" @if($cliente) @if($cliente->estado_vital_cliente == 1) selected @endif @else
+                            selected @endif >VIVO</option>
+                        <option value="2" @if($cliente && $cliente->estado_vital_cliente == 2) selected @endif>FALLECIDO
+                        </option>
+                    </select>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <label for="nombre_persona_recomienda" class="control-label">Nombre de la persona que recomendó a la
+                        compañía</label>
+                    <input type="text" class="form-control" id="nombre_persona_recomienda"
+                        name="nombre_persona_recomienda" @if($cliente) value="{{$cliente->nombre_persona_recomienda }}"
+                        @endif />
                 </div>
             </div>
             <div class="separator margin"></div>

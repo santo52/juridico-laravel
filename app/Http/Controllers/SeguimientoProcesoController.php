@@ -77,6 +77,8 @@ class SeguimientoProcesoController extends Controller
             return response()->json(['redirect' => 'seguimiento-procesos']);
         }
 
+
+
         $etapas = TipoProceso::getEtapas($proceso->id_tipo_proceso)->get();
 
         foreach ($etapas as $key => $value) {
@@ -86,9 +88,14 @@ class SeguimientoProcesoController extends Controller
         }
 
         $comentarios = ProcesoBitacora::where('id_proceso', $id)->orderBy('fecha_creacion', 'desc')->get();
+        $historico = ProcesoEtapaActuacion::leftjoin('proceso_etapa as pe', 'proceso_etapa_actuacion.id_proceso_etapa', 'pe.id_proceso_etapa')
+        ->where(['historico' => 1, 'finalizado' => 1, 'id_proceso' => $id])
+        ->orderBy('fecha_resultado', 'desc')
+        ->get();
 
         return $this->renderSection('seguimiento_proceso.detalle', [
             'proceso' => $proceso,
+            'historico' => $historico,
             'comentarios' => $comentarios,
             'etapas' => $etapas
         ]);

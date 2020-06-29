@@ -131,16 +131,11 @@ class ProcesoController extends Controller
         $paises = Pais::all();
         $departamentos = Departamento::all();
         $municipios = $proceso ? Municipio::where('id_departamento', $proceso->municipio->id_departamento)->get() : [];
-        $historico = ProcesoEtapaActuacion::leftjoin('proceso_etapa as pe', 'proceso_etapa_actuacion.id_proceso_etapa', 'pe.id_proceso_etapa')
-            ->where(['historico' => 1, 'finalizado' => 1, 'id_proceso' => $id])
-            ->orderBy('fecha_resultado', 'desc')
-            ->get();
 
 
         return $this->renderSection('proceso.detalle', [
             'proceso' => $proceso,
             'tiposProceso' => $tiposProceso,
-            'historico' => $historico,
             // 'documentos' => $documentos,
             'entidadesDemandadas' => $entidadesDemandadas,
             'entidadesJusticia' => $entidadesJusticia,

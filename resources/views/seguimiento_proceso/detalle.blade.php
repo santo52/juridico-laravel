@@ -33,6 +33,11 @@
                 Comentarios
             </a>
         </li>
+        <li role="presentation" id="historico-tab">
+            <a href="#historico" aria-controls="historico" role="tab" data-toggle="tab">
+                Histórico de la sentencia
+            </a>
+        </li>
         @if(isset($etapas) && count($etapas))
         @foreach ($etapas as $key => $item)
         <li @if($proceso->id_etapa_proceso == $item->id_etapa_proceso) class="active" @elseif($item->porcentaje == 100)
@@ -436,6 +441,30 @@
                             </div>
                             @endif
                         </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="historico">
+            <table id="historicoTable" class="table table-hover" data-empty="Sin historico de sentencias"
+                data-paging-count-format="Mostrando del {PF} al {PL} de {TR} registros"
+                data-filter-container="#filter-form-container" data-sorting="false" data-filtering="false"
+                data-paging="false" data-filter-placeholder="Buscar ..." data-filter-position="left"
+                data-filter-dropdown-title="Buscar por" data-filter-space="OR">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Usuario</th>
+                        <th>Resultado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($historico as $item)
+                    <tr>
+                        <td>{{$item->getFechaResultadoString()}}</td>
+                        <td>{{$item->getResponsable()}}</td>
+                        <td>{{$item->resultado_actuacion}}</td>
                     </tr>
                     @endforeach
                 </tbody>

@@ -11,11 +11,6 @@
                 Información del proceso
             </a>
         </li>
-        <li role="presentation" id="historico-tab">
-            <a href="#historico" aria-controls="historico" role="tab" data-toggle="tab">
-                Histórico de la sentencia
-            </a>
-        </li>
         {{-- <li role="presentation" id="documentos-tab" @if (!count($documentos)) style="display: none" @endif> --}}
         {{-- <li role="presentation" id="documentos-tab">
             <a href="#documentos" aria-controls="documentos" role="tab" data-toggle="tab">
@@ -320,7 +315,7 @@
             <button class="btn btn-success" style="width: 100%">Guardar proceso</button>
         </div>
 
-        <div role="tabpanel" class="tab-pane" id="historico">
+        {{-- <div role="tabpanel" class="tab-pane" id="historico">
             <table id="historicoTable" class="table table-hover" data-empty="Sin historico de sentencias"
                 data-paging-count-format="Mostrando del {PF} al {PL} de {TR} registros"
                 data-filter-container="#filter-form-container" data-sorting="false" data-filtering="false"
@@ -343,9 +338,9 @@
                     @endforeach
                 </tbody>
             </table>
-        </div>
+        </div> --}}
 
-        <div role="tabpanel" class="tab-pane" id="documentos">
+        {{-- <div role="tabpanel" class="tab-pane" id="documentos">
             <table id="historicoTable" class="table table-hover" data-empty="Sin historico de sentencias"
                 data-paging-count-format="Mostrando del {PF} al {PL} de {TR} registros"
                 data-filter-container="#filter-form-container" data-sorting="false" data-filtering="false"
@@ -368,7 +363,7 @@
                     @endforeach
                 </tbody>
             </table>
-        </div>
+        </div> --}}
     </form>
 </div>
 @endsection

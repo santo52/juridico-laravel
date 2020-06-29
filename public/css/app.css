@@ -1118,7 +1118,7 @@ div.ajax-file-upload-container div.ajax-file-upload-statusbar div.ajax-file-uplo
 }
 
 .separator {
-  border-top: 1px solid #eee !important;
+  border-top: 2px solid #eee !important;
 }
 
 .separator.margin {

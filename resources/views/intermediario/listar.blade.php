@@ -49,7 +49,7 @@
             <th data-breakpoints="all">Municipio</th>
             {{-- <th data-breakpoints="all">Barrio</th>
             <th data-breakpoints="all">Dirección</th> --}}
-            <th data-filterable="false">Retención aplicada</th>
+            {{-- <th data-filterable="false">Retención aplicada</th> --}}
             <th data-breakpoints="xs sm">Estado</th>
             <th data-filterable="false" data-sortable="false"></th>
         </tr>
@@ -72,7 +72,7 @@
             <td>{{$intermediario['nombre_municipio']}}</td>
             {{-- <td>{{$intermediario['barrio']}}</td>
             <td>{{$intermediario['direccion']}}</td> --}}
-            <td>{{$intermediario['retencion']}}%</td>
+            {{-- <td>{{$intermediario['retencion']}}%</td> --}}
             <td>{{$intermediario['estado_intermediario'] == 2 ? 'Inactivo' : 'Activo'}}</td>
             <td>
                 <div class="flex justify-center table-actions">
@@ -177,26 +177,26 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <div class="col-xs-4">
-                            <label for="recipient-name" class="control-label">Teléfono</label>
+                        <div class="col-xs-6">
+                            <label for="recipient-name" class="control-label">Teléfono fijo</label>
                             <div class="input-group">
                                 <span class="input-group-addon" id="indicativo">+1</span>
                                 <input type="text" class="form-control required" id="telefono" name="telefono">
                             </div>
                         </div>
-                        <div class="col-xs-5">
+                        <div class="col-xs-6">
                             <label for="recipient-name" class="control-label">Correo electrónico</label>
                             <input type="email" class="form-control required" id="correoElectronico"
                                 name="correo_electronico">
                         </div>
-                        <div class="col-xs-3">
+                        {{-- <div class="col-xs-3">
                             <label for="recipient-name" class="control-label">Retención aplicada</label>
                             <div class="input-group">
                                 <input type="number" min="0" max="100" class="center form-control required numeric"
                                     id="retencion" name="retencion">
                                 <span class="input-group-addon" id="basic-addon2">%</span>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">Estado</label>

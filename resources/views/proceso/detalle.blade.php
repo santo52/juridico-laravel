@@ -51,7 +51,7 @@
                         value="{{$proceso->cliente->getEstadoVital() }}" @endif disabled />
                 </div>
                 <div class="col-xs-12 col-sm-4">
-                    <label class="control-label">Teléfono cliente</label>
+                    <label class="control-label">Teléfono fijo cliente</label>
                     <div class="input-group">
                         <span class="input-group-addon" id="indicativo_cliente">+1</span>
                         <input disabled type="text" class="form-control" id="telefono_cliente" @if($proceso)
@@ -107,7 +107,7 @@
                         value="{{$proceso->cliente->nombre_beneficiario }}" @endif disabled />
                 </div>
                 <div class="col-xs-12 col-sm-4">
-                    <label class="control-label">Teléfono beneficiario</label>
+                    <label class="control-label">Teléfono fijo beneficiario</label>
                     <div class="input-group">
                         <span class="input-group-addon" id="indicativo_beneficiario">+1</span>
                         <input disabled type="text" class="form-control" id="telefono_beneficiario" @if($proceso)

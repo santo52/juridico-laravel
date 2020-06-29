@@ -94,17 +94,17 @@
             </div>
             <div class="form-group row">
                 <div class="col-xs-12 col-sm-3">
-                    <label for="telefono" class="control-label">Número telefónico cliente</label>
+                    <label for="telefono" class="control-label">Telefono fijo cliente</label>
                     <input type="text" class="form-control required" id="telefono" name="telefono" @if($cliente)
                         value="{{$cliente->telefono }}" @endif />
                 </div>
                 <div class="col-xs-12 col-sm-3">
-                    <label for="celular" class="control-label">Número celular cliente</label>
+                    <label for="celular" class="control-label">Teléfono celular 1 cliente</label>
                     <input type="text" class="form-control required" id="celular" name="celular" @if($cliente)
                         value="{{$cliente->celular }}" @endif />
                 </div>
                 <div class="col-xs-12 col-sm-3">
-                    <label for="celular2" class="control-label">Número celular 2 cliente</label>
+                    <label for="celular2" class="control-label">Teléfono celular 2 cliente</label>
                     <input type="text" class="form-control" id="celular2" name="celular2" @if($cliente)
                         value="{{$cliente->celular2 }}" @endif />
                 </div>
@@ -249,7 +249,7 @@
                         value="{{$cliente->numero_documento_intermediario }}" @endif />
                 </div>
                 <div class="col-xs-12 col-sm-3">
-                    <label for="id_intermediario" class="control-label">Teléfono intermediario</label>
+                    <label for="id_intermediario" class="control-label">Teléfono fijo intermediario</label>
                     <div class="input-group">
                         <span class="input-group-addon" id="indicativo">+@if($cliente)
                             {{$cliente->indicativo_intermediario }} @endif</span>

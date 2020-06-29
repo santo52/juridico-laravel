@@ -15,6 +15,8 @@ class EntidadJusticia extends BaseModel
     const UPDATED_AT = 'fecha_actualizacion';
 
     protected $fillable = [
-        "id_entidad_justicia", "nombre_entidad_justicia", "aplica_primera_instancia", "aplica_segunda_instancia", "estado_entidad_justicia", "fecha_creacion", "id_usuario_creacion", "fecha_actualizacion", "id_usuario_actualizacion", "eliminado"
+        "id_entidad_justicia", "nombre_entidad_justicia", "aplica_primera_instancia",
+        "aplica_segunda_instancia", "estado_entidad_justicia", "fecha_creacion", "id_usuario_creacion",
+        "fecha_actualizacion", "id_usuario_actualizacion", "eliminado", "id_municipio"
     ];
 }

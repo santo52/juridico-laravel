@@ -206,7 +206,7 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-xs-6">
-                            <label for="recipient-name" class="control-label">Teléfono</label>
+                            <label for="recipient-name" class="control-label">Teléfono fijo</label>
                             <div class="input-group">
                                 <span class="input-group-addon" id="indicativo">+1</span>
                                 <input type="text" class="form-control required" id="telefono" name="telefono">

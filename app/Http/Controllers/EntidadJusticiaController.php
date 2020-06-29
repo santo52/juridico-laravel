@@ -5,14 +5,23 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Entities\EntidadJusticia;
+use App\Entities\Municipio;
+use App\Entities\Pais;
+use App\Entities\Departamento;
 
 class EntidadJusticiaController extends Controller
 {
 
     public function index() {
         $entidades = EntidadJusticia::where('eliminado', 0)->get();
+        $ciudades = Municipio::all();
+        $paises = Pais::all();
+        $departamentos = Departamento::all();
         return $this->renderSection('entidad_justicia.listar', [
-            'entidades' => $entidades
+            'entidades' => $entidades,
+            'ciudades' => $ciudades,
+            'paises' => $paises,
+            'departamentos' => $departamentos,
         ]);
     }
 

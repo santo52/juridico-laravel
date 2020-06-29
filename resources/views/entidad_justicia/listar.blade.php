@@ -116,6 +116,35 @@
                         <input type="text" class="form-control required" id="etapaNombre" name="nombre_entidad_justicia">
                     </div>
                     <div class="form-group">
+                        <label for="recipient-name" class="control-label">Nombre de la entidad de justicia</label>
+                        <input type="text" class="form-control required" id="etapaNombre" name="nombre_entidad_justicia">
+                    </div>
+                    {{-- <div class="form-group row">
+                        <div class="col-xs-12 col-sm-4">
+                            <label for="id_pais" class="control-label">País</label>
+                            <select class="form-control required" id="id_pais">
+                                @foreach ($paises as $item)
+                                <option value="{{$item->id_pais}}">{{$item->nombre_pais}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-xs-12 col-sm-4">
+                            <label for="id_departamento" class="control-label">Departamento</label>
+                            <select data-live-search="true" class="form-control required" id="id_departamento"
+                                title="Seleccionar" onChange="cliente.changeDepartamento(this)">
+                                @foreach ($departamentos as $item)
+                                <option value="{{$item->id_departamento}}">{{$item->nombre_departamento}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-xs-12 col-sm-4">
+                            <label for="id_municipio" class="control-label">Municipio</label>
+                            <select data-live-search="true" class="form-control required" id="id_municipio" name="id_municipio"
+                                title="Seleccionar">
+                            </select>
+                        </div>
+                    </div> --}}
+                    <div class="form-group">
                         <label for="recipient-name" class="control-label">¿Aplica primara instancia?</label>
                         <div class="checkbox-form">
                             <input type="checkbox" data-on="Activo" data-off="Inactivo" data-width="90"

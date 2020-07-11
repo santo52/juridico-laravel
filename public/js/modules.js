@@ -2861,6 +2861,205 @@ var TipoProceso = /*#__PURE__*/function () {
 
 var tipoProceso = new TipoProceso();
 
+var TipoResultado = /*#__PURE__*/function () {
+  function TipoResultado() {
+    _classCallCheck(this, TipoResultado);
+  }
+
+  _createClass(TipoResultado, [{
+    key: "pdf",
+    value: function pdf() {
+      window.open('/tipos-de-resultado/pdf');
+    }
+  }, {
+    key: "excel",
+    value: function excel() {
+      window.open('/tipos-de-resultado/excel');
+    }
+  }, {
+    key: "createEtapaOpen",
+    value: function createEtapaOpen() {
+      $('#tipoProcesoEtapaPopover').popover('show');
+    }
+  }, {
+    key: "popoverClose",
+    value: function popoverClose() {
+      $('#tipoProcesoEtapaPopover').popover('hide');
+    }
+  }, {
+    key: "createEtapa",
+    value: function createEtapa() {
+      var _this15 = this;
+
+      var nombre_etapa_proceso = $('#etapaProcesoNombre').val().trim();
+
+      if (nombre_etapa_proceso) {
+        var data = {
+          nombre_etapa_proceso: nombre_etapa_proceso,
+          estado: 1
+        };
+        $.ajax({
+          url: '/tipos-de-resultado/upsert',
+          data: new URLSearchParams(data),
+          success: function success(data) {
+            var id = $('#createValue').val() || 0;
+
+            _this15.renderModalData(id);
+
+            $('#tipoProcesoEtapaPopover').popover('hide');
+          }
+        });
+      }
+    }
+  }, {
+    key: "sortableStart",
+    value: function sortableStart(_, ui) {
+      $(ui.item).find('.footable-last-visible a').hide();
+    }
+  }, {
+    key: "sortableStop",
+    value: function sortableStop(_, ui) {
+      $(ui.item).find('.footable-last-visible a').show();
+    }
+  }, {
+    key: "sortableUpdate",
+    value: function sortableUpdate(event, _) {
+      var $rowList = $(event.target).children('tr') || [];
+      var orderedList = [];
+
+      var _iterator3 = _createForOfIteratorHelper($rowList),
+          _step3;
+
+      try {
+        for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+          item = _step3.value;
+          orderedList.push($(item).data('id'));
+        }
+      } catch (err) {
+        _iterator3.e(err);
+      } finally {
+        _iterator3.f();
+      }
+
+      var params = {
+        orderedList: orderedList,
+        id_tipo_proceso: $('#createValue').val() || 0
+      };
+      $.ajax({
+        url: '/tipos-de-resultado/etapa/update',
+        data: new URLSearchParams(params),
+        success: function success(data) {
+          console.log(data);
+        }
+      });
+    }
+  }, {
+    key: "renderModalData",
+    value: function renderModalData() {
+      var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+      return $.ajax({
+        url: '/tipos-de-resultado/get/' + id,
+        success: function success(data) {
+          return data;
+        }
+      });
+    }
+  }, {
+    key: "createEditModal",
+    value: function createEditModal() {
+      var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+      $('#createModal').modal();
+      $('#createValue').val(id);
+      var title = id ? 'Editar tipo de resultado' : 'Nuevo tipo de resultado';
+      $('#createTitle').text(title);
+      $('#tipoNombre').val('');
+      this.renderModalData(id).then(function (_ref24) {
+        var tipoResultado = _ref24.tipoResultado;
+
+        if (tipoResultado) {
+          $('#tipoNombre').val(tipoResultado.nombre_tipo_resultado);
+          $('#tipoCampo').val(tipoResultado.tipo_campo).selectpicker('refresh');
+          $('#tipoEstado').prop('checked', tipoResultado.unico_tipo_resultado == 1).change();
+        }
+      });
+    }
+  }, {
+    key: "openDelete",
+    value: function openDelete(id) {
+      $('#deleteModal').modal();
+      $('#deleteValue').val(id);
+    }
+  }, {
+    key: "upsert",
+    value: function upsert(e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (validateForm(e)) {
+        var id = $('#createValue').val();
+        var formData = new FormData(e.target);
+        id && formData.append('id_tipo_resultado', id);
+        $.ajax({
+          url: '/tipos-de-resultado/upsert',
+          data: new URLSearchParams(formData),
+          success: function success(data) {
+            if (data.saved) {
+              alert('Se ha guardado satisfactoriamente!');
+              location.hash = "#tipos-de-resultado";
+              location.reload();
+            } else if (data.exists) {
+              $('#etapaNombre').parent().addClass('has-error');
+            }
+          }
+        });
+      }
+
+      return false;
+    }
+  }, {
+    key: "delete",
+    value: function _delete() {
+      var id = $('#deleteValue').val();
+      $.ajax({
+        url: '/tipos-de-resultado/delete/' + id,
+        data: {},
+        success: function success() {
+          location.hash = "#tipos-de-resultado";
+          location.reload();
+        }
+      });
+    }
+  }, {
+    key: "deleteEtapa",
+    value: function deleteEtapa(id) {
+      var _this16 = this;
+
+      var id_tipo_proceso = $('#createValue').val() || 0;
+      var params = {
+        id_etapa_proceso: id,
+        id_tipo_proceso: id_tipo_proceso
+      };
+      $.ajax({
+        url: '/tipos-de-resultado/etapa/delete',
+        data: new URLSearchParams(params),
+        success: function success(data) {
+          _this16.renderModalData(id_tipo_proceso);
+        }
+      });
+    }
+  }, {
+    key: "addRow",
+    value: function addRow(id_etapa_proceso, nombre_etapa_proceso) {
+      //
+      return "\n            <tr data-id=\"".concat(id_etapa_proceso, "\" class=\"ui-state-default\" style=\"cursor:move\">\n                <td>").concat(nombre_etapa_proceso, "</td>\n                <td width=\"30px\" class=\"sortable-column-delete\" >\n                    <div class=\"flex justify-center table-actions\">\n                        <a class=\"text-danger\" href=\"javascript:void(0)\" class=\"btn text-danger\" type=\"button\"\n                            onclick=\"tipoProceso.deleteEtapa(").concat(id_etapa_proceso, ")\">\n                            <span class=\"glyphicon glyphicon-remove\"></span>\n                        </a>\n                    </div>\n                </td>\n            </tr>\n        ");
+    }
+  }]);
+
+  return TipoResultado;
+}();
+
+var tipoResultado = new TipoResultado();
+
 var Usuario = /*#__PURE__*/function () {
   function Usuario() {
     _classCallCheck(this, Usuario);
@@ -2917,8 +3116,8 @@ var Usuario = /*#__PURE__*/function () {
       if (id) {
         $.ajax({
           url: '/usuario/get/' + id,
-          success: function success(_ref24) {
-            var usuario = _ref24.usuario;
+          success: function success(_ref25) {
+            var usuario = _ref25.usuario;
             $('#tipoDocumento').val(usuario.id_tipo_documento).selectpicker('refresh');
             $('#numeroDocumento').val(usuario.numero_documento);
             $('#primerApellido').val(usuario.primer_apellido);

@@ -88,17 +88,17 @@
                                 <select class="form-control required" name="tipo_resultado">
                                     <optgroup label="Formatos">
                                     @foreach ($tiposResultado as $key => $item)
-                                        @if($key <= 3 )
+                                        @if($item->unico_tipo_resultado != 1 )
                                         <option @if(isset($actuacion) && $actuacion->tipo_resultado == $key) selected @endif
-                                            value="{{$key}}">{{$item}}</option>
+                                            value="{{$item->id_tipo_resultado}}">{{$item->nombre_tipo_resultado}}</option>
                                         @endif
                                     @endforeach
                                     </optgroup>
                                     <optgroup label="Valores específicos">
                                         @foreach ($tiposResultado as $key => $item)
-                                            @if($key > 3 )
+                                            @if($item->unico_tipo_resultado == 1 )
                                             <option @if(isset($actuacion) && $actuacion->tipo_resultado == $key) selected @endif
-                                                value="{{$key}}">{{$item}}</option>
+                                                value="{{$item->id_tipo_resultado}}">{{$item->nombre_tipo_resultado}}</option>
                                             @endif
                                         @endforeach
                                         </optgroup>

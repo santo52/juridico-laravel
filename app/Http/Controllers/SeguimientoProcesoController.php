@@ -18,7 +18,10 @@ use App\Entities\ActuacionDocumento;
 use App\Entities\Cobro;
 use App\Entities\PlantillaDocumento;
 use App\Entities\ProcesoEtapaActuacionDocumento;
+use App\Entities\ProcesoTipoResultado;
 use App\Entities\Usuario;
+use App\Entities\TipoResultado;
+
 
 class SeguimientoProcesoController extends Controller
 {
@@ -93,10 +96,19 @@ class SeguimientoProcesoController extends Controller
         ->orderBy('fecha_resultado', 'desc')
         ->get();
 
+        $tiposResultado = TipoResultado::where(['eliminado' => 0, ['id_tipo_resultado', '>', 4]])->get();
+        foreach($tiposResultado as $key => $value) {
+            $procesoTipoResultado = ProcesoTipoResultado::where(['id_proceso' => $id, 'id_tipo_resultado' => $value->id_tipo_resultado])->first();
+            if($procesoTipoResultado) {
+                $tiposResultado[$key]->value = $procesoTipoResultado->valor_proceso_tipo_resultado;
+            }
+        }
+
         return $this->renderSection('seguimiento_proceso.detalle', [
             'proceso' => $proceso,
             'historico' => $historico,
             'comentarios' => $comentarios,
+            'tiposResultado' => $tiposResultado,
             'etapas' => $etapas
         ]);
     }
@@ -311,22 +323,12 @@ class SeguimientoProcesoController extends Controller
             } else if ($data['tipo_resultado'] == 5) {
                 $data['numero_radicado'] = $data['resultado_actuacion'];
                 $proceso->update(['numero_proceso' => $data['resultado_actuacion']]);
-            } else if ($data['tipo_resultado'] == 6) {
-                $proceso->update(['entidad_justicia_primera_instancia' => $data['resultado_actuacion']]);
-            } else if ($data['tipo_resultado'] == 7) {
-                $proceso->update(['entidad_justicia_segunda_instancia' => $data['resultado_actuacion']]);
-            } else if ($data['tipo_resultado'] == 8) {
-                $proceso->update(['cuantia_demandada' => $data['resultado_actuacion']]);
-            } else if ($data['tipo_resultado'] == 9) {
-                $proceso->update(['estimacion_pretenciones' => $data['resultado_actuacion']]);
-            } else if ($data['tipo_resultado'] == 10) {
-                $proceso->update(['fecha_radicacion_cumplimineto' => $data['resultado_actuacion']]);
-            } else if ($data['tipo_resultado'] == 11) {
-                $proceso->update(['fecha_pago' => $data['resultado_actuacion']]);
-            } else if ($data['tipo_resultado'] == 12) {
-                $proceso->update(['ubicacion_fisica_archivo_muerto' => $data['resultado_actuacion']]);
-            } else if ($data['tipo_resultado'] == 13) {
-                $proceso->update(['valor_final_sentencia' => $data['resultado_actuacion']]);
+            } else {
+                ProcesoTipoResultado::updateOrCreate(['id_proceso' => $data['id_proceso'], 'id_tipo_resultado' => $data['tipo_resultado']], [
+                    'id_proceso' => $data['id_proceso'],
+                    'id_tipo_resultado' => $data['tipo_resultado'],
+                    'valor_proceso_tipo_resultado' => $data['resultado_actuacion'],
+                ]);
             }
         }
 

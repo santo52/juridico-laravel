@@ -11,7 +11,7 @@ use App\Entities\PlantillaDocumento;
 use App\Entities\Actuacion;
 use App\Entities\ActuacionDocumento;
 use App\Entities\ActuacionPlantillaDocumento;
-
+use App\Entities\TipoResultado;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ActuacionExport;
 
@@ -19,14 +19,18 @@ class ActuacionController extends Controller
 {
 
     private function getTiposResultados($id_actuacion) {
-        $idTiposResultadoProhibidos = [4,5,6,7,8,9,10,11,12,13,14];
-        $actuaciones = Actuacion::
-        where([['id_actuacion', '<>', $id_actuacion]])
-        ->whereIn('tipo_resultado', $idTiposResultadoProhibidos)->get();
 
-        $tiposResultado = Actuacion::getTiposResultado();
-        foreach($actuaciones as $actuacion) {
-            unset($tiposResultado[$actuacion->tipo_resultado]);
+        $tiposResultado = TipoResultado::where('eliminado', 0)->get();
+        foreach($tiposResultado as $key => $value) {
+            if($value->unico_tipo_resultado === 1) {
+                $used = Actuacion::where([
+                    ['id_actuacion', '<>', $id_actuacion],
+                    ['tipo_resultado', '=', $value->id_tipo_resultado]
+                ])->exists();
+                if($used) {
+                    unset($tiposResultado[$key]);
+                }
+            }
         }
 
         return $tiposResultado;
@@ -177,13 +181,15 @@ class ActuacionController extends Controller
             ->where([['a.id_actuacion', $id], ['pd.estado_plantilla_documento', 1]])
             ->get();
 
+
         return $this->renderSection('actuacion.detalle', [
             'documentos' => $documentos,
             'plantillasDocumento' => $plantillasDocumento,
             'actuacion' => $actuacion,
             'actuacionDocumentos' => $actuacionDocumentos,
             'actuacionPlantillasDocumento' => $actuacionPlantillasDocumento,
-            'tiposResultado' => $this->getTiposResultados($id)
+            'tiposResultado' => $this->getTiposResultados($id),
+            // 'tiposResultado2' => $tiposResultado
         ]);
     }
 

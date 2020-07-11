@@ -38,15 +38,10 @@ class Proceso extends BaseModel
         return $this->hasMany('App\Entities\ProcesoEtapa', 'id_proceso', 'id_proceso');
     }
 
-    // public function entidadJusticiaPrimeraInstancia()
-    // {
-    //     return $this->hasOne('App\Entities\EntidadJusticia', 'id_entidad_justicia', 'entidad_justicia_primera_instancia');
-    // }
-
-    // public function entidadJusticiaSegundaInstancia()
-    // {
-    //     return $this->hasOne('App\Entities\EntidadJusticia', 'id_entidad_justicia', 'entidad_justicia_segunda_instancia');
-    // }
+    public function procesoTiposResultado()
+    {
+        return $this->hasMany('App\Entities\ProcesoTipoResultado', 'id_proceso', 'id_proceso');
+    }
 
     public function responsable()
     {

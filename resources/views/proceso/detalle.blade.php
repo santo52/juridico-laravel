@@ -205,70 +205,21 @@
             </div>
 
             <div class="separator margin"></div>
-
-            <div class="form-group row">
+            <span style="display:none">{!! $key = 1 !!}</span>
+            @foreach($tiposResultado as $c => $tipoResultado)
+                @if($key == 1)
+                <div class="form-group row">
+                @endif
                 <div class="col-xs-12 col-sm-4">
-                    <label for="telefono" class="control-label">Número de radicado</label>
-                    <input type="text" class="form-control" id="numero_proceso" @if($proceso)
-                        value="{{$proceso->numero_proceso ? $proceso->numero_proceso : 'Sin asignar' }}" @endif
-                        disabled />
+                    <label for="telefono" class="control-label">{{$tipoResultado->nombre_tipo_resultado}}</label>
+                    <input type="text" class="form-control" @if($proceso && $tipoResultado->id_tipo_resultado == 5) value="{{$proceso->numero_proceso}}" @else value="{{$tipoResultado->value}}" @endif disabled />
                 </div>
-                <div class="col-xs-12 col-sm-4">
-                    <label for="normatividad_aplicada_caso" class="control-label">Entidad de Justicia en primera
-                        instancia</label>
-                        <input type="text" class="form-control" @if($proceso)
-                        value="{{$proceso->entidad_justicia_primera_instancia}}" @endif
-                        disabled />
+                @if($key == 3 || ($c + 1) == count($tiposResultado))
                     </div>
-                    <div class="col-xs-12 col-sm-4">
-                    <label for="dar_informacion_caso" class="control-label">Entidad de Justicia en segunda
-                        instancia</label>
-                    <input type="text" class="form-control" @if($proceso)
-                    value="{{$proceso->entidad_justicia_segunda_instancia}}" @endif
-                    disabled />
-                </div>
-
-            </div>
-
-            <div class="form-group row">
-                <div class="col-xs-12 col-sm-6">
-                    <label for="normatividad_aplicada_caso" class="control-label"> Cuantía de la demanda</label>
-                    <input type="text" class="form-control" @if($proceso->cuantia_demandada) value="$ {{number_format($proceso->cuantia_demandada, 0, ',', '.')}}" @endif
-                    disabled />
-                </div>
-                <div class="col-xs-12 col-sm-6">
-                    <label for="dar_informacion_caso" class="control-label"> Estimación de pretensiones </label>
-                    <input type="text" class="form-control" @if($proceso->estimacion_pretenciones) value="$ {{number_format($proceso->estimacion_pretenciones, 0, ',', '.')}}" @endif
-                    disabled />
-                </div>
-            </div>
-
-
-
-            <div class="separator margin"></div>
-
-            <div class="form-group row">
-                <div class="col-xs-12 col-sm-4">
-                    <label for="fecha_radicacion_cumplimineto" class="control-label">Fecha de Radicación del
-                        cumplimiento</label>
-                    <input name="fecha_radicacion_cumplimineto" id="fecha_radicacion_cumplimineto" class="form-control"
-                        @if($proceso) value="{{$proceso->fecha_radicacion_cumplimineto }}" @endif disabled />
-                </div>
-
-                <div class="col-xs-12 col-sm-4">
-                    <label for="fecha_retiro_servicio" class="control-label">Fecha de Pago</label>
-                    <input name="fecha_pago" id="fecha_pago" class="form-control" @if($proceso)
-                        value="{{$proceso->fecha_pago }}" @endif disabled />
-                </div>
-
-                <div class="col-xs-12 col-sm-4">
-                    <label for="ubicacion_fisica_archivo_muerto" class="control-label">Ubicación Física del Archivo
-                        Muerto</label>
-                    <input name="ubicacion_fisica_archivo_muerto" id="ubicacion_fisica_archivo_muerto"
-                        class="form-control" @if($proceso) value="{{$proceso->ubicacion_fisica_archivo_muerto }}" @endif
-                        disabled />
-                </div>
-            </div>
+                    <span style="display:none">{!! $key = 0 !!}</span>
+                @endif
+                <span style="display:none">{!! $key++ !!}</span>
+            @endforeach
             @endif
 
             <div class="separator margin"></div>
@@ -292,23 +243,17 @@
 
             </div>
             <div class="form-group row">
-                <div class="col-xs-12 col-sm-4">
+                <div class="col-xs-12 col-sm-6">
                     <label for="fecha_retiro_servicio" class="control-label">Fecha de retiro del servicio</label>
                     <input name="fecha_retiro_servicio" id="fecha_retiro_servicio" data-date-format="yyyy-mm-dd"
                         class="form-control datepicker-here" @if($proceso) value="{{$proceso->fecha_retiro_servicio }}"
                         @endif />
                 </div>
-                <div class="col-xs-12 col-sm-4">
+                <div class="col-xs-12 col-sm-6">
                     <label for="ultima_entidad_retiro" class="control-label">Última entidad de servicio</label>
                     <input type="text" class="form-control required" id="ultima_entidad_retiro"
                         name="ultima_entidad_retiro" @if($proceso) value="{{$proceso->ultima_entidad_retiro }}"
                         @endif />
-                </div>
-                <div class="col-xs-12 col-sm-4">
-                    <label for="valor_final_sentencia" class="control-label">Valor final sentencia</label>
-                    <input type="text" class="form-control" id="valor_final_sentencia"
-                        name="valor_final_sentencia" @if($proceso) value="$ {{number_format($proceso->valor_final_sentencia, 0, ',', '.')}}" @endif
-                        disabled />
                 </div>
             </div>
 

@@ -22,6 +22,8 @@ use App\Entities\Cliente;
 use App\Entities\EtapaProceso;
 use App\Entities\ProcesoEtapa;
 use App\Entities\ProcesoEtapaActuacion;
+use App\Entities\ProcesoTipoResultado;
+use App\Entities\TipoResultado;
 
 class ProcesoController extends Controller
 {
@@ -132,10 +134,18 @@ class ProcesoController extends Controller
         $departamentos = Departamento::all();
         $municipios = $proceso ? Municipio::where('id_departamento', $proceso->municipio->id_departamento)->get() : [];
 
+        $tiposResultado = TipoResultado::where(['eliminado' => 0, ['id_tipo_resultado', '>', 4]])->get();
+        foreach($tiposResultado as $key => $value) {
+            $procesoTipoResultado = ProcesoTipoResultado::where(['id_proceso' => $id, 'id_tipo_resultado' => $value->id_tipo_resultado])->first();
+            if($procesoTipoResultado) {
+                $tiposResultado[$key]->value = $procesoTipoResultado->valor_proceso_tipo_resultado;
+            }
+        }
 
         return $this->renderSection('proceso.detalle', [
             'proceso' => $proceso,
             'tiposProceso' => $tiposProceso,
+            'tiposResultado' => $tiposResultado,
             // 'documentos' => $documentos,
             'entidadesDemandadas' => $entidadesDemandadas,
             'entidadesJusticia' => $entidadesJusticia,

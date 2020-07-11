@@ -27,6 +27,10 @@ class Actuacion extends BaseModel
         "tipo_actuacion", "area_responsable", "dias_vencimiento_tipo", "tipo_resultado"
     ];
 
+    public function tipoResultado() {
+        return $this->belongsTo('App\Entities\TipoResultado', 'tipo_resultado', 'id_tipo_resultado');
+    }
+
     public function etapas()
     {
         return $this->belongsToMany('App\Entities\EtapaProceso', 'actuacion_etapa_proceso', 'id_actuacion', 'id_etapa_proceso')
@@ -57,8 +61,8 @@ class Actuacion extends BaseModel
     }
 
     public function getTipoResultado(){
-        $tiposResultado = self::getTiposResultado();
-        return $tiposResultado[$this->tipo_resultado];
+        $tipoResultado = $this->tipoResultado;
+        return $tipoResultado ? $tipoResultado->nombre_tipo_resultado : 'Alfanumerico';
     }
 
     public function getDiasVencimiento() {

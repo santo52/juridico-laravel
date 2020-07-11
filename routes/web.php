@@ -171,6 +171,11 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/honorarios/upsert', 'HonorarioController@upsert');
     Route::post('/honorarios/cliente/{id}', 'ClienteController@getBasic');
 
+    Route::post('/tipos-de-resultado/listar', 'TipoResultadoController@index');
+    Route::post('/tipos-de-resultado/upsert', 'TipoResultadoController@upsert');
+    Route::post('/tipos-de-resultado/delete/{id}', 'TipoResultadoController@delete');
+    Route::post('/tipos-de-resultado/get/{id}', 'TipoResultadoController@get');
+
 
 
 

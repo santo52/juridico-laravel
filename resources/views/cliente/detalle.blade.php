@@ -186,7 +186,7 @@
                         beneficiario</label>
                     <select class="form-control" id="id_tipo_documento_beneficiario"
                         name="id_tipo_documento_beneficiario" title="Seleccionar">
-                        <option value="0">SIN TIPO DE DOCUMENTO</option>
+                        <option value="0">SIN BENEFICIARIO</option>
                         @foreach ($tiposDocumento as $item)
                         <option @if($cliente && $item->id_tipo_documento === $cliente->id_tipo_documento_beneficiario)
                             selected @endif value="{{$item->id_tipo_documento}}">{{$item->nombre_tipo_documento}}

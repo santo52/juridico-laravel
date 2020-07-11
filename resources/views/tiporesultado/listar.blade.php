@@ -39,7 +39,7 @@
         <tr class="bg-success">
             <th>ID</th>
             <th>Nombre</th>
-            <th>¿Unico?</th>
+            <th>Tipo</th>
             <th>Estado</th>
             <th data-filterable="false" data-sortable="false"></th>
         </tr>
@@ -50,7 +50,7 @@
         <tr id="tipoResultadoRow{{$tipoResultado['id_tipo_resultado']}}">
             <td>{{$tipoResultado['id_tipo_resultado']}}</td>
             <td>{{$tipoResultado['nombre_tipo_resultado']}}</td>
-            <td>{{$tipoResultado['unico_tipo_resultado'] == 1 ? 'Sí' : 'No'}}</td>
+            <td>{{$tipoResultado['unico_tipo_resultado'] == 1 ? 'Valor específico' : 'Formato'}}</td>
             <td>{{$tipoResultado['eliminado'] == 0 ? 'Activo' : 'Eliminado'}}</td>
             <td>
                 <div class="flex justify-center table-actions">
@@ -125,9 +125,9 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="recipient-name" class="control-label">¿Unico?</label>
+                        <label for="recipient-name" class="control-label">Tipo</label>
                         <div class="checkbox-form">
-                            <input type="checkbox" data-on="Sí" data-off="No" data-width="60"
+                            <input type="checkbox" data-on="Valor específico" data-off="Formato" data-width="160"
                                 class="form-control" id="tipoEstado" name="estado" checked />
                         </div>
                     </div>

@@ -57,12 +57,11 @@ class ClienteController extends Controller
                 )
             ->leftjoin('persona as p', 'p.id_persona', 'cliente.id_persona')
             ->leftjoin('municipio as mu', 'mu.id_municipio', 'p.id_municipio')
+            ->leftjoin('departamento as de', 'mu.id_departamento', 'de.id_departamento')
+            ->leftjoin('pais as pa', 'de.id_pais', 'pa.id_pais')
 
             ->leftjoin('intermediario as i', 'i.id_intermediario', 'cliente.id_intermediario')
             ->leftjoin('persona as pi', 'pi.id_persona', 'i.id_persona')
-            ->leftjoin('municipio as mui', 'mui.id_municipio', 'pi.id_municipio')
-            ->leftjoin('departamento as dei', 'mui.id_departamento', 'dei.id_departamento')
-            ->leftjoin('pais as pai', 'dei.id_pais', 'pai.id_pais')
             ->where('cliente.id_cliente', $id)
             ->first();
 

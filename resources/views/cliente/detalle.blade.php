@@ -61,7 +61,7 @@
                 </div>
                 <div class="col-xs-12 @if($cliente) col-sm-3 @else col-sm-4 @endif">
                     <label for="id_lugar_expedicion" class="control-label">Lugar de expedición</label>
-                    <select class="form-control required" id="id_lugar_expedicion" name="id_lugar_expedicion"
+                    <select data-live-search="true" class="form-control required" id="id_lugar_expedicion" name="id_lugar_expedicion"
                         title="Seleccionar">
                         @foreach ($ciudades as $item)
                         <option @if($cliente && $item->id_municipio === $cliente->id_lugar_expedicion) selected
@@ -139,7 +139,7 @@
                 <div class="col-xs-12 col-sm-3">
                     <label for="telefono" class="control-label">Teléfono fijo cliente</label>
                     <div class="input-group">
-                        <span class="input-group-addon" id="indicativo_cliente">+{{$cliente->indicativo }}</span>
+                        <span class="input-group-addon" id="indicativo_cliente">@if($cliente) +{{$cliente->indicativo }} @else +1 @endif </span>
                         <input type="text" class="form-control" name="telefono" id="telefono" @if($cliente)
                             value="{{$cliente->telefono }}" @endif>
                     </div>
@@ -339,7 +339,7 @@
                 <div class="col-xs-12 col-sm-4">
                     <label for="telefono_contacto" class="control-label">Teléfono fijo</label>
                     <div class="input-group">
-                        <span class="input-group-addon" id="indicativo_contacto">+{{$cliente->indicativo_contacto }}</span>
+                        <span class="input-group-addon" id="indicativo_contacto">@if($cliente) +{{$cliente->indicativo_contacto }} @else +1 @endif </span>
                         <input type="text" class="form-control" id="telefono_contacto" name="telefono_contacto"
                             @if($cliente) value="{{$cliente->telefono_contacto }}" @endif />
                     </div>

@@ -55,7 +55,7 @@
         @endif
         <li role="presentation" id="historico-tab">
             <a href="#historico" aria-controls="historico" role="tab" data-toggle="tab">
-                Histórico de la sentencia
+                Histórico de sentencias
             </a>
         </li>
     </ul>

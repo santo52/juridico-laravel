@@ -26,4 +26,9 @@ class Municipio extends BaseModel
         $departamento = $this->departamento;
         return $departamento ? $departamento->nombre_departamento : '';
     }
+
+    public function getPais() {
+        $departamento = $this->departamento;
+        return $departamento ? $departamento->getPais() : '';
+    }
 }

@@ -4,6 +4,8 @@
 
 <div>
 
+
+
     @if($procesoEtapa->finalizado == 0)
     <div class="alert alert-warning" role="alert">
         <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -11,6 +13,9 @@
         <b>Esta actuación no se cerrará hasta que todos los campos esten llenos y los documentos esten cargados</b>
     </div>
     @endif
+
+    <h3>{{$actuacion->nombre_actuacion}}</h3>
+    <br>
 
     <!-- Nav tabs -->
     {{-- <ul class="nav nav-tabs" role="tablist">

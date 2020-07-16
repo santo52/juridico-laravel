@@ -120,7 +120,8 @@
                             <option value="1">Alfanumerico</option>
                             <option value="2">Documento</option>
                             <option value="3">Fecha</option>
-                            <option value="4">Numero</option>
+                            <option value="4">Numérico</option>
+                            <option value="5">Moneda</option>
                         </select>
                     </div>
 

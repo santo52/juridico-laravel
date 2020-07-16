@@ -191,7 +191,7 @@
                     <div class="form-group row">
                         <div class="col-xs-6">
                             <label for="recipient-name" class="control-label">Sede operativa</label>
-                            <select class="form-control" id="municipio" name="id_municipio" title="Seleccione" onchange="usuario.changeMunicipio(this)">
+                            <select data-live-search="true" class="form-control" id="municipio" name="id_municipio" title="Seleccione" onchange="usuario.changeMunicipio(this)">
                                 @foreach ($municipios as $item)
                                 <option value="{{$item->id_municipio}}">{{$item->nombre_municipio}}
                                 </option>
@@ -219,6 +219,12 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label for="recipient-name" class="control-label">Firma</label>
+                        <div class="input-firma">
+                            <input type="file" name="firma" accept="image/*" />
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label for="recipient-name" class="control-label">Estado</label>
                         <div class="checkbox-form">
                             <input type="checkbox" data-on="Activo" data-off="Inactivo" data-width="90"
@@ -239,3 +245,32 @@
 
 
 @endsection
+
+
+@section('javascript')
+<script>
+
+    $(document).ready(function(){
+        $('.input-firma input[type=file]').on('change', e => {
+            e.preventDefault()
+            e.stopPropagation();
+            const files = e.target.files && e.target.files[0]
+            if(files) {
+                const FR= new FileReader();
+                FR.addEventListener("load", function(e) {
+                    if(!$('.input-firma img').length) {
+                        $('.input-firma').append('<img src="" />')
+                    }
+
+                    $('.input-firma img').attr('src', e.target.result)
+                });
+
+                FR.readAsDataURL( files );
+            }
+        })
+    })
+</script>
+@endsection
+
+
+

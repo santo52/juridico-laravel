@@ -39,7 +39,7 @@
     data-filter-space="OR">
     <thead>
         <tr class="bg-success">
-            <th>ID</th>
+            <th data-filterable="false">ID</th>
             <th>Documento cliente</th>
             <th>Nombre cliente</th>
             <th data-breakpoints="xs sm">Tipo de proceso</th>
@@ -49,14 +49,16 @@
                 <th >Valor cobrado</th>
                 <th >Valor pagado</th>
             @endisset
-            <th data-breakpoints="all" data-filterable="false">Etapa actual</th>
+            <th data-breakpoints="all">Etapa actual</th>
             {{-- <th data-breakpoints="all" data-filterable="false">Valor del estudio</th> --}}
             <th data-breakpoints="all" data-filterable="false">Fecha de retiro del servicio</th>
-            <th data-breakpoints="all">Última entidad de servicio</th>
+            <th data-breakpoints="all" data-filterable="false">Última entidad de servicio</th>
             <th data-breakpoints="all">Municipio</th>
-            <th data-breakpoints="all">Acto administrativo del retiro</th>
+            <th data-breakpoints="all" data-filterable="false">Acto administrativo del retiro</th>
             <th data-breakpoints="all">Normatividad aplicada al caso</th>
-            <th data-breakpoints="all">Observaciones del caso</th>
+            <th data-breakpoints="all">Entidad de justicia primera instancia</th>
+            <th data-breakpoints="all">Entidad de justicia segunda instancia</th>
+            <th data-breakpoints="all" data-filterable="false">Observaciones del caso</th>
             @if(!isset($cobros))
                 <th data-breakpoints="xs sm">Estado</th>
             @endif
@@ -84,6 +86,8 @@
             <td>{{$proceso->municipio->nombre_municipio}}</td>
             <td>{{$proceso->acto_administrativo}}</td>
             <td>{{$proceso->normatividad_aplicada_caso}}</td>
+            <td>{{$proceso->entidad_justicia_primera_instancia}}</td>
+            <td>{{$proceso->entidad_justicia_segunda_instancia}}</td>
             <td>{{$proceso->observaciones_caso}}</td>
             @if(!isset($cobros))
                 <td>{{$proceso->estado_proceso == 2 ? 'Finalizado' : 'Activo'}}</td>

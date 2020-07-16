@@ -39,11 +39,6 @@
                 Comentarios
             </a>
         </li>
-        <li role="presentation" id="historico-tab">
-            <a href="#historico" aria-controls="historico" role="tab" data-toggle="tab">
-                Histórico de la sentencia
-            </a>
-        </li>
         @if(isset($etapas) && count($etapas))
         @foreach ($etapas as $key => $item)
         <li @if($proceso->id_etapa_proceso == $item->id_etapa_proceso) class="active" @elseif($item->porcentaje == 100)
@@ -58,6 +53,11 @@
         </li>
         @endforeach
         @endif
+        <li role="presentation" id="historico-tab">
+            <a href="#historico" aria-controls="historico" role="tab" data-toggle="tab">
+                Histórico de la sentencia
+            </a>
+        </li>
     </ul>
 
     <div class="tab-content">

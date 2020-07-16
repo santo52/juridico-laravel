@@ -840,10 +840,6 @@ form .alert-danger {
     box-shadow: 0 1px 2px 0 #a9a9a9;
 }
 
-form .form-control[readonly] {
-    background-color: #ffffff;
-}
-
 .popover {
     font-family: 'Open Sans', sans-serif, Verdana;
     font-size: 12px;
@@ -1116,4 +1112,13 @@ ul.nav-tabs {
         opacity: 0;
         height: 100%;
     }
+}
+
+.form-control[readonly], fieldset[readonly] .form-control {
+    cursor: not-allowed;
+}
+
+.form-control[readonly], .form-control[readonly], fieldset[readonly] .form-control {
+    background-color: #eee;
+    opacity: 1;
 }

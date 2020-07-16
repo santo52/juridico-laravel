@@ -39,6 +39,7 @@
         <tr class="bg-success">
             <th>ID</th>
             <th>Nombre</th>
+            <th>Correo electrónico</th>
             <th>Estado</th>
             <th data-filterable="false" data-sortable="false"></th>
         </tr>
@@ -49,6 +50,7 @@
         <tr id="tipoProcesoRow{{$entidad['id_entidad_demandada']}}">
             <td>{{$entidad['id_entidad_demandada']}}</td>
             <td>{{$entidad['nombre_entidad_demandada']}}</td>
+            <td>{{$entidad['email_entidad_demandada']}}</td>
             <td>{{$entidad['estado_entidad_demandada'] == 2 ? 'Inactivo' : 'Activo'}}</td>
             <td>
                 <div class="flex justify-center table-actions">
@@ -110,6 +112,10 @@
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">Nombre de la entidad demandada</label>
                         <input type="text" class="form-control required" id="etapaNombre" name="nombre_entidad_demandada">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">Correo electrónico de notificaciones</label>
+                        <input type="email" class="form-control required" id="etapaCorreo" name="email_entidad_demandada">
                     </div>
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">Estado</label>

@@ -25,4 +25,9 @@ class Departamento extends BaseModel
     {
         return $this->hasOne('App\Entities\Pais', 'id_pais', 'id_pais');
     }
+
+    public function getPais() {
+        $pais = $this->pais;
+        return $pais ? $pais->nombre_pais : '';
+    }
 }

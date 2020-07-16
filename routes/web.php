@@ -95,6 +95,8 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/entidades-de-justicia/upsert', 'EntidadJusticiaController@upsert');
     Route::post('/entidades-de-justicia/get/{id}', 'EntidadJusticiaController@get');
     Route::post('/entidades-de-justicia/delete/{id}', 'EntidadJusticiaController@delete');
+    Route::post('/entidades-de-justicia/departamentos/{id}', 'PaisController@getDepartamentos');
+    Route::post('/entidades-de-justicia/municipios/{id}', 'DepartamentoController@getMunicipios');
 
     Route::get('/intermediario/pdf', 'IntermediarioController@createPDF');
     Route::get('/intermediario/excel', 'IntermediarioController@createExcel');
@@ -119,6 +121,10 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/cliente/{id}', 'ClienteController@get');
     Route::post('/cliente/basic/{id}', 'ClienteController@getBasic');
     Route::post('/cliente/delete/{id}', 'ClienteController@delete');
+    Route::post('/cliente/departamentos/{id}', 'PaisController@getDepartamentos');
+    Route::post('/cliente/municipios/{id}', 'DepartamentoController@getMunicipios');
+    Route::post('/cliente/municipio/{id}', 'MunicipioController@get');
+
 
     Route::get('/proceso/pdf', 'ProcesoController@createPDF');
     Route::get('/proceso/excel', 'ProcesoController@createExcel');
@@ -177,6 +183,7 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/tipos-de-resultado/get/{id}', 'TipoResultadoController@get');
 
 
+    // Route::get('/importar/ciudades', 'PaisController@index');
 
 
 

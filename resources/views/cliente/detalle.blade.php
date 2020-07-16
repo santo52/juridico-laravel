@@ -95,7 +95,7 @@
             <div class="form-group row">
                 <div class="col-xs-12 col-sm-4">
                     <label for="id_pais" class="control-label">País</label>
-                    <select class="form-control required" id="id_pais">
+                    <select class="form-control required" id="id_pais" onChange="cliente.changePais(this)">
                         @foreach ($paises as $item)
                         <option @if($cliente && $item->id_pais === $cliente->id_pais) selected @endif
                             value="{{$item->id_pais}}">{{$item->nombre_pais}}</option>
@@ -115,7 +115,7 @@
                 <div class="col-xs-12 col-sm-4">
                     <label for="id_municipio" class="control-label">Municipio</label>
                     <select data-live-search="true" class="form-control required" id="id_municipio" name="id_municipio"
-                        title="Seleccionar">
+                        title="Seleccionar" onChange="cliente.changeMunicipio(this)">
                         @foreach ($municipios as $item)
                         <option @if($cliente && $item->id_municipio === $cliente->id_municipio) selected @endif
                             value="{{$item->id_municipio}}">{{$item->nombre_municipio}}</option>
@@ -139,7 +139,7 @@
                 <div class="col-xs-12 col-sm-3">
                     <label for="telefono" class="control-label">Teléfono fijo cliente</label>
                     <div class="input-group">
-                        <span class="input-group-addon" id="indicativo_cliente">+1</span>
+                        <span class="input-group-addon" id="indicativo_cliente">+{{$cliente->indicativo }}</span>
                         <input type="text" class="form-control" name="telefono" id="telefono" @if($cliente)
                             value="{{$cliente->telefono }}" @endif>
                     </div>
@@ -185,7 +185,7 @@
                     <label for="id_tipo_documento_beneficiario" class="control-label">Tipo de documento
                         beneficiario</label>
                     <select class="form-control" id="id_tipo_documento_beneficiario"
-                        name="id_tipo_documento_beneficiario" title="Seleccionar">
+                        name="id_tipo_documento_beneficiario" title="Seleccionar" onchange="cliente.changeBeneficiario(this)">
                         <option value="0">SIN BENEFICIARIO</option>
                         @foreach ($tiposDocumento as $item)
                         <option @if($cliente && $item->id_tipo_documento === $cliente->id_tipo_documento_beneficiario)
@@ -229,7 +229,7 @@
                 </div>
                 <div class="col-xs-12 col-sm-3">
                     <label for="correo_electronico_beneficiario" class="control-label">Correo electrónico beneficiario</label>
-                    <input type="email" class="form-control required" id="correo_electronico_beneficiario" name="correo_electronico_beneficiario"
+                    <input type="email" class="form-control" id="correo_electronico_beneficiario" name="correo_electronico_beneficiario"
                         @if($cliente) value="{{$cliente->correo_electronico_beneficiario }}" @endif />
                 </div>
             </div>
@@ -267,7 +267,12 @@
                         value="{{$cliente->correo_electronico_intermediario }}" @endif />
                 </div>
             </div>
-
+            <div class="form-group">
+                <label for="observaciones" class="control-label">Observaciones</label>
+                <textarea rows="4" class="form-control"
+                    id="observaciones"
+                    name="observaciones">@if($cliente){{$cliente->observaciones}}@endif</textarea>
+            </div>
         </div>
         <div role="tabpanel" class="tab-pane" id="informacion-contacto">
             <div class="form-group row">
@@ -284,21 +289,42 @@
             </div>
             <div class="form-group row">
                 <div class="col-xs-12 col-sm-4">
-                    <label for="id_municipio_contacto" class="control-label">Ciudad</label>
-                    <select class="form-control" id="id_municipio_contacto" name="id_municipio_contacto"
-                        title="Seleccionar">
-                        @foreach ($ciudades as $item)
-                        <option @if($cliente && $cliente->id_municipio_contacto == $item->id_municipio) selected @endif
-                            value="{{$item->id_municipio}}">{{$item->nombre_municipio}}</option>
+                    <label for="id_pais" class="control-label">País</label>
+                    <select class="form-control" id="id_pais_contacto" onChange="cliente.changePaisContacto(this)">
+                        @foreach ($paises as $item)
+                        <option @if($cliente && $item->id_pais === $cliente->id_pais) selected @endif
+                            value="{{$item->id_pais}}">{{$item->nombre_pais}}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="col-xs-12 col-sm-4">
+                    <label for="id_departamento" class="control-label">Departamento</label>
+                    <select data-live-search="true" class="form-control" id="id_departamento_contacto"
+                        title="Seleccionar" onChange="cliente.changeDepartamentoContacto(this)">
+                        @foreach ($departamentos as $item)
+                        <option @if($cliente && $item->id_departamento === $cliente->id_departamento) selected @endif
+                            value="{{$item->id_departamento}}">{{$item->nombre_departamento}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <label for="id_municipio" class="control-label">Municipio</label>
+                    <select data-live-search="true" class="form-control" id="id_municipio_contacto" name="id_municipio_contacto"
+                        title="Seleccionar" onChange="cliente.changeMunicipioContacto(this)">
+                        @foreach ($municipios as $item)
+                        <option @if($cliente && $item->id_municipio === $cliente->id_municipio) selected @endif
+                            value="{{$item->id_municipio}}">{{$item->nombre_municipio}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-xs-12 col-sm-6">
                     <label for="barrio_contacto" class="control-label">Barrio</label>
                     <input type="text" class="form-control" id="barrio_contacto" name="barrio_contacto" @if($cliente)
                         value="{{$cliente->barrio_contacto }}" @endif />
                 </div>
-                <div class="col-xs-12 col-sm-4">
+                <div class="col-xs-12 col-sm-6">
                     <label for="direccion_contacto" class="control-label">Dirección</label>
                     <input type="text" class="form-control" id="direccion_contacto" name="direccion_contacto"
                         @if($cliente) value="{{$cliente->direccion_contacto }}" @endif />
@@ -306,14 +332,19 @@
             </div>
             <div class="form-group row">
                 <div class="col-xs-12 col-sm-4">
-                    <label for="celular_contacto" class="control-label">Número de celular</label>
+                    <label for="celular_contacto" class="control-label">Teléfono Celular</label>
                     <input type="text" class="form-control" id="celular_contacto" name="celular_contacto" @if($cliente)
                         value="{{$cliente->celular_contacto }}" @endif />
                 </div>
                 <div class="col-xs-12 col-sm-4">
-                    <label for="telefono_contacto" class="control-label">Número telefónico</label>
-                    <input type="text" class="form-control" id="telefono_contacto" name="telefono_contacto"
-                        @if($cliente) value="{{$cliente->telefono_contacto }}" @endif />
+                    <label for="telefono_contacto" class="control-label">Teléfono fijo</label>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="indicativo_contacto">+{{$cliente->indicativo_contacto }}</span>
+                        <input type="text" class="form-control" id="telefono_contacto" name="telefono_contacto"
+                            @if($cliente) value="{{$cliente->telefono_contacto }}" @endif />
+                    </div>
+
+
                 </div>
                 <div class="col-xs-12 col-sm-4">
                     <label for="email_contacto" class="control-label">Correo electrónico</label>
@@ -340,4 +371,11 @@
         </div>
     </form>
 </div>
+@endsection
+@section('javascript')
+<script>
+    $(document).ready(function(){
+        cliente.changeBeneficiario($('#id_tipo_documento_beneficiario'))
+    })
+</script>
 @endsection

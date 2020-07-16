@@ -23,6 +23,7 @@ class EntidadDemandada {
                 url: '/entidades-demandadas/get/' + id,
                 success: ({ entidadDemandada }) => {
                     $('#etapaNombre').val(entidadDemandada.nombre_entidad_demandada)
+                    $('#etapaCorreo').val(entidadDemandada.email_entidad_demandada)
                     $('#etapaEstado').prop('checked', entidadDemandada.estado_entidad_demandada == 1).change()
                 }
             })

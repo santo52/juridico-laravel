@@ -15,6 +15,9 @@ class EntidadDemandada extends BaseModel
     const UPDATED_AT = 'fecha_actualizacion';
 
     protected $fillable = [
-        "id_entidad_demandada", "nombre_entidad_demandada", "estado_entidad_demandada", "fecha_creacion", "id_usuario_creacion", "fecha_actualizacion", "id_usuario_actualizacion", "eliminado"
+        "id_entidad_demandada", "nombre_entidad_demandada",
+        "estado_entidad_demandada", "fecha_creacion",
+        "id_usuario_creacion", "fecha_actualizacion",
+        "id_usuario_actualizacion", "eliminado", "email_entidad_demandada"
     ];
 }

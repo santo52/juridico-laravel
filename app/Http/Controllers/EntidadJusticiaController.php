@@ -26,7 +26,7 @@ class EntidadJusticiaController extends Controller
     }
 
     public function get($id) {
-        $entidad = EntidadJusticia::find($id);
+        $entidad = EntidadJusticia::with(['municipio','municipio.departamento'])->find($id);
         return response()->json([ 'entidadJusticia' => $entidad ]);
     }
 
@@ -59,10 +59,12 @@ class EntidadJusticiaController extends Controller
 
         $id = $request->get('id_entidad_justicia');
         $name = $request->get('nombre_entidad_justicia');
+        $email = strtolower($request->get('email_entidad_justicia'));
         $entidad = $this->getEntidad($id, $name);
         $data = $request->all();
         $data['nombre_entidad_justicia'] = $name;
         $data['estado_entidad_justicia'] = empty($data['estado']) ? 2 : 1;
+        $data['email_entidad_justicia'] = $email;
 
         if ($entidad['exists']) {
 

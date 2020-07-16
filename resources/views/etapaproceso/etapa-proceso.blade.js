@@ -12,7 +12,7 @@ class EtapaProceso {
         $('#createModal').modal('hide')
         $('.modal-backdrop').remove()
         $('body').removeClass('modal-open')
-        location.hash = 'actuacion/crear'
+        window.open('/#actuacion/crear')
     }
 
     renderModalData(id){

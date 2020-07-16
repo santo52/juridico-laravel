@@ -52,7 +52,8 @@ class ClienteController extends Controller
                 'pi.primer_nombre as intermediario_p_nombre', 'pi.segundo_nombre as intermediario_s_nombre',
                 'pi.primer_apellido as intermediario_p_apellido', 'pi.segundo_apellido as intermediario_s_apellido',
                 'pi.telefono as telefono_intermediario', 'pi.celular as celular_intermediario', 'cliente.id_tipo_documento_beneficiario',
-                'mui.indicativo as indicativo_intermediario', 'pi.correo_electronico as correo_electronico_intermediario'
+                'mui.indicativo as indicativo_intermediario', 'pi.correo_electronico as correo_electronico_intermediario',
+                'mui.nombre_municipio', 'dei.nombre_departamento', 'pai.nombre_pais'
                 )
             ->leftjoin('persona as p', 'p.id_persona', 'cliente.id_persona')
             ->leftjoin('municipio as mu', 'mu.id_municipio', 'p.id_municipio')
@@ -60,6 +61,8 @@ class ClienteController extends Controller
             ->leftjoin('intermediario as i', 'i.id_intermediario', 'cliente.id_intermediario')
             ->leftjoin('persona as pi', 'pi.id_persona', 'i.id_persona')
             ->leftjoin('municipio as mui', 'mui.id_municipio', 'pi.id_municipio')
+            ->leftjoin('departamento as dei', 'mui.id_departamento', 'dei.id_departamento')
+            ->leftjoin('pais as pai', 'dei.id_pais', 'pai.id_pais')
             ->where('cliente.id_cliente', $id)
             ->first();
 
@@ -79,7 +82,8 @@ class ClienteController extends Controller
                 'pi.telefono as telefono_intermediario', 'pi.celular as celular_intermediario', 'mui.indicativo as indicativo_intermediario',
                 'pi.correo_electronico as correo_electronico_intermediario', 'co.numero_documento as numero_documento_contacto', 'co.nombre_contacto',
                 'co.parentesco as parentesco_contacto', 'co.direccion as direccion_contacto', 'co.barrio as barrio_contacto', 'co.celular as celular_contacto',
-                'co.telefono as telefono_contacto', 'co.correo_electronico as correo_electronico_contacto', 'co.informacion_adicional', 'co.id_municipio as id_municipio_contacto'
+                'co.telefono as telefono_contacto', 'co.correo_electronico as correo_electronico_contacto', 'co.informacion_adicional', 'co.id_municipio as id_municipio_contacto',
+                'muc.indicativo as indicativo_contacto'
             )
             ->leftjoin('persona as p', 'p.id_persona', 'cliente.id_persona')
             ->leftjoin('tipo_documento as td', 'p.id_tipo_documento', 'td.id_tipo_documento')

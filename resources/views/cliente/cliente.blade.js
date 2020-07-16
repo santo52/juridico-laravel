@@ -1,15 +1,51 @@
 class Cliente {
 
-    changeMunicipio(self) {
+    changePaisContacto(self) {
+        const pais = $(self).val()
+        return $.ajax({
+            url: '/cliente/departamentos/' + pais,
+            success: data => {
+                const html = data.map(item => `<option value="${item.id_departamento}">${item.nombre_departamento}</option>`)
+                $('#id_departamento_contacto').html(html).selectpicker('refresh')
+                $('#id_municipio_contacto').html('').val('').selectpicker('refresh')
+            }
+        })
+    }
+
+    changeDepartamentoContacto(self) {
+        const departamento = $(self).val()
+        $.ajax({
+            url: '/cliente/municipios/' + departamento,
+            success: data => {
+                $('#id_municipio_contacto').val('')
+                const html = data.map(item => `<option value="${item.id_municipio}">${item.nombre_municipio}</option>`)
+                $('#id_municipio_contacto').html(html).selectpicker('refresh')
+            }
+        })
+    }
+
+    changeMunicipioContacto(self) {
         const municipio = $(self).val()
         $.ajax({
             url: '/cliente/municipio/' + municipio,
             success: data => {
                 if (data.indicativo) {
-                    $('#indicativo').show().text('+' + data.indicativo)
+                    $('#indicativo_contacto').show().text('+' + data.indicativo)
                 } else {
-                    $('#indicativo').hide()
+                    $('#indicativo_contacto').hide()
                 }
+            }
+        })
+    }
+
+    changePais(self) {
+        const pais = $(self).val()
+        return $.ajax({
+            url: '/cliente/departamentos/' + pais,
+            success: data => {
+                const html = data.map(item => `<option value="${item.id_departamento}">${item.nombre_departamento}</option>`)
+                $('#id_departamento').html(html).selectpicker('refresh')
+                $('#id_municipio').html('').val('').selectpicker('refresh')
             }
         })
     }
@@ -17,11 +53,25 @@ class Cliente {
     changeDepartamento(self) {
         const departamento = $(self).val()
         $.ajax({
-            url: '/departamento/municipios/' + departamento,
+            url: '/cliente/municipios/' + departamento,
             success: data => {
                 $('#id_municipio').val('')
                 const html = data.map(item => `<option value="${item.id_municipio}">${item.nombre_municipio}</option>`)
                 $('#id_municipio').html(html).selectpicker('refresh')
+            }
+        })
+    }
+
+    changeMunicipio(self) {
+        const municipio = $(self).val()
+        $.ajax({
+            url: '/cliente/municipio/' + municipio,
+            success: data => {
+                if (data.indicativo) {
+                    $('#indicativo_cliente').show().text('+' + data.indicativo)
+                } else {
+                    $('#indicativo_cliente').hide()
+                }
             }
         })
     }
@@ -41,6 +91,28 @@ class Cliente {
                     $('#telefono_intermediario').val(intermediario.telefono)
                     $('#email_intermediario').val(intermediario.correo_electronico)
                 }
+            }
+        })
+    }
+
+    changeBeneficiario(self) {
+        const val = $(self).val()
+        const fields = [
+            'numero_documento_beneficiario',
+            'nombre_beneficiario',
+            'parentesco_beneficiario',
+            'telefono_beneficiario',
+            'celular_beneficiario',
+            'celular2_beneficiario',
+            'correo_electronico_beneficiario'
+        ];
+
+        fields.map(field => {
+            const $item = $('#' + field)
+            if(val == 0) {
+                $item.val('').prop('readonly', true)
+            } else {
+                $item.prop('readonly', false)
             }
         })
     }

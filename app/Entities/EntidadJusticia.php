@@ -17,6 +17,26 @@ class EntidadJusticia extends BaseModel
     protected $fillable = [
         "id_entidad_justicia", "nombre_entidad_justicia", "aplica_primera_instancia",
         "aplica_segunda_instancia", "estado_entidad_justicia", "fecha_creacion", "id_usuario_creacion",
-        "fecha_actualizacion", "id_usuario_actualizacion", "eliminado", "id_municipio"
+        "fecha_actualizacion", "id_usuario_actualizacion", "eliminado", "id_municipio", "email_entidad_justicia"
     ];
+
+    public function municipio()
+    {
+        return $this->hasOne('App\Entities\Municipio', 'id_municipio', 'id_municipio');
+    }
+
+    public function getMunicipio(){
+        $municipio = $this->municipio;
+        return $municipio ? $municipio->nombre_municipio : '';
+    }
+
+    public function getDepartamento(){
+        $municipio = $this->municipio;
+        return $municipio ? $municipio->getDepartamento() : '';
+    }
+
+    public function getPais(){
+        $municipio = $this->municipio;
+        return $municipio ? $municipio->getPais() : '';
+    }
 }

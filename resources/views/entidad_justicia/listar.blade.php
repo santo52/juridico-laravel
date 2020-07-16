@@ -41,6 +41,10 @@
             <th>Nombre</th>
             <th data-filterable="false">¿Aplica primera instancia?</th>
             <th data-filterable="false">¿Aplica segunda instancia?</th>
+            <th data-breakpoints="xs sm">Correo electrónico notificaciones</th>
+            <th data-breakpoints="all">Pais</th>
+            <th data-breakpoints="all">Departamento</th>
+            <th data-breakpoints="all">Municipio</th>
             <th>Estado</th>
             <th data-filterable="false" data-sortable="false"></th>
         </tr>
@@ -53,6 +57,10 @@
             <td>{{$entidad['nombre_entidad_justicia']}}</td>
             <td>{{$entidad['aplica_primera_instancia'] == 2 ? 'No' : 'Sí'}}</td>
             <td>{{$entidad['aplica_segunda_instancia'] == 2 ? 'No' : 'Sí'}}</td>
+            <td>{{$entidad['email_entidad_justicia']}}</td>
+            <td>{{$entidad->getPais()}}</td>
+            <td>{{$entidad->getDepartamento()}}</td>
+            <td>{{$entidad->getMunicipio()}}</td>
             <td>{{$entidad['estado_entidad_justicia'] == 2 ? 'Inactivo' : 'Activo'}}</td>
             <td>
                 <div class="flex justify-center table-actions">
@@ -116,13 +124,13 @@
                         <input type="text" class="form-control required" id="etapaNombre" name="nombre_entidad_justicia">
                     </div>
                     <div class="form-group">
-                        <label for="recipient-name" class="control-label">Nombre de la entidad de justicia</label>
-                        <input type="text" class="form-control required" id="etapaNombre" name="nombre_entidad_justicia">
+                        <label for="recipient-name" class="control-label">Correo electrónico de notificaciones</label>
+                        <input type="email" class="form-control required" id="etapaCorreo" name="email_entidad_justicia">
                     </div>
-                    {{-- <div class="form-group row">
+                    <div class="form-group row">
                         <div class="col-xs-12 col-sm-4">
                             <label for="id_pais" class="control-label">País</label>
-                            <select class="form-control required" id="id_pais">
+                            <select class="form-control required" id="id_pais" onChange="entidadJusticia.changePais(this)">
                                 @foreach ($paises as $item)
                                 <option value="{{$item->id_pais}}">{{$item->nombre_pais}}</option>
                                 @endforeach
@@ -131,11 +139,7 @@
                         <div class="col-xs-12 col-sm-4">
                             <label for="id_departamento" class="control-label">Departamento</label>
                             <select data-live-search="true" class="form-control required" id="id_departamento"
-                                title="Seleccionar" onChange="cliente.changeDepartamento(this)">
-                                @foreach ($departamentos as $item)
-                                <option value="{{$item->id_departamento}}">{{$item->nombre_departamento}}</option>
-                                @endforeach
-                            </select>
+                                title="Seleccionar" onChange="entidadJusticia.changeDepartamento(this)"></select>
                         </div>
                         <div class="col-xs-12 col-sm-4">
                             <label for="id_municipio" class="control-label">Municipio</label>
@@ -143,7 +147,7 @@
                                 title="Seleccionar">
                             </select>
                         </div>
-                    </div> --}}
+                    </div>
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">¿Aplica primara instancia?</label>
                         <div class="checkbox-form">

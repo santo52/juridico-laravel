@@ -196,17 +196,62 @@ var Cliente = /*#__PURE__*/function () {
   }
 
   _createClass(Cliente, [{
-    key: "changeMunicipio",
-    value: function changeMunicipio(self) {
+    key: "changePaisContacto",
+    value: function changePaisContacto(self) {
+      var pais = $(self).val();
+      return $.ajax({
+        url: '/cliente/departamentos/' + pais,
+        success: function success(data) {
+          var html = data.map(function (item) {
+            return "<option value=\"".concat(item.id_departamento, "\">").concat(item.nombre_departamento, "</option>");
+          });
+          $('#id_departamento_contacto').html(html).selectpicker('refresh');
+          $('#id_municipio_contacto').html('').val('').selectpicker('refresh');
+        }
+      });
+    }
+  }, {
+    key: "changeDepartamentoContacto",
+    value: function changeDepartamentoContacto(self) {
+      var departamento = $(self).val();
+      $.ajax({
+        url: '/cliente/municipios/' + departamento,
+        success: function success(data) {
+          $('#id_municipio_contacto').val('');
+          var html = data.map(function (item) {
+            return "<option value=\"".concat(item.id_municipio, "\">").concat(item.nombre_municipio, "</option>");
+          });
+          $('#id_municipio_contacto').html(html).selectpicker('refresh');
+        }
+      });
+    }
+  }, {
+    key: "changeMunicipioContacto",
+    value: function changeMunicipioContacto(self) {
       var municipio = $(self).val();
       $.ajax({
         url: '/cliente/municipio/' + municipio,
         success: function success(data) {
           if (data.indicativo) {
-            $('#indicativo').show().text('+' + data.indicativo);
+            $('#indicativo_contacto').show().text('+' + data.indicativo);
           } else {
-            $('#indicativo').hide();
+            $('#indicativo_contacto').hide();
           }
+        }
+      });
+    }
+  }, {
+    key: "changePais",
+    value: function changePais(self) {
+      var pais = $(self).val();
+      return $.ajax({
+        url: '/cliente/departamentos/' + pais,
+        success: function success(data) {
+          var html = data.map(function (item) {
+            return "<option value=\"".concat(item.id_departamento, "\">").concat(item.nombre_departamento, "</option>");
+          });
+          $('#id_departamento').html(html).selectpicker('refresh');
+          $('#id_municipio').html('').val('').selectpicker('refresh');
         }
       });
     }
@@ -215,13 +260,28 @@ var Cliente = /*#__PURE__*/function () {
     value: function changeDepartamento(self) {
       var departamento = $(self).val();
       $.ajax({
-        url: '/departamento/municipios/' + departamento,
+        url: '/cliente/municipios/' + departamento,
         success: function success(data) {
           $('#id_municipio').val('');
           var html = data.map(function (item) {
             return "<option value=\"".concat(item.id_municipio, "\">").concat(item.nombre_municipio, "</option>");
           });
           $('#id_municipio').html(html).selectpicker('refresh');
+        }
+      });
+    }
+  }, {
+    key: "changeMunicipio",
+    value: function changeMunicipio(self) {
+      var municipio = $(self).val();
+      $.ajax({
+        url: '/cliente/municipio/' + municipio,
+        success: function success(data) {
+          if (data.indicativo) {
+            $('#indicativo_cliente').show().text('+' + data.indicativo);
+          } else {
+            $('#indicativo_cliente').hide();
+          }
         }
       });
     }
@@ -244,6 +304,21 @@ var Cliente = /*#__PURE__*/function () {
             $('#telefono_intermediario').val(intermediario.telefono);
             $('#email_intermediario').val(intermediario.correo_electronico);
           }
+        }
+      });
+    }
+  }, {
+    key: "changeBeneficiario",
+    value: function changeBeneficiario(self) {
+      var val = $(self).val();
+      var fields = ['numero_documento_beneficiario', 'nombre_beneficiario', 'parentesco_beneficiario', 'telefono_beneficiario', 'celular_beneficiario', 'celular2_beneficiario', 'correo_electronico_beneficiario'];
+      fields.map(function (field) {
+        var $item = $('#' + field);
+
+        if (val == 0) {
+          $item.val('').prop('readonly', true);
+        } else {
+          $item.prop('readonly', false);
         }
       });
     }
@@ -784,6 +859,7 @@ var EntidadDemandada = /*#__PURE__*/function () {
           success: function success(_ref4) {
             var entidadDemandada = _ref4.entidadDemandada;
             $('#etapaNombre').val(entidadDemandada.nombre_entidad_demandada);
+            $('#etapaCorreo').val(entidadDemandada.email_entidad_demandada);
             $('#etapaEstado').prop('checked', entidadDemandada.estado_entidad_demandada == 1).change();
           }
         });
@@ -856,8 +932,39 @@ var EntidadJusticia = /*#__PURE__*/function () {
       window.open('/entidades-de-justicia/excel');
     }
   }, {
+    key: "changePais",
+    value: function changePais(self) {
+      var pais = $(self).val();
+      return $.ajax({
+        url: '/entidades-de-justicia/departamentos/' + pais,
+        success: function success(data) {
+          var html = data.map(function (item) {
+            return "<option value=\"".concat(item.id_departamento, "\">").concat(item.nombre_departamento, "</option>");
+          });
+          $('#id_departamento').html(html).selectpicker('refresh');
+          $('#id_municipio').html('').val('').selectpicker('refresh');
+        }
+      });
+    }
+  }, {
+    key: "changeDepartamento",
+    value: function changeDepartamento(self) {
+      var departamento = $(self).val();
+      return $.ajax({
+        url: '/entidades-de-justicia/municipios/' + departamento,
+        success: function success(data) {
+          var html = data.map(function (item) {
+            return "<option value=\"".concat(item.id_municipio, "\">").concat(item.nombre_municipio, "</option>");
+          });
+          $('#id_municipio').html(html).selectpicker('refresh');
+        }
+      });
+    }
+  }, {
     key: "createEditModal",
     value: function createEditModal(id) {
+      var _this2 = this;
+
       var title = id ? 'Editar entidad de justicia' : 'Crear entidad de justicia';
       $('#createModal').modal();
       $('#createValue').val(id);
@@ -866,6 +973,9 @@ var EntidadJusticia = /*#__PURE__*/function () {
       $('#primeraInstancia').prop('checked', false).change();
       $('#segundaInstancia').prop('checked', false).change();
       $('#createTitle').text(title);
+      $('#id_departamento').html('');
+      $('#id_municipio').html('');
+      $('#id_pais,#id_departamento,#id_municipio').val('').selectpicker('refresh');
 
       if (id) {
         $.ajax({
@@ -873,9 +983,19 @@ var EntidadJusticia = /*#__PURE__*/function () {
           success: function success(_ref5) {
             var entidadJusticia = _ref5.entidadJusticia;
             $('#etapaNombre').val(entidadJusticia.nombre_entidad_justicia);
+            $('#etapaCorreo').val(entidadJusticia.email_entidad_justicia);
             $('#etapaEstado').prop('checked', entidadJusticia.estado_entidad_justicia == 1).change();
             $('#primeraInstancia').prop('checked', entidadJusticia.aplica_primera_instancia == 1).change();
             $('#segundaInstancia').prop('checked', entidadJusticia.aplica_segunda_instancia == 1).change();
+            $('#id_pais').val(entidadJusticia.municipio.departamento.id_pais).selectpicker('refresh');
+
+            _this2.changePais($('#id_pais')).then(function () {
+              $('#id_departamento').val(entidadJusticia.municipio.id_departamento).selectpicker('refresh');
+
+              _this2.changeDepartamento($('#id_departamento')).then(function () {
+                $('#id_municipio').val(entidadJusticia.id_municipio).selectpicker('refresh');
+              });
+            });
           }
         });
       }
@@ -952,12 +1072,12 @@ var EtapaProceso = /*#__PURE__*/function () {
       $('#createModal').modal('hide');
       $('.modal-backdrop').remove();
       $('body').removeClass('modal-open');
-      location.hash = 'actuacion/crear';
+      window.open('/#actuacion/crear');
     }
   }, {
     key: "renderModalData",
     value: function renderModalData(id) {
-      var _this2 = this;
+      var _this3 = this;
 
       return $.ajax({
         url: '/etapas-de-proceso/get/' + (id || 0),
@@ -969,14 +1089,14 @@ var EtapaProceso = /*#__PURE__*/function () {
           });
           $('#actuacionesList').html(htmlActuaciones).selectpicker('refresh');
           var htmlSelected = selectedActuaciones.map(function (a) {
-            return _this2.addRow(a.id_actuacion_etapa_proceso, a.nombre_actuacion, a.tiempo_maximo_proxima_actuacion, a.unidad_tiempo_proxima_actuacion);
+            return _this3.addRow(a.id_actuacion_etapa_proceso, a.nombre_actuacion, a.tiempo_maximo_proxima_actuacion, a.unidad_tiempo_proxima_actuacion);
           });
           $('#sortable').html(htmlSelected);
           $('#tableCreateModal').footable();
           $("#sortable").sortable({
-            start: _this2.sortableStart,
-            stop: _this2.sortableStop,
-            update: _this2.sortableUpdate
+            start: _this3.sortableStart,
+            stop: _this3.sortableStop,
+            update: _this3.sortableUpdate
           }).disableSelection();
           return data;
         }
@@ -999,7 +1119,7 @@ var EtapaProceso = /*#__PURE__*/function () {
   }, {
     key: "addActuacion",
     value: function addActuacion(e) {
-      var _this3 = this;
+      var _this4 = this;
 
       e.preventDefault();
       e.stopPropagation();
@@ -1016,9 +1136,9 @@ var EtapaProceso = /*#__PURE__*/function () {
         url: '/etapas-de-proceso/actuacion/insert',
         data: new URLSearchParams(formData),
         success: function success() {
-          _this3.renderModalData(id_etapa_proceso);
+          _this4.renderModalData(id_etapa_proceso);
 
-          _this3.asociarActuacionModal('hide');
+          _this4.asociarActuacionModal('hide');
         }
       });
       return false;
@@ -1387,23 +1507,23 @@ var Honorario = /*#__PURE__*/function () {
   }, {
     key: "changeCliente",
     value: function changeCliente(self) {
-      var _this4 = this;
+      var _this5 = this;
 
       var id = $(self).val();
       $.ajax({
         url: '/cliente/basic/' + id,
         success: function success(cliente) {
           $('#documento_cliente').val(cliente.numero_documento);
-          $('#telefono_cliente').val(_this4.formatTelefonoCliente(cliente));
+          $('#telefono_cliente').val(_this5.formatTelefonoCliente(cliente));
           $('#indicativo_cliente').text('+' + cliente.indicativo);
           $('#nombre_intermediario').val((cliente.intermediario_p_apellido || '') + ' ' + (cliente.intermediario_s_apellido || '') + ' ' + (cliente.intermediario_p_nombre || '') + ' ' + (cliente.intermediario_s_nombre || ''));
           $('#nombre_beneficiario').val(cliente.nombre_beneficiario);
           $('#indicativo_beneficiario').val(cliente.indicativo_beneficiario);
-          $('#telefono_beneficiario').val(_this4.formatTelefonoBeneficiario(cliente));
+          $('#telefono_beneficiario').val(_this5.formatTelefonoBeneficiario(cliente));
           $('#email_beneficiario').val(cliente.correo_electronico_beneficiario);
           $('#email_cliente').val(cliente.correo_electronico_cliente);
           $('#estado_vital_cliente').val(cliente.estado_vital_cliente == 1 ? 'vivo' : 'fallecido');
-          $('#telefono_intermediario').val(_this4.formatTelefonoIntermediario(cliente));
+          $('#telefono_intermediario').val(_this5.formatTelefonoIntermediario(cliente));
           $('#indicativo_intermediario').val(cliente.indicativo_intermediario);
           $('#email_intermediario').val(cliente.correo_electronico_intermediario);
         }
@@ -1629,7 +1749,7 @@ var Menu = /*#__PURE__*/function () {
   }, {
     key: "createModal",
     value: function createModal(id) {
-      var _this5 = this;
+      var _this6 = this;
 
       var title = id ? 'Crear' : 'Editar';
       var that = this;
@@ -1649,7 +1769,7 @@ var Menu = /*#__PURE__*/function () {
           $('#create_ruta_menu').val(data.ruta_menu);
           $('#create_orden_menu').val(data.orden_menu);
           var html = (data.acciones || []).map(function (accion) {
-            return _this5.rowAccion(accion);
+            return _this6.rowAccion(accion);
           });
           that.renderParents(data.parents);
           $('#tableCreateModal tbody').html(html.join(''));
@@ -1757,7 +1877,7 @@ var Menu = /*#__PURE__*/function () {
   }, {
     key: "upsertAccion",
     value: function upsertAccion(e) {
-      var _this6 = this;
+      var _this7 = this;
 
       e.preventDefault();
       e.stopPropagation();
@@ -1767,7 +1887,7 @@ var Menu = /*#__PURE__*/function () {
         url: '/opciones/accion/upsert',
         data: new URLSearchParams(formData),
         success: function success(data) {
-          var html = _this6.rowAccion(data);
+          var html = _this7.rowAccion(data);
 
           var $item = $('#accionRow' + data.id_accion);
 
@@ -1831,7 +1951,7 @@ var Perfil = /*#__PURE__*/function () {
   }, {
     key: "redrawTableModal",
     value: function redrawTableModal(id) {
-      var _this7 = this;
+      var _this8 = this;
 
       return $.ajax({
         url: '/perfil/get/' + (id || 0),
@@ -1841,13 +1961,13 @@ var Perfil = /*#__PURE__*/function () {
           });
           $('#listaMenu').html(html).selectpicker('refresh');
           html = data.selectedMenus.map(function (menu) {
-            return _this7.getRow(menu.id_menu_perfil, menu.nombre_menu, menu.acciones);
+            return _this8.getRow(menu.id_menu_perfil, menu.nombre_menu, menu.acciones);
           });
           $('#tableCreateModal tbody').html(html).children('.footable-empty').remove();
           $('#tableCreateModal').footable();
           $('#tableCreateModal select').selectpicker('refresh');
 
-          _this7.addSelectListener();
+          _this8.addSelectListener();
 
           return data;
         }
@@ -1888,7 +2008,7 @@ var Perfil = /*#__PURE__*/function () {
   }, {
     key: "addMenu",
     value: function addMenu() {
-      var _this8 = this;
+      var _this9 = this;
 
       var id_menu = $('#listaMenu').val();
       var id_perfil = $('#createValue').val() || 0;
@@ -1908,7 +2028,7 @@ var Perfil = /*#__PURE__*/function () {
           var saved = _ref12.saved;
 
           if (saved) {
-            _this8.redrawTableModal(id_perfil);
+            _this9.redrawTableModal(id_perfil);
           }
         }
       });
@@ -2186,25 +2306,28 @@ var Proceso = /*#__PURE__*/function () {
   }, {
     key: "changeCliente",
     value: function changeCliente(self) {
-      var _this9 = this;
+      var _this10 = this;
 
       var id = $(self).val();
       $.ajax({
         url: '/cliente/basic/' + id,
         success: function success(cliente) {
           $('#documento_cliente').val(cliente.numero_documento);
-          $('#telefono_cliente').val(_this9.formatTelefonoCliente(cliente));
+          $('#telefono_cliente').val(_this10.formatTelefonoCliente(cliente));
           $('#indicativo_cliente').text('+' + cliente.indicativo);
           $('#nombre_intermediario').val((cliente.intermediario_p_apellido || '') + ' ' + (cliente.intermediario_s_apellido || '') + ' ' + (cliente.intermediario_p_nombre || '') + ' ' + (cliente.intermediario_s_nombre || ''));
           $('#nombre_beneficiario').val(cliente.nombre_beneficiario);
           $('#indicativo_beneficiario').val(cliente.indicativo_beneficiario);
-          $('#telefono_beneficiario').val(_this9.formatTelefonoBeneficiario(cliente));
+          $('#telefono_beneficiario').val(_this10.formatTelefonoBeneficiario(cliente));
           $('#email_beneficiario').val(cliente.correo_electronico_beneficiario);
           $('#email_cliente').val(cliente.correo_electronico_cliente);
           $('#estado_vital_cliente').val(cliente.estado_vital_cliente == 1 ? 'vivo' : 'fallecido');
-          $('#telefono_intermediario').val(_this9.formatTelefonoIntermediario(cliente));
+          $('#telefono_intermediario').val(_this10.formatTelefonoIntermediario(cliente));
           $('#indicativo_intermediario').val(cliente.indicativo_intermediario);
           $('#email_intermediario').val(cliente.correo_electronico_intermediario);
+          $('#id_municipio_cliente').val(cliente.nombre_municipio);
+          $('#id_departamento_cliente').val(cliente.nombre_departamento);
+          $('#id_pais_cliente').val(cliente.nombre_pais);
         }
       });
     }
@@ -2586,7 +2709,7 @@ var SeguimientoProceso = /*#__PURE__*/function () {
   }, {
     key: "saveComentario",
     value: function saveComentario(e) {
-      var _this10 = this;
+      var _this11 = this;
 
       e.preventDefault();
       e.stopPropagation();
@@ -2613,7 +2736,7 @@ var SeguimientoProceso = /*#__PURE__*/function () {
             $table.footable();
           }
 
-          _this10.closeComentarioModal();
+          _this11.closeComentarioModal();
         }
       });
       return false;
@@ -2653,7 +2776,7 @@ var TipoProceso = /*#__PURE__*/function () {
   }, {
     key: "createEtapa",
     value: function createEtapa() {
-      var _this11 = this;
+      var _this12 = this;
 
       var nombre_etapa_proceso = $('#etapaProcesoNombre').val().trim();
 
@@ -2668,7 +2791,7 @@ var TipoProceso = /*#__PURE__*/function () {
           success: function success(data) {
             var id = $('#createValue').val() || 0;
 
-            _this11.renderModalData(id);
+            _this12.renderModalData(id);
 
             $('#tipoProcesoEtapaPopover').popover('hide');
           }
@@ -2720,7 +2843,7 @@ var TipoProceso = /*#__PURE__*/function () {
   }, {
     key: "renderModalData",
     value: function renderModalData() {
-      var _this12 = this;
+      var _this13 = this;
 
       var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
       return $.ajax({
@@ -2732,14 +2855,14 @@ var TipoProceso = /*#__PURE__*/function () {
           $('#listaEtapa').html(htmlListaEtapas.join('')).selectpicker('refresh'); //addRow
 
           var htmlSelectedEtapas = data.selectedEtapas.map(function (e) {
-            return _this12.addRow(e.id_etapa_proceso, e.nombre_etapa_proceso);
+            return _this13.addRow(e.id_etapa_proceso, e.nombre_etapa_proceso);
           });
           $('#tableCreateModal tbody').html(htmlSelectedEtapas.join(''));
           $('#tableCreateModal').footable();
           $("#sortable").sortable({
-            start: _this12.sortableStart,
-            stop: _this12.sortableStop,
-            update: _this12.sortableUpdate
+            start: _this13.sortableStart,
+            stop: _this13.sortableStop,
+            update: _this13.sortableUpdate
           }).disableSelection();
           return data;
         }
@@ -2748,7 +2871,7 @@ var TipoProceso = /*#__PURE__*/function () {
   }, {
     key: "addEtapa",
     value: function addEtapa(self) {
-      var _this13 = this;
+      var _this14 = this;
 
       var id_etapa_proceso = $(self).val();
       var id_tipo_proceso = $('#createValue').val() || 0;
@@ -2764,7 +2887,7 @@ var TipoProceso = /*#__PURE__*/function () {
           id_tipo_proceso: id_tipo_proceso
         }),
         success: function success() {
-          _this13.renderModalData(id_tipo_proceso);
+          _this14.renderModalData(id_tipo_proceso);
         }
       });
     }
@@ -2833,7 +2956,7 @@ var TipoProceso = /*#__PURE__*/function () {
   }, {
     key: "deleteEtapa",
     value: function deleteEtapa(id) {
-      var _this14 = this;
+      var _this15 = this;
 
       var id_tipo_proceso = $('#createValue').val() || 0;
       var params = {
@@ -2844,7 +2967,7 @@ var TipoProceso = /*#__PURE__*/function () {
         url: '/tipos-de-proceso/etapa/delete',
         data: new URLSearchParams(params),
         success: function success(data) {
-          _this14.renderModalData(id_tipo_proceso);
+          _this15.renderModalData(id_tipo_proceso);
         }
       });
     }
@@ -2889,7 +3012,7 @@ var TipoResultado = /*#__PURE__*/function () {
   }, {
     key: "createEtapa",
     value: function createEtapa() {
-      var _this15 = this;
+      var _this16 = this;
 
       var nombre_etapa_proceso = $('#etapaProcesoNombre').val().trim();
 
@@ -2904,7 +3027,7 @@ var TipoResultado = /*#__PURE__*/function () {
           success: function success(data) {
             var id = $('#createValue').val() || 0;
 
-            _this15.renderModalData(id);
+            _this16.renderModalData(id);
 
             $('#tipoProcesoEtapaPopover').popover('hide');
           }
@@ -3032,7 +3155,7 @@ var TipoResultado = /*#__PURE__*/function () {
   }, {
     key: "deleteEtapa",
     value: function deleteEtapa(id) {
-      var _this16 = this;
+      var _this17 = this;
 
       var id_tipo_proceso = $('#createValue').val() || 0;
       var params = {
@@ -3043,7 +3166,7 @@ var TipoResultado = /*#__PURE__*/function () {
         url: '/tipos-de-resultado/etapa/delete',
         data: new URLSearchParams(params),
         success: function success(data) {
-          _this16.renderModalData(id_tipo_proceso);
+          _this17.renderModalData(id_tipo_proceso);
         }
       });
     }

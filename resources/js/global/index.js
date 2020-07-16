@@ -8,7 +8,6 @@ showLoading();
 jQuery(document).ready(function () {
 
     hideLoading();
-
 });
 
 jQuery.ajaxSetup({

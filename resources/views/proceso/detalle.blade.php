@@ -53,7 +53,7 @@
                 <div class="col-xs-12 col-sm-4">
                     <label class="control-label">Teléfono fijo cliente</label>
                     <div class="input-group">
-                        <span class="input-group-addon" id="indicativo_cliente">+1</span>
+                        <span class="input-group-addon" id="indicativo_cliente">@if($proceso) +{{$proceso->cliente->persona->municipio->indicativo}} @else +1 @endif</span>
                         <input disabled type="text" class="form-control" id="telefono_cliente" @if($proceso)
                             value="{{$proceso->cliente->persona->telefono }}" @endif>
                     </div>
@@ -67,36 +67,42 @@
             <div class="form-group row">
                 <div class="col-xs-12 col-sm-4">
                     <label for="id_pais" class="control-label">Pais</label>
-                    <select id="id_pais" data-live-search="true" class="form-control required" title="Seleccionar">
+                    <input type="text" class="form-control" id="id_pais_cliente" @if($proceso)
+                        value="{{$proceso->cliente->persona->getPais() }}" @endif disabled />
+                    {{-- <select id="id_pais" data-live-search="true" class="form-control" title="Seleccionar">
                         @foreach ($paises as $item)
                         <option @if($proceso) @if($proceso->municipio->departamento->id_pais == $item->id_pais) selected
                             @endif @else selected
                             @endif
                             value="{{$item->id_pais}}">{{$item->nombre_pais}}</option>
                         @endforeach
-                    </select>
+                    </select> --}}
                 </div>
                 <div class="col-xs-12 col-sm-4">
                     <label for="id_departamento" class="control-label">Departamento</label>
-                    <select id="id_departamento" data-live-search="true" class="form-control required"
+                    <input type="text" class="form-control" id="id_departamento_cliente" @if($proceso)
+                        value="{{$proceso->cliente->persona->getDepartamento() }}" @endif disabled />
+                    {{-- <select id="id_departamento" data-live-search="true" class="form-control required"
                         title="Seleccionar" onchange="proceso.changeDepartamento(this)">
                         @foreach ($departamentos as $item)
                         <option @if($proceso && $proceso->municipio->id_departamento == $item->id_departamento) selected
                             @endif
                             value="{{$item->id_departamento}}">{{$item->nombre_departamento}}</option>
                         @endforeach
-                    </select>
+                    </select> --}}
                 </div>
                 <div class="col-xs-12 col-sm-4">
                     <label for="id_municipio" class="control-label">Municipio</label>
-                    <select data-live-search="true" class="form-control required" title="Seleccionar" id="id_municipio"
+                    <input type="text" class="form-control" id="id_municipio_cliente" @if($proceso)
+                        value="{{$proceso->cliente->persona->getMunicipio() }}" @endif disabled />
+                    {{-- <select data-live-search="true" class="form-control required" title="Seleccionar" id="id_municipio"
                         name="id_municipio">
                         @foreach ($municipios as $item)
                         <option @if($proceso && $proceso->municipio->id_municipio == $item->id_municipio) selected
                             @endif
                             value="{{$item->id_municipio}}">{{$item->nombre_municipio}}</option>
                         @endforeach
-                    </select>
+                    </select> --}}
                 </div>
             </div>
 
@@ -109,7 +115,7 @@
                 <div class="col-xs-12 col-sm-4">
                     <label class="control-label">Teléfono fijo beneficiario</label>
                     <div class="input-group">
-                        <span class="input-group-addon" id="indicativo_beneficiario">+1</span>
+                        <span class="input-group-addon" id="indicativo_beneficiario">@if($proceso) +{{$proceso->cliente->persona->municipio->indicativo}} @else +1 @endif</span>
                         <input disabled type="text" class="form-control" id="telefono_beneficiario" @if($proceso)
                             value="{{$proceso->cliente->telefono_beneficiario }}" @endif>
                     </div>

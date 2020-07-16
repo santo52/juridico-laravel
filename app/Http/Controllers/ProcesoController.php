@@ -97,7 +97,8 @@ class ProcesoController extends Controller
     public function get($id)
     {
         $proceso = Proceso::get($id);
-        $clientes = Cliente::leftjoin('persona as pe', 'pe.id_persona', 'cliente.id_persona')
+        // $clientes = Cliente::leftjoin('persona as pe', 'pe.id_persona', 'cliente.id_persona')
+        $clientes = Cliente::with(['persona', 'persona.municipio'])
             ->where([
                 'cliente.eliminado' => 0,
                 'estado_cliente' => '1'
@@ -130,9 +131,9 @@ class ProcesoController extends Controller
             ])->get();
 
         // $documentos = $proceso ? $this->getDocumentos($id, $proceso->id_tipo_proceso) : [];
-        $paises = Pais::all();
-        $departamentos = Departamento::all();
-        $municipios = $proceso ? Municipio::where('id_departamento', $proceso->municipio->id_departamento)->get() : [];
+        // $paises = Pais::all();
+        // $departamentos = Departamento::all();
+        // $municipios = $proceso ? Municipio::where('id_departamento', $proceso->municipio->id_departamento)->get() : [];
 
         $tiposResultado = TipoResultado::where(['eliminado' => 0, ['id_tipo_resultado', '>', 4]])->get();
         foreach($tiposResultado as $key => $value) {
@@ -150,9 +151,9 @@ class ProcesoController extends Controller
             'entidadesDemandadas' => $entidadesDemandadas,
             'entidadesJusticia' => $entidadesJusticia,
             'actuaciones' => $actuaciones,
-            'paises' => $paises,
-            'departamentos' => $departamentos,
-            'municipios' => $municipios,
+            // 'paises' => $paises,
+            // 'departamentos' => $departamentos,
+            // 'municipios' => $municipios,
             'usuarios' => $usuarios,
             'clientes' => $clientes
         ]);

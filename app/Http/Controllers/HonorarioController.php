@@ -36,7 +36,7 @@ class HonorarioController extends Controller
         foreach($cobros as $cobro) {
             $totalCobrado += $cobro->valor;
             if($cobro->pago) {
-                $totalPagado += $cobro->pago->valor_pago;
+                $totalPagado += $cobro->getPagado();
             }
         }
 

@@ -134,7 +134,7 @@ class ProcesoEtapaActuacion extends BaseModel
     public function getValorPagado() {
         $pagado = 0;
         if($this->cobro && $this->cobro->pago) {
-            $pagado = $this->cobro->pago->valor_pago;
+            $pagado = $this->cobro->getPagado();
         }
         return $pagado;
     }

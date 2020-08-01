@@ -127,7 +127,7 @@
                 </button>
                 <h4 class="modal-title" id="createTitle"></h4>
             </div>
-            <form onsubmit="usuario.upsert(event)">
+            <form onsubmit="usuario.upsert(event)" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="form-group row">
                         <div class="col-xs-4">
@@ -221,7 +221,7 @@
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">Firma</label>
                         <div class="input-firma">
-                            <input type="file" name="firma" accept="image/*" />
+                            <input id="firma" type="file" name="firma" accept="image/*" />
                         </div>
                     </div>
                     <div class="form-group">

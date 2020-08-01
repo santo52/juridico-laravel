@@ -11,6 +11,7 @@ use App\Entities\Perfil;
 use App\Entities\Persona;
 use App\Entities\Municipio;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class UsuarioController extends Controller
 {
@@ -120,6 +121,10 @@ class UsuarioController extends Controller
         $datausuario['nombre_usuario'] = $nombre_usuario;
         $datausuario['estado_usuario'] = !empty($request->get('estado')) ? 1 : 2;
         $saved = Usuario::updateOrCreate(['id_usuario' => $id], $datausuario);
+
+        if($saved) {
+            $request->firma->storeAs('firmas', $saved->id_usuario . '.png', 'uploads');
+        }
 
         return response()->json([ 'saved' => $saved ]);
     }

@@ -55,6 +55,14 @@ return [
             'visibility' => 'public',
         ],
 
+        'uploads' => [
+            'driver' => 'local',
+            // 'root' => storage_path('app/public/documentos'),
+            'root' => public_path('uploads'),
+            'url' => '/uploads',
+            'visibility' => 'public',
+        ],
+
         'documentos' => [
             'driver' => 'local',
             // 'root' => storage_path('app/public/documentos'),
@@ -68,6 +76,14 @@ return [
             // 'root' => storage_path('app/public/plantillas'),
             'root' => public_path('uploads/plantillas'),
             'url' => '/uploads/plantillas',
+            'visibility' => 'public',
+        ],
+
+        'firmas' => [
+            'driver' => 'local',
+            // 'root' => storage_path('app/public/plantillas'),
+            'root' => public_path('uploads/firmas'),
+            'url' => '/uploads/firmas',
             'visibility' => 'public',
         ],
 

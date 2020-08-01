@@ -68,6 +68,12 @@ class Usuario {
                     } else {
                         $('#indicativo').hide()
                     }
+
+                    if(!$('.input-firma img').length) {
+                        $('.input-firma').append('<img src="" />')
+                    }
+
+                    $('.input-firma img').attr('src', `/uploads/firmas/${usuario.id_usuario}.png`)
  }
             })
         }
@@ -84,9 +90,14 @@ class Usuario {
             const formData = new FormData(e.target)
             id && formData.append('id_usuario', id)
 
+            // const firma = $('#firma');
+            // firma && formData.append('firma', firma[0].files[0])
+
             $.ajax({
                 url: '/usuario/upsert',
-                data: new URLSearchParams(formData),
+                data: formData,
+                contentType: false,
+                processData: false,
                 success: data => {
                     if (data.saved) {
                         location.reload()

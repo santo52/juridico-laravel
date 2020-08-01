@@ -3260,6 +3260,12 @@ var Usuario = /*#__PURE__*/function () {
             } else {
               $('#indicativo').hide();
             }
+
+            if (!$('.input-firma img').length) {
+              $('.input-firma').append('<img src="" />');
+            }
+
+            $('.input-firma img').attr('src', "/uploads/firmas/".concat(usuario.id_usuario, ".png"));
           }
         });
       }
@@ -3273,10 +3279,14 @@ var Usuario = /*#__PURE__*/function () {
       if (validateForm(e)) {
         var id = $('#createValue').val();
         var formData = new FormData(e.target);
-        id && formData.append('id_usuario', id);
+        id && formData.append('id_usuario', id); // const firma = $('#firma');
+        // firma && formData.append('firma', firma[0].files[0])
+
         $.ajax({
           url: '/usuario/upsert',
-          data: new URLSearchParams(formData),
+          data: formData,
+          contentType: false,
+          processData: false,
           success: function success(data) {
             if (data.saved) {
               location.reload();

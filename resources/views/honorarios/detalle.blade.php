@@ -13,7 +13,7 @@
         </li>
         <li role="presentation" id="historico-tab">
             <a href="#historico" aria-controls="historico" role="tab" data-toggle="tab">
-                Histórico de la sentencia
+                Histórico sentencias
             </a>
         </li>
         {{-- <li role="presentation" id="documentos-tab" @if (!count($documentos)) style="display: none" @endif> --}}

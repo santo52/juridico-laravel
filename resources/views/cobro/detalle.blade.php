@@ -47,9 +47,10 @@
             <th>Fecha cobro</th>
             <th>Cliente</th>
             <th data-breakpoints="all">Fecha de creación</th>
-            <th data-breakpoints="xs sm">Concepto</th>
+            <th data-breakpoints="all">Concepto</th>
             <th>Valor cobrado</th>
             <th>Valor pagado</th>
+            <th data-breakpoints="all">Pagos</th>
             <th>Estado</th>
             <th data-filterable="false" data-sortable="false"></th>
         </tr>
@@ -60,25 +61,31 @@
         <tr id="cobroRow{{$cobro['id_cobro']}}">
             <td>{{$cobro['id_cobro']}}</td>
             <td>{{$cobro->getFechaCobro()}}</td>
-            <td>{{$cobro->procesoEtapaActuacion ? $cobro->procesoEtapaActuacion->procesoEtapa->proceso->cliente->getNombreCompleto() : ''}}</td>
+            <td>{{$cobro->procesoEtapaActuacion ? $cobro->procesoEtapaActuacion->procesoEtapa->proceso->cliente->getNombreCompleto() : ''}}
+            </td>
             <td>{{$cobro->getFechaCreacion()}}</td>
             <td>{{$cobro['concepto']}}</td>
             <td>$ {{number_format($cobro['valor'], 0, ',', '.')}}</td>
-            <td>$ {{number_format(floatval($cobro->pago ? $cobro->pago->valor_pago : 0), 0, ',', '.')}}</td>
+            <td>$ {{number_format(floatval($cobro->getPagado()), 0, ',', '.')}}</td>
+            <td>@foreach($cobro->pago as $pago)
+                <div>{{$pago->fecha_pago}} - $ {{number_format(floatval($pago->valor_pago), 0, ',', '.')}}</div>
+                @endforeach
+            </td>
             <td>{{$cobro['cerrado'] == 1 ? 'Pagado' : 'Pendiente'}}</td>
             <td>
                 <div class="flex justify-center table-actions">
-                    <a href="javascript:void(0)"
-                        title="Editar cobro"
-                        onclick="cobro.cobroModalOpen('{{$cobro['id_cobro']}}')"
-                        class="btn text-primary" type="button">
+                    <a href="javascript:void(0)" title="Editar cobro"
+                        onclick="cobro.cobroModalOpen('{{$cobro['id_cobro']}}')" class="btn text-primary" type="button">
                         <span class="glyphicon glyphicon-eye-open"></span>
                     </a>
-                    <a href="javascript:void(0)"
-                        title="Registrar pago"
-                        onclick="cobro.pagoModalOpen('{{$cobro['id_cobro']}}')"
-                        class="btn text-warning" type="button">
+                    <a href="javascript:void(0)" title="Listar pagos"
+                        onclick="cobro.pagoModalOpen('{{$cobro['id_cobro']}}')" class="btn text-warning" type="button">
                         <span class="glyphicon glyphicon-usd"></span>
+                    </a>
+                    <a href="javascript:void(0)" title="Registrar pago"
+                        onclick="cobro.registrarPagoModalOpen('{{$cobro['id_cobro']}}')" class="btn text-success"
+                        type="button">
+                        <span class="glyphicon glyphicon-plus"></span>
                     </a>
                 </div>
             </td>
@@ -114,7 +121,8 @@
                     <div class="form-group row">
                         <div class="col-xs-12 col-sm-6">
                             <label for="fecha_cobro" class="control-label">Fecha de cobro</label>
-                            <input name="fecha_cobro" id="fecha_cobro" data-date-format="yyyy-mm-dd" class="form-control datepicker-here required" />
+                            <input name="fecha_cobro" id="fecha_cobro" data-date-format="yyyy-mm-dd"
+                                class="form-control datepicker-here required" />
                         </div>
                         <div class="col-xs-12 col-sm-6">
                             <label for="valor_cobro" class="control-label">Valor cobro</label>
@@ -131,7 +139,8 @@
                     </div>
                     <div class="form-group">
                         <label for="concepto_cobro" class="control-label">Concepto</label>
-                        <textarea style="min-height:50px;" name="concepto" id="concepto_cobro" class="form-control required"></textarea>
+                        <textarea style="min-height:50px;" name="concepto" id="concepto_cobro"
+                            class="form-control required"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer center">
@@ -145,6 +154,39 @@
 </div>
 
 <div class="modal fade" tabindex="-1" role="dialog" id="pagosModal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="cobrosTitle">Pagos realizados</h4>
+            </div>
+            <form onsubmit="cobro.upsertPago(event)">
+                <div class="modal-body row">
+                    <div class="col-xs-12">
+                        <table id="lista-pagos" class="table" data-empty="Sin pagos">
+                            <thead>
+                                <th>Fecha de pago</th>
+                                <th>Forma de pago</th>
+                                <th>N° Referencia</th>
+                                <th>Valor del pago</th>
+                                <th></th>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer center">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" tabindex="-1" role="dialog" id="editarPagoModal">
     <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -190,6 +232,7 @@
                 </div>
                 <div class="modal-footer center">
                     <input type="hidden" id="id_cobro_pago" />
+                    <input type="hidden" id="id_pago_pago" />
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-success">Guardar</button>
                 </div>
@@ -199,12 +242,31 @@
 </div>
 
 
+<div class="modal fade" tabindex="-1" role="dialog" id="deletePagoModal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Eliminar pago</h4>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro que desea eliminar el pago?</p>
+            </div>
+            <div class="modal-footer center">
+                <input type="hidden" id="deletePagoValue" />
+                <button type="button" onClick="cobro.deletePagoCancelar()" class="btn btn-default">Cancelar</button>
+                <button type="button" onClick="cobro.deletePagoAceptar()" class="btn btn-danger">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @endsection
 
 @section('javascript')
 <script>
-
     $(document).ready(function(){
         $('#tipoProcesoEtapaPopover').popover({
             title: "Agregar etapa",

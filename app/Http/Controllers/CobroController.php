@@ -33,7 +33,7 @@ class CobroController extends Controller
         foreach($cobros as $cobro) {
             $totalCobrado += $cobro->valor;
             if($cobro->pago) {
-                $totalPagado += $cobro->pago->valor_pago;
+                $totalPagado += $cobro->getPagado();
             }
         }
 
@@ -54,9 +54,14 @@ class CobroController extends Controller
         return response()->json($cobro);
     }
 
-    public function getPago($id) {
-        $cobro = Pago::where('id_cobro', $id)->first();
+    public function getPagos($id) {
+        $cobro = Pago::where('id_cobro', $id)->get();
         return response()->json($cobro);
+    }
+
+    public function getPago($id) {
+        $pago = Pago::find($id);
+        return response()->json($pago);
     }
 
     public function upsert(Request $request) {
@@ -77,21 +82,24 @@ class CobroController extends Controller
 
     public function upsertPago(Request $request) {
 
-        $id = $request->get('id_cobro');
-        $pagado = $request->get('valor_pago');
+        $id = $request->get('id_pago');
+        // $idCobro = $request->get('id_cobro');
+        // $pagado = $request->get('valor_pago');
         $data = $request->all();
-        $cobro = Cobro::find($id);
-        $closed = 0;
-        if( floatval($pagado) >= $cobro->valor) {
-            $data['valor_pago'] = $cobro->valor;
-            $closed = 1;
-        }
+        // $cobro = Cobro::find($id);
+        // $closed = 0;
 
-        $saved = Pago::updateOrCreate(['id_cobro' => $id], $data);
-        if($saved) {
-            $cobro->update(['cerrado' => $closed]);
-        }
+        // return response()->json(['cobro' => $cobro, $id]);
+        // if( floatval($pagado) >= $cobro->valor) {
+        //     $data['valor_pago'] = $cobro->valor;
+        //     $closed = 1;
+        // }
 
-        return response()->json(['saved' => $saved]);
+        $saved = Pago::updateOrCreate(['id_pago' => $id], $data);
+        // if($saved) {
+        //     $cobro->update(['cerrado' => $closed]);
+        // }
+
+        return response()->json(['saved' => $saved, $request->all()]);
     }
 }

@@ -21,7 +21,7 @@ class Pago extends Model
     ];
 
     public function cobro() {
-        return $this->hasOne('App\Entities\Cobro', 'id_cobro', 'id_cobro');
+        return $this->belongsTo('App\Entities\Cobro', 'id_cobro', 'id_cobro');
     }
 
     public function entidadFinanciera() {

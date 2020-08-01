@@ -171,6 +171,7 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/cobros-y-pagos/upsert', 'CobroController@upsert');
     Route::post('/cobros-y-pagos/pago/upsert', 'CobroController@upsertPago');
     Route::post('/cobros-y-pagos/cobro/get/{id}', 'CobroController@getCobro');
+    Route::post('/cobros-y-pagos/pagos/get/{id}', 'CobroController@getPagos');
     Route::post('/cobros-y-pagos/pago/get/{id}', 'CobroController@getPago');
 
     Route::post('/honorarios/listar', 'HonorarioController@index');

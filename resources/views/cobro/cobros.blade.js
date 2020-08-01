@@ -1,15 +1,15 @@
 class Cobro {
 
-    pdf(){
+    pdf() {
         window.open('/etapas-de-proceso/pdf')
     }
 
-    excel(){
+    excel() {
         window.open('/etapas-de-proceso/excel')
     }
 
     changeFormaPago(value) {
-        if(value == 1) {
+        if (value == 1) {
             $('#informacion_pago_financiero').hide()
             $('#id_entidad_financiera').removeClass('required').val('')
             $('#referencia').removeClass('required').val('')
@@ -20,19 +20,100 @@ class Cobro {
         }
     }
 
-    pagoModalOpen(id) {
-        $('#pagosModal').modal('show')
-        this.changeFormaPago(1)
-        $('#id_cobro_pago').val(id)
+    formasPago(id) {
+        switch (id) {
+            case 1:
+                return 'Efectivo'
+            case 2:
+                return 'Consignación'
+            case 3:
+                return 'Cheque'
+            default:
+                return 'Desconocido'
+        }
+    }
 
-        if(id) {
+    formatDate(date) {
+        const newDate = new Date(date)
+        return newDate.getDate() + '/' + (newDate.getMonth() + 1) + '/' + newDate.getFullYear()
+    }
+
+    deletePagoModal(id) {
+        $('#deletePagoValue').val(id)
+        $('#pagosModal').modal('hide')
+        setTimeout(() => {
+            $('#deletePagoModal').modal('show')
+        }, 500);
+    }
+
+    deletePagoCancelar() {
+        $('#deletePagoValue').val('')
+        $('#deletePagoModal').modal('hide')
+        setTimeout(() => {
+            $('#pagosModal').modal('show')
+        }, 500);
+    }
+
+    deletePagoAceptar() {
+        const id = $('#deletePagoValue').val()
+        $('#item-pago-' + id).remove()
+        this.deletePagoCancelar()
+    }
+
+    pagoModalOpen(id) {
+
+        $('#pagosModal').modal('show')
+        $('#lista-pagos tbody').html('')
+        $('#lista-pagos').footable('refresh')
+
+        if (id) {
             $.ajax({
-                url: '/cobros-y-pagos/pago/get/' + id,
+                url: '/cobros-y-pagos/pagos/get/' + id,
                 success: data => {
-                    if(data) {
+                    if (data) {
+
+                        const html = data.map(item => `<tr id="item-pago-${item.id_pago}">
+                            <td>${this.formatDate(item.fecha_pago)}</td>
+                            <td>${this.formasPago(item.forma_pago)}</td>
+                            <td>${item.referencia || 'Sin referencia'}</td>
+                            <td>${item.valor_pago}</td>
+                            <td>
+                                <div class="flex justify-center table-actions">
+                                    <a href="javascript:void(0)" title="Editar pago"
+                                        onclick="cobro.registrarPagoModalOpen('${item.id_cobro}', '${item.id_pago}')" class="btn text-primary" type="button">
+                                        <span class="glyphicon glyphicon-edit"></span>
+                                    </a>
+                                    <a href="javascript:void(0)" title="Eliminar pago"
+                                        onclick="cobro.deletePagoModal('${item.id_pago}')" class="btn text-danger" type="button">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </a>
+                                </div>
+
+                            </td>
+                        </tr>`)
+                        $('#lista-pagos tbody').html(html)
+                    }
+
+                    $('#lista-pagos').footable('refresh')
+                }
+            })
+        }
+    }
+
+    registrarPagoModalOpen(id, idpago = 0) {
+        $('#editarPagoModal').modal('show')
+        this.changeFormaPago(1)
+        $('#id_entidad_financiera').val(0).selectpicker('refresh')
+        $('#id_cobro_pago').val(id)
+        $('#id_pago_pago').val(idpago)
+        if (id) {
+            $.ajax({
+                url: '/cobros-y-pagos/pago/get/' + idpago,
+                success: data => {
+                    if (data) {
                         $('#fecha_pago').val(data.fecha_pago)
                         $('#forma_pago').val(data.forma_pago).selectpicker('refresh')
-                        $('#id_entidad_financiera').val(data.id_entidad_financiera)
+                        $('#id_entidad_financiera').val(data.id_entidad_financiera).selectpicker('refresh')
                         $('#referencia').val(data.referencia)
                         this.changeFormaPago(data.forma_pago)
                         $('#valor_pago').val(data.valor_pago)
@@ -42,7 +123,7 @@ class Cobro {
         }
     }
 
-    cobroModalOpen(id){
+    cobroModalOpen(id) {
         $('#cobrosModal').modal('show')
         $('#fecha_cobro').val('')
         $('#accion_cobro').val('')
@@ -52,21 +133,21 @@ class Cobro {
         $('#valor_pagado').val(0)
         $('#valor_por_pagar').val(0)
 
-        if(id) {
+        if (id) {
             $.ajax({
                 url: '/cobros-y-pagos/cobro/get/' + id,
                 success: data => {
-                    if(data) {
+                    if (data) {
                         const procesoActuacion = data.proceso_etapa_actuacion
-                        if(procesoActuacion) {
-                            if(procesoActuacion.actuacion) {
+                        if (procesoActuacion) {
+                            if (procesoActuacion.actuacion) {
                                 const actuacion = procesoActuacion.actuacion
                                 $('#accion_cobro').val(actuacion.nombre_actuacion)
                             }
 
-                            if(procesoActuacion.proceso_etapa) {
+                            if (procesoActuacion.proceso_etapa) {
                                 const procesoEtapa = procesoActuacion.proceso_etapa
-                                if(procesoEtapa.etapa_proceso) {
+                                if (procesoEtapa.etapa_proceso) {
                                     const etapaProceso = procesoEtapa.etapa_proceso
                                     $('#etapa_cobro').val(etapaProceso.nombre_etapa_proceso)
                                 }
@@ -94,7 +175,7 @@ class Cobro {
 
             const id = $('#id_cobro').val()
             const formData = new FormData(e.target)
-            id && formData.append('id_cobro', id)
+            id && formData.append('id_pago', id)
 
             $.ajax({
                 url: '/cobros-y-pagos/upsert',
@@ -117,8 +198,10 @@ class Cobro {
         if (validateForm(e)) {
 
             const id = $('#id_cobro_pago').val()
+            const idpago = $('#id_pago_pago').val()
             const formData = new FormData(e.target)
             id && formData.append('id_cobro', id)
+            idpago && formData.append('id_pago', idpago)
 
             $.ajax({
                 url: '/cobros-y-pagos/pago/upsert',

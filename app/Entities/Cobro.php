@@ -29,7 +29,7 @@ class Cobro extends Model
     }
 
     public function pago() {
-        return $this->hasOne('App\Entities\Pago', 'id_cobro', 'id_cobro');
+        return $this->hasMany('App\Entities\Pago', 'id_cobro', 'id_cobro');
     }
 
     public function getFechaCobro() {
@@ -42,5 +42,15 @@ class Cobro extends Model
         return date('d/m/Y h:i A', $timestamp);
     }
 
+    public function getPagado() {
+        $total = 0;
+        $pagos = $this->pago;
+        if($pagos) {
+            foreach($pagos as $value) {
+                $total += $value->valor_pago;
+            }
+        }
+        return $total;
+    }
 
 }

@@ -47,7 +47,7 @@
             <th>Fecha cobro</th>
             <th>Cliente</th>
             <th data-breakpoints="all">Fecha de creación</th>
-            <th data-breakpoints="all">Concepto</th>
+            <th>Concepto</th>
             <th>Valor cobrado</th>
             <th>Valor pagado</th>
             <th data-breakpoints="all">Pagos</th>

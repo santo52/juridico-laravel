@@ -341,7 +341,7 @@ class SeguimientoProcesoController extends Controller
 
                     $dataCobro['fecha_cobro'] = date('Y-m-d');
                     $dataCobro['id_cliente'] = $id_cliente;
-                    $dataCobro['concepto'] = 'Cobro actuación: ' . $nombreActuacion;
+                    $dataCobro['concepto'] = $nombreActuacion;
                 }
 
                 $dataCobro['valor'] = $data['valor_pago'];

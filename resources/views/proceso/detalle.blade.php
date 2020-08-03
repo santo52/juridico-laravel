@@ -209,23 +209,6 @@
                         disabled />
                 </div>
             </div>
-
-            <div class="separator margin"></div>
-            <span style="display:none">{!! $key = 1 !!}</span>
-            @foreach($tiposResultado as $c => $tipoResultado)
-                @if($key == 1)
-                <div class="form-group row">
-                @endif
-                <div class="col-xs-12 col-sm-4">
-                    <label for="telefono" class="control-label">{{$tipoResultado->nombre_tipo_resultado}}</label>
-                    <input type="text" class="form-control" @if($proceso && $tipoResultado->id_tipo_resultado == 5) value="{{$proceso->numero_proceso}}" @else value="{{$tipoResultado->value}}" @endif disabled />
-                </div>
-                @if($key == 3 || ($c + 1) == count($tiposResultado))
-                    </div>
-                    <span style="display:none">{!! $key = 0 !!}</span>
-                @endif
-                <span style="display:none">{!! $key++ !!}</span>
-            @endforeach
             @endif
 
             <div class="separator margin"></div>

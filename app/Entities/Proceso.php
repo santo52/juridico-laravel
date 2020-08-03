@@ -73,6 +73,14 @@ class Proceso extends BaseModel
         return $this->hasOne('App\Entities\EntidadJusticia', 'id_entidad_justicia', 'id_entidad_justicia');
     }
 
+    public function entidadPrimeraInstancia() {
+        return $this->hasOne('App\Entities\EntidadJusticia', 'id_entidad_justicia', 'entidad_justicia_primera_instancia');
+    }
+
+    public function entidadSegundaInstancia() {
+        return $this->hasOne('App\Entities\EntidadJusticia', 'id_entidad_justicia', 'entidad_justicia_segunda_instancia');
+    }
+
     public function municipio()
     {
         return $this->hasOne('App\Entities\Municipio', 'id_municipio', 'id_municipio');

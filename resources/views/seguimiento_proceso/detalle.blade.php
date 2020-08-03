@@ -191,7 +191,23 @@
                 @endif
                 <div class="col-xs-12 col-sm-4">
                     <label for="telefono" class="control-label">{{$tipoResultado->nombre_tipo_resultado}}</label>
-                    <input type="text" class="form-control" @if($proceso && $tipoResultado->id_tipo_resultado == 5) value="{{$proceso->numero_proceso}}" @else value="{{$tipoResultado->value}}" @endif disabled />
+                    @if($proceso && $tipoResultado->id_tipo_resultado == 5)
+                        <input type="text" class="form-control" value="{{$proceso->numero_proceso}}" disabled />
+                    @elseif($proceso && $tipoResultado->id_tipo_resultado == 6)
+                        @if($proceso->entidadPrimeraInstancia)
+                            <input type="text" style="font-size: 10px;" class="form-control" value="{{$proceso->entidadPrimeraInstancia->nombre_entidad_justicia}} ({{$proceso->entidadPrimeraInstancia->getMunicipio()}} - {{$proceso->entidadPrimeraInstancia->getDepartamento()}})" disabled />
+                        @else
+                            <input type="text" class="form-control" disabled />
+                        @endif
+                    @elseif($proceso && $tipoResultado->id_tipo_resultado == 7)
+                        @if($proceso->entidadSegundaInstancia)
+                            <input type="text" style="font-size: 10px;" class="form-control" value="{{$proceso->entidadSegundaInstancia->nombre_entidad_justicia}} ({{$proceso->entidadSegundaInstancia->getMunicipio()}} - {{$proceso->entidadSegundaInstancia->getDepartamento()}})" disabled />
+                        @else
+                            <input type="text" class="form-control" disabled />
+                        @endif
+                    @else
+                        <input type="text" class="form-control" value="{{$tipoResultado->value}}" disabled />
+                    @endif
                 </div>
                 @if($key == 3 || ($c + 1) == count($tiposResultado))
                     </div>

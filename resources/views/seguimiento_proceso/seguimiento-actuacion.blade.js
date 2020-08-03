@@ -44,7 +44,7 @@ class SeguimientoActuacion {
             const allDocs = $reqDocuments.every(item => $(item).data('filename'));
 
             const $fieldList = $(e.target).find('input.form-control, select.form-control, textarea.form-control').toArray()
-            const allSaved = $fieldList.every(item => $(item).attr('disabled') || $(item).val().trim());
+            const allSaved = $fieldList.every(item => $(item).attr('disabled') || $(item).val().trim() || $(item).attr('type') == 'search');
             const idProcesoEtapaActuacion = $('#id_proceso_etapa_actuacion').val()
             const finalizado = $('#finalizado').val() == 1
 

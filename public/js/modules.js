@@ -2508,7 +2508,7 @@ var SeguimientoActuacion = /*#__PURE__*/function () {
         });
         var $fieldList = $(e.target).find('input.form-control, select.form-control, textarea.form-control').toArray();
         var allSaved = $fieldList.every(function (item) {
-          return $(item).attr('disabled') || $(item).val().trim();
+          return $(item).attr('disabled') || $(item).val().trim() || $(item).attr('type') == 'search';
         });
         var idProcesoEtapaActuacion = $('#id_proceso_etapa_actuacion').val();
         var finalizado = $('#finalizado').val() == 1;

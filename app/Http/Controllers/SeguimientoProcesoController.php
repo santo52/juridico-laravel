@@ -16,6 +16,7 @@ use App\Entities\ProcesoEtapaActuacionPlantillas;
 use App\Entities\Actuacion;
 use App\Entities\ActuacionDocumento;
 use App\Entities\Cobro;
+use App\Entities\EntidadJusticia;
 use App\Entities\PlantillaDocumento;
 use App\Entities\ProcesoEtapaActuacionDocumento;
 use App\Entities\ProcesoTipoResultado;
@@ -192,6 +193,9 @@ class SeguimientoProcesoController extends Controller
         $documentos = $this->getDocumentos($procesoEtapa->id_proceso_etapa_actuacion, $procesoEtapa->id_actuacion);
 
         $etapas = TipoProceso::getEtapas($procesoEtapa->id_tipo_proceso)->get();
+
+
+
         foreach($etapas as $key => $etapa) {
             $array = [
                 'id_proceso' => $procesoEtapa->id_proceso,
@@ -211,6 +215,8 @@ class SeguimientoProcesoController extends Controller
             'eliminado' => 0
         ])->get();
 
+        $entidadesJusticia = $this->getEntidadesJusticia($actuacion->tipoResultado->id_tipo_resultado);
+
         return $this->renderSection('seguimiento_proceso.actuacion', [
             'procesoEtapa' => $procesoEtapa,
             'actuacion' => $actuacion,
@@ -218,8 +224,26 @@ class SeguimientoProcesoController extends Controller
             'documentosGenerados' => $list,
             'documentos' => $documentos,
             'etapas' => $etapas,
-            'usuarios' => $usuarios
+            'usuarios' => $usuarios,
+            'entidadesJusticia' => $entidadesJusticia
         ]);
+    }
+
+    private function getEntidadesJusticia($type) {
+
+        if(!in_array($type, [ 6, 7 ])) {
+            return [];
+        }
+
+        $conditional['eliminado'] = 0;
+        $conditional['estado_entidad_justicia'] = '1';
+        if($type === 6) {
+            $conditional['aplica_primera_instancia'] = '1';
+        } else {
+            $conditional['aplica_segunda_instancia'] = '1';
+        }
+
+        return EntidadJusticia::where($conditional)->get();
     }
 
     public function crearActuacion($idProcesoEtapa, $id)
@@ -239,12 +263,14 @@ class SeguimientoProcesoController extends Controller
             'eliminado' => 0
         ])->get();
 
+        $entidadesJusticia = $this->getEntidadesJusticia($actuacion->tipoResultado->id_tipo_resultado);
         return $this->renderSection('seguimiento_proceso.actuacion', [
             'procesoEtapa' => $procesoEtapa,
             'actuacion' => $actuacion,
             'plantillas' => $plantillas,
             'etapas' => $etapas,
-            'usuarios' => $usuarios
+            'usuarios' => $usuarios,
+            'entidadesJusticia' => $entidadesJusticia
         ]);
     }
 
@@ -323,6 +349,10 @@ class SeguimientoProcesoController extends Controller
             } else if ($data['tipo_resultado'] == 5) {
                 $data['numero_radicado'] = $data['resultado_actuacion'];
                 $proceso->update(['numero_proceso' => $data['resultado_actuacion']]);
+            } else if ($data['tipo_resultado'] == 6) {
+                $proceso->update(['entidad_justicia_primera_instancia' => $data['resultado_actuacion']]);
+            } else if ($data['tipo_resultado'] == 7) {
+                $proceso->update(['entidad_justicia_segunda_instancia' => $data['resultado_actuacion']]);
             } else {
                 ProcesoTipoResultado::updateOrCreate(['id_proceso' => $data['id_proceso'], 'id_tipo_resultado' => $data['tipo_resultado']], [
                     'id_proceso' => $data['id_proceso'],

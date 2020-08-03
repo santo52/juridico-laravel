@@ -4,8 +4,6 @@
 
 <div>
 
-
-
     @if($procesoEtapa->finalizado == 0)
     <div class="alert alert-warning" role="alert">
         <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -100,6 +98,13 @@
                 @elseif($actuacion->tipoResultado->tipo_campo === 4)
                     <input type="number" name="resultado_actuacion" class="form-control numeric"
                         value="{{ $procesoEtapa->resultado_actuacion }}" />
+                @elseif($actuacion->tipoResultado->id_tipo_resultado === 6 || $actuacion->tipoResultado->id_tipo_resultado === 7)
+                    <select data-live-search="true" class="form-control" id="resultado_actuacion" name="resultado_actuacion" title="Seleccionar">
+                        @foreach ($entidadesJusticia as $item)
+                            <option @if($procesoEtapa && $item->id_entidad_justicia == $procesoEtapa->resultado_actuacion) selected @endif
+                                value="{{$item->id_entidad_justicia}}">{{$item->nombre_entidad_justicia}}</option>
+                        @endforeach
+                    </select>
                 @else
                 <input type="text" name="resultado_actuacion" class="form-control"
                     value="{{ $procesoEtapa->resultado_actuacion }}" />

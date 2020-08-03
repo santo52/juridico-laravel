@@ -231,7 +231,7 @@ class SeguimientoProcesoController extends Controller
 
     private function getEntidadesJusticia($type) {
 
-        if(!in_array($type, [ 6, 7 ])) {
+        if(!in_array($type, [ 7, 8 ])) {
             return [];
         }
 
@@ -344,14 +344,14 @@ class SeguimientoProcesoController extends Controller
 
         $proceso = Proceso::find($data['id_proceso']);
         if ($proceso) {
-            if ($data['tipo_resultado'] == 4) {
+            if ($data['tipo_resultado'] == 5) {
                 $data['historico'] = 1;
-            } else if ($data['tipo_resultado'] == 5) {
+            } else if ($data['tipo_resultado'] == 6) {
                 $data['numero_radicado'] = $data['resultado_actuacion'];
                 $proceso->update(['numero_proceso' => $data['resultado_actuacion']]);
-            } else if ($data['tipo_resultado'] == 6) {
-                $proceso->update(['entidad_justicia_primera_instancia' => $data['resultado_actuacion']]);
             } else if ($data['tipo_resultado'] == 7) {
+                $proceso->update(['entidad_justicia_primera_instancia' => $data['resultado_actuacion']]);
+            } else if ($data['tipo_resultado'] == 8) {
                 $proceso->update(['entidad_justicia_segunda_instancia' => $data['resultado_actuacion']]);
             } else {
                 ProcesoTipoResultado::updateOrCreate(['id_proceso' => $data['id_proceso'], 'id_tipo_resultado' => $data['tipo_resultado']], [

@@ -95,10 +95,10 @@
                     <input name="resultado_actuacion" id="resultado_actuacion" data-date-format="yyyy-mm-dd"
                     class="form-control datepicker-here" @if($procesoEtapa)
                     value="{{$procesoEtapa->resultado_actuacion }}" @endif />
-                @elseif($actuacion->tipoResultado->tipo_campo === 4)
+                @elseif($actuacion->tipoResultado->tipo_campo === 5)
                     <input type="number" name="resultado_actuacion" class="form-control numeric"
                         value="{{ $procesoEtapa->resultado_actuacion }}" />
-                @elseif($actuacion->tipoResultado->id_tipo_resultado === 6 || $actuacion->tipoResultado->id_tipo_resultado === 7)
+                @elseif($actuacion->tipoResultado->id_tipo_resultado === 7 || $actuacion->tipoResultado->id_tipo_resultado === 8)
                     <select data-live-search="true" class="form-control" id="resultado_actuacion" name="resultado_actuacion" title="Seleccionar">
                         @foreach ($entidadesJusticia as $item)
                             <option @if($procesoEtapa && $item->id_entidad_justicia == $procesoEtapa->resultado_actuacion) selected @endif

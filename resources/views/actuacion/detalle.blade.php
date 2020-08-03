@@ -29,7 +29,7 @@
                                 <label class="lblForm">Tiempo de vencimiento</label>
                                 <input {{!isset($permissions->cambiar_dia_de_vencimiento) ? 'disabled' : '' }}
                                     maxlength="5" autocomplete="off" type="text" id="diasVencimiento"
-                                    name="diasVencimiento" class="form-control required numeric"
+                                    name="dias_vencimiento" class="form-control required numeric"
                                     value="{{ isset($actuacion) ? $actuacion['dias_vencimiento'] : '' }}" />
                             </div>
                             <div class="col-sm-3">
@@ -89,7 +89,7 @@
                                     <optgroup label="Formatos">
                                     @foreach ($tiposResultado as $key => $item)
                                         @if($item->unico_tipo_resultado != 1 )
-                                        <option @if(isset($actuacion) && $actuacion->tipo_resultado == $key) selected @endif
+                                        <option @if(isset($actuacion) && $actuacion->tipo_resultado == $item->id_tipo_resultado) selected @endif
                                             value="{{$item->id_tipo_resultado}}">{{$item->nombre_tipo_resultado}}</option>
                                         @endif
                                     @endforeach
@@ -97,7 +97,7 @@
                                     <optgroup label="Valores específicos">
                                         @foreach ($tiposResultado as $key => $item)
                                             @if($item->unico_tipo_resultado == 1 )
-                                            <option @if(isset($actuacion) && $actuacion->tipo_resultado == $key) selected @endif
+                                            <option @if(isset($actuacion) && $actuacion->tipo_resultado == $item->id_tipo_resultado) selected @endif
                                                 value="{{$item->id_tipo_resultado}}">{{$item->nombre_tipo_resultado}}</option>
                                             @endif
                                         @endforeach

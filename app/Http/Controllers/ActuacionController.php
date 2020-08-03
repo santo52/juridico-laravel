@@ -64,18 +64,14 @@ class ActuacionController extends Controller
         }
 
         $saved = $this->upsert($request);
-        return response()->json(['saved' => $saved]);
+        return response()->json(['savedsss' => $saved]);
     }
 
     private function upsert(Request $request, $id = false) {
 
         //Guardar en Actuación
         $actuacion = $this->prepareActuacion($request, $id);
-        $saved = $actuacion->save();
-
-        if (!$saved) {
-            return false;
-        }
+        // $saved = $actuacion->save();
 
         $documents = explode(',', $request->get('documents'));
         // $templates = explode(',', $request->get('templates'));
@@ -104,8 +100,7 @@ class ActuacionController extends Controller
         //         ])->save();
         //     }
         // }
-
-        return true;
+        return $actuacion;
     }
 
     private function prepareActuacion(Request $request, $id = false) {
@@ -114,27 +109,6 @@ class ActuacionController extends Controller
         $data['nombre_actuacion'] = trim($request->get('nombreActuacion'));
         $data['actuacion_tiene_cobro'] =  empty($request->get('actuacionTieneCobro')) ? 2 : 1;
         $data['estado_actuacion'] =  empty($request->get('estado')) ? 2 : 1;
-
-        // $data = [
-        //     'nombre_actuacion' => trim($request->get('nombreActuacion')),
-        //     'genera_alertas' => empty($request->get('generaAlertas')) ? 2 : 1,
-        //     'aplica_control_vencimiento' => empty($request->get('aplicaControlVencimiento')) ? 2 : 1,
-        //     'dias_vencimiento' => $request->get('diasVencimiento'),
-        //     'requiere_estudio_favorabilidad' => empty($request->get('requiereEstudioFavorabilidad')) ? 2 : 1,
-        //     'actuacion_tiene_cobro' => empty($request->get('actuacionTieneCobro')) ? 2 : 1,
-        //     'actuacion_creacion_cliente' => empty($request->get('actuacionCreacionCliente')) ? 2 : 1,
-        //     'mostrar_datos_radicado' => empty($request->get('mostrarDatosRadicado')) ? 2 : 1,
-        //     'mostrar_datos_juzgado' => empty($request->get('mostrarDatosJuzgado')) ? 2 : 1,
-        //     'mostrar_datos_respuesta' => empty($request->get('mostrarDatosRespuesta')) ? 2 : 1,
-        //     'mostrar_datos_apelacion' => empty($request->get('mostrarDatosApelacion')) ? 2 : 1,
-        //     'mostrar_datos_cobros' => empty($request->get('mostrarDatosCobros')) ? 2 : 1,
-        //     'programar_audiencia' => empty($request->get('programarAudiencia')) ? 2 : 1,
-        //     'control_entrega_documentos' => empty($request->get('controlEntregaDocumentos')) ? 2 : 1,
-        //     'generar_documentos' => empty($request->get('generarDocumentos')) ? 2 : 1,
-        //     'estado_actuacion' => empty($request->get('estado')) ? 2 : 1,
-        //     'dias_vencimiento_unidad' => $request->get('dias_vencimiento_unidad'),
-        //     'dias_vencimiento_tipo' => $request->get('dias_vencimiento_unidad')
-        // ];
 
         if (!$id) {
             $data['eliminado'] = 0;

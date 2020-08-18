@@ -725,6 +725,11 @@ function errorLog(xhr, status, error) {
     return false;
   }
 
+  if (error === 'unknown status') {
+    location.reload();
+    return false;
+  }
+
   console.log({
     xhr: xhr,
     status: status,

@@ -68,7 +68,7 @@ class Cobro {
 
         if (id) {
             $.ajax({
-                url: '/cobros-y-pagos/pagos/get/' + id,
+                url: '/honorarios/pagos/get/' + id,
                 success: data => {
                     if (data) {
 
@@ -108,7 +108,7 @@ class Cobro {
         $('#id_pago_pago').val(idpago)
         if (id) {
             $.ajax({
-                url: '/cobros-y-pagos/pago/get/' + idpago,
+                url: '/honorarios/pago/get/' + idpago,
                 success: data => {
                     if (data) {
                         $('#fecha_pago').val(data.fecha_pago)

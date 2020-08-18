@@ -180,6 +180,13 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/honorarios/delete/{id}', 'HonorarioController@delete');
     Route::post('/honorarios/cliente/{id}', 'ClienteController@getBasic');
     Route::post('/honorarios/proceso/{id}', 'HonorarioController@getProceso');
+    Route::post('/honorarios/pago/upsert', 'HonorarioController@upsertPago');
+    Route::post('/honorarios/pago/get/{id}', 'HonorarioController@getPago');
+    Route::post('/honorarios/pagos/get/{id}', 'HonorarioController@getPagos');
+
+
+
+
 
     Route::post('/tipos-de-resultado/listar', 'TipoResultadoController@index');
     Route::post('/tipos-de-resultado/upsert', 'TipoResultadoController@upsert');

@@ -40,6 +40,147 @@ class Honorario {
         }
     }
 
+    changeFormaPago(value) {
+        if (value == 1) {
+            $('#informacion_pago_financiero').hide()
+            $('#id_entidad_financiera').removeClass('required').val('')
+            $('#referencia').removeClass('required').val('')
+        } else {
+            $('#informacion_pago_financiero').show()
+            $('#id_entidad_financiera').addClass('required')
+            $('#referencia').addClass('required')
+        }
+    }
+
+    formasPago(id) {
+        switch (id) {
+            case 1:
+                return 'Efectivo'
+            case 2:
+                return 'Consignación'
+            case 3:
+                return 'Cheque'
+            default:
+                return 'Desconocido'
+        }
+    }
+
+    formatDate(date) {
+        const newDate = new Date(date)
+        return newDate.getDate() + '/' + (newDate.getMonth() + 1) + '/' + newDate.getFullYear()
+    }
+
+    deletePagoModal(id) {
+        $('#deletePagoValue').val(id)
+        $('#pagosModal').modal('hide')
+        setTimeout(() => {
+            $('#deletePagoModal').modal('show')
+        }, 500);
+    }
+
+    deletePagoCancelar() {
+        $('#deletePagoValue').val('')
+        $('#deletePagoModal').modal('hide')
+        setTimeout(() => {
+            $('#pagosModal').modal('show')
+        }, 500);
+    }
+
+    deletePagoAceptar() {
+        const id = $('#deletePagoValue').val()
+        $('#item-pago-' + id).remove()
+        this.deletePagoCancelar()
+    }
+
+    pagoModalOpen(id) {
+
+        $('#pagosModal').modal('show')
+        $('#lista-pagos tbody').html('')
+        $('#lista-pagos').footable('refresh')
+
+        if (id) {
+            $.ajax({
+                url: '/honorarios/pagos/get/' + id,
+                success: data => {
+                    if (data) {
+
+                        const html = data.map(item => `<tr id="item-pago-${item.id_pago_honorario}">
+                            <td>${this.formatDate(item.fecha_consignacion)}</td>
+                            <td>${this.formasPago(item.forma_pago)}</td>
+                            <td>${item.numero_cuenta || 'En efectivo'}</td>
+                            <td>${item.valor_pago}</td>
+                            <td>
+                                <div class="flex justify-center table-actions">
+                                    <a href="javascript:void(0)" title="Editar pago"
+                                        onclick="honorario.registrarPagoModalOpen('${item.id_honorario}', '${item.id_pago_honorario}')" class="btn text-primary" type="button">
+                                        <span class="glyphicon glyphicon-edit"></span>
+                                    </a>
+                                    <a href="javascript:void(0)" title="Eliminar pago"
+                                        onclick="honorario.deletePagoModal('${item.id_pago_honorario}')" class="btn text-danger" type="button">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </a>
+                                </div>
+
+                            </td>
+                        </tr>`)
+                        $('#lista-pagos tbody').html(html)
+                    }
+
+                    $('#lista-pagos').footable('refresh')
+                }
+            })
+        }
+    }
+
+    upsertPago(e) {
+        e.preventDefault()
+        e.stopPropagation()
+
+        if (validateForm(e)) {
+
+            const id = $('#id_cobro_pago').val()
+            const idpago = $('#id_pago_pago').val()
+            const formData = new FormData(e.target)
+            id && formData.append('id_honorario', id)
+            idpago && formData.append('id_pago', idpago)
+
+            $.ajax({
+                url: '/honorarios/pago/upsert',
+                data: new URLSearchParams(formData),
+                success: data => {
+                    if (data.saved) {
+                        location.reload()
+                    }
+                }
+            })
+        }
+
+        return false
+    }
+
+    registrarPagoModalOpen(id, idpago = 0) {
+        $('#editarPagoModal').modal('show')
+        this.changeFormaPago(1)
+        $('#id_entidad_financiera').val(0).selectpicker('refresh')
+        $('#id_cobro_pago').val(id)
+        $('#id_pago_pago').val(idpago)
+        if (id) {
+            $.ajax({
+                url: '/honorarios/pago/get/' + idpago,
+                success: data => {
+                    if (data) {
+                        $('#fecha_pago').val(data.fecha_consignacion)
+                        $('#forma_pago').val(data.forma_pago).selectpicker('refresh')
+                        $('#id_entidad_financiera').val(data.id_entidad_financiera).selectpicker('refresh')
+                        $('#referencia').val(data.numero_cuenta)
+                        this.changeFormaPago(data.forma_pago)
+                        $('#valor_pago').val(data.valor_pago)
+                    }
+                }
+            })
+        }
+    }
+
     onChangeComisiones() {
         const valorComision = parseFloat($('#valor_comision').val()) || 0
         const retefuente = parseFloat($('#retefuente').val()) || 0

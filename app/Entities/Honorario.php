@@ -25,7 +25,11 @@ class Honorario extends Model
     }
 
     public function pagoHonorario() {
-        return $this->belongsTo('App\Entities\PagoHonorario', 'id_honorario', 'id_honorario');
+        return $this->hasMany('App\Entities\PagoHonorario', 'id_honorario', 'id_honorario');
+    }
+
+    public function pagoHonorarios() {
+        return $this->hasMany('App\Entities\PagoHonorario', 'id_honorario', 'id_honorario');
     }
 
     public function cliente() {
@@ -37,7 +41,13 @@ class Honorario extends Model
     }
 
     public function getValorPagado() {
-        return 0;
+        $total = 0;
+        if($this->pagoHonorarios) {
+            foreach($this->pagoHonorarios as $pago) {
+                $total += $pago->valor_pago;
+            }
+        }
+        return $total;
     }
 
     public function getTotalRetefuente() {

@@ -14,10 +14,10 @@ class PagoHonorario extends Model
 
     protected $fillable = [
         "id_pago_honorario", "fecha_consignacion", "id_entidad_financiera",
-        "numero_cuenta", "valor_pago", "eliminado", "id_honorario"
+        "numero_cuenta", "valor_pago", "eliminado", "id_honorario", "forma_pago"
     ];
 
-    public function honorarios() {
-        return $this->hasOne('App\Entities\Honorario', 'id_honorario', 'id_honorario');
+    public function honorario() {
+        return $this->belongsTo('App\Entities\Honorario', 'id_honorario', 'id_honorario');
     }
 }

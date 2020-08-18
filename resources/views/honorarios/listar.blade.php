@@ -64,12 +64,20 @@
             <td>
                 <div class="flex justify-center table-actions">
                     @isset ($permissions->editar)
-                    <a href="javascript:void(0)"
-                        onclick="honorario.createEditModal('{{$honorario['id_honorario']}}')"
-                        class="btn text-primary" type="button">
+                    <a href="javascript:void(0)" title="Editar cobro"
+                        onclick="honorario.createEditModal('{{$honorario['id_honorario']}}')" class="btn text-primary" type="button">
                         <span class="glyphicon glyphicon-pencil"></span>
                     </a>
                     @endisset
+                    <a href="javascript:void(0)" title="Listar pagos"
+                        onclick="honorario.pagoModalOpen('{{$honorario['id_honorario']}}')" class="btn text-warning" type="button">
+                        <span class="glyphicon glyphicon-usd"></span>
+                    </a>
+                    <a href="javascript:void(0)" title="Registrar pago"
+                        onclick="honorario.registrarPagoModalOpen('{{$honorario['id_honorario']}}')" class="btn text-success"
+                        type="button">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </a>
                     @isset ($permissions->eliminar)
                     <a href="javascript:void(0)" class="btn text-danger" type="button"
                         onclick="honorario.openDelete('{{$honorario['id_honorario']}}')">
@@ -262,10 +270,117 @@
     </div>
 </div>
 
-
-
-
 @endif
+
+
+<div class="modal fade" tabindex="-1" role="dialog" id="pagosModal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="cobrosTitle">Pagos realizados</h4>
+            </div>
+            <form onsubmit="cobro.upsertPago(event)">
+                <div class="modal-body row">
+                    <div class="col-xs-12">
+                        <table id="lista-pagos" class="table" data-empty="Sin pagos">
+                            <thead>
+                                <th>Fecha de pago</th>
+                                <th>Forma de pago</th>
+                                <th>N° Referencia</th>
+                                <th>Valor del pago</th>
+                                <th></th>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer center">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" tabindex="-1" role="dialog" id="editarPagoModal">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="cobrosTitle">Pago realizado</h4>
+            </div>
+            <form onsubmit="honorario.upsertPago(event)">
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <div class="col-xs-12 col-sm-6">
+                            <label for="fecha_pago" class="control-label">Fecha de pago</label>
+                            <input name="fecha_consignacion" id="fecha_pago" data-date-format="yyyy-mm-dd" class="form-control datepicker-here required" />
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <label for="forma_pago" class="control-label">Forma de pago</label>
+                            <select class="form-control required" title="Seleccione" id="forma_pago" name="forma_pago" onchange="cobro.changeFormaPago(this.value)">
+                                <option value="1">Efectivo</option>
+                                <option value="2">Consignación</option>
+                                <option value="3">Cheque</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row" id="informacion_pago_financiero">
+                        <div class="col-xs-12 col-sm-6">
+                            <label for="id_entidad_financiera" class="control-label">* Entidad financiera</label>
+                            <select class="form-control" title="Seleccione" data-live-search="true" name="id_entidad_financiera" id="id_entidad_financiera">
+                                @foreach ($entidadesFinancieras as $item)
+                                    <option value="{{$item->id_entidad_financiera}}">{{$item->nombre_entidad_financiera}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <label for="referencia" class="control-label">* Número de cuenta</label>
+                            <input class="form-control"  name="numero_cuenta" id="referencia" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="valor_pago" class="control-label">Valor pagado</label>
+                        <input name="valor_pago" id="valor_pago" class="form-control numeric required" />
+                    </div>
+                </div>
+                <div class="modal-footer center">
+                    <input type="hidden" id="id_cobro_pago" />
+                    <input type="hidden" id="id_pago_pago" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" tabindex="-1" role="dialog" id="deletePagoModal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Eliminar pago</h4>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro que desea eliminar el pago?</p>
+            </div>
+            <div class="modal-footer center">
+                <input type="hidden" id="deletePagoValue" />
+                <button type="button" onClick="cobro.deletePagoCancelar()" class="btn btn-default">Cancelar</button>
+                <button type="button" onClick="cobro.deletePagoAceptar()" class="btn btn-danger">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 @endsection

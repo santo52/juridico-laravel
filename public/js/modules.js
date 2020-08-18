@@ -516,7 +516,7 @@ var Cobro = /*#__PURE__*/function () {
 
       if (id) {
         $.ajax({
-          url: '/cobros-y-pagos/pagos/get/' + id,
+          url: '/honorarios/pagos/get/' + id,
           success: function success(data) {
             if (data) {
               var html = data.map(function (item) {
@@ -544,7 +544,7 @@ var Cobro = /*#__PURE__*/function () {
 
       if (id) {
         $.ajax({
-          url: '/cobros-y-pagos/pago/get/' + idpago,
+          url: '/honorarios/pago/get/' + idpago,
           success: function success(data) {
             if (data) {
               $('#fecha_pago').val(data.fecha_pago);
@@ -1436,6 +1436,147 @@ var Honorario = /*#__PURE__*/function () {
       }
     }
   }, {
+    key: "changeFormaPago",
+    value: function changeFormaPago(value) {
+      if (value == 1) {
+        $('#informacion_pago_financiero').hide();
+        $('#id_entidad_financiera').removeClass('required').val('');
+        $('#referencia').removeClass('required').val('');
+      } else {
+        $('#informacion_pago_financiero').show();
+        $('#id_entidad_financiera').addClass('required');
+        $('#referencia').addClass('required');
+      }
+    }
+  }, {
+    key: "formasPago",
+    value: function formasPago(id) {
+      switch (id) {
+        case 1:
+          return 'Efectivo';
+
+        case 2:
+          return 'Consignación';
+
+        case 3:
+          return 'Cheque';
+
+        default:
+          return 'Desconocido';
+      }
+    }
+  }, {
+    key: "formatDate",
+    value: function formatDate(date) {
+      var newDate = new Date(date);
+      return newDate.getDate() + '/' + (newDate.getMonth() + 1) + '/' + newDate.getFullYear();
+    }
+  }, {
+    key: "deletePagoModal",
+    value: function deletePagoModal(id) {
+      $('#deletePagoValue').val(id);
+      $('#pagosModal').modal('hide');
+      setTimeout(function () {
+        $('#deletePagoModal').modal('show');
+      }, 500);
+    }
+  }, {
+    key: "deletePagoCancelar",
+    value: function deletePagoCancelar() {
+      $('#deletePagoValue').val('');
+      $('#deletePagoModal').modal('hide');
+      setTimeout(function () {
+        $('#pagosModal').modal('show');
+      }, 500);
+    }
+  }, {
+    key: "deletePagoAceptar",
+    value: function deletePagoAceptar() {
+      var id = $('#deletePagoValue').val();
+      $('#item-pago-' + id).remove();
+      this.deletePagoCancelar();
+    }
+  }, {
+    key: "pagoModalOpen",
+    value: function pagoModalOpen(id) {
+      var _this6 = this;
+
+      $('#pagosModal').modal('show');
+      $('#lista-pagos tbody').html('');
+      $('#lista-pagos').footable('refresh');
+
+      if (id) {
+        $.ajax({
+          url: '/honorarios/pagos/get/' + id,
+          success: function success(data) {
+            if (data) {
+              var html = data.map(function (item) {
+                return "<tr id=\"item-pago-".concat(item.id_pago_honorario, "\">\n                            <td>").concat(_this6.formatDate(item.fecha_consignacion), "</td>\n                            <td>").concat(_this6.formasPago(item.forma_pago), "</td>\n                            <td>").concat(item.numero_cuenta || 'En efectivo', "</td>\n                            <td>").concat(item.valor_pago, "</td>\n                            <td>\n                                <div class=\"flex justify-center table-actions\">\n                                    <a href=\"javascript:void(0)\" title=\"Editar pago\"\n                                        onclick=\"honorario.registrarPagoModalOpen('").concat(item.id_honorario, "', '").concat(item.id_pago_honorario, "')\" class=\"btn text-primary\" type=\"button\">\n                                        <span class=\"glyphicon glyphicon-edit\"></span>\n                                    </a>\n                                    <a href=\"javascript:void(0)\" title=\"Eliminar pago\"\n                                        onclick=\"honorario.deletePagoModal('").concat(item.id_pago_honorario, "')\" class=\"btn text-danger\" type=\"button\">\n                                        <span class=\"glyphicon glyphicon-trash\"></span>\n                                    </a>\n                                </div>\n\n                            </td>\n                        </tr>");
+              });
+              $('#lista-pagos tbody').html(html);
+            }
+
+            $('#lista-pagos').footable('refresh');
+          }
+        });
+      }
+    }
+  }, {
+    key: "upsertPago",
+    value: function upsertPago(e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (validateForm(e)) {
+        var id = $('#id_cobro_pago').val();
+        var idpago = $('#id_pago_pago').val();
+        var formData = new FormData(e.target);
+        id && formData.append('id_honorario', id);
+        idpago && formData.append('id_pago', idpago);
+        $.ajax({
+          url: '/honorarios/pago/upsert',
+          data: new URLSearchParams(formData),
+          success: function success(data) {
+            if (data.saved) {
+              location.reload();
+            }
+          }
+        });
+      }
+
+      return false;
+    }
+  }, {
+    key: "registrarPagoModalOpen",
+    value: function registrarPagoModalOpen(id) {
+      var _this7 = this;
+
+      var idpago = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+      $('#editarPagoModal').modal('show');
+      this.changeFormaPago(1);
+      $('#id_entidad_financiera').val(0).selectpicker('refresh');
+      $('#id_cobro_pago').val(id);
+      $('#id_pago_pago').val(idpago);
+
+      if (id) {
+        $.ajax({
+          url: '/honorarios/pago/get/' + idpago,
+          success: function success(data) {
+            if (data) {
+              $('#fecha_pago').val(data.fecha_consignacion);
+              $('#forma_pago').val(data.forma_pago).selectpicker('refresh');
+              $('#id_entidad_financiera').val(data.id_entidad_financiera).selectpicker('refresh');
+              $('#referencia').val(data.numero_cuenta);
+
+              _this7.changeFormaPago(data.forma_pago);
+
+              $('#valor_pago').val(data.valor_pago);
+            }
+          }
+        });
+      }
+    }
+  }, {
     key: "onChangeComisiones",
     value: function onChangeComisiones() {
       var valorComision = parseFloat($('#valor_comision').val()) || 0;
@@ -1696,23 +1837,23 @@ var Honorario = /*#__PURE__*/function () {
   }, {
     key: "changeCliente",
     value: function changeCliente(self) {
-      var _this6 = this;
+      var _this8 = this;
 
       var id = $(self).val();
       $.ajax({
         url: '/cliente/basic/' + id,
         success: function success(cliente) {
           $('#documento_cliente').val(cliente.numero_documento);
-          $('#telefono_cliente').val(_this6.formatTelefonoCliente(cliente));
+          $('#telefono_cliente').val(_this8.formatTelefonoCliente(cliente));
           $('#indicativo_cliente').text('+' + cliente.indicativo);
           $('#nombre_intermediario').val((cliente.intermediario_p_apellido || '') + ' ' + (cliente.intermediario_s_apellido || '') + ' ' + (cliente.intermediario_p_nombre || '') + ' ' + (cliente.intermediario_s_nombre || ''));
           $('#nombre_beneficiario').val(cliente.nombre_beneficiario);
           $('#indicativo_beneficiario').val(cliente.indicativo_beneficiario);
-          $('#telefono_beneficiario').val(_this6.formatTelefonoBeneficiario(cliente));
+          $('#telefono_beneficiario').val(_this8.formatTelefonoBeneficiario(cliente));
           $('#email_beneficiario').val(cliente.correo_electronico_beneficiario);
           $('#email_cliente').val(cliente.correo_electronico_cliente);
           $('#estado_vital_cliente').val(cliente.estado_vital_cliente == 1 ? 'vivo' : 'fallecido');
-          $('#telefono_intermediario').val(_this6.formatTelefonoIntermediario(cliente));
+          $('#telefono_intermediario').val(_this8.formatTelefonoIntermediario(cliente));
           $('#indicativo_intermediario').val(cliente.indicativo_intermediario);
           $('#email_intermediario').val(cliente.correo_electronico_intermediario);
         }
@@ -1938,7 +2079,7 @@ var Menu = /*#__PURE__*/function () {
   }, {
     key: "createModal",
     value: function createModal(id) {
-      var _this7 = this;
+      var _this9 = this;
 
       var title = id ? 'Crear' : 'Editar';
       var that = this;
@@ -1958,7 +2099,7 @@ var Menu = /*#__PURE__*/function () {
           $('#create_ruta_menu').val(data.ruta_menu);
           $('#create_orden_menu').val(data.orden_menu);
           var html = (data.acciones || []).map(function (accion) {
-            return _this7.rowAccion(accion);
+            return _this9.rowAccion(accion);
           });
           that.renderParents(data.parents);
           $('#tableCreateModal tbody').html(html.join(''));
@@ -2066,7 +2207,7 @@ var Menu = /*#__PURE__*/function () {
   }, {
     key: "upsertAccion",
     value: function upsertAccion(e) {
-      var _this8 = this;
+      var _this10 = this;
 
       e.preventDefault();
       e.stopPropagation();
@@ -2076,7 +2217,7 @@ var Menu = /*#__PURE__*/function () {
         url: '/opciones/accion/upsert',
         data: new URLSearchParams(formData),
         success: function success(data) {
-          var html = _this8.rowAccion(data);
+          var html = _this10.rowAccion(data);
 
           var $item = $('#accionRow' + data.id_accion);
 
@@ -2140,7 +2281,7 @@ var Perfil = /*#__PURE__*/function () {
   }, {
     key: "redrawTableModal",
     value: function redrawTableModal(id) {
-      var _this9 = this;
+      var _this11 = this;
 
       return $.ajax({
         url: '/perfil/get/' + (id || 0),
@@ -2150,13 +2291,13 @@ var Perfil = /*#__PURE__*/function () {
           });
           $('#listaMenu').html(html).selectpicker('refresh');
           html = data.selectedMenus.map(function (menu) {
-            return _this9.getRow(menu.id_menu_perfil, menu.nombre_menu, menu.acciones);
+            return _this11.getRow(menu.id_menu_perfil, menu.nombre_menu, menu.acciones);
           });
           $('#tableCreateModal tbody').html(html).children('.footable-empty').remove();
           $('#tableCreateModal').footable();
           $('#tableCreateModal select').selectpicker('refresh');
 
-          _this9.addSelectListener();
+          _this11.addSelectListener();
 
           return data;
         }
@@ -2197,7 +2338,7 @@ var Perfil = /*#__PURE__*/function () {
   }, {
     key: "addMenu",
     value: function addMenu() {
-      var _this10 = this;
+      var _this12 = this;
 
       var id_menu = $('#listaMenu').val();
       var id_perfil = $('#createValue').val() || 0;
@@ -2217,7 +2358,7 @@ var Perfil = /*#__PURE__*/function () {
           var saved = _ref12.saved;
 
           if (saved) {
-            _this10.redrawTableModal(id_perfil);
+            _this12.redrawTableModal(id_perfil);
           }
         }
       });
@@ -2495,23 +2636,23 @@ var Proceso = /*#__PURE__*/function () {
   }, {
     key: "changeCliente",
     value: function changeCliente(self) {
-      var _this11 = this;
+      var _this13 = this;
 
       var id = $(self).val();
       $.ajax({
         url: '/cliente/basic/' + id,
         success: function success(cliente) {
           $('#documento_cliente').val(cliente.numero_documento);
-          $('#telefono_cliente').val(_this11.formatTelefonoCliente(cliente));
+          $('#telefono_cliente').val(_this13.formatTelefonoCliente(cliente));
           $('#indicativo_cliente').text('+' + cliente.indicativo);
           $('#nombre_intermediario').val((cliente.intermediario_p_apellido || '') + ' ' + (cliente.intermediario_s_apellido || '') + ' ' + (cliente.intermediario_p_nombre || '') + ' ' + (cliente.intermediario_s_nombre || ''));
           $('#nombre_beneficiario').val(cliente.nombre_beneficiario);
           $('#indicativo_beneficiario').val(cliente.indicativo_beneficiario);
-          $('#telefono_beneficiario').val(_this11.formatTelefonoBeneficiario(cliente));
+          $('#telefono_beneficiario').val(_this13.formatTelefonoBeneficiario(cliente));
           $('#email_beneficiario').val(cliente.correo_electronico_beneficiario);
           $('#email_cliente').val(cliente.correo_electronico_cliente);
           $('#estado_vital_cliente').val(cliente.estado_vital_cliente == 1 ? 'vivo' : 'fallecido');
-          $('#telefono_intermediario').val(_this11.formatTelefonoIntermediario(cliente));
+          $('#telefono_intermediario').val(_this13.formatTelefonoIntermediario(cliente));
           $('#indicativo_intermediario').val(cliente.indicativo_intermediario);
           $('#email_intermediario').val(cliente.correo_electronico_intermediario);
           $('#id_municipio_cliente').val(cliente.nombre_municipio);
@@ -2898,7 +3039,7 @@ var SeguimientoProceso = /*#__PURE__*/function () {
   }, {
     key: "saveComentario",
     value: function saveComentario(e) {
-      var _this12 = this;
+      var _this14 = this;
 
       e.preventDefault();
       e.stopPropagation();
@@ -2925,7 +3066,7 @@ var SeguimientoProceso = /*#__PURE__*/function () {
             $table.footable();
           }
 
-          _this12.closeComentarioModal();
+          _this14.closeComentarioModal();
         }
       });
       return false;
@@ -2965,7 +3106,7 @@ var TipoProceso = /*#__PURE__*/function () {
   }, {
     key: "createEtapa",
     value: function createEtapa() {
-      var _this13 = this;
+      var _this15 = this;
 
       var nombre_etapa_proceso = $('#etapaProcesoNombre').val().trim();
 
@@ -2980,7 +3121,7 @@ var TipoProceso = /*#__PURE__*/function () {
           success: function success(data) {
             var id = $('#createValue').val() || 0;
 
-            _this13.renderModalData(id);
+            _this15.renderModalData(id);
 
             $('#tipoProcesoEtapaPopover').popover('hide');
           }
@@ -3032,7 +3173,7 @@ var TipoProceso = /*#__PURE__*/function () {
   }, {
     key: "renderModalData",
     value: function renderModalData() {
-      var _this14 = this;
+      var _this16 = this;
 
       var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
       return $.ajax({
@@ -3044,14 +3185,14 @@ var TipoProceso = /*#__PURE__*/function () {
           $('#listaEtapa').html(htmlListaEtapas.join('')).selectpicker('refresh'); //addRow
 
           var htmlSelectedEtapas = data.selectedEtapas.map(function (e) {
-            return _this14.addRow(e.id_etapa_proceso, e.nombre_etapa_proceso);
+            return _this16.addRow(e.id_etapa_proceso, e.nombre_etapa_proceso);
           });
           $('#tableCreateModal tbody').html(htmlSelectedEtapas.join(''));
           $('#tableCreateModal').footable();
           $("#sortable").sortable({
-            start: _this14.sortableStart,
-            stop: _this14.sortableStop,
-            update: _this14.sortableUpdate
+            start: _this16.sortableStart,
+            stop: _this16.sortableStop,
+            update: _this16.sortableUpdate
           }).disableSelection();
           return data;
         }
@@ -3060,7 +3201,7 @@ var TipoProceso = /*#__PURE__*/function () {
   }, {
     key: "addEtapa",
     value: function addEtapa(self) {
-      var _this15 = this;
+      var _this17 = this;
 
       var id_etapa_proceso = $(self).val();
       var id_tipo_proceso = $('#createValue').val() || 0;
@@ -3076,7 +3217,7 @@ var TipoProceso = /*#__PURE__*/function () {
           id_tipo_proceso: id_tipo_proceso
         }),
         success: function success() {
-          _this15.renderModalData(id_tipo_proceso);
+          _this17.renderModalData(id_tipo_proceso);
         }
       });
     }
@@ -3145,7 +3286,7 @@ var TipoProceso = /*#__PURE__*/function () {
   }, {
     key: "deleteEtapa",
     value: function deleteEtapa(id) {
-      var _this16 = this;
+      var _this18 = this;
 
       var id_tipo_proceso = $('#createValue').val() || 0;
       var params = {
@@ -3156,7 +3297,7 @@ var TipoProceso = /*#__PURE__*/function () {
         url: '/tipos-de-proceso/etapa/delete',
         data: new URLSearchParams(params),
         success: function success(data) {
-          _this16.renderModalData(id_tipo_proceso);
+          _this18.renderModalData(id_tipo_proceso);
         }
       });
     }
@@ -3201,7 +3342,7 @@ var TipoResultado = /*#__PURE__*/function () {
   }, {
     key: "createEtapa",
     value: function createEtapa() {
-      var _this17 = this;
+      var _this19 = this;
 
       var nombre_etapa_proceso = $('#etapaProcesoNombre').val().trim();
 
@@ -3216,7 +3357,7 @@ var TipoResultado = /*#__PURE__*/function () {
           success: function success(data) {
             var id = $('#createValue').val() || 0;
 
-            _this17.renderModalData(id);
+            _this19.renderModalData(id);
 
             $('#tipoProcesoEtapaPopover').popover('hide');
           }
@@ -3344,7 +3485,7 @@ var TipoResultado = /*#__PURE__*/function () {
   }, {
     key: "deleteEtapa",
     value: function deleteEtapa(id) {
-      var _this18 = this;
+      var _this20 = this;
 
       var id_tipo_proceso = $('#createValue').val() || 0;
       var params = {
@@ -3355,7 +3496,7 @@ var TipoResultado = /*#__PURE__*/function () {
         url: '/tipos-de-resultado/etapa/delete',
         data: new URLSearchParams(params),
         success: function success(data) {
-          _this18.renderModalData(id_tipo_proceso);
+          _this20.renderModalData(id_tipo_proceso);
         }
       });
     }

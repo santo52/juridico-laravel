@@ -15,12 +15,14 @@ class Honorario extends Model
     const UPDATED_AT = 'fecha_actualizacion';
 
     protected $fillable = [
-        "id_honorario", "id_proceso", "id_cliente", "numero_caso", "valor_pagado_cliente",
-        "id_intermediario", "fecha_pago", "observacion", "porcentaje_honorarios",
-        "valor_honorarios", "valor_comision", "eliminado",
-        "fecha_actualizacion", "id_usuario_actualizacion",
-        "fecha_creacion", "id_usuario_creacion"
+        "id_honorario", "id_proceso", "porcentaje_honorarios", "valor_comision",
+        "retefuente", "reteica", "fecha_actualizacion", "id_usuario_actualizacion",
+        "fecha_creacion", "id_usuario_creacion", "eliminado"
     ];
+
+    public function proceso(){
+        return $this->belongsTo('App\Entities\Proceso', 'id_proceso', 'id_proceso');
+    }
 
     public function pagoHonorario() {
         return $this->belongsTo('App\Entities\PagoHonorario', 'id_honorario', 'id_honorario');
@@ -31,10 +33,39 @@ class Honorario extends Model
     }
 
     public function getValorAPagar() {
-        return $this->valor_comision;
+        return $this->getTotalHonorarios() + $this->getTotalComisiones();
     }
 
     public function getValorPagado() {
+        return 0;
+    }
+
+    public function getTotalRetefuente() {
+        if($this->valor_comision && $this->retefuente) {
+            return $this->valor_comision * $this->retefuente / 100;
+        }
+        return 0;
+    }
+
+    public function getTotalReteica() {
+        if($this->valor_comision && $this->reteica) {
+            return $this->valor_comision * $this->reteica / 100;
+        }
+        return 0;
+    }
+
+    public function getTotalComisiones() {
+        if($this->valor_comision) {
+            return $this->valor_comision - $this->getTotalRetefuente() - $this->getTotalReteica();
+        }
+        return 0;
+    }
+
+    public function getTotalHonorarios() {
+        if($this->proceso->valor_final_sentencia && $this->porcentaje_honorarios) {
+            return $this->proceso->valor_final_sentencia * $this->porcentaje_honorarios / 100;
+        }
+
         return 0;
     }
 }

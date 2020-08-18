@@ -17,10 +17,10 @@ class ProcesoTipoResultado extends Model
     ];
 
     public function proceso() {
-        $this->belongsTo('App\Entities\Proceso', 'id_proceso', 'id_proceso');
+        return $this->belongsTo('App\Entities\Proceso', 'id_proceso', 'id_proceso');
     }
 
     public function tipoResultado() {
-        $this->belongsTo('App\Entities\TipoResultado', 'id_tipo_resultado', 'id_tipo_resultado');
+        return $this->belongsTo('App\Entities\TipoResultado', 'id_tipo_resultado', 'id_tipo_resultado');
     }
 }

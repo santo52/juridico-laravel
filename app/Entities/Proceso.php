@@ -4,6 +4,7 @@ namespace App\Entities;
 
 use \App\BaseModel;
 use App\Builder\ProcesoBuilder;
+use App\Collection\ProcesoCollection;
 use Illuminate\Support\Facades\DB;
 
 class Proceso extends BaseModel
@@ -29,6 +30,10 @@ class Proceso extends BaseModel
         'fecha_pago', 'ubicacion_fisica_archivo_muerto'
     ];
 
+    public function newCollection(array $models = []) {
+        return new ProcesoCollection($models);
+    }
+
     public function newEloquentBuilder($builder)
     {
         return new ProcesoBuilder($builder, $this);
@@ -51,6 +56,10 @@ class Proceso extends BaseModel
     public function etapa()
     {
         return $this->hasOne('App\Entities\EtapaProceso', 'id_etapa_proceso', 'id_etapa_proceso');
+    }
+
+    public function honorarios(){
+        return $this->hasMany('App\Entities\Honorario', 'id_proceso', 'id_proceso');
     }
 
     public function cliente()

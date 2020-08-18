@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\Entities\TipoProceso;
 use App\Entities\ProcesoEtapa;
 use App\Entities\ProcesoEtapaActuacion;
+use App\Entities\ProcesoTipoResultado;
 use App\Entities\EtapaProceso;
 use App\Entities\Proceso;
 use Illuminate\Support\Facades\Auth;
@@ -20,6 +21,23 @@ class ProcesoBuilder extends Builder
     {
         $this->values = $values;
         parent::__construct($builder);
+    }
+
+    public function addTiposResultadoToProceso(){
+        $tiposResultadoProceso = ProcesoTipoResultado::with('tipoResultado')
+            ->where('id_proceso', $this->values->id_proceso)
+            ->whereRaw('id_tipo_resultado in (12, 14)')
+            ->get();
+
+        foreach($tiposResultadoProceso as $tipo) {
+            if($tipo->id_tipo_resultado === 12) {
+                $this->values->fecha_pago = $tipo->valor_proceso_tipo_resultado;
+            } else if($tipo->id_tipo_resultado === 14) {
+                $this->values->valor_final_sentencia = $tipo->valor_proceso_tipo_resultado;
+            }
+        }
+
+        return $this->values;
     }
 
     public function createFirstActuacion()

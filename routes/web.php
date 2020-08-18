@@ -177,6 +177,8 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/honorarios/listar', 'HonorarioController@index');
     Route::post('/honorarios/upsert', 'HonorarioController@upsert');
     Route::post('/honorarios/cliente/{id}', 'ClienteController@getBasic');
+    Route::post('/honorarios/proceso/{id}', 'HonorarioController@getProceso');
+
 
     Route::post('/tipos-de-resultado/listar', 'TipoResultadoController@index');
     Route::post('/tipos-de-resultado/upsert', 'TipoResultadoController@upsert');

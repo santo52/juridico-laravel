@@ -31,34 +31,6 @@
         </table>
     </div>
     <div class="item-pendientes">
-        <span class="pendientes-titulo">Vencimiento para iniciar la próxima acción</span>
-        <table class="table" data-empty="Sin pendientes">
-            <thead>
-                <th>Cliente</th>
-                <th>Ciudad</th>
-                <th>Etapa</th>
-                <th>Acción</th>
-                <th>Fecha fin última acción</th>
-                <th>Fecha próxima acción</th>
-                <th></th>
-            </thead>
-        </table>
-    </div>
-    <div class="item-pendientes">
-        <span class="pendientes-titulo">Procesos con más de un mes sin movimiento</span>
-        <table class="table" data-empty="Sin pendientes">
-            <thead>
-                <th>Cliente</th>
-                <th>Ciudad</th>
-                <th>Etapa</th>
-                <th>Acción</th>
-                <th>Última fecha actualización</th>
-                <th>Usuario última actualización</th>
-                <th></th>
-            </thead>
-        </table>
-    </div>
-    <div class="item-pendientes">
         <span class="pendientes-titulo">Otras tareas programadas</span>
         <table class="table" data-empty="Sin pendientes">
             <thead>

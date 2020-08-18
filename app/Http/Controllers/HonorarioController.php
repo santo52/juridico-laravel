@@ -7,8 +7,10 @@ use App\Entities\Cobro;
 use App\Entities\Proceso;
 use App\Entities\Honorario;
 use App\Entities\PagoHonorario;
+use App\Entities\Pago;
 use App\Entities\Cliente;
 use App\Entities\EntidadFinanciera;
+use App\Entities\ProcesoTipoResultado;
 
 class HonorarioController extends Controller
 {
@@ -16,8 +18,13 @@ class HonorarioController extends Controller
 
         $clientes = Cliente::where(['eliminado' => 0, 'estado_cliente' => '1'])->get();
         $honorarios = Honorario::with('pagoHonorario', 'cliente.persona')->where('eliminado', 0)->get();
+        foreach($honorarios as $honorario) {
+            $honorario->proceso->addTiposResultadoToProceso();
+        }
+        $procesos = Proceso::select('id_proceso', 'numero_proceso')->where('eliminado', 0)->get();
         return $this->renderSection('honorarios.listar', [
             'honorarios' => $honorarios,
+            'procesos' => $procesos,
             'clientes' => $clientes
         ]);
     }
@@ -86,5 +93,10 @@ class HonorarioController extends Controller
         }
 
         return response()->json(['saved' => $saved]);
+    }
+
+    public function getProceso($id) {
+        $proceso = Proceso::with('cliente.persona', 'cliente.intermediario.persona')->find($id)->addTiposResultadoToProceso();
+        return response()->json($proceso);
     }
 }

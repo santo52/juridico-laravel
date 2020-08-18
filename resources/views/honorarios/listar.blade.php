@@ -2,7 +2,8 @@
 <div class="juridico right-buttons">
     <div class="flex">
         @isset ($permissions->crear)
-        <a style="margin-right: 5px;" href="javascript:void(0)" onclick="honorario.createEditModal()" class="btn btn-default">
+        <a style="margin-right: 5px;" href="javascript:void(0)" onclick="honorario.createEditModal()"
+            class="btn btn-default">
             Crear honorarios
         </a>
         @endisset
@@ -36,7 +37,9 @@
             <th data-breakpoints="all">Cliente</th>
             <th data-breakpoints="all">Valor pagado al cliente</th>
             <th data-breakpoints="all">Fecha de pago cliente</th>
-            <th data-breakpoints="all">Observaciones</th>
+            <th data-breakpoints="all">Honorarios</th>
+            <th data-breakpoints="all">Comisiones</th>
+            {{-- <th data-breakpoints="all">Observaciones</th> --}}
             <th>Estado</th>
             <th data-filterable="false" data-sortable="false"></th>
         </tr>
@@ -46,32 +49,34 @@
         @foreach ($honorarios as $honorario)
         <tr id="tipoProcesoRow{{$honorario['id_honorario']}}">
             <td>{{$honorario['id_honorario']}}</td>
-            <td>{{$honorario->cliente->intermediario->persona->numero_documento}}</td>
-            <td>{{$honorario->cliente->intermediario->getNombreCompleto()}}</td>
+            <td>{{$honorario->proceso->cliente->intermediario->persona->numero_documento}}</td>
+            <td>{{$honorario->proceso->cliente->intermediario->getNombreCompleto()}}</td>
             <td>$ {{number_format($honorario->getValorAPagar(), 0, ',', '.')}}</td>
             <td>$ {{number_format($honorario->getValorPagado(), 0, ',', '.')}}</td>
-            <td>{{$honorario->cliente->persona->numero_documento}}</td>
-            <td>{{$honorario->cliente->getNombreCompleto()}}</td>
-            <td>$ {{number_format($honorario->valor_pagado_cliente, 0, ',', '.')}}</td>
-            <td>{{$honorario->fecha_pago}}</td>
-            <td>{{$honorario->observacion}}</td>
+            <td>{{$honorario->proceso->cliente->persona->numero_documento}}</td>
+            <td>{{$honorario->proceso->cliente->getNombreCompleto()}}</td>
+            <td>$ {{number_format($honorario->proceso->valor_final_sentencia, 0, ',', '.')}}</td>
+            <td>{{$honorario->proceso->fecha_pago}}</td>
+            <td>$ {{number_format($honorario->getTotalHonorarios(), 0, ',', '.')}}</td>
+            <td>$ {{number_format($honorario->getTotalComisiones(), 0, ',', '.')}}</td>
+            {{-- <td>{{$honorario->observacion}}</td> --}}
             <td>{{$honorario['pago_honorario'] ? 'Pagado' : 'Pendiente'}}</td>
             {{-- <td>
                 <div class="flex justify-center table-actions">
                     @isset ($permissions->editar)
                     <a href="javascript:void(0)"
                         onclick="honorario.createEditModal('{{$honorario['id_tipo_proceso']}}')"
-                        class="btn text-primary" type="button">
-                        <span class="glyphicon glyphicon-pencil"></span>
-                    </a>
-                    @endisset
-                    @isset ($permissions->eliminar)
-                    <a href="javascript:void(0)" class="btn text-danger" type="button"
-                        onclick="honorario.openDelete('{{$honorario['id_tipo_proceso']}}')">
-                        <span class="glyphicon glyphicon-remove"></span>
-                    </a>
-                    @endisset
-                </div>
+            class="btn text-primary" type="button">
+            <span class="glyphicon glyphicon-pencil"></span>
+            </a>
+            @endisset
+            @isset ($permissions->eliminar)
+            <a href="javascript:void(0)" class="btn text-danger" type="button"
+                onclick="honorario.openDelete('{{$honorario['id_tipo_proceso']}}')">
+                <span class="glyphicon glyphicon-remove"></span>
+            </a>
+            @endisset
+            </div>
             </td> --}}
         </tr>
         @endforeach
@@ -114,71 +119,139 @@
             </div>
             <form onsubmit="honorario.upsert(event)">
                 <div class="modal-body">
+                    <h5 class="title-bordered">Liquidación de honorarios</h5>
                     <div class="form-group row">
-                        <div class="col-sm-2">
-                            <label for="recipient-name" class="control-label">Número de caso</label>
-                            <input name="numero_caso" id="numero_caso" class="form-control required" />
-                        </div>
-                        <div class="col-sm-5">
-                            <label for="recipient-name" class="control-label">Documento cliente</label>
-                            <select data-live-search="true" id="documento_cliente" class="form-control required" title="Seleccionar" onchange="honorario.onChangeClient(this)">
-                                @foreach($clientes as $cliente)
-                                    <option value="{{$cliente->id_cliente}}">{{$cliente->persona->numero_documento}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-sm-5">
-                            <label for="recipient-name" class="control-label">Cliente</label>
-                            <select data-live-search="true" id="nombre_cliente" name="id_cliente" class="form-control required" title="Seleccionar" onchange="honorario.onChangeClient(this)">
-                                @foreach($clientes as $cliente)
-                                    <option value="{{$cliente->id_cliente}}">{{$cliente->getNombreCompleto()}}</option>
+                        <div class="col-sm-12">
+                            <label for="recipient-name" class="control-label">Proceso</label>
+                            <select data-live-search="true" name="id_proceso" id="id_proceso"
+                                class="form-control required" title="Seleccionar"
+                                onchange="honorario.onChangeProceso(this)">
+                                @foreach($procesos as $proceso)
+                                <option value="{{$proceso->id_proceso}}">({{$proceso->id_proceso}}) -
+                                    {{$proceso->numero_proceso ? $proceso->numero_proceso : 'Sin Radicado'}}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <div class="col-sm-6">
-                            <label for="recipient-name" class="control-label">Valor pagado al cliente</label>
-                            <input name="valor_pagado_cliente" id="valor_pagado_cliente" class="form-control numeric required" />
+                    <div id="campos-honorarios">
+                        <div class="form-group row">
+                            <div class="col-sm-6">
+                                <label for="recipient-name" class="control-label">Documento cliente</label>
+                                <input id="documento_cliente" class="form-control" disabled />
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="recipient-name" class="control-label">Cliente</label>
+                                <input id="nombre_cliente" class="form-control" disabled />
+                            </div>
                         </div>
-                        <div class="col-sm-6">
-                            <label for="recipient-name" class="control-label">Fecha de pago</label>
-                            <input name="fecha_pago" id="fecha_pago" data-date-format="yyyy-mm-dd" class="form-control datepicker-here required" />
+                        <div class="form-group row">
+                            <div class="col-sm-6">
+                                <label for="recipient-name" class="control-label">Valor pagado al cliente</label>
+                                <input id="valor_pagado_cliente" class="form-control" disabled />
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="recipient-name" class="control-label">Fecha de pago</label>
+                                <input id="fecha_pago_cliente" class="form-control" disabled />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-6">
+                                <label for="recipient-name" class="control-label">Documento intermediario</label>
+                                <input id="documento_intermediario" class="form-control" disabled />
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="recipient-name" class="control-label">Nombre intermediario</label>
+                                <input id="nombre_intermediario" class="form-control" disabled />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-6">
+                                <label for="recipient-name" class="control-label">* Porcentaje honorarios</label>
+                                <input min="0" max="100" type="number" name="porcentaje_honorarios"
+                                    id="porcentaje_honorarios" class="form-control numeric"
+                                    onchange="honorario.onChangePorcentajeHonorarios(this)"
+                                    onkeyup="honorario.onChangePorcentajeHonorarios(this)" />
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="recipient-name" class="control-label">Valor de los honorarios</label>
+                                <input id="valor_honorarios" class="form-control" disabled />
+                            </div>
+                        </div>
+                        {{-- <div class="form-group row">
+                            <div class="col-sm-6">
+                                <label for="recipient-name" class="control-label">Valor pagado al cliente</label>
+                                <input name="valor_pagado_cliente" id="valor_pagado_cliente" class="form-control numeric required" />
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="recipient-name" class="control-label">Fecha de pago</label>
+                                <input name="fecha_pago" id="fecha_pago" data-date-format="yyyy-mm-dd" class="form-control datepicker-here required" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-6">
+                                <label for="recipient-name" class="control-label">Porcentaje de honorarios</label>
+                                <input name="porcentaje_honorarios" id="porcentaje_honorarios" class="form-control numeric required" />
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="recipient-name" class="control-label">Valor honorarios</label>
+                                <input name="valor_honorarios" id="valor_honorarios" class="form-control numeric required" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-4">
+                                <label for="recipient-name" class="control-label">Documento intermediario</label>
+                                <input id="documento_intermediario" disabled class="form-control"/>
+                            </div>
+                            <div class="col-sm-5">
+                                <label for="recipient-name" class="control-label">Nombre intermediario</label>
+                                <input id="nombre_intermediario" disabled class="form-control"/>
+                            </div>
+                            <div class="col-sm-3">
+                                <label for="recipient-name" class="control-label">Valor comisión</label>
+                                <input name="valor_comision" id="valor_comision" class="form-control numeric required" />
+                            </div>
+                        </div> --}}
+                        {{-- <div class="form-group">
+                            <label for="recipient-name" class="control-label">Observaciones</label>
+                            <textarea class="form-control" id="observacion", name="observacion"></textarea>
+                        </div> --}}
+                        <h5 class="title-bordered" style="margin-top:20px">Liquidación de comisiones</h5>
+                        <div class="form-group row">
+                            <div class="col-sm-4">
+                                <label for="recipient-name" class="control-label">Valor comisión</label>
+                                <input name="valor_comision" id="valor_comision" class="form-control numeric" onkeyup="honorario.onChangeComisiones(this)" onchange="honorario.onChangeComisiones(this)" />
+                            </div>
+                            <div class="col-sm-4">
+                                <label for="recipient-name" class="control-label">% retefuente</label>
+                                <input type="number" min="0" max="100" name="retefuente" id="retefuente"
+                                    class="form-control numeric" onkeyup="honorario.onChangeComisiones(this)" onchange="honorario.onChangeComisiones(this)"/>
+                            </div>
+                            <div class="col-sm-4">
+                                <label for="recipient-name" class="control-label">% rete-ICA</label>
+                                <input type="number" min="0" max="100" name="reteica" id="reteica"
+                                    class="form-control numeric" onkeyup="honorario.onChangeComisiones(this)" onchange="honorario.onChangeComisiones(this)"/>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-4">
+                                <label for="recipient-name" class="control-label">Valor retefuente</label>
+                                <input id="valor_retefuente" class="form-control" disabled />
+                            </div>
+                            <div class="col-sm-4">
+                                <label for="recipient-name" class="control-label">Valor rete-ICA</label>
+                                <input id="valor_reteica" class="form-control" disabled />
+                            </div>
+                            <div class="col-sm-4">
+                                <label for="recipient-name" class="control-label">Valor comisión</label>
+                                <input id="total_comision" class="form-control" disabled />
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <div class="col-sm-6">
-                            <label for="recipient-name" class="control-label">Porcentaje de honorarios</label>
-                            <input name="porcentaje_honorarios" id="porcentaje_honorarios" class="form-control numeric required" />
-                        </div>
-                        <div class="col-sm-6">
-                            <label for="recipient-name" class="control-label">Valor honorarios</label>
-                            <input name="valor_honorarios" id="valor_honorarios" class="form-control numeric required" />
-                        </div>
+                    <div class="modal-footer center">
+                        <input type="hidden" id="createValue" />
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-success">Guardar</button>
                     </div>
-                    <div class="form-group row">
-                        <div class="col-sm-4">
-                            <label for="recipient-name" class="control-label">Documento intermediario</label>
-                            <input id="documento_intermediario" disabled class="form-control"/>
-                        </div>
-                        <div class="col-sm-5">
-                            <label for="recipient-name" class="control-label">Nombre intermediario</label>
-                            <input id="nombre_intermediario" disabled class="form-control"/>
-                        </div>
-                        <div class="col-sm-3">
-                            <label for="recipient-name" class="control-label">Valor comisión</label>
-                            <input name="valor_comision" id="valor_comision" class="form-control numeric required" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="recipient-name" class="control-label">Observaciones</label>
-                        <textarea class="form-control" id="observacion", name="observacion"></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer center">
-                    <input type="hidden" id="createValue" />
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-success">Guardar</button>
                 </div>
             </form>
         </div>
@@ -195,7 +268,6 @@
 
 @section('javascript')
 <script>
-
     $(document).ready(function(){
         $('#tipoProcesoEtapaPopover').popover({
             title: "Agregar etapa",

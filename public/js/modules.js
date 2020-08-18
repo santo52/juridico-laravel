@@ -1414,12 +1414,107 @@ var Honorario = /*#__PURE__*/function () {
       $('#createValue').val(id);
       var title = id ? 'Editar honorarios' : 'Nuevo cobro de honorarios';
       $('#createTitle').text(title);
-      $('#tipoNombre').val(''); // this.renderModalData(id).then(({ tipoProceso }) => {
+      $('#tipoNombre').val('');
+      this.resetForm(); // this.renderModalData(id).then(({ tipoProceso }) => {
       //     if (tipoProceso) {
       //         $('#tipoNombre').val(tipoProceso.nombre_tipo_proceso)
       //         $('#tipoEstado').prop('checked', tipoProceso.estado_tipo_proceso == 1).change()
       //     }
       // })
+    }
+  }, {
+    key: "onChangeComisiones",
+    value: function onChangeComisiones() {
+      var valorComision = parseFloat($('#valor_comision').val()) || 0;
+      var retefuente = parseFloat($('#retefuente').val()) || 0;
+      var reteica = parseFloat($('#reteica').val()) || 0;
+      var totalReteica = (valorComision * reteica / 100).toFixed(2);
+      var totalRetefuente = (valorComision * retefuente / 100).toFixed(2);
+      var totalComision = (valorComision - totalReteica - totalRetefuente).toFixed(2);
+      $('#valor_retefuente').val(totalRetefuente);
+      $('#valor_reteica').val(totalReteica);
+      $('#total_comision').val(totalComision);
+    }
+  }, {
+    key: "resetForm",
+    value: function resetForm() {
+      $('#campos-honorarios').hide();
+      $('#documento_cliente').val('');
+      $('#nombre_cliente').val('');
+      $('#valor_pagado_cliente').val(0);
+      $('#fecha_pago_cliente').val('');
+      $('#documento_intermediario').val('');
+      $('#nombre_intermediario').val('');
+      $('#porcentaje_honorarios').val(0);
+      $('#valor_honorarios').val(0);
+    }
+  }, {
+    key: "onChangeProceso",
+    value: function onChangeProceso(self) {
+      var $self = $(self);
+      var id = $self.val();
+
+      if (id) {
+        $.ajax({
+          url: '/honorarios/proceso/' + id,
+          success: function success(data) {
+            console.log(data);
+
+            if (data) {
+              var getNombreCompleto = function getNombreCompleto(data) {
+                var nombreCliente = [];
+
+                if (data) {
+                  if (data.primer_apellido) {
+                    nombreCliente.push(data.primer_apellido);
+                  }
+
+                  if (data.segundo_apellido) {
+                    nombreCliente.push(data.segundo_apellido);
+                  }
+
+                  if (data.primer_nombre) {
+                    nombreCliente.push(data.primer_nombre);
+                  }
+
+                  if (data.segundo_nombre) {
+                    nombreCliente.push(data.segundo_nombre);
+                  }
+                }
+
+                return nombreCliente.join(' ');
+              };
+
+              $('#campos-honorarios').show();
+              $('#documento_cliente').val(data.cliente.persona.numero_documento);
+              $('#nombre_cliente').val(getNombreCompleto(data.cliente.persona));
+              $('#valor_pagado_cliente').val(data.valor_final_sentencia);
+              $('#fecha_pago_cliente').val(data.fecha_pago);
+              $('#documento_intermediario').val(data.cliente.intermediario.persona.numero_documento);
+              $('#nombre_intermediario').val(getNombreCompleto(data.cliente.intermediario.persona));
+              $('#porcentaje_honorarios').val(0);
+              $('#valor_honorarios').val(0);
+            }
+          }
+        });
+      }
+    }
+  }, {
+    key: "onChangePorcentajeHonorarios",
+    value: function onChangePorcentajeHonorarios(self) {
+      var $self = $(self);
+      var value = parseFloat($self.val() || 0);
+
+      if (value > 100) {
+        value = 100;
+        $self.val(100);
+      } else if (value < 0) {
+        value = 0;
+        $self.val(0);
+      }
+
+      var valorPagado = parseFloat($('#valor_pagado_cliente').val() || 0);
+      $('#valor_honorarios').val(valorPagado * value);
     }
   }, {
     key: "onChangeClient",

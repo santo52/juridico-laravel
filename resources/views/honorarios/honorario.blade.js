@@ -14,20 +14,30 @@ class Honorario {
     }
 
     createEditModal(id = 0) {
+        const that = this
         $('#createModal').modal()
         $('#createValue').val(id)
         const title = id ? 'Editar honorarios' : 'Nuevo cobro de honorarios'
         $('#createTitle').text(title)
         $('#tipoNombre').val('')
-        this.resetForm()
-        // this.renderModalData(id).then(({ tipoProceso }) => {
-        //     if (tipoProceso) {
-        //         $('#tipoNombre').val(tipoProceso.nombre_tipo_proceso)
-        //         $('#tipoEstado').prop('checked', tipoProceso.estado_tipo_proceso == 1).change()
-        //     }
-        // })
-
-
+        that.resetForm()
+        if(id) {
+            $.ajax({
+                url: '/honorarios/get/' + id,
+                success: data => {
+                    $('#id_proceso').val(data.id_proceso).selectpicker('refresh')
+                    that.onChangeProceso($('#id_proceso'))
+                    .then(() => {
+                        $('#porcentaje_honorarios').val(data.porcentaje_honorarios)
+                        $('#retefuente').val(data.retefuente)
+                        $('#reteica').val(data.reteica)
+                        $('#valor_comision').val(data.valor_comision)
+                        that.onChangeComisiones()
+                        that.onChangePorcentajeHonorarios($('#porcentaje_honorarios'))
+                    })
+                }
+            })
+        }
     }
 
     onChangeComisiones() {
@@ -45,6 +55,7 @@ class Honorario {
     }
 
     resetForm() {
+        $('#id_proceso').val('').selectpicker('refresh')
         $('#campos-honorarios').hide()
         $('#documento_cliente').val('')
         $('#nombre_cliente').val('')
@@ -62,7 +73,7 @@ class Honorario {
 
         if(id) {
 
-            $.ajax({
+            return $.ajax({
                 url: '/honorarios/proceso/' + id,
                 success: data => {
                     console.log(data)
@@ -98,16 +109,12 @@ class Honorario {
                         $('#fecha_pago_cliente').val(data.fecha_pago)
                         $('#documento_intermediario').val(data.cliente.intermediario.persona.numero_documento)
                         $('#nombre_intermediario').val(getNombreCompleto(data.cliente.intermediario.persona))
-                        $('#porcentaje_honorarios').val(0)
-                        $('#valor_honorarios').val(0)
                     }
                 }
             })
-
-
-
-
         }
+
+        return new Promise()
     }
 
     onChangePorcentajeHonorarios(self) {
@@ -122,7 +129,7 @@ class Honorario {
         }
 
         const valorPagado = parseFloat($('#valor_pagado_cliente').val() || 0)
-        $('#valor_honorarios').val(valorPagado * value)
+        $('#valor_honorarios').val(valorPagado * value / 100)
     }
 
     onChangeClient(self) {
@@ -273,7 +280,9 @@ class Honorario {
 
         if (validateForm(e)) {
 
+            const id = $('#createValue').val()
             const formData = new FormData(e.target)
+            id && formData.append('id_honorario', id)
 
             $.ajax({
                 url: '/honorarios/upsert',

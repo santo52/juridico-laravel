@@ -29,33 +29,15 @@ class HonorarioController extends Controller
         ]);
     }
 
+    public function delete($id) {
+        $honorario = Honorario::find($id);
+        $deleted = $honorario->update(['eliminado' => 1]);
+        return response()->json(['deleted' => $deleted]);
+    }
+
     public function get($id) {
-        $entidadesFinancieras = EntidadFinanciera::where('eliminado', 0)->get();
-        $cobros = Cobro::whereHas('procesoEtapaActuacion.procesoEtapa.proceso', function($q) use($id){
-            $q->where('id_proceso', $id);
-        })
-        ->with('pago', 'procesoEtapaActuacion', 'procesoEtapaActuacion.procesoEtapa.proceso.cliente')
-        ->where('cobro.eliminado', 0)->get();
-
-        $totalCobrado = 0;
-        $totalPagado = 0;
-
-        foreach($cobros as $cobro) {
-            $totalCobrado += $cobro->valor;
-            if($cobro->pago) {
-                $totalPagado += $cobro->getPagado();
-            }
-        }
-
-
-        return $this->renderSection('cobro.detalle', [
-            'cobros' => $cobros,
-            'entidadesFinancieras' => $entidadesFinancieras,
-            'totalCobrado' => $totalCobrado,
-            'totalPagado' => $totalPagado,
-        ]);
-
-
+        $honorario = Honorario::find($id);
+        return response()->json($honorario);
     }
 
     public function getCobro($id) {
@@ -72,7 +54,7 @@ class HonorarioController extends Controller
     public function upsert(Request $request) {
         $id = $request->get('id_honorario');
         $saved = Honorario::updateOrCreate(['id_honorario' => $id], $request->all());
-        return response()->json(['saved' => $saved]);
+        return response()->json(['saved' => $saved, $request->all()]);
     }
 
     public function upsertPago(Request $request) {

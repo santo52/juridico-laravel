@@ -61,23 +61,23 @@
             <td>$ {{number_format($honorario->getTotalComisiones(), 0, ',', '.')}}</td>
             {{-- <td>{{$honorario->observacion}}</td> --}}
             <td>{{$honorario['pago_honorario'] ? 'Pagado' : 'Pendiente'}}</td>
-            {{-- <td>
+            <td>
                 <div class="flex justify-center table-actions">
                     @isset ($permissions->editar)
                     <a href="javascript:void(0)"
-                        onclick="honorario.createEditModal('{{$honorario['id_tipo_proceso']}}')"
-            class="btn text-primary" type="button">
-            <span class="glyphicon glyphicon-pencil"></span>
-            </a>
-            @endisset
-            @isset ($permissions->eliminar)
-            <a href="javascript:void(0)" class="btn text-danger" type="button"
-                onclick="honorario.openDelete('{{$honorario['id_tipo_proceso']}}')">
-                <span class="glyphicon glyphicon-remove"></span>
-            </a>
-            @endisset
-            </div>
-            </td> --}}
+                        onclick="honorario.createEditModal('{{$honorario['id_honorario']}}')"
+                        class="btn text-primary" type="button">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </a>
+                    @endisset
+                    @isset ($permissions->eliminar)
+                    <a href="javascript:void(0)" class="btn text-danger" type="button"
+                        onclick="honorario.openDelete('{{$honorario['id_honorario']}}')">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </a>
+                    @endisset
+                </div>
+            </td>
         </tr>
         @endforeach
         @endif
@@ -91,10 +91,10 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Eliminar tipo de proceso</h4>
+                <h4 class="modal-title">Eliminar honorarios</h4>
             </div>
             <div class="modal-body">
-                <p>¿Está seguro que desea eliminar el tipo de proceso?</p>
+                <p>¿Está seguro que desea eliminar estos honorarios?</p>
             </div>
             <div class="modal-footer center">
                 <input type="hidden" id="deleteValue" />
@@ -219,17 +219,21 @@
                         <div class="form-group row">
                             <div class="col-sm-4">
                                 <label for="recipient-name" class="control-label">Valor comisión</label>
-                                <input name="valor_comision" id="valor_comision" class="form-control numeric" onkeyup="honorario.onChangeComisiones(this)" onchange="honorario.onChangeComisiones(this)" />
+                                <input name="valor_comision" id="valor_comision" class="form-control numeric"
+                                    onkeyup="honorario.onChangeComisiones(this)"
+                                    onchange="honorario.onChangeComisiones(this)" />
                             </div>
                             <div class="col-sm-4">
                                 <label for="recipient-name" class="control-label">% retefuente</label>
                                 <input type="number" min="0" max="100" name="retefuente" id="retefuente"
-                                    class="form-control numeric" onkeyup="honorario.onChangeComisiones(this)" onchange="honorario.onChangeComisiones(this)"/>
+                                    class="form-control numeric" onkeyup="honorario.onChangeComisiones(this)"
+                                    onchange="honorario.onChangeComisiones(this)" />
                             </div>
                             <div class="col-sm-4">
                                 <label for="recipient-name" class="control-label">% rete-ICA</label>
                                 <input type="number" min="0" max="100" name="reteica" id="reteica"
-                                    class="form-control numeric" onkeyup="honorario.onChangeComisiones(this)" onchange="honorario.onChangeComisiones(this)"/>
+                                    class="form-control numeric" onkeyup="honorario.onChangeComisiones(this)"
+                                    onchange="honorario.onChangeComisiones(this)" />
                             </div>
                         </div>
                         <div class="form-group row">

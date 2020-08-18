@@ -1410,17 +1410,30 @@ var Honorario = /*#__PURE__*/function () {
     key: "createEditModal",
     value: function createEditModal() {
       var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+      var that = this;
       $('#createModal').modal();
       $('#createValue').val(id);
       var title = id ? 'Editar honorarios' : 'Nuevo cobro de honorarios';
       $('#createTitle').text(title);
       $('#tipoNombre').val('');
-      this.resetForm(); // this.renderModalData(id).then(({ tipoProceso }) => {
-      //     if (tipoProceso) {
-      //         $('#tipoNombre').val(tipoProceso.nombre_tipo_proceso)
-      //         $('#tipoEstado').prop('checked', tipoProceso.estado_tipo_proceso == 1).change()
-      //     }
-      // })
+      that.resetForm();
+
+      if (id) {
+        $.ajax({
+          url: '/honorarios/get/' + id,
+          success: function success(data) {
+            $('#id_proceso').val(data.id_proceso).selectpicker('refresh');
+            that.onChangeProceso($('#id_proceso')).then(function () {
+              $('#porcentaje_honorarios').val(data.porcentaje_honorarios);
+              $('#retefuente').val(data.retefuente);
+              $('#reteica').val(data.reteica);
+              $('#valor_comision').val(data.valor_comision);
+              that.onChangeComisiones();
+              that.onChangePorcentajeHonorarios($('#porcentaje_honorarios'));
+            });
+          }
+        });
+      }
     }
   }, {
     key: "onChangeComisiones",
@@ -1438,6 +1451,7 @@ var Honorario = /*#__PURE__*/function () {
   }, {
     key: "resetForm",
     value: function resetForm() {
+      $('#id_proceso').val('').selectpicker('refresh');
       $('#campos-honorarios').hide();
       $('#documento_cliente').val('');
       $('#nombre_cliente').val('');
@@ -1455,7 +1469,7 @@ var Honorario = /*#__PURE__*/function () {
       var id = $self.val();
 
       if (id) {
-        $.ajax({
+        return $.ajax({
           url: '/honorarios/proceso/' + id,
           success: function success(data) {
             console.log(data);
@@ -1492,12 +1506,12 @@ var Honorario = /*#__PURE__*/function () {
               $('#fecha_pago_cliente').val(data.fecha_pago);
               $('#documento_intermediario').val(data.cliente.intermediario.persona.numero_documento);
               $('#nombre_intermediario').val(getNombreCompleto(data.cliente.intermediario.persona));
-              $('#porcentaje_honorarios').val(0);
-              $('#valor_honorarios').val(0);
             }
           }
         });
       }
+
+      return new Promise();
     }
   }, {
     key: "onChangePorcentajeHonorarios",
@@ -1514,7 +1528,7 @@ var Honorario = /*#__PURE__*/function () {
       }
 
       var valorPagado = parseFloat($('#valor_pagado_cliente').val() || 0);
-      $('#valor_honorarios').val(valorPagado * value);
+      $('#valor_honorarios').val(valorPagado * value / 100);
     }
   }, {
     key: "onChangeClient",
@@ -1662,7 +1676,9 @@ var Honorario = /*#__PURE__*/function () {
       e.stopPropagation();
 
       if (validateForm(e)) {
+        var id = $('#createValue').val();
         var formData = new FormData(e.target);
+        id && formData.append('id_honorario', id);
         $.ajax({
           url: '/honorarios/upsert',
           data: new URLSearchParams(formData),

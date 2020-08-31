@@ -49,8 +49,8 @@
         @foreach ($honorarios as $honorario)
         <tr id="tipoProcesoRow{{$honorario['id_honorario']}}">
             <td>{{$honorario['id_honorario']}}</td>
-            <td>{{$honorario->proceso->cliente->intermediario->persona->numero_documento}}</td>
-            <td>{{$honorario->proceso->cliente->intermediario->getNombreCompleto()}}</td>
+            <td>{{$honorario->proceso->cliente->intermediario ? $honorario->proceso->cliente->intermediario->persona->numero_documento : 'Sin Intermediario'}}</td>
+            <td>{{$honorario->proceso->cliente->intermediario ? $honorario->proceso->cliente->intermediario->getNombreCompleto() :  'Sin Intermediario'}}</td>
             <td>$ {{number_format($honorario->getValorAPagar(), 0, ',', '.')}}</td>
             <td>$ {{number_format($honorario->getValorPagado(), 0, ',', '.')}}</td>
             <td>{{$honorario->proceso->cliente->persona->numero_documento}}</td>
@@ -183,6 +183,16 @@
                             <div class="col-sm-6">
                                 <label for="recipient-name" class="control-label">Valor de los honorarios</label>
                                 <input id="valor_honorarios" class="form-control" disabled />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-6">
+                                <label for="numero_factura" class="control-label">Número de factura</label>
+                                <input name="numero_factura" id="numero_factura" class="form-control" />
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="valor_factura" class="control-label">Valor factura</label>
+                                <input type="number" id="valor_factura" name="valor_factura" class="form-control numeric" />
                             </div>
                         </div>
                         {{-- <div class="form-group row">

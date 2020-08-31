@@ -17,7 +17,7 @@ class Honorario extends Model
     protected $fillable = [
         "id_honorario", "id_proceso", "porcentaje_honorarios", "valor_comision",
         "retefuente", "reteica", "fecha_actualizacion", "id_usuario_actualizacion",
-        "fecha_creacion", "id_usuario_creacion", "eliminado"
+        "fecha_creacion", "id_usuario_creacion", "eliminado", "valor_factura", "numero_factura"
     ];
 
     public function proceso(){

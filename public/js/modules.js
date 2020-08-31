@@ -1428,6 +1428,8 @@ var Honorario = /*#__PURE__*/function () {
               $('#retefuente').val(data.retefuente);
               $('#reteica').val(data.reteica);
               $('#valor_comision').val(data.valor_comision);
+              $('#numero_factura').val(data.numero_factura);
+              $('#valor_factura').val(data.valor_factura);
               that.onChangeComisiones();
               that.onChangePorcentajeHonorarios($('#porcentaje_honorarios'));
             });

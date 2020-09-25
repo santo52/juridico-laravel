@@ -83,7 +83,7 @@
             {{-- <td>{{$proceso->valor_estudio}}</td> --}}
             <td>{{$proceso->getFechaRetiroServicio()}}</td>
             <td>{{$proceso->ultima_entidad_retiro}}</td>
-            <td>{{$proceso->municipio->nombre_municipio}}</td>
+            <td>{{$proceso->cliente->persona->municipio->nombre_municipio}}</td>
             <td>{{$proceso->acto_administrativo}}</td>
             <td>{{$proceso->normatividad_aplicada_caso}}</td>
             <td>{{$proceso->entidad_justicia_primera_instancia}}</td>

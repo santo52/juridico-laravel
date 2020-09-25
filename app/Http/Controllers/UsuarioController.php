@@ -122,7 +122,7 @@ class UsuarioController extends Controller
         $datausuario['estado_usuario'] = !empty($request->get('estado')) ? 1 : 2;
         $saved = Usuario::updateOrCreate(['id_usuario' => $id], $datausuario);
 
-        if($saved) {
+        if($saved && $request->firma) {
             $request->firma->storeAs('firmas', $saved->id_usuario . '.png', 'uploads');
         }
 

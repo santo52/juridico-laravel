@@ -194,10 +194,25 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/tipos-de-resultado/get/{id}', 'TipoResultadoController@get');
 
 
+    Route::post('/gestion-procesos-activos/listar', 'GestionProcesosReportController@index');
+    Route::post('/gestion-procesos-activos/pdf', 'GestionProcesosReportController@pdf');
+    Route::post('/gestion-procesos-activos/excel', 'GestionProcesosReportController@excel');
+
+    Route::post('/estado-de-cuenta-de-procesos/listar', 'EstadoCuentaReportController@index');
+    Route::post('/estado-de-cuenta-de-procesos/pdf', 'EstadoCuentaReportController@pdf');
+    Route::post('/estado-de-cuenta-de-procesos/excel', 'EstadoCuentaReportController@excel');
+
+    Route::post('/honorarios-y-gastos-procesales/listar', 'HonorariosGastosReportController@index');
+    Route::post('/honorarios-y-gastos-procesales/pdf', 'HonorariosGastosReportController@pdf');
+    Route::post('/honorarios-y-gastos-procesales/excel', 'HonorariosGastosReportController@excel');
+
+    Route::post('/gestion-organizacional/listar', 'GestionOrganizacionalReportController@index');
+    Route::post('/gestion-organizacional/pdf', 'GestionOrganizacionalReportController@pdf');
+    Route::post('/gestion-organizacional/excel', 'GestionOrganizacionalReportController@excel');
+
+    Route::get('/templates', 'GestionProcesosReportController@templates');
+
     // Route::get('/importar/ciudades', 'PaisController@index');
-
-
-
     // Route::post('/proceso/upsert', 'ProcesoController@upsert');
     // Route::post('/proceso/upload', 'ProcesoController@uploadFile');
     // Route::post('/proceso/upload/delete', 'ProcesoController@deleteFile');

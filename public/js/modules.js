@@ -2709,6 +2709,46 @@ var Proceso = /*#__PURE__*/function () {
 
 var proceso = new Proceso();
 
+var GestionProcesosActivos = /*#__PURE__*/function () {
+  function GestionProcesosActivos() {
+    _classCallCheck(this, GestionProcesosActivos);
+  }
+
+  _createClass(GestionProcesosActivos, [{
+    key: "generatePDF",
+    value: function generatePDF(e) {
+      if (validateForm(e)) {
+        var formData = new FormData(e.target);
+        $.ajax({
+          url: '/gestion-procesos-activos/pdf',
+          data: new URLSearchParams(formData),
+          success: function success(data) {
+            console.log('data', data);
+          }
+        });
+      }
+    }
+  }, {
+    key: "generateExcel",
+    value: function generateExcel(e) {
+      if (validateForm(e)) {
+        var formData = new FormData(e.target);
+        $.ajax({
+          url: '/gestion-procesos-activos/excel',
+          data: new URLSearchParams(formData),
+          success: function success(data) {
+            console.log('data', data);
+          }
+        });
+      }
+    }
+  }]);
+
+  return GestionProcesosActivos;
+}();
+
+var gestionProcesosActivos = new GestionProcesosActivos();
+
 var SeguimientoActuacion = /*#__PURE__*/function () {
   function SeguimientoActuacion() {
     _classCallCheck(this, SeguimientoActuacion);

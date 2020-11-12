@@ -3,10 +3,21 @@
 namespace App\Entities;
 
 use \App\BaseModel;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use App\Entities\Persona;
-class Usuario extends Authenticatable
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Auth\MustVerifyEmail;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Foundation\Auth\Access\Authorizable;
+
+class Usuario extends BaseModel implements
+AuthenticatableContract,
+AuthorizableContract,
+CanResetPasswordContract
 {
+    use Authenticatable, Authorizable, CanResetPassword, MustVerifyEmail;
+
     protected $table = 'usuario';
 
     protected $primaryKey = 'id_usuario';
@@ -38,6 +49,36 @@ class Usuario extends Authenticatable
     public function getNombreCompleto() {
         $persona = $this->persona;
         return $persona ? $persona->getNombreCompleto() : $this->nombre_usuario;
+    }
+
+    public function getArea() {
+        $area = $this->area;
+        return $area ? $area->nombre : 'Sin area';
+    }
+
+    public function getTipoDocumento() {
+        $persona = $this->persona;
+        return $persona ? $persona->getTipoDocumento() : $this->nombre_usuario;
+    }
+
+    public function getSedeOperativa() {
+        $persona = $this->persona;
+        return $persona ? $persona->getMunicipio() : '';
+    }
+
+    public function getDireccion() {
+        $persona = $this->persona;
+        return $persona ? $persona->direccion : '';
+    }
+
+    public function getTelefono() {
+        $persona = $this->persona;
+        return $persona ? $persona->telefono : '';
+    }
+
+    public function getCorreoElectronico() {
+        $persona = $this->persona;
+        return $persona ? $persona->correo_electronico : '';
     }
 }
 

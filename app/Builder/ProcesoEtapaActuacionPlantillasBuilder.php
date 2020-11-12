@@ -5,6 +5,7 @@ namespace App\Builder;
 use Illuminate\Database\Eloquent\Builder;
 use App\Entities\Variable;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class ProcesoEtapaActuacionPlantillasBuilder extends Builder
 {
@@ -69,6 +70,9 @@ class ProcesoEtapaActuacionPlantillasBuilder extends Builder
                             break;
                         case 5:
                             $model = $proceso->cliente->contacto;
+                            break;
+                        case 6:
+                            $model = Auth::user();
                             break;
                         default:
                             $model = $proceso;

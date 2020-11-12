@@ -69,18 +69,9 @@
                             <div class="col-sm-4">
                                 <label class="lblForm">Área responsable</label>
                                 <select class="form-control required" name="area_responsable">
-                                    <option @if(isset($actuacion) && $actuacion->area_responsable == 1) selected @endif
-                                        value="1">Recepción</option>
-                                    <option @if(isset($actuacion) && $actuacion->area_responsable == 2) selected @endif
-                                        value="2">Administración</option>
-                                    <option @if(isset($actuacion) && $actuacion->area_responsable == 3) selected @endif
-                                        value="3">Agotamientos de Via</option>
-                                    <option @if(isset($actuacion) && $actuacion->area_responsable == 4) selected @endif
-                                        value="4">Sustanciación</option>
-                                    <option @if(isset($actuacion) && $actuacion->area_responsable == 5) selected @endif
-                                        value="5">Dependencia</option>
-                                    <option @if(isset($actuacion) && $actuacion->area_responsable == 6) selected @endif
-                                        value="6">Mensajería</option>
+                                    @foreach ($areas as $item)
+                                        <option @if(isset($actuacion) && $actuacion->area_responsable == $item->id_area) selected @endif value="{{$item->id_area}}">{{ $item->nombre }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="col-sm-4">

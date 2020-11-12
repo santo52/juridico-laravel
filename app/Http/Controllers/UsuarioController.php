@@ -10,12 +10,14 @@ use App\Entities\TipoDocumento;
 use App\Entities\Perfil;
 use App\Entities\Persona;
 use App\Entities\Municipio;
+use App\Entities\Area;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class UsuarioController extends Controller
 {
     public function index() {
+        $areas = Area::where('eliminado', 0)->get();
         $usuarios = Usuario::
         leftjoin('persona as p', 'p.id_persona', 'usuario.id_persona')
         ->leftjoin('tipo_documento as td', 'p.id_tipo_documento', 'td.id_tipo_documento')
@@ -37,7 +39,8 @@ class UsuarioController extends Controller
             'usuarios' => $usuarios,
             'tiposDocumento' => $tiposDocumento,
             'municipios' => $municipios,
-            'perfiles' => $perfiles
+            'perfiles' => $perfiles,
+            'areas' => $areas
         ]);
     }
 

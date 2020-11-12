@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Entities\Documento;
 use App\Entities\PlantillaDocumento;
 use App\Entities\Actuacion;
+use App\Entities\Area;
 use App\Entities\ActuacionDocumento;
 use App\Entities\ActuacionPlantillaDocumento;
 use App\Entities\TipoResultado;
@@ -40,11 +41,12 @@ class ActuacionController extends Controller
 
         $documentos = Documento::where('estado_documento', 1)->get();
         $plantillasDocumento = PlantillaDocumento::where('estado_plantilla_documento', 1)->get();
-
+        $areas = Area::where('eliminado', 0)->get();
         return $this->renderSection('actuacion.detalle', [
             'documentos' => $documentos,
             'plantillasDocumento' => $plantillasDocumento,
-            'tiposResultado' => $this->getTiposResultados(0)
+            'tiposResultado' => $this->getTiposResultados(0),
+            'areas' => $areas
         ]);
     }
 
@@ -142,6 +144,7 @@ class ActuacionController extends Controller
 
         $documentos = Documento::where('estado_documento', 1)->get();
         $plantillasDocumento = PlantillaDocumento::where('estado_plantilla_documento', 1)->get();
+        $areas = Area::where('eliminado', 0)->get();
 
         $actuacionDocumentos = DB::Table('actuacion as a')->select('d.*')
             ->leftJoin('actuacion_documento as ad', 'a.id_actuacion', '=', 'ad.id_actuacion')
@@ -163,6 +166,7 @@ class ActuacionController extends Controller
             'actuacionDocumentos' => $actuacionDocumentos,
             'actuacionPlantillasDocumento' => $actuacionPlantillasDocumento,
             'tiposResultado' => $this->getTiposResultados($id),
+            'areas' => $areas
             // 'tiposResultado2' => $tiposResultado
         ]);
     }

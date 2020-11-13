@@ -150,12 +150,14 @@ class Proceso extends BaseModel
 
     public function getEntidadDemandada()
     {
-        return $this->entidadDemandada->nombre_entidad_demandada;
+        $entidad = $this->entidadDemandada;
+        return $entidad ? $this->entidadDemandada->nombre_entidad_demandada : '';
     }
 
     public function getEntidadJusticia()
     {
-        return $this->entidadJusticia->nombre_entidad_justicia;
+        $entidad = $this->entidadJusticia;
+        return $entidad ? $this->entidadJusticia->nombre_entidad_justicia : '';
     }
 
     public function getFechaRetiroServicioString()

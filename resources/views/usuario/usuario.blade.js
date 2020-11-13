@@ -43,7 +43,10 @@ class Usuario {
         $('#etapaEstado').prop('checked', true).change()
         $('#nombre_usuario').val('')
         $('#direccion').val('')
+        $('#id_area').val('').selectpicker('refresh')
         $('#indicativo').show().text('+1')
+
+
 
         if (id) {
             $.ajax({
@@ -62,6 +65,7 @@ class Usuario {
                     $('#correoElectronico').val(usuario.correo_electronico)
                     $('#etapaEstado').prop('checked', usuario.estado_usuario == 1).change()
                     $('#id_perfil').val(usuario.id_perfil).selectpicker('refresh')
+                    $('#id_area').val(usuario.id_area).selectpicker('refresh')
 
                     if(usuario.indicativo) {
                         $('#indicativo').text('+' + usuario.indicativo)

@@ -130,7 +130,7 @@
             <form onsubmit="usuario.upsert(event)" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="form-group row">
-                        <div class="col-xs-4">
+                        <div class="col-xs-6">
                             <label for="recipient-name" class="control-label">Perfil</label>
                             <select class="form-control required" id="id_perfil" name="id_perfil" title="Seleccione">
                                 @foreach ($perfiles as $item)
@@ -139,12 +139,23 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-xs-4">
+                        <div class="col-xs-6">
+                            <label for="recipient-name" class="control-label">Area</label>
+                            <select class="form-control required" id="id_area" name="id_area" title="Seleccione">
+                                @foreach ($areas as $item)
+                                <option value="{{$item->id_area}}">{{$item->nombre}}
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-xs-6">
                             <label for="recipient-name" class="control-label">Usuario</label>
                             <input type="text" class="form-control required" id="nombre_usuario"
                                 name="nombre_usuario">
                         </div>
-                        <div class="col-xs-4">
+                        <div class="col-xs-6">
                             <label for="recipient-name" class="control-label">Contraseña</label>
                             <input type="text" class="form-control" id="password"
                                 name="password_value">

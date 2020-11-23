@@ -357,7 +357,7 @@ class SeguimientoProcesoController extends Controller
                 ProcesoTipoResultado::updateOrCreate(['id_proceso' => $data['id_proceso'], 'id_tipo_resultado' => $data['tipo_resultado']], [
                     'id_proceso' => $data['id_proceso'],
                     'id_tipo_resultado' => $data['tipo_resultado'],
-                    'valor_proceso_tipo_resultado' => $data['resultado_actuacion'],
+                    'valor_proceso_tipo_resultado' => $request->has('resultado_actuacion') ? $data['resultado_actuacion'] : '',
                 ]);
             }
         }

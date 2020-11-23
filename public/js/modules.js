@@ -2657,9 +2657,9 @@ var Proceso = /*#__PURE__*/function () {
           $('#telefono_intermediario').val(_this13.formatTelefonoIntermediario(cliente));
           $('#indicativo_intermediario').val(cliente.indicativo_intermediario);
           $('#email_intermediario').val(cliente.correo_electronico_intermediario);
-          $('#id_municipio_cliente').val(cliente.nombre_municipio);
-          $('#id_departamento_cliente').val(cliente.nombre_departamento);
-          $('#id_pais_cliente').val(cliente.nombre_pais);
+          $('#id_municipio_cliente').val(cliente.nombre_municipio_cliente);
+          $('#id_departamento_cliente').val(cliente.nombre_departamento_cliente);
+          $('#id_pais_cliente').val(cliente.nombre_pais_cliente);
         }
       });
     }

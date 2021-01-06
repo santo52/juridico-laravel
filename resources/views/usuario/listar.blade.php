@@ -93,6 +93,19 @@
         @endforeach
         @endif
     </tbody>
+    <tfoot>
+        <tr class="footable-paging">
+            <td colspan="8">
+                <div class="footable-pagination-wrapper">
+                    {{$usuarios}}
+                    {{-- <div class="divider"></div>
+                    <span class="label label-default">
+                        Mostrando del 1 al 10 de 21 registros
+                    </span> --}}
+                </div>
+            </td>
+        </tr>
+    </tfoot>
 </table>
 
 @isset ($permissions->eliminar)

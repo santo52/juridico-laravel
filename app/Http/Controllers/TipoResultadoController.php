@@ -9,7 +9,9 @@ use Illuminate\Support\Facades\Auth;
 class TipoResultadoController extends Controller
 {
     public function index() {
-        $tiposResultado = TipoResultado::where('eliminado', 0)->get();
+        $tiposResultado = TipoResultado::where('eliminado', 0)
+        ->paginate(10)->withPath('#tipos-de-resultado');
+
         return $this->renderSection('tiporesultado.listar', [
             'tiposResultado' => $tiposResultado
         ]);

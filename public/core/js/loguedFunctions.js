@@ -1,6 +1,6 @@
 function render() {
 
-  let url = location.hash.replace('#', '').toLowerCase()
+  let [url, paramsString] = location.hash.replace('#', '').toLowerCase().split('?')
   const count = url.split('/').filter(section => section.trim()).length
   if(count === 1) {
     url += '/listar'
@@ -8,7 +8,7 @@ function render() {
 
   if (url) {
     $.ajax({
-      url,
+      url: url + '?' + paramsString,
       data: new URLSearchParams({}),
       success: data => {
 

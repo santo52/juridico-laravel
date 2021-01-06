@@ -10,7 +10,7 @@ class EntidadDemandadaController extends Controller
 {
 
     public function index() {
-        $entidades = EntidadDemandada::where('eliminado', 0)->get();
+        $entidades = EntidadDemandada::where('eliminado', 0)->paginate(10)->withPath('#entidades-demandadas');
         return $this->renderSection('entidad_demandada.listar', [
             'entidades' => $entidades
         ]);

@@ -18,7 +18,7 @@ class IntermediarioController extends Controller
         ->leftjoin('municipio as mu', 'mu.id_municipio', 'p.id_municipio')
         // ->leftjoin('departamento as de', 'de.id_departamento', 'mu.id_departamento')
         // ->leftjoin('pais as pa', 'pa.id_pais', 'de.id_pais')
-        ->where('intermediario.eliminado', 0)->get();
+        ->where('intermediario.eliminado', 0)->paginate(10)->withPath('#intermediario');
 
         $municipios = Municipio::all();
 

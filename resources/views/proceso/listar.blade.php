@@ -133,6 +133,19 @@
         @endforeach
         @endif
     </tbody>
+    <tfoot>
+        <tr class="footable-paging">
+            <td colspan="8">
+                <div class="footable-pagination-wrapper">
+                    {{$procesos}}
+                    {{-- <div class="divider"></div>
+                    <span class="label label-default">
+                        Mostrando del 1 al 10 de 21 registros
+                    </span> --}}
+                </div>
+            </td>
+        </tr>
+    </tfoot>
 </table>
 
 <div class="modal fade" tabindex="-1" role="dialog" id="comentariosModal">

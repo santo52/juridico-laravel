@@ -16,7 +16,7 @@ class TipoProcesoController extends Controller
         $tiposProceso = TipoProceso::where([
             'eliminado' => 0,
             'estado_tipo_proceso' => 1
-        ])->get();
+        ])->paginate(10)->withPath('#tipos-de-proceso');
         return $this->renderSection('tipoproceso.listar', [
             'tiposProceso' => $tiposProceso
         ]);

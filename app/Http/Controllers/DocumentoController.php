@@ -8,7 +8,7 @@ use App\Entities\Documento;
 class DocumentoController extends Controller
 {
     public function index() {
-        $documentos = Documento::where('eliminado', 0)->get();
+        $documentos = Documento::where('eliminado', 0)->paginate(10)->withPath('#documento');
         return $this->renderSection('documento.listar', [
             'documentos' => $documentos
         ]);

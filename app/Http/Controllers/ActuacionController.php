@@ -126,7 +126,7 @@ class ActuacionController extends Controller
         $list = $actuacion
             ->where('eliminado', 0)
             ->orderBy('id_actuacion', 'desc')
-            ->get();
+            ->paginate(10)->withPath('#actuacion');
 
         return $this->renderSection('actuacion.listar', [
             'actuaciones' => $list,

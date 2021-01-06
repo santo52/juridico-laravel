@@ -13,7 +13,7 @@ class EtapaProcesoController extends Controller
 
     public function index()
     {
-        $etapasProceso = EtapaProceso::where('eliminado', 0)->get();
+        $etapasProceso = EtapaProceso::where('eliminado', 0)->paginate(10)->withPath('#etapas-de-proceso');
         return $this->renderSection('etapaproceso.listar', [
             'etapas' => $etapasProceso
         ]);

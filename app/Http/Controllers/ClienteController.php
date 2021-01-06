@@ -37,7 +37,8 @@ class ClienteController extends Controller
 
             ->where([
             'cliente.eliminado' => 0,
-        ])->get();
+        ])
+        ->paginate(10)->withPath('#cliente');
 
         return $this->renderSection('cliente.listar', [
             'clientes' => $clientes

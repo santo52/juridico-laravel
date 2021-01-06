@@ -14,25 +14,20 @@ use App\Entities\ProcesoDocumento;
 use App\Entities\ActuacionDocumento;
 use App\Entities\EntidadJusticia;
 use App\Entities\Actuacion;
-use App\Entities\Pais;
-use App\Entities\Departamento;
 use App\Entities\Usuario;
-use App\Entities\Municipio;
 use App\Entities\Cliente;
-use App\Entities\EtapaProceso;
-use App\Entities\ProcesoEtapa;
-use App\Entities\ProcesoEtapaActuacion;
 use App\Entities\ProcesoTipoResultado;
 use App\Entities\TipoResultado;
 
 class ProcesoController extends Controller
 {
+
     public function index()
     {
-        $procesos = Proceso::getAll()->orderBy('id_proceso', 'desc')->get();
+        $procesos = Proceso::getAll()->orderBy('id_proceso', 'desc')->paginate(10)->withPath('#proceso');
         return $this->renderSection('proceso.listar', [
             'procesos' => $procesos,
-            'creacion' => true
+            'creacion' => true,
         ]);
     }
 

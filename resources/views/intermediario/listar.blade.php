@@ -30,7 +30,7 @@
     </div>
 </div>
 
-<table id="tipoProcesoTable" class="table table-hover" data-empty="Sin tipos de proceso"
+<table id="tipoProcesoTable" class="table table-hover" data-empty="Sin intermediarios"
     data-paging-count-format="Mostrando del {PF} al {PL} de {TR} registros"
     data-filter-container="#filter-form-container" data-sorting="true" data-filtering="true" data-paging="true"
     data-filter-placeholder="Buscar ..." data-filter-position="left" data-filter-dropdown-title="Buscar por"
@@ -95,6 +95,19 @@
         @endforeach
         @endif
     </tbody>
+    <tfoot>
+        <tr class="footable-paging">
+            <td colspan="8">
+                <div class="footable-pagination-wrapper">
+                    {{$intermediarios}}
+                    {{-- <div class="divider"></div>
+                    <span class="label label-default">
+                        Mostrando del 1 al 10 de 21 registros
+                    </span> --}}
+                </div>
+            </td>
+        </tr>
+    </tfoot>
 </table>
 
 @isset ($permissions->eliminar)

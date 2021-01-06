@@ -17,7 +17,8 @@ class PerfilController extends Controller
         $list = $perfil->where([
             ['id_perfil', '<>', 1],
             ['eliminado', 0]
-        ])->orderBy('id_perfil', 'desc')->get();
+        ])->orderBy('id_perfil', 'desc')
+        ->paginate(10)->withPath('#perfil');
 
 
         return $this->renderSection('perfil.listar', [

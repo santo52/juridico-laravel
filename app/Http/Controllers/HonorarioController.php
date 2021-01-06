@@ -17,7 +17,9 @@ class HonorarioController extends Controller
     public function index() {
         $entidadesFinancieras = EntidadFinanciera::where('eliminado', 0)->get();
         $clientes = Cliente::where(['eliminado' => 0, 'estado_cliente' => '1'])->get();
-        $honorarios = Honorario::with('pagoHonorario', 'cliente.persona')->where('eliminado', 0)->get();
+        $honorarios = Honorario::with('pagoHonorario', 'cliente.persona')->where('eliminado', 0)
+        ->paginate(10)->withPath('#honorarios');
+
         foreach($honorarios as $honorario) {
             $honorario->proceso->addTiposResultadoToProceso();
         }

@@ -11,7 +11,7 @@ class PlantillaDocumentoController extends Controller
     public function index()
     {
 
-        $plantillas = PlantillaDocumento::where('eliminado', 0)->get();
+        $plantillas = PlantillaDocumento::where('eliminado', 0)->paginate(10)->withPath('#plantillas');
         return $this->renderSection('plantillas.listar', [
             'plantillas' => $plantillas
         ]);

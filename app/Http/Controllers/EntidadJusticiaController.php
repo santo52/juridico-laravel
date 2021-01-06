@@ -13,7 +13,7 @@ class EntidadJusticiaController extends Controller
 {
 
     public function index() {
-        $entidades = EntidadJusticia::where('eliminado', 0)->get();
+        $entidades = EntidadJusticia::where('eliminado', 0)->paginate(10)->withPath('#entidades-de-justicia');
         $ciudades = Municipio::all();
         $paises = Pais::all();
         $departamentos = Departamento::all();

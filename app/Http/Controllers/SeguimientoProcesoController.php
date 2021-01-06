@@ -56,7 +56,9 @@ class SeguimientoProcesoController extends Controller
 
     public function index()
     {
-        $procesos = Proceso::getAll()->orderBy('id_proceso', 'desc')->get();
+        $procesos = Proceso::getAll()->orderBy('id_proceso', 'desc')
+        ->paginate(10)->withPath('#seguimiento-procesos');
+
         return $this->renderSection('proceso.listar', [
             'procesos' => $procesos,
             'seguimiento' => true

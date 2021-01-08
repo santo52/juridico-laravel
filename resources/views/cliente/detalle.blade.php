@@ -362,7 +362,7 @@
         <div class="form-group">
             <label for="estado_cliente" class="control-label">Estado</label>
             <div class="checkbox-form">
-                <input type="checkbox" data-on="Activo" data-off="Inactivo" data-width="90" class="form-control"
+                <input type="checkbox" data-on="Activo" data-off="Inactivo" data-width="90" class="form-control checkbox-toogle"
                     id="estado_cliente" name="estado" @if($cliente && $cliente->estado_cliente == 1) checked @endif />
             </div>
         </div>

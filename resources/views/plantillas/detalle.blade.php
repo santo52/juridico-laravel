@@ -22,7 +22,7 @@
     <div class="form-group">
         <label for="estado_plantilla_documento" class="control-label">Estado</label>
         <div class="checkbox-form">
-            <input type="checkbox" data-on="Activo" data-off="Inactivo" data-width="90" class="form-control"
+            <input type="checkbox" data-on="Activo" data-off="Inactivo" data-width="90" class="form-control checkbox-toogle"
                 id="estado_plantilla_documento" name="estado" @if(!$plantilla || $plantilla &&
                 $plantilla->estado_plantilla_documento
             == 1) checked @endif />

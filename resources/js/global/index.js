@@ -28,14 +28,14 @@ jQuery.ajaxSetup({
 });
 
 function compileLibraries() {
-    $('input[type=checkbox]').bootstrapToggle({
+    $('input[type=checkbox].checkbox-toogle').bootstrapToggle({
         size: 'mini',
         height: 32,
         onstyle: 'success'
     })
 
     $('select').selectpicker();
-    $('.table').footable();
+    $('.table').asyncFootable();
 
     $('.datepicker-here').datepicker({
         language: 'es',
@@ -552,11 +552,101 @@ $.fn.richText = function (config = {}) {
 $.fn.footableAdd = function (html) {
     $(this).find('tbody .footable-empty').remove()
     $(this).find('tbody').append(html)
-    $(this).footable();
+    $(this).asyncFootable();
+}
+
+function submitFilterSearch(e) {
+    e.preventDefault()
+    e.stopPropagation()
+
+    const jsonParams = hashQueryToJSON();
+    jsonParams.page = 1;
+    jsonParams.search = $(e.target).find('input[name=search]').val() || ''
+    jsonParams.searchby = $(e.target).find('input[name*=searchby]:checked').toArray().map(item => $(item).val()).join(',') || ''
+
+    location.hash = JSONToHash(jsonParams)
+}
+
+function hashQueryToJSON() {
+    const params = location.hash.split('&').reduce((initial, item) => [...initial, ...item.split('?')], [])
+    params.splice(0,1)
+    return params.reduce((initial, item) => {
+        const [key, value] = item.split('=');
+        return { ...initial, [key]: value }
+    }, {})
+}
+
+function JSONToHash(json) {
+    const queryString = Object.keys(json).map(key => `${key}=${json[key]}`).join('&')
+    const [url] = location.hash.split('?')
+    return url + '?' + queryString
+}
+
+function handleClickButtonSearch(self, search) {
+    if(search) {
+        $(self).children().removeClass('fooicon-remove').addClass('fooicon-remove')
+        $("#form-sumbit-filter-search").find('input[name=search]').val('')
+
+    }
+
+    $("#form-sumbit-filter-search").trigger('submit')
+}
+
+function addFilterActive(self) {
+    const filterContainer = $(self).data('filter-container')
+
+    if($(filterContainer).length) {
+
+        const sortIDs = []
+        const items = $(self).find('[data-sort-id]')
+        for(let i = 0; i < items.length; i++) {
+            const item = items.eq(i)
+            const field = item.data('sort-id')
+            const text = item.text()
+            if(field && text) {
+                sortIDs.push({ field, text })
+            }
+        }
+
+        if(sortIDs.length) {
+
+            const { search = '', searchby = '' } = hashQueryToJSON();
+
+            const html = `
+            <form class="form-inline" onsubmit="submitFilterSearch(event)" id="form-sumbit-filter-search">
+                <div class="form-group footable-filtering-search">
+                    <label class="sr-only">Buscar</label>
+                    <div class="input-group">
+                        <input type="text" name="search" class="form-control" placeholder="Buscar ..." value="${search}">
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-primary" onclick="handleClickButtonSearch(this, '${search}')">
+                                <span class="fooicon fooicon-${search ? 'remove' : 'search'}"></span>
+                            </button>
+                            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
+                                ${sortIDs.map(item => `<li><a class="flex items-center"><input type="checkbox" name="searchby[${item.field}]" ${!searchby || searchby.indexOf(item.field) !== -1 ? 'checked="checked"' : ''} value="${item.field}" >${item.text}</a></li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </form>`
+
+            $(filterContainer).addClass('footable-filtering-external footable-filtering-left').append(html)
+        }
+    }
 }
 
 
+
 $.fn.asyncFootable = function (data) {
+    $(this).footable()
+    const filterActive = $(this).data('filter-active')
+    if(filterActive) {
+        addFilterActive(this)
+    }
+
     const orderItem = $(this).find('.fooicon')
 
     orderItem.on('click', function (e) {
@@ -570,32 +660,13 @@ $.fn.asyncFootable = function (data) {
 
 
 function asyncFootableOnSort(e, callback) {
-    let type = '';
-    const $sorting = $(e.target)
-    const sortClass = 'fooicon-sort'
 
-    $sorting.parents('th')
-        .siblings()
-        .children()
-        .removeClass(`${sortClass}-asc ${sortClass}-desc`)
-        .addClass(sortClass)
+    const jsonParams = hashQueryToJSON();
+    jsonParams.order = $(e.target).parents('th').data('sort-id')
+    jsonParams.page = jsonParams.page ? jsonParams.page : 1;
+    jsonParams.type = jsonParams.type && jsonParams.type === 'desc' ? 'asc' : 'desc'
 
-    if ($sorting.hasClass(`${sortClass}-asc`) || $sorting.hasClass(sortClass)) {
-
-        type = 'desc';
-
-        $sorting
-            .removeClass(`${sortClass}-asc ${sortClass}`)
-            .addClass(`${sortClass}-desc`)
-
-    } else if ($sorting.hasClass(`${sortClass}-desc`)) {
-
-        type = 'asc';
-        $sorting
-            .removeClass(`${sortClass}-desc`)
-            .addClass(`${sortClass}-asc`)
-    }
-
+    location.hash = JSONToHash(jsonParams)
     callback(type);
 }
 

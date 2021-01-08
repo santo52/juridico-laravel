@@ -127,7 +127,7 @@
                         <label for="recipient-name" class="control-label">Estado</label>
                         <div class="checkbox-form">
                             <input type="checkbox" data-on="Activo" data-off="Inactivo" data-width="90"
-                                class="form-control" id="perfilEstado" name="estado" checked />
+                                class="form-control checkbox-toogle" id="perfilEstado" name="estado" checked />
                         </div>
                     </div>
                     <div class="form-group">

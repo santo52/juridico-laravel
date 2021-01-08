@@ -133,7 +133,7 @@
                 <div class="col-sm-6">
                     <label class="lblForm">¿La actuación tiene cobro?</label>
                     <div class="input-group">
-                        <input type="checkbox" id="actuacionTieneCobro" name="actuacionTieneCobro" data-on="Sí"
+                        <input type="checkbox" class="checkbox-toogle" id="actuacionTieneCobro" name="actuacionTieneCobro" data-on="Sí"
                             data-off="No" data-width="60"
                             {{ !isset($actuacion) || $actuacion['actuacion_tiene_cobro'] == '1' ?  'checked' : '' }} />
                     </div>
@@ -335,7 +335,7 @@
                 <div class="col-sm-12 flex flex-column items-end">
                     <label class="lblForm">Estado</label>
                     <div class="input-group">
-                        <input type="checkbox" id="estado_actuacion" name="estado" data-on="Activo" data-off="Inactivo"
+                        <input type="checkbox" class="checkbox-toogle" id="estado_actuacion" name="estado" data-on="Activo" data-off="Inactivo"
                             data-width="100"
                             {{ !isset($actuacion) || $actuacion['estado_actuacion'] == '1' ?  'checked' : '' }} />
                     </div>

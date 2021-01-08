@@ -1,3 +1,23 @@
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -332,13 +352,13 @@ jQuery.ajaxSetup({
 });
 
 function compileLibraries() {
-  $('input[type=checkbox]').bootstrapToggle({
+  $('input[type=checkbox].checkbox-toogle').bootstrapToggle({
     size: 'mini',
     height: 32,
     onstyle: 'success'
   });
   $('select').selectpicker();
-  $('.table').footable();
+  $('.table').asyncFootable();
   $('.datepicker-here').datepicker({
     language: 'es',
     autoClose: true
@@ -839,10 +859,100 @@ $.fn.richText = function () {
 $.fn.footableAdd = function (html) {
   $(this).find('tbody .footable-empty').remove();
   $(this).find('tbody').append(html);
-  $(this).footable();
+  $(this).asyncFootable();
 };
 
+function submitFilterSearch(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  var jsonParams = hashQueryToJSON();
+  jsonParams.page = 1;
+  jsonParams.search = $(e.target).find('input[name=search]').val() || '';
+  jsonParams.searchby = $(e.target).find('input[name*=searchby]:checked').toArray().map(function (item) {
+    return $(item).val();
+  }).join(',') || '';
+  location.hash = JSONToHash(jsonParams);
+}
+
+function hashQueryToJSON() {
+  var params = location.hash.split('&').reduce(function (initial, item) {
+    return [].concat(_toConsumableArray(initial), _toConsumableArray(item.split('?')));
+  }, []);
+  params.splice(0, 1);
+  return params.reduce(function (initial, item) {
+    var _item$split = item.split('='),
+        _item$split2 = _slicedToArray(_item$split, 2),
+        key = _item$split2[0],
+        value = _item$split2[1];
+
+    return _objectSpread(_objectSpread({}, initial), {}, _defineProperty({}, key, value));
+  }, {});
+}
+
+function JSONToHash(json) {
+  var queryString = Object.keys(json).map(function (key) {
+    return "".concat(key, "=").concat(json[key]);
+  }).join('&');
+
+  var _location$hash$split = location.hash.split('?'),
+      _location$hash$split2 = _slicedToArray(_location$hash$split, 1),
+      url = _location$hash$split2[0];
+
+  return url + '?' + queryString;
+}
+
+function handleClickButtonSearch(self, search) {
+  if (search) {
+    $(self).children().removeClass('fooicon-remove').addClass('fooicon-remove');
+    $("#form-sumbit-filter-search").find('input[name=search]').val('');
+  }
+
+  $("#form-sumbit-filter-search").trigger('submit');
+}
+
+function addFilterActive(self) {
+  var filterContainer = $(self).data('filter-container');
+
+  if ($(filterContainer).length) {
+    var sortIDs = [];
+    var items = $(self).find('[data-sort-id]');
+
+    for (var i = 0; i < items.length; i++) {
+      var item = items.eq(i);
+      var field = item.data('sort-id');
+      var text = item.text();
+
+      if (field && text) {
+        sortIDs.push({
+          field: field,
+          text: text
+        });
+      }
+    }
+
+    if (sortIDs.length) {
+      var _hashQueryToJSON = hashQueryToJSON(),
+          _hashQueryToJSON$sear = _hashQueryToJSON.search,
+          search = _hashQueryToJSON$sear === void 0 ? '' : _hashQueryToJSON$sear,
+          _hashQueryToJSON$sear2 = _hashQueryToJSON.searchby,
+          searchby = _hashQueryToJSON$sear2 === void 0 ? '' : _hashQueryToJSON$sear2;
+
+      var html = "\n            <form class=\"form-inline\" onsubmit=\"submitFilterSearch(event)\" id=\"form-sumbit-filter-search\">\n                <div class=\"form-group footable-filtering-search\">\n                    <label class=\"sr-only\">Buscar</label>\n                    <div class=\"input-group\">\n                        <input type=\"text\" name=\"search\" class=\"form-control\" placeholder=\"Buscar ...\" value=\"".concat(search, "\">\n                        <div class=\"input-group-btn\">\n                            <button type=\"button\" class=\"btn btn-primary\" onclick=\"handleClickButtonSearch(this, '").concat(search, "')\">\n                                <span class=\"fooicon fooicon-").concat(search ? 'remove' : 'search', "\"></span>\n                            </button>\n                            <button class=\"btn btn-default dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                                <span class=\"caret\"></span>\n                            </button>\n                            <ul class=\"dropdown-menu dropdown-menu-right\" aria-labelledby=\"dropdownMenu1\">\n                                ").concat(sortIDs.map(function (item) {
+        return "<li><a class=\"flex items-center\"><input type=\"checkbox\" name=\"searchby[".concat(item.field, "]\" ").concat(!searchby || searchby.indexOf(item.field) !== -1 ? 'checked="checked"' : '', " value=\"").concat(item.field, "\" >").concat(item.text, "</a></li>");
+      }).join(''), "\n                            </ul>\n                        </div>\n                    </div>\n                </div>\n            </form>");
+      $(filterContainer).addClass('footable-filtering-external footable-filtering-left').append(html);
+    }
+  }
+}
+
 $.fn.asyncFootable = function (data) {
+  $(this).footable();
+  var filterActive = $(this).data('filter-active');
+
+  if (filterActive) {
+    addFilterActive(this);
+  }
+
   var orderItem = $(this).find('.fooicon');
   orderItem.on('click', function (e) {
     e.preventDefault();
@@ -854,19 +964,11 @@ $.fn.asyncFootable = function (data) {
 };
 
 function asyncFootableOnSort(e, callback) {
-  var type = '';
-  var $sorting = $(e.target);
-  var sortClass = 'fooicon-sort';
-  $sorting.parents('th').siblings().children().removeClass("".concat(sortClass, "-asc ").concat(sortClass, "-desc")).addClass(sortClass);
-
-  if ($sorting.hasClass("".concat(sortClass, "-asc")) || $sorting.hasClass(sortClass)) {
-    type = 'desc';
-    $sorting.removeClass("".concat(sortClass, "-asc ").concat(sortClass)).addClass("".concat(sortClass, "-desc"));
-  } else if ($sorting.hasClass("".concat(sortClass, "-desc"))) {
-    type = 'asc';
-    $sorting.removeClass("".concat(sortClass, "-desc")).addClass("".concat(sortClass, "-asc"));
-  }
-
+  var jsonParams = hashQueryToJSON();
+  jsonParams.order = $(e.target).parents('th').data('sort-id');
+  jsonParams.page = jsonParams.page ? jsonParams.page : 1;
+  jsonParams.type = jsonParams.type && jsonParams.type === 'desc' ? 'asc' : 'desc';
+  location.hash = JSONToHash(jsonParams);
   callback(type);
 }
 

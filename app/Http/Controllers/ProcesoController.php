@@ -22,12 +22,15 @@ use App\Entities\TipoResultado;
 class ProcesoController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        $procesos = Proceso::getAll()->orderBy('id_proceso', 'desc')->paginate(10)->withPath('#proceso');
+        $procesos = Proceso::getAll($request)->paginate(10)
+        ->appends(request()->query())
+        ->withPath('#proceso');
+
         return $this->renderSection('proceso.listar', [
             'procesos' => $procesos,
-            'creacion' => true,
+            'creacion' => true
         ]);
     }
 

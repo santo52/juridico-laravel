@@ -95,11 +95,71 @@ class Proceso extends BaseModel
         return $this->hasOne('App\Entities\Municipio', 'id_municipio', 'id_municipio');
     }
 
-    public static function getAll()
+    public static function getAll($request = null)
     {
-        return self::with('tipoProceso', 'entidadDemandada', 'municipio', 'entidadJusticia', 'cliente.persona', 'responsable', 'etapa', 'procesoEtapa.procesoEtapaActuaciones.cobro.pago')
-            ->select('*', DB::raw("(select count(*) from proceso_bitacora pb where pb.id_proceso = proceso.id_proceso ) as totalComentarios"))
+
+        $procesos = self::
+            with( 'cliente.persona', 'tipoProceso', 'entidadDemandada', 'municipio', 'entidadJusticia', 'responsable', 'etapa', 'procesoEtapa.procesoEtapaActuaciones.cobro.pago')
+            ->select(
+                'proceso.*',
+                'p.numero_documento as documento_cliente',
+                'nombre_tipo_proceso',
+                'nombre_entidad_demandada',
+                'nombre_etapa_proceso as etapa_actual',
+                'mc.nombre_municipio',
+                'ejpi.nombre_entidad_justicia as entidad_primera_instancia',
+                'ejsi.nombre_entidad_justicia as entidad_segunda_instancia',
+                DB::raw("CONCAT(p.primer_apellido, ' ', p.segundo_apellido, ' ', p.primer_nombre, ' ', p.segundo_nombre) as nombre_cliente" ),
+                DB::raw("CONCAT(pu.primer_apellido, ' ', pu.segundo_apellido, ' ', pu.primer_nombre, ' ', pu.segundo_nombre) as nombre_responsable" ),
+                DB::raw("(select count(*) from proceso_bitacora pb where pb.id_proceso = proceso.id_proceso ) as totalComentarios"))
+            ->leftjoin('cliente as c', 'c.id_cliente', '=', 'proceso.id_cliente')
+            ->leftjoin('persona as p', 'c.id_persona', '=', 'p.id_persona')
+            ->leftjoin('municipio as mc', 'mc.id_municipio', '=', 'p.id_municipio')
+
+            ->leftjoin('usuario as u', 'u.id_usuario', '=', 'proceso.id_usuario_responsable')
+            ->leftjoin('persona as pu', 'u.id_persona', '=', 'pu.id_persona')
+
+            ->leftjoin('tipo_proceso as tp', 'tp.id_tipo_proceso', '=', 'proceso.id_tipo_proceso')
+            ->leftjoin('entidad_demandada as ed', 'ed.id_entidad_demandada', '=', 'proceso.id_entidad_demandada')
+            ->leftjoin('etapa_proceso as ep', 'ep.id_etapa_proceso', '=', 'proceso.id_etapa_proceso')
+            ->leftjoin('entidad_justicia as ejpi', 'ejpi.id_entidad_justicia', '=', 'proceso.entidad_justicia_primera_instancia')
+            ->leftjoin('entidad_justicia as ejsi', 'ejsi.id_entidad_justicia', '=', 'proceso.entidad_justicia_segunda_instancia')
             ->where('proceso.eliminado', 0);
+
+
+
+        $sql = $procesos->toSql();
+        $orderBy = 'id_proceso';
+        $type = 'desc';
+        $search = '';
+        $searchBy = [];
+
+        if($request && $request->has('order') && strpos($sql, $request->get('order')) !== false) {
+            $orderBy = $request->get('order');
+        }
+
+        if($request && $request->has('type')) {
+            $type = $request->get('type');
+        }
+
+        if($request && $request->has('search') && $request->has('searchby')) {
+            $search = trim($request->get('search'));
+            $search = !empty($search) ? $search : false;
+            $searchBy = explode(',', trim($request->get('searchby')));
+        }
+
+        foreach($searchBy as $field) {
+            if($field && strpos($sql, $field) !== false) {
+                $procesos->orHavingRaw("{$field} like '%{$search}%'");
+            }
+        }
+
+        if($search && in_array('estado_proceso', $searchBy)) {
+            $estado = strpos('activo', strtolower($search)) !== false ? 1 : 2;
+            $procesos->orHavingRaw("estado_proceso = '{$estado}'");
+        }
+
+        return $procesos->orderBy($orderBy, $type);
     }
 
     public static function get($id)
@@ -151,13 +211,23 @@ class Proceso extends BaseModel
     public function getEntidadDemandada()
     {
         $entidad = $this->entidadDemandada;
-        return $entidad ? $this->entidadDemandada->nombre_entidad_demandada : '';
+        return $entidad ? $entidad->nombre_entidad_demandada : '';
     }
 
     public function getEntidadJusticia()
     {
         $entidad = $this->entidadJusticia;
-        return $entidad ? $this->entidadJusticia->nombre_entidad_justicia : '';
+        return $entidad ? $entidad->nombre_entidad_justicia : '';
+    }
+
+    public function getEntidadJusticiaPrimeraInstancia() {
+        $entidad = $this->entidadPrimeraInstancia;
+        return $entidad ? $entidad->nombre_entidad_justicia : '';
+    }
+
+    public function getEntidadJusticiaSegundaInstancia() {
+        $entidad = $this->entidadSegundaInstancia;
+        return $entidad ? $entidad->nombre_entidad_justicia : '';
     }
 
     public function getFechaRetiroServicioString()

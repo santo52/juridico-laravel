@@ -130,7 +130,7 @@
                     <label for="dar_informacion_caso" class="control-label">¿Se autoriza a dar información del
                         caso?</label>
                     <div class="checkbox-form">
-                        <input type="checkbox" data-on="Si" data-off="No" data-width="90" class="form-control"
+                        <input type="checkbox" data-on="Si" data-off="No" data-width="90" class="form-control checkbox-toogle"
                             id="dar_informacion_caso" name="dar_informacion_caso" @if($proceso &&
                             $proceso->dar_informacion_caso
                         == 1) checked @endif />
@@ -186,7 +186,7 @@
                 <div class="col-xs-12 col-sm-4">
                     <label for="caducidad" class="control-label">Caducidad</label>
                     <div class="checkbox-form">
-                        <input type="checkbox" data-on="Si" data-off="No" data-width="90" class="form-control"
+                        <input type="checkbox" data-on="Si" data-off="No" data-width="90" class="form-control checkbox-toogle"
                             id="caducidad" name="caducidad" @if($proceso && $proceso->caducidad
                         == 1) checked @endif />
                     </div>

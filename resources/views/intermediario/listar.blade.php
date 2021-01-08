@@ -215,7 +215,7 @@
                         <label for="recipient-name" class="control-label">Estado</label>
                         <div class="checkbox-form">
                             <input type="checkbox" data-on="Activo" data-off="Inactivo" data-width="90"
-                                class="form-control" id="etapaEstado" name="estado" checked />
+                                class="form-control checkbox-toogle" id="etapaEstado" name="estado" checked />
                         </div>
                     </div>
                 </div>

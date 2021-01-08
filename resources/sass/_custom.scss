@@ -291,3 +291,11 @@ h5.title-bordered {
     padding-bottom: 10px;
     margin-bottom: 20px;
 }
+
+.dropdown-menu>li>a.flex {
+    display: flex;
+    input {
+        margin:0;
+        margin-right: 10px;
+    }
+}

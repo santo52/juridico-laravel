@@ -130,14 +130,14 @@
                         <label for="recipient-name" class="control-label">¿Es obligatorio?</label>
                         <div class="checkbox-form">
                             <input type="checkbox" data-on="Sí" data-off="No" data-width="90"
-                                class="form-control" id="documentoObligatorio" name="obligatorio" checked />
+                                class="form-control checkbox-toogle" id="documentoObligatorio" name="obligatorio" checked />
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">Estado</label>
                         <div class="checkbox-form">
                             <input type="checkbox" data-on="Activo" data-off="Inactivo" data-width="90"
-                                class="form-control" id="documentoEstado" name="estado" checked />
+                                class="form-control checkbox-toogle" id="documentoEstado" name="estado" checked />
                         </div>
                     </div>
                 </div>

@@ -32,37 +32,33 @@
     </div>
 </div>
 
-<table id="tipoProcesoTable" class="table table-hover" data-empty="Sin procesos"
-    data-paging-count-format="Mostrando del {PF} al {PL} de {TR} registros"
-    data-filter-container="#filter-form-container" data-sorting="true" data-filtering="true" data-paging="true"
-    data-filter-placeholder="Buscar ..." data-filter-position="left" data-filter-dropdown-title="Buscar por"
-    data-filter-space="OR">
+<table id="tipoProcesoTable" class="table table-hover" data-empty="Sin procesos" data-filter-container="#filter-form-container" data-sorting="true" data-filter-active="true">
     <thead>
         <tr class="bg-success">
-            <th data-filterable="false">ID</th>
-            <th>Documento cliente</th>
-            <th>Nombre cliente</th>
-            <th data-breakpoints="xs sm">Tipo de proceso</th>
-            <th @isset($cobros) data-breakpoints="all" @endisset>Entidad demandada</th>
-            <th @isset($cobros) data-breakpoints="all" @endisset>Responsable</th>
+            <th data-sort-id="id_proceso">ID</th>
+            <th data-sort-id="documento_cliente">Documento cliente</th>
+            <th data-sort-id="nombre_cliente">Nombre cliente</th>
+            <th data-sort-id="nombre_tipo_proceso" data-breakpoints="xs sm">Tipo de proceso</th>
+            <th data-sort-id="nombre_entidad_demandada" @isset($cobros) data-breakpoints="all" @endisset>Entidad demandada</th>
+            <th data-sort-id="nombre_responsable" @isset($cobros) data-breakpoints="all" @endisset>Responsable</th>
             @isset($cobros)
                 <th >Valor cobrado</th>
                 <th >Valor pagado</th>
             @endisset
-            <th data-breakpoints="all">Etapa actual</th>
+            <th data-sort-id="etapa_actual" data-breakpoints="all">Etapa actual</th>
             {{-- <th data-breakpoints="all" data-filterable="false">Valor del estudio</th> --}}
-            <th data-breakpoints="all" data-filterable="false">Fecha de retiro del servicio</th>
-            <th data-breakpoints="all" data-filterable="false">Última entidad de servicio</th>
-            <th data-breakpoints="all">Municipio</th>
-            <th data-breakpoints="all" data-filterable="false">Acto administrativo del retiro</th>
-            <th data-breakpoints="all">Normatividad aplicada al caso</th>
-            <th data-breakpoints="all">Entidad de justicia primera instancia</th>
-            <th data-breakpoints="all">Entidad de justicia segunda instancia</th>
-            <th data-breakpoints="all" data-filterable="false">Observaciones del caso</th>
+            <th data-breakpoints="all">Fecha de retiro del servicio</th>
+            <th data-breakpoints="all">Última entidad de servicio</th>
+            <th data-sort-id="nombre_municipio" data-breakpoints="all">Municipio</th>
+            <th data-breakpoints="all">Acto administrativo del retiro</th>
+            <th data-sort-id="normatividad_aplicada_caso" data-breakpoints="all">Normatividad aplicada al caso</th>
+            <th data-sort-id="entidad_primera_instancia" data-breakpoints="all">Entidad de justicia primera instancia</th>
+            <th data-sort-id="entidad_segunda_instancia" data-breakpoints="all">Entidad de justicia segunda instancia</th>
+            <th data-breakpoints="all">Observaciones del caso</th>
             @if(!isset($cobros))
-                <th data-breakpoints="xs sm">Estado</th>
+                <th data-sort-id="estado_proceso" data-breakpoints="xs sm">Estado</th>
             @endif
-            <th data-filterable="false" data-sortable="false"></th>
+            <th data-sortable="false"></th>
         </tr>
     </thead>
     <tbody>
@@ -86,8 +82,8 @@
             <td>{{$proceso->cliente->persona->municipio->nombre_municipio}}</td>
             <td>{{$proceso->acto_administrativo}}</td>
             <td>{{$proceso->normatividad_aplicada_caso}}</td>
-            <td>{{$proceso->entidad_justicia_primera_instancia}}</td>
-            <td>{{$proceso->entidad_justicia_segunda_instancia}}</td>
+            <td>{{$proceso->getEntidadJusticiaPrimeraInstancia()}}</td>
+            <td>{{$proceso->getEntidadJusticiaSegundaInstancia()}}</td>
             <td>{{$proceso->observaciones_caso}}</td>
             @if(!isset($cobros))
                 <td>{{$proceso->estado_proceso == 2 ? 'Finalizado' : 'Activo'}}</td>

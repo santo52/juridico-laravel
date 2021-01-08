@@ -47,7 +47,7 @@ class Controller extends BaseController
         $currentPosition = 0;
         foreach(explode('/', $uri) as $value ){
             $value = trim($value);
-            $regex = '/(\?)([A-Za-z=&0-9]+)\w/';
+            $regex = '/(\?)([A-Za-z0-9].+)/';
             $value = preg_replace($regex, '', $value);
 
             if(!empty($value)){

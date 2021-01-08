@@ -1724,3 +1724,12 @@ h5.title-bordered {
   margin-bottom: 20px;
 }
 
+.dropdown-menu > li > a.flex {
+  display: flex;
+}
+
+.dropdown-menu > li > a.flex input {
+  margin: 0;
+  margin-right: 10px;
+}
+

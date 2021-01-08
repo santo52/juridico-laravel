@@ -142,7 +142,7 @@
                         <label for="recipient-name" class="control-label">Tipo</label>
                         <div class="checkbox-form">
                             <input type="checkbox" data-on="Valor específico" data-off="Formato" data-width="160"
-                                class="form-control" id="tipoEstado" name="estado" checked />
+                                class="form-control checkbox-toogle" id="tipoEstado" name="estado" checked />
                         </div>
                     </div>
                 </div>

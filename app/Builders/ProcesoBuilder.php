@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Builder;
+namespace App\Builders;
 
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\DB;
+use App\Builders\Builder;
 use App\Entities\TipoProceso;
 use App\Entities\ProcesoEtapa;
 use App\Entities\ProcesoEtapaActuacion;

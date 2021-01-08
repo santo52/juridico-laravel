@@ -3,7 +3,7 @@
 namespace App\Entities;
 
 use App\BaseModel;
-use App\Builder\ProcesoEtapaActuacionPlantillasBuilder;
+use App\Builders\ProcesoEtapaActuacionPlantillasBuilder;
 
 class ProcesoEtapaActuacionPlantillas extends BaseModel
 {

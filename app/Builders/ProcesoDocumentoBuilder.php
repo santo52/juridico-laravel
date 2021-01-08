@@ -1,16 +1,12 @@
 <?php
 
-namespace App\Builder;
+namespace App\Builders;
 
-use Illuminate\Database\Eloquent\Builder;
+use App\Builders\Builder;
 use Illuminate\Support\Facades\Storage;
-
-use function GuzzleHttp\json_decode;
 
 class ProcesoDocumentoBuilder extends Builder
 {
-
-    private $values;
 
 
     public function __construct($builder, $values)

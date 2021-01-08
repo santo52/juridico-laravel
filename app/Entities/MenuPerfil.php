@@ -3,7 +3,7 @@
 namespace App\Entities;
 
 use \App\BaseModel;
-use App\Builder\MenuPerfilBuilder;
+use App\Builders\MenuPerfilBuilder;
 
 class MenuPerfil extends BaseModel
 {

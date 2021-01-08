@@ -3,7 +3,7 @@
 namespace App\Entities;
 
 use \App\BaseModel;
-use App\Builder\ProcesoBuilder;
+use App\Builders\ProcesoBuilder;
 use App\Collection\ProcesoCollection;
 use Illuminate\Support\Facades\DB;
 
@@ -126,40 +126,20 @@ class Proceso extends BaseModel
             ->leftjoin('entidad_justicia as ejsi', 'ejsi.id_entidad_justicia', '=', 'proceso.entidad_justicia_segunda_instancia')
             ->where('proceso.eliminado', 0);
 
+        //app\builders\Builder.php
+        return $procesos->applyFilters('id_proceso', $request, function($query, $search, $searchBy) {
+            if($search && in_array('estado_proceso', $searchBy)) {
 
+                $estado = false;
+                if(strpos('activo', strtolower($search)) !== false) {
+                    $estado = 1;
+                } else if(strpos('finalizado', strtolower($search)) !== false) {
+                    $estado = 2;
+                }
 
-        $sql = $procesos->toSql();
-        $orderBy = 'id_proceso';
-        $type = 'desc';
-        $search = '';
-        $searchBy = [];
-
-        if($request && $request->has('order') && strpos($sql, $request->get('order')) !== false) {
-            $orderBy = $request->get('order');
-        }
-
-        if($request && $request->has('type')) {
-            $type = $request->get('type');
-        }
-
-        if($request && $request->has('search') && $request->has('searchby')) {
-            $search = trim($request->get('search'));
-            $search = !empty($search) ? $search : false;
-            $searchBy = explode(',', trim($request->get('searchby')));
-        }
-
-        foreach($searchBy as $field) {
-            if($field && strpos($sql, $field) !== false) {
-                $procesos->orHavingRaw("{$field} like '%{$search}%'");
+                $query->orHavingRaw("estado_proceso = '{$estado}'");
             }
-        }
-
-        if($search && in_array('estado_proceso', $searchBy)) {
-            $estado = strpos('activo', strtolower($search)) !== false ? 1 : 2;
-            $procesos->orHavingRaw("estado_proceso = '{$estado}'");
-        }
-
-        return $procesos->orderBy($orderBy, $type);
+        });
     }
 
     public static function get($id)

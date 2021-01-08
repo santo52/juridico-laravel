@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Builder;
+namespace App\Builders;
 
-use Illuminate\Database\Eloquent\Builder;
+use App\Builders\Builder;
 use App\Entities\Variable;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;

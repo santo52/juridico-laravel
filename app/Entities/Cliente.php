@@ -3,8 +3,9 @@
 namespace App\Entities;
 
 use \App\BaseModel;
+use App\Builders\Builder;
 use App\Entities\Persona;
-use App\Builder\ClienteBuilder;
+use App\Builders\ClienteBuilder;
 
 class Cliente extends BaseModel
 {
@@ -52,6 +53,11 @@ class Cliente extends BaseModel
     public function procesos()
     {
         return $this->belongsTo('App\Entities\Proceso');
+    }
+
+    public function newEloquentBuilder($builder)
+    {
+        return new Builder($builder, $this);
     }
 
     public function getSiglasTipoDocumento()

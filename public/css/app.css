@@ -1731,5 +1731,13 @@ h5.title-bordered {
 .dropdown-menu > li > a.flex input {
   margin: 0;
   margin-right: 10px;
+  min-height: auto;
+}
+
+.dropdown-menu > li > a.flex label {
+  font-weight: 300;
+  margin-bottom: 0;
+  display: block;
+  width: 100%;
 }
 

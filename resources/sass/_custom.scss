@@ -297,5 +297,13 @@ h5.title-bordered {
     input {
         margin:0;
         margin-right: 10px;
+        min-height: auto;
+    }
+
+    label {
+        font-weight: 300;
+        margin-bottom: 0;
+        display: block;
+        width: 100%;
     }
 }

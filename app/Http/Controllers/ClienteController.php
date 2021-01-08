@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Exports\ClienteExport;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\DB;
 
 use App\Entities\Cliente;
 use App\Entities\TipoDocumento;
@@ -18,30 +19,49 @@ use App\Entities\Persona;
 
 class ClienteController extends Controller
 {
-    public function index() {
+    public function index(Request $request) {
         $clientes = Cliente::
-            select(
-                'cliente.*', 'p.*', 'td.*', 'mu.*',
-                'pi.numero_documento as numero_documento_intermediario',
-                'pi.telefono as telefono_intermediario', 'pi.celular as celular_intermediario',
-                'pi.correo_electronico as correo_electronico_intermediario',
-                'mui.indicativo as indicativo_intermediario'
+            with('intermediario.persona.municipio', 'persona.tipoDocumento', 'persona.municipio')
+            ->select(
+                'cliente.*', 'cliente.id_cliente as id_del_cliente', 'cliente.nombre_persona_recomienda as recomienda',
+                'td.abreviatura_tipo_documento', 'td.nombre_tipo_documento', 'p.numero_documento',
+                'p.telefono', 'p.celular', 'p.correo_electronico', 'mu.nombre_municipio',
+                DB::raw("CONCAT(p.primer_apellido, ' ', p.segundo_apellido, ' ', p.primer_nombre, ' ', p.segundo_nombre) as nombre_cliente" )
+                // ,'pi.numero_documento as numero_documento_intermediario',
+                // 'pi.telefono as telefono_intermediario', 'pi.celular as celular_intermediario',
+                // 'pi.correo_electronico as correo_electronico_intermediario',
+                // 'mui.indicativo as indicativo_intermediario'
             )
             ->leftjoin('persona as p', 'p.id_persona', 'cliente.id_persona')
             ->leftjoin('tipo_documento as td', 'p.id_tipo_documento', 'td.id_tipo_documento')
             ->leftjoin('municipio as mu', 'mu.id_municipio', 'p.id_municipio')
 
-            ->leftjoin('intermediario as i', 'i.id_intermediario', 'cliente.id_intermediario')
-            ->leftjoin('persona as pi', 'pi.id_persona', 'i.id_persona')
-            ->leftjoin('municipio as mui', 'mui.id_municipio', 'pi.id_municipio')
+            // ->leftjoin('intermediario as i', 'i.id_intermediario', 'cliente.id_intermediario')
+            // ->leftjoin('persona as pi', 'pi.id_persona', 'i.id_persona')
+            // ->leftjoin('municipio as mui', 'mui.id_municipio', 'pi.id_municipio')
 
             ->where([
             'cliente.eliminado' => 0,
-        ])
-        ->paginate(10)->withPath('#cliente');
+        ])->applyFilters('id_del_cliente', $request, function($query, $search, $searchBy) {
+            if($search && in_array('estado_vital', $searchBy)) {
+                $estado = false;
+                if(strpos('vivo', strtolower($search)) !== false) {
+                    $estado = 1;
+                } else if(strpos('fallecido', strtolower($search)) !== false) {
+                    $estado = 2;
+                }
+
+                $query->orHavingRaw("estado_vital_cliente = '{$estado}'");
+            }
+        });
+
+        $clientes = $clientes->paginate(10)
+        ->appends(request()->query())
+        ->withPath('#cliente');
 
         return $this->renderSection('cliente.listar', [
-            'clientes' => $clientes
+            'clientes' => $clientes,
+            // 'sql' => $clientes->toSql()
         ]);
     }
 

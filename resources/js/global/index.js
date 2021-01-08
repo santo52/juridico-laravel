@@ -536,8 +536,6 @@ $.fn.richText = function (config = {}) {
         toolbar.push(['variables', Object.keys(plugins)])
     }
 
-    // toolbar.push(["view", [/*"fullscreen", "codeview", */"help"]])
-
     $(this).summernote({
         ...config,
         lang: 'es-ES',
@@ -622,11 +620,11 @@ function addFilterActive(self) {
                             <button type="button" class="btn btn-primary" onclick="handleClickButtonSearch(this, '${search}')">
                                 <span class="fooicon fooicon-${search ? 'remove' : 'search'}"></span>
                             </button>
-                            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuFromSubmitFilterSearch" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                 <span class="caret"></span>
                             </button>
-                            <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
-                                ${sortIDs.map(item => `<li><a class="flex items-center"><input type="checkbox" name="searchby[${item.field}]" ${!searchby || searchby.indexOf(item.field) !== -1 ? 'checked="checked"' : ''} value="${item.field}" >${item.text}</a></li>`).join('')}
+                            <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuFromSubmitFilterSearch">
+                                ${sortIDs.map(item => `<li><a onclick="event.stopPropagation()" class="flex items-center"><input type="checkbox" id="searchby[${item.field}]" name="searchby[${item.field}]" ${!searchby || searchby.indexOf(item.field) !== -1 ? 'checked="checked"' : ''} value="${item.field}" ><label for="searchby[${item.field}]">${item.text}</label></a></li>`).join('')}
                             </ul>
                         </div>
                     </div>

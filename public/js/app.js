@@ -844,8 +844,7 @@ $.fn.richText = function () {
     var plugins = initSummernoteVariables();
     $.extend($.summernote.plugins, plugins);
     toolbar.push(['variables', Object.keys(plugins)]);
-  } // toolbar.push(["view", [/*"fullscreen", "codeview", */"help"]])
-
+  }
 
   $(this).summernote(_objectSpread(_objectSpread({}, config), {}, {
     lang: 'es-ES',
@@ -937,8 +936,8 @@ function addFilterActive(self) {
           _hashQueryToJSON$sear2 = _hashQueryToJSON.searchby,
           searchby = _hashQueryToJSON$sear2 === void 0 ? '' : _hashQueryToJSON$sear2;
 
-      var html = "\n            <form class=\"form-inline\" onsubmit=\"submitFilterSearch(event)\" id=\"form-sumbit-filter-search\">\n                <div class=\"form-group footable-filtering-search\">\n                    <label class=\"sr-only\">Buscar</label>\n                    <div class=\"input-group\">\n                        <input type=\"text\" name=\"search\" class=\"form-control\" placeholder=\"Buscar ...\" value=\"".concat(search, "\">\n                        <div class=\"input-group-btn\">\n                            <button type=\"button\" class=\"btn btn-primary\" onclick=\"handleClickButtonSearch(this, '").concat(search, "')\">\n                                <span class=\"fooicon fooicon-").concat(search ? 'remove' : 'search', "\"></span>\n                            </button>\n                            <button class=\"btn btn-default dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                                <span class=\"caret\"></span>\n                            </button>\n                            <ul class=\"dropdown-menu dropdown-menu-right\" aria-labelledby=\"dropdownMenu1\">\n                                ").concat(sortIDs.map(function (item) {
-        return "<li><a class=\"flex items-center\"><input type=\"checkbox\" name=\"searchby[".concat(item.field, "]\" ").concat(!searchby || searchby.indexOf(item.field) !== -1 ? 'checked="checked"' : '', " value=\"").concat(item.field, "\" >").concat(item.text, "</a></li>");
+      var html = "\n            <form class=\"form-inline\" onsubmit=\"submitFilterSearch(event)\" id=\"form-sumbit-filter-search\">\n                <div class=\"form-group footable-filtering-search\">\n                    <label class=\"sr-only\">Buscar</label>\n                    <div class=\"input-group\">\n                        <input type=\"text\" name=\"search\" class=\"form-control\" placeholder=\"Buscar ...\" value=\"".concat(search, "\">\n                        <div class=\"input-group-btn\">\n                            <button type=\"button\" class=\"btn btn-primary\" onclick=\"handleClickButtonSearch(this, '").concat(search, "')\">\n                                <span class=\"fooicon fooicon-").concat(search ? 'remove' : 'search', "\"></span>\n                            </button>\n                            <button class=\"btn btn-default dropdown-toggle\" type=\"button\" id=\"dropdownMenuFromSubmitFilterSearch\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                                <span class=\"caret\"></span>\n                            </button>\n                            <ul class=\"dropdown-menu dropdown-menu-right\" aria-labelledby=\"dropdownMenuFromSubmitFilterSearch\">\n                                ").concat(sortIDs.map(function (item) {
+        return "<li><a onclick=\"event.stopPropagation()\" class=\"flex items-center\"><input type=\"checkbox\" id=\"searchby[".concat(item.field, "]\" name=\"searchby[").concat(item.field, "]\" ").concat(!searchby || searchby.indexOf(item.field) !== -1 ? 'checked="checked"' : '', " value=\"").concat(item.field, "\" ><label for=\"searchby[").concat(item.field, "]\">").concat(item.text, "</label></a></li>");
       }).join(''), "\n                            </ul>\n                        </div>\n                    </div>\n                </div>\n            </form>");
       $(filterContainer).addClass('footable-filtering-external footable-filtering-left').append(html);
     }

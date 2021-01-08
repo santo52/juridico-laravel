@@ -3,7 +3,7 @@
 namespace App\Entities;
 
 use \App\BaseModel;
-use App\Builder\ProcesoDocumentoBuilder;
+use App\Builders\ProcesoDocumentoBuilder;
 
 class ProcesoDocumento extends BaseModel
 {

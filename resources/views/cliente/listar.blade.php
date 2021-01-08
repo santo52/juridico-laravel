@@ -30,54 +30,52 @@
     </div>
 </div>
 
-<table id="tipoProcesoTable" class="table table-hover" data-empty="Sin clientes"
-    data-paging-count-format="Mostrando del {PF} al {PL} de {TR} registros"
-    data-filter-container="#filter-form-container" data-sorting="true" data-filtering="true" data-paging="true"
-    data-filter-placeholder="Buscar ..." data-filter-position="left" data-filter-dropdown-title="Buscar por"
-    data-filter-space="OR">
+<table id="tipoProcesoTable" class="table table-hover" data-empty="Sin clientes"  data-filter-container="#filter-form-container" data-sorting="true" data-filter-active="true">
     <thead>
         <tr class="bg-success">
-            <th>ID</th>
-            <th>Tipo documento</th>
-            <th>Número de documento</th>
-            <th>Nombres Completos</th>
-            <th>Número telefónico</th>
-            <th data-breakpoints="xs sm">Celular</th>
+            <th data-sort-id="id_del_cliente">ID</th>
+            <th data-sort-id="nombre_tipo_documento" >Tipo documento</th>
+            <th data-breakpoints="all">Nombre tipo documento</th>
+            <th data-sort-id="numero_documento">Número de documento</th>
+            <th data-sort-id="nombre_cliente">Nombres Completos</th>
+            <th data-sort-id="telefono">Número telefónico</th>
+            <th data-sort-id="celular" data-breakpoints="xs sm">Celular</th>
             <th data-breakpoints="all">Celular 2</th>
-            <th data-breakpoints="xs">Correo electrónico</th>
-            <th data-breakpoints="all" data-filterable="false">Fecha de creación</th>
-            <th data-breakpoints="all">Nombre de quien recomienda</th>
+            <th data-sort-id="correo_electronico" data-breakpoints="xs">Correo electrónico</th>
+            <th data-breakpoints="all" >Fecha de creación</th>
+            <th data-sort-id="recomienda" data-breakpoints="all">Nombre de quien recomienda</th>
             {{-- <th data-breakpoints="all">País</th>
             <th data-breakpoints="all">Departamento</th> --}}
-            <th data-breakpoints="all">Municipio</th>
+            <th data-sort-id="nombre_municipio" data-breakpoints="all">Municipio</th>
             {{-- <th data-breakpoints="all">Barrio</th> --}}
-             <th data-breakpoints="all">Dirección</th>
-            <th>Estado vital</th>
-            <th data-breakpoints="xs sm">Estado</th>
-            <th data-filterable="false" data-sortable="false"></th>
+            <th data-breakpoints="all">Dirección</th>
+            <th data-sort-id="estado_vital">Estado vital</th>
+            <th data-sort-id="estado_cliente" data-breakpoints="xs sm">Estado</th>
+            <th data-sortable="false"></th>
         </tr>
     </thead>
     <tbody>
         @if (count($clientes) > 0)
         @foreach ($clientes as $cliente)
         <tr id="tipoProcesoRow{{$cliente['id_cliente']}}">
-            <td>{{$cliente['id_cliente']}}</td>
-            <td>{{$cliente['abreviatura_tipo_documento']}}</td>
-            <td>{{$cliente['numero_documento']}}</td>
+            <td>{{$cliente->id_cliente}}</td>
+            <td>{{$cliente->persona->getSiglasTipoDocumento()}}</td>
+            <td>{{$cliente->getTipoDocumento()}}</td>
+            <td>{{$cliente->getNumeroDocumento()}}</td>
             <td>{{$cliente->getNombreCompleto()}}</td>
             <td>
-                @if($cliente['indicativo'])<span style="margin-right:2px;">(+{{$cliente['indicativo']}})</span>@endif{{$cliente['telefono']}}
+                @if($cliente->persona->getIndicativo())<span style="margin-right:2px;">(+{{$cliente->persona->getIndicativo()}})</span>@endif{{$cliente->getTelefono()}}
             </td>
-            <td>{{$cliente['celular']}}</td>
-            <td>{{$cliente['celular2']}}</td>
-            <td>{{$cliente['correo_electronico']}}</td>
-            <td>{{$cliente['fecha_creacion']}}</td>
-            <td>{{$cliente['nombre_persona_recomienda']}}</td>
+            <td>{{$cliente->getCelular()}}</td>
+            <td>{{$cliente->celular2}}</td>
+            <td>{{$cliente->getEmail()}}</td>
+            <td>{{$cliente->getFechaCreacion()}}</td>
+            <td>{{$cliente->nombre_persona_recomienda}}</td>
             {{-- <td>{{$cliente['nombre_pais']}}</td>
             <td>{{$cliente['nombre_departamento']}}</td> --}}
-            <td>{{$cliente['nombre_municipio']}}</td>
+            <td>{{$cliente->persona->getMunicipio()}}</td>
             {{-- <td>{{$cliente['barrio']}}</td> --}}
-            <td>{{$cliente['direccion']}}</td>
+            <td>{{$cliente->getDireccion()}}</td>
             <td>{{$cliente->getEstadoVital()}}</td>
             <td>{{$cliente['estado_cliente'] == 2 ? 'Inactivo' : 'Activo'}}</td>
             <td>

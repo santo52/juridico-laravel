@@ -8,13 +8,29 @@ use App\Entities\Actuacion;
 use App\Entities\ActuacionEtapaProceso;
 use Illuminate\Support\Facades\Auth;
 
+use App\Exports\EtapaProcesoExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 class EtapaProcesoController extends Controller
 {
 
     public function index(Request $request)
     {
-        $etapasProceso = EtapaProceso::where('eliminado', 0)
-        ->applyFilters('id_etapa_proceso', $request)
+        $etapasProceso = EtapaProceso::select('id_etapa_proceso', 'nombre_etapa_proceso', 'estado_etapa_proceso')
+        ->where('eliminado', 0)
+        ->applyFilters('id_etapa_proceso', $request, function($query, $search, $searchBy) {
+            if($search && in_array('estado_etapa_proceso', $searchBy)) {
+
+                $estado = 10;
+                if(strpos('activo', strtolower($search)) !== false) {
+                    $estado = 1;
+                } else if(strpos('inactivo', strtolower($search)) !== false) {
+                    $estado = 2;
+                }
+
+                $query->orHavingRaw("estado_etapa_proceso = '{$estado}'");
+            }
+        })
         ->paginate(10)
         ->appends(request()->query())
         ->withPath('#etapas-de-proceso');
@@ -165,5 +181,15 @@ class EtapaProcesoController extends Controller
         }
 
         return response()->json(['saved' => $dataSaved, $request->all(), $conditional]);
+    }
+
+    public function createExcel() {
+        return Excel::download(new EtapaProcesoExport, 'etapasProceso.xlsx');
+    }
+
+    public function createPDF() {
+        $etapas = EtapaProceso::where('eliminado', 0)->get();
+        $pdf = \PDF::loadView('etapaproceso.pdf', ["etapas" => $etapas])->setPaper('a4', 'landscape');
+        return $pdf->download('etapas.pdf');
     }
 }

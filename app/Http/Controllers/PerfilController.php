@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Entities\Perfil;
 use App\Exports\PerfilExport;
-use App\Entities\Menu;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Entities\Menu;
 use App\Entities\MenuPerfil;
 
 use App\Entities\AccionMenuPerfil;

@@ -11,7 +11,7 @@
 <div class="row">
     <div class="col-xs-12 flex juridico" id="filter-form-container">
         <div class="pull-left flex" style="padding-right:20px">
-            {{-- <div>
+            <div>
                 <a href="javascript:void(0)" onClick="etapaProceso.pdf()" class="btn download-file-action">
                     <img style="width: 100%" src="{!! asset('images/pdf.svg') !!}" />
                 </a>
@@ -20,7 +20,7 @@
                 <a href="javascript:void(0)" onClick="etapaProceso.excel()" class="btn download-file-action">
                     <img style="width: 100%" src="{!! asset('images/xlsx.svg') !!}" />
                 </a>
-            </div> --}}
+            </div>
             <div>
                 <a href="javascript:void(0)" onClick="window.print()" class="btn download-file-action">
                     <img style="width: 100%" src="{!! asset('images/print.svg') !!}" />
@@ -30,17 +30,13 @@
     </div>
 </div>
 
-<table id="tipoProcesoTable" class="table table-hover" data-empty="Sin etapas de proceso"
-    data-paging-count-format="Mostrando del {PF} al {PL} de {TR} registros"
-    data-filter-container="#filter-form-container" data-sorting="true" data-filtering="true" data-paging="true"
-    data-filter-placeholder="Buscar ..." data-filter-position="left" data-filter-dropdown-title="Buscar por"
-    data-filter-space="OR">
+<table id="tipoProcesoTable" class="table table-hover" data-empty="Sin etapas de proceso" data-filter-container="#filter-form-container" data-sorting="true" data-filter-active="true">
     <thead>
         <tr class="bg-success">
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Estado</th>
-            <th data-filterable="false" data-sortable="false"></th>
+            <th data-sort-id="id_etapa_proceso">ID</th>
+            <th data-sort-id="nombre_etapa_proceso">Nombre</th>
+            <th data-sort-id="estado_etapa_proceso">Estado</th>
+            <th data-sortable="false"></th>
         </tr>
     </thead>
     <tbody>

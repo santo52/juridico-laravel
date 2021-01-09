@@ -645,7 +645,7 @@ $.fn.asyncFootable = function (data) {
         addFilterActive(this)
     }
 
-    const orderItem = $(this).find('.fooicon')
+    const orderItem = $(this).find('.fooicon').parents('th')
 
     orderItem.on('click', function (e) {
         e.preventDefault();
@@ -660,7 +660,7 @@ $.fn.asyncFootable = function (data) {
 function asyncFootableOnSort(e, callback) {
 
     const jsonParams = hashQueryToJSON();
-    jsonParams.order = $(e.target).parents('th').data('sort-id')
+    jsonParams.order = $(e.target).data('sort-id') || $(e.target).parents('th').data('sort-id')
     jsonParams.page = jsonParams.page ? jsonParams.page : 1;
     jsonParams.type = jsonParams.type && jsonParams.type === 'desc' ? 'asc' : 'desc'
 

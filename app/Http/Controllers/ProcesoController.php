@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Exports\ProcesoExport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -215,5 +217,15 @@ class ProcesoController extends Controller
         $client = Proceso::find($id);
         $client->update(['eliminado' => 1]);
         return response()->json(['deleted' => true]);
+    }
+
+    public function createExcel() {
+        return Excel::download(new ProcesoExport, 'procesos.xlsx');
+    }
+
+    public function createPDF() {
+        $procesos = Proceso::getAll()->get();
+        $pdf = \PDF::loadView('proceso.pdf', ["procesos" => $procesos])->setPaper('a4', 'landscape');
+        return $pdf->download('procesos.pdf');
     }
 }

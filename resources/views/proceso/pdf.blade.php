@@ -20,43 +20,53 @@
 <table>
     <thead>
         <tr>
-            <th>Nombre de la actuación</th>
-            <th>¿Genera alertas?</th>
-            <th>¿Aplica control de vencimiento?</th>
-            <th>Días de vencimiento</th>
-            <th>¿Requiere estudio de favorabilidad?</th>
-            <th>¿La actuación tiene cobro?</th>
-            <th>Valor de la actuación</th>
-            <th>Actuación para creación de cliente</th>
-            <th>¿Mostrar datos de radicado?</th>
-            <th>¿Mostrar datos de juzgado?</th>
-            <th>¿Mostrar datos de respuesta?</th>
-            <th>¿Mostrar datos de apelación?</th>
-            <th>¿Mostrar datos de cobros?</th>
-            <th>¿Programar audiencia?</th>
-            <th>Control de entrega de documentos</th>
-            <th>¿Generar documentos?</th>
+            <th>Documento cliente</th>
+            <th>Nombre cliente</th>
+            <th>Tipo de proceso</th>
+            <th>Entidad demandada</th>
+            <th>Responsable</th>
+            @isset($cobros)
+                <th >Valor cobrado</th>
+                <th >Valor pagado</th>
+            @endisset
+            <th>Etapa actual</th>
+            {{-- <th data-breakpoints="all" data-filterable="false">Valor del estudio</th> --}}
+            <th>Fecha de retiro del servicio</th>
+            <th>Última entidad de servicio</th>
+            <th>Municipio</th>
+            <th>Acto administrativo del retiro</th>
+            <th>Normatividad aplicada al caso</th>
+            <th>Entidad de justicia primera instancia</th>
+            <th>Entidad de justicia segunda instancia</th>
+            @if(!isset($cobros))
+                <th>Estado</th>
+            @endif
         </tr>
     </thead>
     <tbody>
-        @foreach ($actuaciones as $item)
+        @foreach ($procesos as $proceso)
         <tr>
-            <th style="text-align:left;padding-left: 5px;" >{{$item->nombre_actuacion}}</th>
-            <th>{{$item->genera_alertas}}</th>
-            <th>{{$item->aplica_control_vencimiento}}</th>
-            <th>{{$item->getDiasVencimiento()}}</th>
-            <th>{{$item->requiere_estudio_favorabilidad}}</th>
-            <th>{{$item->actuacion_tiene_cobro}}</th>
-            <th style="text-align:left;padding-left: 5px;">{{$item->valor_actuacion}}</th>
-            <th>{{$item->actuacion_creacion_cliente}}</th>
-            <th>{{$item->mostrar_datos_radicado}}</th>
-            <th>{{$item->mostrar_datos_juzgado}}</th>
-            <th>{{$item->mostrar_datos_respuesta}}</th>
-            <th>{{$item->mostrar_datos_apelacion}}</th>
-            <th>{{$item->mostrar_datos_cobros}}</th>
-            <th>{{$item->programar_audiencia}}</th>
-            <th>{{$item->control_entrega_documentos}}</th>
-            <th>{{$item->generar_documentos}}</th>
+            <td>{{$proceso->cliente->persona->numero_documento}}</td>
+            <td>{{$proceso->getNombreCompletoCliente()}}</td>
+            <td>{{$proceso->tipoProceso->nombre_tipo_proceso}}</td>
+            <td>{{$proceso->entidadDemandada->nombre_entidad_demandada}}</td>
+            <td>{{$proceso->responsable ? $proceso->responsable->getNombreCompleto() : 'Sin responsable'}}</td>
+            @isset($cobros)
+                <td>$ {{number_format($proceso->getTotalCobrado(), 0, ',', '.')}}</td>
+                <td>$ {{number_format($proceso->getTotalPagado(), 0, ',', '.')}}</td>
+            @endisset
+            <td>{{$proceso->etapa ? $proceso->etapa->nombre_etapa_proceso : 'Sin iniciar'}}</td>
+            {{-- <td>{{$proceso->valor_estudio}}</td> --}}
+            <td>{{$proceso->getFechaRetiroServicio()}}</td>
+            <td>{{$proceso->ultima_entidad_retiro}}</td>
+            <td>{{$proceso->cliente->persona->municipio->nombre_municipio}}</td>
+            <td>{{$proceso->acto_administrativo}}</td>
+            <td>{{$proceso->normatividad_aplicada_caso}}</td>
+            <td>{{$proceso->getEntidadJusticiaPrimeraInstancia()}}</td>
+            <td>{{$proceso->getEntidadJusticiaSegundaInstancia()}}</td>
+            @if(!isset($cobros))
+                <td>{{$proceso->estado_proceso == 2 ? 'Finalizado' : 'Activo'}}</td>
+            @endif
         </tr>
         @endforeach
     </tbody>

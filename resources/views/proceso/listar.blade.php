@@ -13,16 +13,25 @@
 <div class="row">
     <div class="col-xs-12 flex juridico" id="filter-form-container">
         <div class="pull-left flex" style="padding-right:20px">
-            {{-- <div>
+            <div>
                 <a href="javascript:void(0)" onClick="proceso.pdf()" class="btn download-file-action">
                     <img style="width: 100%" src="{!! asset('images/pdf.svg') !!}" />
                 </a>
             </div>
             <div>
                 <a href="javascript:void(0)" onClick="proceso.excel()" class="btn download-file-action">
-                    <img style="width: 100%" src="{!! asset('images/xlsx.svg') !!}" />
+                    <img style="width: 100%" src="{!! as<div>
+                        <a href="javascript:void(0)" onClick="proceso.pdf()" class="btn download-file-action">
+                            <img style="width: 100%" src="{!! asset('images/pdf.svg') !!}" />
+                        </a>
+                    </div>
+                    <div>
+                        <a href="javascript:void(0)" onClick="proceso.excel()" class="btn download-file-action">
+                            <img style="width: 100%" src="{!! asset('images/xlsx.svg') !!}" />
+                        </a>
+                    </div>set('images/xlsx.svg') !!}" />
                 </a>
-            </div> --}}
+            </div>
             <div>
                 <a href="javascript:void(0)" onClick="window.print()" class="btn download-file-action">
                     <img style="width: 100%" src="{!! asset('images/print.svg') !!}" />

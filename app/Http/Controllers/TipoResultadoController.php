@@ -8,9 +8,12 @@ use Illuminate\Support\Facades\Auth;
 
 class TipoResultadoController extends Controller
 {
-    public function index() {
+    public function index(Request $request) {
         $tiposResultado = TipoResultado::where('eliminado', 0)
-        ->paginate(10)->withPath('#tipos-de-resultado');
+        ->applyFilters('id_tipo_resultado', $request)
+        ->paginate(10)
+        ->appends(request()->query())
+        ->withPath('#tipos-de-resultado');
 
         return $this->renderSection('tiporesultado.listar', [
             'tiposResultado' => $tiposResultado

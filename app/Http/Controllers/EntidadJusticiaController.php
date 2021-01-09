@@ -12,8 +12,12 @@ use App\Entities\Departamento;
 class EntidadJusticiaController extends Controller
 {
 
-    public function index() {
-        $entidades = EntidadJusticia::where('eliminado', 0)->paginate(10)->withPath('#entidades-de-justicia');
+    public function index(Request $request) {
+        $entidades = EntidadJusticia::where('eliminado', 0)
+        ->applyFilters('id_entidad_justicia', $request)
+        ->paginate(10)
+        ->appends(request()->query())
+        ->withPath('#entidades-de-justicia');
         $ciudades = Municipio::all();
         $paises = Pais::all();
         $departamentos = Departamento::all();

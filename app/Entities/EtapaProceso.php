@@ -3,6 +3,7 @@
 namespace App\Entities;
 
 use App\BaseModel;
+use App\Builders\Builder;
 
 class EtapaProceso extends BaseModel
 {
@@ -28,6 +29,10 @@ class EtapaProceso extends BaseModel
     {
         return $this->belongsToMany('App\Entities\Actuacion', 'actuacion_etapa_proceso', 'id_etapa_proceso', 'id_actuacion')
             ->withPivot('tiempo_maximo_proxima_actuacion', 'unidad_tiempo_proxima_actuacion', 'id_usuario_creacion', 'order');
+    }
+
+    public function newEloquentBuilder($builder) {
+        return new Builder($builder, $this);
     }
 
     public static function getActuaciones($id, $where = false)

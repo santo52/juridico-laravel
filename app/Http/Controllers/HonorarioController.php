@@ -14,11 +14,14 @@ use App\Entities\ProcesoTipoResultado;
 
 class HonorarioController extends Controller
 {
-    public function index() {
+    public function index(Request $request) {
         $entidadesFinancieras = EntidadFinanciera::where('eliminado', 0)->get();
         $clientes = Cliente::where(['eliminado' => 0, 'estado_cliente' => '1'])->get();
         $honorarios = Honorario::with('pagoHonorario', 'cliente.persona')->where('eliminado', 0)
-        ->paginate(10)->withPath('#honorarios');
+            ->applyFilters('id_honorario', $request)
+            ->paginate(10)
+            ->appends(request()->query())
+            ->withPath('#honorarios');
 
         foreach($honorarios as $honorario) {
             $honorario->proceso->addTiposResultadoToProceso();

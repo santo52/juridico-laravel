@@ -8,10 +8,14 @@ use App\Entities\PlantillaDocumento;
 
 class PlantillaDocumentoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
 
-        $plantillas = PlantillaDocumento::where('eliminado', 0)->paginate(10)->withPath('#plantillas');
+        $plantillas = PlantillaDocumento::where('eliminado', 0)
+        ->applyFilters('id_plantilla_documento', $request)
+        ->paginate(10)
+        ->appends(request()->query())
+        ->withPath('#plantillas');
         return $this->renderSection('plantillas.listar', [
             'plantillas' => $plantillas
         ]);

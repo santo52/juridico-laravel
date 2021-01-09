@@ -34,7 +34,7 @@
 </div>
 
 <table id="listTable" class="table table-hover" data-empty="Sin items de menú" data-paging-count-format="Mostrando del {PF} al {PL} de {TR} registros"
-    data-filter-container="#filter-form-container" data-sorting="true" data-filtering="true" data-paging="true"
+    data-filter-container="#filter-form-container" data-sorting="true" data-filtering="false" data-paging="true"
     data-filter-placeholder="Buscar ..." data-filter-position="left" data-filter-dropdown-title="Buscar por"
     data-filter-space="OR">
     <thead>

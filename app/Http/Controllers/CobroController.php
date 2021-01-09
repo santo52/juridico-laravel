@@ -10,10 +10,12 @@ use App\Entities\EntidadFinanciera;
 
 class CobroController extends Controller
 {
-    public function index() {
+    public function index(Request $request) {
 
-        $procesos = Proceso::getAll()
-        ->paginate(10)->withPath('#cobros-y-pagos');
+        $procesos = Proceso::getAll($request)
+        ->paginate(10)
+        ->appends(request()->query())
+        ->withPath('#cobros-y-pagos');
 
         return $this->renderSection('proceso.listar', [
             'procesos' => $procesos,

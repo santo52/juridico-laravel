@@ -3,6 +3,7 @@
 namespace App\Entities;
 
 use \App\BaseModel;
+use App\Builders\Builder;
 
 class TipoProceso extends BaseModel
 {
@@ -20,6 +21,10 @@ class TipoProceso extends BaseModel
 
     public function etapas(){
         return $this->belongsToMany('App\Entities\EtapaProceso', 'etapas_proceso_tipo_proceso', 'id_tipo_proceso', 'id_etapa_proceso')->withPivot('order', 'id_usuario_creacion');
+    }
+
+    public function newEloquentBuilder($builder) {
+        return new Builder($builder, $this);
     }
 
     public static function getEtapas($id, $where = false) {

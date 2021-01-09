@@ -11,9 +11,13 @@ use Illuminate\Support\Facades\Auth;
 class EtapaProcesoController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        $etapasProceso = EtapaProceso::where('eliminado', 0)->paginate(10)->withPath('#etapas-de-proceso');
+        $etapasProceso = EtapaProceso::where('eliminado', 0)
+        ->applyFilters('id_etapa_proceso', $request)
+        ->paginate(10)
+        ->appends(request()->query())
+        ->withPath('#etapas-de-proceso');
         return $this->renderSection('etapaproceso.listar', [
             'etapas' => $etapasProceso
         ]);

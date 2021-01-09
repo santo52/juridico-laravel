@@ -4,6 +4,7 @@ namespace App\Entities;
 
 use \App\BaseModel;
 use App\Collection\ActuacionCollection;
+use App\Builders\Builder;
 
 
 class Actuacion extends BaseModel
@@ -39,6 +40,10 @@ class Actuacion extends BaseModel
 
     public function newCollection(array $models = []) {
         return new ActuacionCollection($models);
+    }
+
+    public function newEloquentBuilder($builder) {
+        return new Builder($builder, $this);
     }
 
     public static function getTiposResultado() {

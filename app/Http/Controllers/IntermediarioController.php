@@ -11,14 +11,18 @@ use Illuminate\Support\Facades\Auth;
 
 class IntermediarioController extends Controller
 {
-    public function index() {
+    public function index(Request $request) {
         $intermediarios = Intermediario::
         leftjoin('persona as p', 'p.id_persona', 'intermediario.id_persona')
         ->leftjoin('tipo_documento as td', 'p.id_tipo_documento', 'td.id_tipo_documento')
         ->leftjoin('municipio as mu', 'mu.id_municipio', 'p.id_municipio')
         // ->leftjoin('departamento as de', 'de.id_departamento', 'mu.id_departamento')
         // ->leftjoin('pais as pa', 'pa.id_pais', 'de.id_pais')
-        ->where('intermediario.eliminado', 0)->paginate(10)->withPath('#intermediario');
+        ->where('intermediario.eliminado', 0)
+        ->applyFilters('id_intermediario', $request)
+        ->paginate(10)
+        ->appends(request()->query())
+        ->withPath('#intermediario');
 
         $municipios = Municipio::all();
 

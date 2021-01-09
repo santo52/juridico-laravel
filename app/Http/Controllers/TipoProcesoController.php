@@ -11,12 +11,16 @@ use Illuminate\Support\Facades\Auth;
 
 class TipoProcesoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $tiposProceso = TipoProceso::where([
             'eliminado' => 0,
             'estado_tipo_proceso' => 1
-        ])->paginate(10)->withPath('#tipos-de-proceso');
+        ])
+        ->applyFilters('id_tipo_proceso', $request)
+        ->paginate(10)
+        ->appends(request()->query())
+        ->withPath('#tipos-de-proceso');
         return $this->renderSection('tipoproceso.listar', [
             'tiposProceso' => $tiposProceso
         ]);

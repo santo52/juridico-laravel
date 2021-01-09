@@ -26,7 +26,8 @@ class ProcesoController extends Controller
 
     public function index(Request $request)
     {
-        $procesos = Proceso::getAll($request)->paginate(10)
+        $procesos = Proceso::getAll($request)
+        ->paginate(10)
         ->appends(request()->query())
         ->withPath('#proceso');
 

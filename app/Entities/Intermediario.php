@@ -3,7 +3,7 @@
 namespace App\Entities;
 
 use \App\BaseModel;
-use App\Entities\Persona;
+use App\Builders\Builder;
 
 class Intermediario extends BaseModel
 {
@@ -22,6 +22,10 @@ class Intermediario extends BaseModel
     public function persona()
     {
         return $this->hasOne('App\Entities\Persona', 'id_persona', 'id_persona');
+    }
+
+    public function newEloquentBuilder($builder) {
+        return new Builder($builder, $this);
     }
 
     public function getNombreCompleto(){

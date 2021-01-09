@@ -3,6 +3,7 @@
 namespace App\Entities;
 
 use App\BaseModel;
+use App\Builders\Builder;
 
 class PlantillaDocumento extends BaseModel
 {
@@ -17,4 +18,8 @@ class PlantillaDocumento extends BaseModel
     protected $fillable = [
         "id_plantilla_documento", "nombre_plantilla_documento", "contenido_plantilla_documento", "estado_plantilla_documento", "fecha_creacion", "id_usuario_creacion", "fecha_actualizacion", "id_usuario_actualizacion", "eliminado"
     ];
+
+    public function newEloquentBuilder($builder) {
+        return new Builder($builder, $this);
+    }
 }

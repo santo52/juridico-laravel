@@ -54,10 +54,12 @@ class SeguimientoProcesoController extends Controller
         return $actuacionDocumentos;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $procesos = Proceso::getAll()
-        ->paginate(10)->withPath('#seguimiento-procesos');
+        $procesos = Proceso::getAll($request)
+        ->paginate(10)
+        ->appends(request()->query())
+        ->withPath('#seguimiento-procesos');
 
         return $this->renderSection('proceso.listar', [
             'procesos' => $procesos,

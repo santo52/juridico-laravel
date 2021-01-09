@@ -3,6 +3,7 @@
 namespace App\Entities;
 
 use \App\BaseModel;
+use App\Builders\Builder;
 
 class EntidadDemandada extends BaseModel
 {
@@ -24,6 +25,10 @@ class EntidadDemandada extends BaseModel
     public function municipio()
     {
         return $this->hasOne('App\Entities\Municipio', 'id_municipio', 'id_municipio');
+    }
+
+    public function newEloquentBuilder($builder) {
+        return new Builder($builder, $this);
     }
 
     public function getMunicipio(){

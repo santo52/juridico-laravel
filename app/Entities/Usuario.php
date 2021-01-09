@@ -3,6 +3,7 @@
 namespace App\Entities;
 
 use \App\BaseModel;
+use App\Builders\Builder;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\MustVerifyEmail;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -44,6 +45,10 @@ CanResetPasswordContract
     public function area()
     {
         return $this->hasOne('App\Entities\Area', 'id_area', 'id_area');
+    }
+
+    public function newEloquentBuilder($builder) {
+        return new Builder($builder, $this);
     }
 
     public function getNombreCompleto() {

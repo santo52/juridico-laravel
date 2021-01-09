@@ -9,8 +9,12 @@ use App\Entities\EntidadDemandada;
 class EntidadDemandadaController extends Controller
 {
 
-    public function index() {
-        $entidades = EntidadDemandada::where('eliminado', 0)->paginate(10)->withPath('#entidades-demandadas');
+    public function index(Request $request) {
+        $entidades = EntidadDemandada::where('eliminado', 0)
+        ->applyFilters('id_entidad_demandada', $request)
+        ->paginate(10)
+        ->appends(request()->query())
+        ->withPath('#entidades-demandadas');
         return $this->renderSection('entidad_demandada.listar', [
             'entidades' => $entidades
         ]);

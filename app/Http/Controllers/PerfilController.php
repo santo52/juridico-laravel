@@ -12,13 +12,16 @@ use Illuminate\Support\Facades\Auth;
 
 class PerfilController extends Controller
 {
-    public function index() {
+    public function index(Request $request) {
         $perfil = new Perfil;
         $list = $perfil->where([
             ['id_perfil', '<>', 1],
             ['eliminado', 0]
-        ])->orderBy('id_perfil', 'desc')
-        ->paginate(10)->withPath('#perfil');
+        ])
+        ->applyFilters('id_perfil', $request)
+        ->paginate(10)
+        ->appends(request()->query())
+        ->withPath('#perfil');
 
 
         return $this->renderSection('perfil.listar', [

@@ -5,6 +5,7 @@ namespace App\Entities;
 use \App\BaseModel;
 use App\Collection\MenuCollection;
 use Illuminate\Support\Facades\Auth;
+use App\Builders\Builder;
 
 class Menu extends BaseModel
 {
@@ -57,5 +58,9 @@ class Menu extends BaseModel
 
     public function newCollection(array $models = []) {
         return new MenuCollection($models);
+    }
+
+    public function newEloquentBuilder($builder) {
+        return new Builder($builder, $this);
     }
 }

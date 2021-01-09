@@ -3,6 +3,7 @@
 namespace App\Entities;
 
 use \App\BaseModel;
+use App\Builders\Builder;
 
 class TipoResultado extends BaseModel
 {
@@ -20,6 +21,10 @@ class TipoResultado extends BaseModel
     public function procesoTiposResultado()
     {
         return $this->hasMany('App\Entities\ProcesoTipoResultado', 'id_tipo_resultado', 'id_tipo_resultado');
+    }
+
+    public function newEloquentBuilder($builder) {
+        return new Builder($builder, $this);
     }
 }
 

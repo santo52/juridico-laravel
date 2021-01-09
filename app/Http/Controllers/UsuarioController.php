@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Storage;
 
 class UsuarioController extends Controller
 {
-    public function index() {
+    public function index(Request $request) {
         $areas = Area::where('eliminado', 0)->get();
         $usuarios = Usuario::
         leftjoin('persona as p', 'p.id_persona', 'usuario.id_persona')
@@ -24,7 +24,11 @@ class UsuarioController extends Controller
         ->leftjoin('municipio as mu', 'mu.id_municipio', 'p.id_municipio')
         // ->leftjoin('departamento as de', 'de.id_departamento', 'mu.id_departamento')
         // ->leftjoin('pais as pa', 'pa.id_pais', 'de.id_pais')
-        ->where('usuario.eliminado', 0)->paginate(10)->withPath('#usuario');
+        ->where('usuario.eliminado', 0)
+        ->applyFilters('id_usuario', $request)
+        ->paginate(10)
+        ->appends(request()->query())
+        ->withPath('#usuario');
 
         $municipios = Municipio::all();
 

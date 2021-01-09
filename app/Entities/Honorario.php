@@ -3,6 +3,7 @@
 namespace App\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Builders\Builder;
 
 class Honorario extends Model
 {
@@ -34,6 +35,10 @@ class Honorario extends Model
 
     public function cliente() {
         return $this->belongsTo('App\Entities\Cliente', 'id_cliente', 'id_cliente');
+    }
+
+    public function newEloquentBuilder($builder) {
+        return new Builder($builder, $this);
     }
 
     public function getValorAPagar() {

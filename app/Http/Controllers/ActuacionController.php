@@ -120,13 +120,16 @@ class ActuacionController extends Controller
 
     }
 
-    public function index() {
+    public function index(Request $request) {
 
         $actuacion = new Actuacion;
         $list = $actuacion
             ->where('eliminado', 0)
             ->orderBy('id_actuacion', 'desc')
-            ->paginate(10)->withPath('#actuacion');
+            ->applyFilters('id_actuacion', $request)
+            ->paginate(10)
+            ->appends(request()->query())
+            ->withPath('#actuacion');
 
         return $this->renderSection('actuacion.listar', [
             'actuaciones' => $list,

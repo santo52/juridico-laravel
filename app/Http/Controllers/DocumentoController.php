@@ -4,12 +4,26 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Entities\Documento;
+use App\Exports\DocumentoExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class DocumentoController extends Controller
 {
     public function index(Request $request) {
-        $documentos = Documento::where('eliminado', 0)
-        ->applyFilters('id_documento', $request)
+        $documentos = Documento::select('id_documento', 'nombre_documento', 'estado_documento')
+        ->where('eliminado', 0)
+        ->applyFilters('id_documento', $request, function($query, $search, $searchBy) {
+            if($search && in_array('estado_documento', $searchBy)) {
+                $estado = 10000;
+                if(strpos('activo', strtolower($search)) !== false) {
+                    $estado = 1;
+                } else if(strpos('inactivo', strtolower($search)) !== false) {
+                    $estado = 2;
+                }
+
+                $query->orHavingRaw("estado_documento = '{$estado}'");
+            }
+        })
         ->paginate(10)
         ->appends(request()->query())
         ->withPath('#documento');
@@ -72,5 +86,15 @@ class DocumentoController extends Controller
 
         $saved = Documento::updateOrCreate(['id_documento' => $id], $data);
         return response()->json([ 'saved' => $saved ]);
+    }
+
+    public function createExcel() {
+        return Excel::download(new DocumentoExport, 'documentos.xlsx');
+    }
+
+    public function createPDF() {
+        $documentos = Documento::where('eliminado', 0)->get();
+        $pdf = \PDF::loadView('documento.pdf', ["documentos" => $documentos])->setPaper('a4', 'landscape');
+        return $pdf->download('documentos.pdf');
     }
 }

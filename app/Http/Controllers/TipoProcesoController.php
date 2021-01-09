@@ -7,17 +7,31 @@ use App\Entities\TipoProceso;
 use App\Entities\EtapaProceso;
 use App\Entities\EtapasProcesoTipoProceso;
 use Illuminate\Support\Facades\Auth;
+use App\Exports\TipoProcesoExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class TipoProcesoController extends Controller
 {
     public function index(Request $request)
     {
-        $tiposProceso = TipoProceso::where([
+        $tiposProceso = TipoProceso::select('id_tipo_proceso', 'nombre_tipo_proceso', 'estado_tipo_proceso')
+        ->where([
             'eliminado' => 0,
             'estado_tipo_proceso' => 1
         ])
-        ->applyFilters('id_tipo_proceso', $request)
+        ->applyFilters('id_tipo_proceso', $request, function($query, $search, $searchBy) {
+            if($search && in_array('estado_tipo_proceso', $searchBy)) {
+                $estado = 10000;
+                if(strpos('activo', strtolower($search)) !== false) {
+                    $estado = 1;
+                } else if(strpos('inactivo', strtolower($search)) !== false) {
+                    $estado = 2;
+                }
+
+                $query->orHavingRaw("estado_tipo_proceso = '{$estado}'");
+            }
+        })
         ->paginate(10)
         ->appends(request()->query())
         ->withPath('#tipos-de-proceso');
@@ -160,5 +174,15 @@ class TipoProcesoController extends Controller
 
         $deleted = EtapasProcesoTipoProceso::where($conditionals)->delete();
         return response()->json(['deleted' => $deleted]);
+    }
+
+    public function createExcel() {
+        return Excel::download(new TipoProcesoExport, 'tiposproceso.xlsx');
+    }
+
+    public function createPDF() {
+        $tiposproceso = TipoProceso::where('eliminado', 0)->get();
+        $pdf = \PDF::loadView('tipoproceso.pdf', ["tiposproceso" => $tiposproceso])->setPaper('a4', 'landscape');
+        return $pdf->download('tiposproceso.pdf');
     }
 }

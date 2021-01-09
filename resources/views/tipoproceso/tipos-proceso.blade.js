@@ -1,11 +1,11 @@
 class TipoProceso {
 
     pdf(){
-        window.open('/etapas-de-proceso/pdf')
+        window.open('/tipos-de-proceso/pdf')
     }
 
     excel(){
-        window.open('/etapas-de-proceso/excel')
+        window.open('/tipos-de-proceso/excel')
     }
 
     createEtapaOpen(){

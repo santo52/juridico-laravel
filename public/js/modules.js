@@ -3128,12 +3128,12 @@ var TipoProceso = /*#__PURE__*/function () {
   _createClass(TipoProceso, [{
     key: "pdf",
     value: function pdf() {
-      window.open('/etapas-de-proceso/pdf');
+      window.open('/tipos-de-proceso/pdf');
     }
   }, {
     key: "excel",
     value: function excel() {
-      window.open('/etapas-de-proceso/excel');
+      window.open('/tipos-de-proceso/excel');
     }
   }, {
     key: "createEtapaOpen",

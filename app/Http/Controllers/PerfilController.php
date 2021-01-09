@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Entities\Perfil;
+use App\Exports\PerfilExport;
 use App\Entities\Menu;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Entities\MenuPerfil;
 
 use App\Entities\AccionMenuPerfil;
@@ -148,5 +150,15 @@ class PerfilController extends Controller
         }
 
         return response()->json(['saved' => true]);
+    }
+
+    public function createExcel() {
+        return Excel::download(new PerfilExport, 'perfiles.xlsx');
+    }
+
+    public function createPDF() {
+        $perfiles = Perfil::where('eliminado', 0)->get();
+        $pdf = \PDF::loadView('perfil.pdf', ["perfiles" => $perfiles])->setPaper('a4', 'landscape');
+        return $pdf->download('perfil.pdf');
     }
 }

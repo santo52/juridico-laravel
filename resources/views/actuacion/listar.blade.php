@@ -37,20 +37,16 @@
     </div>
 </div>
 
-<table id="actuacionTable" class="table table-hover"
-    data-paging-count-format="Mostrando del {PF} al {PL} de {TR} registros"
-    data-filter-container="#filter-form-container" data-sorting="true" data-filtering="true" data-paging="true"
-    data-filter-placeholder="Buscar ..." data-filter-position="left" data-filter-dropdown-title="Buscar por"
-    data-filter-space="OR">
+<table id="actuacionTable" class="table table-hover" data-empty="Sin actuaciones" data-filter-container="#filter-form-container" data-sorting="true" data-filter-active="true">
     <thead>
         <tr class="bg-success">
-            <th>ID</th>
-            <th>Nombre de la actuación</th>
+            <th data-sort-id="id_actuacion">ID</th>
+            <th data-sort-id="nombre_actuacion">Nombre de la actuación</th>
             {{-- <th data-breakpoints="all" data-filterable="false">¿Genera alertas?</th> --}}
             {{-- <th data-breakpoints="all" data-filterable="false">¿Aplica control de vencimiento?</th> --}}
-            <th data-filterable="false">Tiempo de vencimiento</th>
+            <th>Tiempo de vencimiento</th>
             {{-- <th data-breakpoints="all" data-filterable="false">¿Aplica procedibilidad?</th> --}}
-            <th data-filterable="false">¿La actuación tiene cobro?</th>
+            <th>¿La actuación tiene cobro?</th>
             {{-- <th data-filterable="false">Valor de la actuación</th> --}}
             {{-- <th data-breakpoints="all" data-filterable="false">¿Mostrar datos de radicado?</th> --}}
             {{-- <th data-breakpoints="all" data-filterable="false">¿Mostrar datos de juzgado?</th> --}}
@@ -60,7 +56,7 @@
             {{-- <th data-breakpoints="all" data-filterable="false">¿Programar audiencia?</th> --}}
             {{-- <th data-breakpoints="xs sm" data-filterable="false">Control de entrega de documentos</th> --}}
             {{-- <th data-breakpoints="all" data-filterable="false">¿Generar documentos?</th> --}}
-            <th>Estado</th>
+            <th data-sort-id="estado_actuacion">Estado</th>
             @if (isset($permissions->editar) || isset($permissions->eliminar) )
             <th data-filterable="false" data-sortable="false"></th>
             @endif

@@ -122,11 +122,23 @@ class ActuacionController extends Controller
 
     public function index(Request $request) {
 
-        $actuacion = new Actuacion;
+        $actuacion = new Actuacion();
         $list = $actuacion
+            ->select('id_actuacion', 'nombre_actuacion', 'estado_actuacion')
             ->where('eliminado', 0)
             ->orderBy('id_actuacion', 'desc')
-            ->applyFilters('id_actuacion', $request)
+            ->applyFilters('id_actuacion', $request, function($query, $search, $searchby) {
+                if($search && in_array('estado_actuacion', $searchby)) {
+                    $estado = false;
+                    if(strpos('activo', strtolower($search)) !== false) {
+                        $estado = 1;
+                    } else if(strpos('inactivo', strtolower($search)) !== false) {
+                        $estado = 2;
+                    }
+
+                    $query->orHavingRaw("estado_actuacion = '{$estado}'");
+                }
+            })
             ->paginate(10)
             ->appends(request()->query())
             ->withPath('#actuacion');

@@ -3,17 +3,25 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Entities\EntidadJusticia;
 use App\Entities\Municipio;
 use App\Entities\Pais;
 use App\Entities\Departamento;
+use App\Exports\EntidadJusticiaExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class EntidadJusticiaController extends Controller
 {
 
     public function index(Request $request) {
-        $entidades = EntidadJusticia::where('eliminado', 0)
+        $entidades = EntidadJusticia::select(
+            'id_entidad_justicia', 'nombre_entidad_justicia', 'email_entidad_justicia',
+            'nombre_pais', 'nombre_departamento', 'nombre_municipio'
+        )
+        ->leftjoin('municipio as m', 'm.id_municipio', 'entidad_justicia.id_municipio')
+        ->leftjoin('departamento as d', 'd.id_departamento', 'm.id_departamento')
+        ->leftjoin('pais as p', 'p.id_pais', 'd.id_pais')
+        ->where('eliminado', 0)
         ->applyFilters('id_entidad_justicia', $request)
         ->paginate(10)
         ->appends(request()->query())
@@ -87,5 +95,15 @@ class EntidadJusticiaController extends Controller
 
         $saved = EntidadJusticia::updateOrCreate(['id_entidad_justicia' => $id], $data);
         return response()->json([ 'saved' => $saved ]);
+    }
+
+    public function createExcel() {
+        return Excel::download(new EntidadJusticiaExport, 'entidades_justicia.xlsx');
+    }
+
+    public function createPDF() {
+        $entidades = EntidadJusticia::where('eliminado', 0)->get();
+        $pdf = \PDF::loadView('entidad_justicia.pdf', ["entidades" => $entidades])->setPaper('a4', 'landscape');
+        return $pdf->download('entidades_justicia.pdf');
     }
 }

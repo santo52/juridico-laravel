@@ -11,7 +11,7 @@
 <div class="row">
     <div class="col-xs-12 flex juridico" id="filter-form-container">
         <div class="pull-left flex" style="padding-right:20px">
-            {{-- <div>
+            <div>
                 <a href="javascript:void(0)" onClick="entidadJusticia.pdf()" class="btn download-file-action">
                     <img style="width: 100%" src="{!! asset('images/pdf.svg') !!}" />
                 </a>
@@ -20,7 +20,7 @@
                 <a href="javascript:void(0)" onClick="entidadJusticia.excel()" class="btn download-file-action">
                     <img style="width: 100%" src="{!! asset('images/xlsx.svg') !!}" />
                 </a>
-            </div> --}}
+            </div>
             <div>
                 <a href="javascript:void(0)" onClick="window.print()" class="btn download-file-action">
                     <img style="width: 100%" src="{!! asset('images/print.svg') !!}" />
@@ -30,21 +30,17 @@
     </div>
 </div>
 
-<table id="tipoProcesoTable" class="table table-hover" data-empty="Sin entidades de justicia"
-    data-paging-count-format="Mostrando del {PF} al {PL} de {TR} registros"
-    data-filter-container="#filter-form-container" data-sorting="true" data-filtering="true" data-paging="true"
-    data-filter-placeholder="Buscar ..." data-filter-position="left" data-filter-dropdown-title="Buscar por"
-    data-filter-space="OR">
+<table id="tipoProcesoTable" class="table table-hover" data-empty="Sin entidades de justicia" data-filter-container="#filter-form-container" data-sorting="true" data-filter-active="true">
     <thead>
         <tr class="bg-success">
-            <th>ID</th>
-            <th>Nombre</th>
-            <th data-filterable="false">¿Aplica primera instancia?</th>
-            <th data-filterable="false">¿Aplica segunda instancia?</th>
-            <th data-breakpoints="xs sm">Correo electrónico notificaciones</th>
-            <th data-breakpoints="all">Pais</th>
-            <th data-breakpoints="all">Departamento</th>
-            <th data-breakpoints="all">Municipio</th>
+            <th data-sort-id="id_entidad_justicia">ID</th>
+            <th data-sort-id="nombre_entidad_justicia">Nombre</th>
+            <th>¿Aplica primera instancia?</th>
+            <th>¿Aplica segunda instancia?</th>
+            <th data-sort-id="email_entidad_justicia" data-breakpoints="xs sm">Correo electrónico notificaciones</th>
+            <th data-sort-id="nombre_pais" data-breakpoints="all">Pais</th>
+            <th data-sort-id="nombre_departamento" data-breakpoints="all">Departamento</th>
+            <th data-sort-id="nombre_municipio" data-breakpoints="all">Municipio</th>
             <th>Estado</th>
             <th data-filterable="false" data-sortable="false"></th>
         </tr>
@@ -58,9 +54,9 @@
             <td>{{$entidad['aplica_primera_instancia'] == 2 ? 'No' : 'Sí'}}</td>
             <td>{{$entidad['aplica_segunda_instancia'] == 2 ? 'No' : 'Sí'}}</td>
             <td>{{$entidad['email_entidad_justicia']}}</td>
-            <td>{{$entidad->getPais()}}</td>
-            <td>{{$entidad->getDepartamento()}}</td>
-            <td>{{$entidad->getMunicipio()}}</td>
+            <td>{{$entidad->nombre_pais}}</td>
+            <td>{{$entidad->nombre_departamento}}</td>
+            <td>{{$entidad->nombre_municipio}}</td>
             <td>{{$entidad['estado_entidad_justicia'] == 2 ? 'Inactivo' : 'Activo'}}</td>
             <td>
                 <div class="flex justify-center table-actions">

@@ -187,7 +187,8 @@ Route::middleware(['auth', 'route'])->group(function () {
 
 
 
-
+    Route::get('/tipos-de-resultado/pdf', 'TipoResultadoController@createPDF');
+    Route::get('/tipos-de-resultado/excel', 'TipoResultadoController@createExcel');
     Route::post('/tipos-de-resultado/listar', 'TipoResultadoController@index');
     Route::post('/tipos-de-resultado/upsert', 'TipoResultadoController@upsert');
     Route::post('/tipos-de-resultado/delete/{id}', 'TipoResultadoController@delete');

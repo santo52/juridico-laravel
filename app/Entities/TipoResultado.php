@@ -26,5 +26,20 @@ class TipoResultado extends BaseModel
     public function newEloquentBuilder($builder) {
         return new Builder($builder, $this);
     }
+
+    public function getTipoCampo() {
+        switch($this->tipo_campo) {
+            case 1: return 'Alfanumerico';
+            case 2: return 'Documento';
+            case 3: return 'Fecha';
+            case 4: return 'Numero';
+            case 5: return 'Moneda';
+            default: return 'Alfanumerico';
+        }
+    }
+
+    public function getGrupo() {
+        return $this->unico_tipo_resultado == 1 ? 'Valor específico' : 'Formato';
+    }
 }
 

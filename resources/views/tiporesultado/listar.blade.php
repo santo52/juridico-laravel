@@ -11,7 +11,7 @@
 <div class="row">
     <div class="col-xs-12 flex juridico" id="filter-form-container">
         <div class="pull-left flex" style="padding-right:20px">
-            {{-- <div>
+            <div>
                 <a href="javascript:void(0)" onClick="tipoResultado.pdf()" class="btn download-file-action">
                     <img style="width: 100%" src="{!! asset('images/pdf.svg') !!}" />
                 </a>
@@ -20,7 +20,7 @@
                 <a href="javascript:void(0)" onClick="tipoResultado.excel()" class="btn download-file-action">
                     <img style="width: 100%" src="{!! asset('images/xlsx.svg') !!}" />
                 </a>
-            </div> --}}
+            </div>
             <div>
                 <a href="javascript:void(0)" onClick="window.print()" class="btn download-file-action">
                     <img style="width: 100%" src="{!! asset('images/print.svg') !!}" />
@@ -30,18 +30,15 @@
     </div>
 </div>
 
-<table id="tipoResultadoTable" class="table table-hover" data-empty="Sin tipos de resultado"
-    data-paging-count-format="Mostrando del {PF} al {PL} de {TR} registros"
-    data-filter-container="#filter-form-container" data-sorting="true" data-filtering="true" data-paging="true"
-    data-filter-placeholder="Buscar ..." data-filter-position="left" data-filter-dropdown-title="Buscar por"
-    data-filter-space="OR">
+<table id="tipoResultadoTable" class="table table-hover" data-empty="Sin tipos de resultado"  data-filter-container="#filter-form-container" data-sorting="true" data-filter-active="true">
     <thead>
         <tr class="bg-success">
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Tipo</th>
+            <th data-sort-id="id_tipo_resultado">ID</th>
+            <th data-sort-id="nombre_tipo_resultado">Nombre</th>
+            <th>Grupo</th>
+            <th>Tipo de campo</th>
             <th>Estado</th>
-            <th data-filterable="false" data-sortable="false"></th>
+            <th data-sortable="false"></th>
         </tr>
     </thead>
     <tbody>
@@ -50,7 +47,8 @@
         <tr id="tipoResultadoRow{{$tipoResultado['id_tipo_resultado']}}">
             <td>{{$tipoResultado['id_tipo_resultado']}}</td>
             <td>{{$tipoResultado['nombre_tipo_resultado']}}</td>
-            <td>{{$tipoResultado['unico_tipo_resultado'] == 1 ? 'Valor específico' : 'Formato'}}</td>
+            <td>{{$tipoResultado->getGrupo()}}</td>
+            <td>{{$tipoResultado->getTipoCampo()}}</td>
             <td>{{$tipoResultado['eliminado'] == 0 ? 'Activo' : 'Eliminado'}}</td>
             <td>
                 <div class="flex justify-center table-actions">

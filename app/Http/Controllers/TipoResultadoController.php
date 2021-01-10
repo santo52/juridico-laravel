@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Entities\TipoResultado;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Exports\TipoResultadoExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TipoResultadoController extends Controller
 {
     public function index(Request $request) {
-        $tiposResultado = TipoResultado::where('eliminado', 0)
+        $tiposResultado = TipoResultado::select('id_tipo_resultado', 'nombre_tipo_resultado', 'unico_tipo_resultado', 'tipo_campo')
+        ->where('eliminado', 0)
         ->applyFilters('id_tipo_resultado', $request)
         ->paginate(10)
         ->appends(request()->query())
@@ -78,5 +80,15 @@ class TipoResultadoController extends Controller
         return response()->json([
             'tipoResultado' => $tipoResultado
         ]);
+    }
+
+    public function createExcel() {
+        return Excel::download(new TipoResultadoExport, 'tiposresultado.xlsx');
+    }
+
+    public function createPDF() {
+        $tiposresultado = TipoResultado::where('eliminado', 0)->get();
+        $pdf = \PDF::loadView('tiporesultado.pdf', ["tiposresultado" => $tiposresultado])->setPaper('a4', 'landscape');
+        return $pdf->download('tiposresultado.pdf');
     }
 }

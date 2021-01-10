@@ -17,46 +17,26 @@
 
 </style>
 
-<table>
+<table style="width:100%">
     <thead>
         <tr>
-            <th>Nombre de la actuación</th>
-            <th>¿Genera alertas?</th>
-            <th>¿Aplica control de vencimiento?</th>
-            <th>Días de vencimiento</th>
-            <th>¿Requiere estudio de favorabilidad?</th>
-            <th>¿La actuación tiene cobro?</th>
-            <th>Valor de la actuación</th>
-            <th>Actuación para creación de cliente</th>
-            <th>¿Mostrar datos de radicado?</th>
-            <th>¿Mostrar datos de juzgado?</th>
-            <th>¿Mostrar datos de respuesta?</th>
-            <th>¿Mostrar datos de apelación?</th>
-            <th>¿Mostrar datos de cobros?</th>
-            <th>¿Programar audiencia?</th>
-            <th>Control de entrega de documentos</th>
-            <th>¿Generar documentos?</th>
+            <th>ID</th>
+            <th>Tipo de resultado</th>
+            <th>Grupo</th>
+            <th>Tipo de Campo</th>
+            <th>Fecha de creación</th>
+            <th>Estado</th>
         </tr>
     </thead>
     <tbody>
-        @foreach ($actuaciones as $item)
+        @foreach ($tiposresultado as $item)
         <tr>
-            <th style="text-align:left;padding-left: 5px;" >{{$item->nombre_actuacion}}</th>
-            <th>{{$item->genera_alertas}}</th>
-            <th>{{$item->aplica_control_vencimiento}}</th>
-            <th>{{$item->getDiasVencimiento()}}</th>
-            <th>{{$item->requiere_estudio_favorabilidad}}</th>
-            <th>{{$item->actuacion_tiene_cobro}}</th>
-            <th style="text-align:left;padding-left: 5px;">{{$item->valor_actuacion}}</th>
-            <th>{{$item->actuacion_creacion_cliente}}</th>
-            <th>{{$item->mostrar_datos_radicado}}</th>
-            <th>{{$item->mostrar_datos_juzgado}}</th>
-            <th>{{$item->mostrar_datos_respuesta}}</th>
-            <th>{{$item->mostrar_datos_apelacion}}</th>
-            <th>{{$item->mostrar_datos_cobros}}</th>
-            <th>{{$item->programar_audiencia}}</th>
-            <th>{{$item->control_entrega_documentos}}</th>
-            <th>{{$item->generar_documentos}}</th>
+            <th>{{$item->id_tipo_resultado}}</th>
+            <th style="text-align:left;padding-left: 5px;" >{{$item->nombre_tipo_resultado}}</th>
+            <th>{{$item->getGrupo()}}</th>
+            <th>{{$item->getTipoCampo()}}</th>
+            <th>{{$item->fecha_creacion}}</th>
+            <th>{{$item->eliminado == 1 ? 'Eliminado' : 'Activo'}}</th>
         </tr>
         @endforeach
     </tbody>

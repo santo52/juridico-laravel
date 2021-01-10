@@ -15,6 +15,12 @@ class EtapaProceso {
         window.open('/#actuacion/crear')
     }
 
+    closeCreateModal() {
+        $('#createModal')
+            .removeClass('open')
+            .modal('hide')
+    }
+
     renderModalData(id){
         return $.ajax({
             url: '/etapas-de-proceso/get/' + (id || 0),
@@ -81,7 +87,7 @@ class EtapaProceso {
 
         const title = id ? 'Editar etapa' : 'Crear etapa'
 
-        $('#createModal').modal()
+        $('#createModal').addClass('open').modal()
         $('#createValue').val(id)
         $('#etapaNombre').val('')
         $('#etapaEstado').prop('checked', true).change()
@@ -111,6 +117,7 @@ class EtapaProceso {
                 success: data => {
                     if (data.saved) {
                         alert('Se ha guardado satisfactoriamente!');
+                        $('#createModal').removeClass('open').modal('hide')
                         location.reload()
                     } else if (data.exists) {
                         $('#etapaNombre').parent().addClass('has-error')

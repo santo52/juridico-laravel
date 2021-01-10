@@ -18,7 +18,7 @@
             </a>
         </li> --}}
     </ul>
-    <form class="tab-content" onsubmit="proceso.upsert(event)">
+    <form class="tab-content validate open" onsubmit="proceso.upsert(event)">
         @if ($proceso)
         <input type="hidden" name="id_proceso" value="{{$proceso->id_proceso}}" />
         @endif

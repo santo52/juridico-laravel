@@ -67,6 +67,12 @@ class TipoProceso {
         })
     }
 
+    closeCreateModal() {
+        $('#createModal')
+            .removeClass('open')
+            .modal('hide')
+    }
+
     renderModalData(id = 0) {
         return $.ajax({
             url: '/tipos-de-proceso/get/' + id,
@@ -108,7 +114,7 @@ class TipoProceso {
     }
 
     createEditModal(id = 0) {
-        $('#createModal').modal()
+        $('#createModal').addClass('open').modal()
         $('#createValue').val(id)
         const title = id ? 'Editar tipo de proceso' : 'Nuevo tipo de proceso'
         $('#createTitle').text(title)
@@ -144,6 +150,7 @@ class TipoProceso {
                 success: data => {
                     if (data.saved) {
                         alert('Se ha guardado satisfactoriamente!');
+                        $('#createModal').removeClass('open').modal('hide')
                         location.reload()
                     } else if (data.exists) {
                         $('#etapaNombre').parent().addClass('has-error')

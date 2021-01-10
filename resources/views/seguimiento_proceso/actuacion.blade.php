@@ -32,7 +32,7 @@
 
 
 
-    <form id="formularioActuacion" onsubmit="seguimientoActuacion.guardarActuacion(event)">
+    <form class="validate open" id="formularioActuacion" onsubmit="seguimientoActuacion.guardarActuacion(event)">
 
         <input type="hidden" name="id_proceso" id="id_proceso" value="{{$procesoEtapa->id_proceso}}" />
         <input type="hidden" name="id_proceso_etapa" id="id_proceso_etapa"

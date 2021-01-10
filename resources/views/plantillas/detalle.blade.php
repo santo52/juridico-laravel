@@ -2,7 +2,7 @@
 
 @section('content')
 
-<form onsubmit="plantilla.upsert(event)">
+<form class="validate open" onsubmit="plantilla.upsert(event)">
     @if ($plantilla)
     <input type="hidden" name="id_plantilla_documento" value="{{$plantilla->id_plantilla_documento}}" />
     @endif

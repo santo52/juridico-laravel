@@ -101,7 +101,7 @@ class Cobro {
     }
 
     registrarPagoModalOpen(id, idpago = 0) {
-        $('#editarPagoModal').modal('show')
+        $('#editarPagoModal').addClass('open').modal('show')
         this.changeFormaPago(1)
         $('#id_entidad_financiera').val(0).selectpicker('refresh')
         $('#id_cobro_pago').val(id)
@@ -123,8 +123,16 @@ class Cobro {
         }
     }
 
+    pagoModalClose() {
+        $('#editarPagoModal').removeClass('open').modal('hide')
+    }
+
+    cobroModalClose() {
+        $('#cobrosModal').removeClass('open').modal('hide')
+    }
+
     cobroModalOpen(id) {
-        $('#cobrosModal').modal('show')
+        $('#cobrosModal').addClass('open').modal('show')
         $('#fecha_cobro').val('')
         $('#accion_cobro').val('')
         $('#etapa_cobro').val('')
@@ -182,6 +190,7 @@ class Cobro {
                 data: new URLSearchParams(formData),
                 success: data => {
                     if (data.saved) {
+                        $('#cobrosModal').removeClass('open').modal('hide')
                         location.reload()
                     }
                 }
@@ -208,6 +217,7 @@ class Cobro {
                 data: new URLSearchParams(formData),
                 success: data => {
                     if (data.saved) {
+                        $('#editarPagoModal').removeClass('open').modal('hide')
                         location.reload()
                     }
                 }

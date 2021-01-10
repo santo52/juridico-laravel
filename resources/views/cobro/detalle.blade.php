@@ -96,11 +96,11 @@
 </table>
 
 
-<div class="modal fade" tabindex="-1" role="dialog" id="cobrosModal">
+<div class="modal fade validate" tabindex="-1" role="dialog" id="cobrosModal">
     <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" onclick="cobro.cobroModalClose()" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
                 <h4 class="modal-title" id="cobrosTitle">Editar cobro</h4>
@@ -145,7 +145,7 @@
                 </div>
                 <div class="modal-footer center">
                     <input type="hidden" id="id_cobro" />
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-default" onclick="cobro.cobroModalClose()">Cancelar</button>
                     <button type="submit" class="btn btn-success">Guardar</button>
                 </div>
             </form>
@@ -186,11 +186,11 @@
 </div>
 
 
-<div class="modal fade" tabindex="-1" role="dialog" id="editarPagoModal">
+<div class="modal fade validate" tabindex="-1" role="dialog" id="editarPagoModal">
     <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" onclick="cobro.pagoModalClose()" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
                 <h4 class="modal-title" id="cobrosTitle">Pago realizado</h4>
@@ -233,7 +233,7 @@
                 <div class="modal-footer center">
                     <input type="hidden" id="id_cobro_pago" />
                     <input type="hidden" id="id_pago_pago" />
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-default" onclick="cobro.pagoModalClose()">Cancelar</button>
                     <button type="submit" class="btn btn-success">Guardar</button>
                 </div>
             </form>

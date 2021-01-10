@@ -8,6 +8,12 @@ class EntidadJusticia {
         window.open('/entidades-de-justicia/excel')
     }
 
+    closeCreateModal() {
+        $('#createModal')
+            .removeClass('open')
+            .modal('hide')
+    }
+
     changePais(self) {
         const pais = $(self).val()
         return $.ajax({
@@ -35,7 +41,7 @@ class EntidadJusticia {
 
         const title = id ? 'Editar entidad de justicia' : 'Crear entidad de justicia'
 
-        $('#createModal').modal()
+        $('#createModal').addClass('open').modal()
         $('#createValue').val(id)
         $('#etapaNombre').val('')
         $('#etapaEstado').prop('checked', true).change()
@@ -88,6 +94,7 @@ class EntidadJusticia {
                 success: data => {
                     if (data.saved) {
                         alert('Se ha guardado satisfactoriamente!');
+                        $('#createModal').removeClass('open').modal('hide')
                         location.reload()
                     } else if (data.exists) {
                         $('#etapaNombre').parent().addClass('has-error')

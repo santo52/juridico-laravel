@@ -13,9 +13,21 @@ class Honorario {
         $('#deleteValue').val(id)
     }
 
+    closePagoModal() {
+        $('#editarPagoModal')
+            .removeClass('open')
+            .modal('hide')
+    }
+
+    closeCreateModal() {
+        $('#createModal')
+            .removeClass('open')
+            .modal('hide')
+    }
+
     createEditModal(id = 0) {
         const that = this
-        $('#createModal').modal()
+        $('#createModal').addClass('open').modal()
         $('#createValue').val(id)
         const title = id ? 'Editar honorarios' : 'Nuevo cobro de honorarios'
         $('#createTitle').text(title)
@@ -151,6 +163,7 @@ class Honorario {
                 data: new URLSearchParams(formData),
                 success: data => {
                     if (data.saved) {
+                        $('#editarPagoModal').removeClass('open').modal('hide')
                         location.reload()
                     }
                 }
@@ -161,7 +174,7 @@ class Honorario {
     }
 
     registrarPagoModalOpen(id, idpago = 0) {
-        $('#editarPagoModal').modal('show')
+        $('#editarPagoModal').addClass('open').modal('show')
         this.changeFormaPago(1)
         $('#id_entidad_financiera').val(0).selectpicker('refresh')
         $('#id_cobro_pago').val(id)
@@ -433,6 +446,7 @@ class Honorario {
                 success: data => {
                     if (data.saved) {
                         alert('Se ha guardado satisfactoriamente!');
+                        $('#createModal').removeClass('open').modal('hide')
                         location.reload()
                     }
                 }

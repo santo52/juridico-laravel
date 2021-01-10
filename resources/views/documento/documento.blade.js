@@ -8,11 +8,17 @@ class Documento {
         window.open('/documento/excel')
     }
 
+    closeCreateModal() {
+        $('#createModal')
+            .removeClass('open')
+            .modal('hide')
+    }
+
     createEditModal(id) {
 
         const title = id ? 'Editar documento' : 'Crear documento'
 
-        $('#createModal').modal()
+        $('#createModal').addClass('open').modal()
         $('#createValue').val(id)
         $('#documentoNombre').val('')
         $('#documentoEstado').prop('checked', true).change()
@@ -48,6 +54,7 @@ class Documento {
                 success: data => {
                     if (data.saved) {
                         alert('Se ha guardado satisfactoriamente!');
+                        $('#createModal').removeClass('open').modal('hide')
                         location.reload()
                     } else if (data.exists) {
                         $('#documentoNombre').parent().addClass('has-error')

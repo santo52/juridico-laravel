@@ -104,11 +104,11 @@
 @endisset
 
 @if(isset($permissions->crear) || isset($permissions->editar))
-<div class="modal fade" tabindex="-1" role="dialog" id="createModal">
+<div class="modal fade validate" tabindex="-1" role="dialog" id="createModal">
     <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" onclick="perfil.closeCreateModal()" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
                 <h4 class="modal-title" id="createTitle"></h4>
@@ -154,7 +154,7 @@
                 </div>
                 <div class="modal-footer center">
                     <input type="hidden" id="createValue" />
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-default" onclick="perfil.closeCreateModal()">Cancelar</button>
                     <button type="submit" class="btn btn-success">Guardar</button>
                 </div>
             </form>

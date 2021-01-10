@@ -3,7 +3,7 @@
 
 @section('content')
 
-<form role="form" id="form-crear-actuacion"
+<form class="validate open" role="form" id="form-crear-actuacion"
     onSubmit="{{ isset($actuacion) ? 'actuacion.update(event)' : 'actuacion.create(event)' }} ">
     <div class="row">
         <div class="col-sm-6">

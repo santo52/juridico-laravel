@@ -8,6 +8,12 @@ class Intermediario {
         window.open('/intermediario/excel')
     }
 
+    closeCreateModal() {
+        $('#createModal')
+            .removeClass('open')
+            .modal('hide')
+    }
+
     changeMunicipio(self){
         const municipio = $(self).val()
         $.ajax({
@@ -26,7 +32,7 @@ class Intermediario {
 
         const title = id ? 'Editar intermediario' : 'Crear intermediario'
 
-        $('#createModal').modal()
+        $('#createModal').addClass('open').modal()
         $('#createValue').val(id)
         $('#createTitle').text(title)
         $('#tipoDocumento').val(1).selectpicker('refresh')
@@ -85,6 +91,7 @@ class Intermediario {
                 success: data => {
                     if (data.saved) {
                         alert('Se ha guardado satisfactoriamente!');
+                        $('#createModal').removeClass('open').modal('hide')
                         location.reload()
                     } else if(data.documentExists || data.invalidDocument) {
                         $('#numeroDocumento').parent().addClass('has-error')

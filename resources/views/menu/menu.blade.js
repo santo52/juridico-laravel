@@ -33,7 +33,7 @@ class Menu {
         const title = id ? 'Crear' : 'Editar'
         const that = this
 
-        $('#createModal').modal()
+        $('#createModal').addClass('open').modal()
         $('#createTitle').text(title)
         $('#idCreateElement').val(id)
         $('#create_nombre_menu').val('')
@@ -63,6 +63,12 @@ class Menu {
         })
     }
 
+    closeCreateModal() {
+        $('#createModal')
+            .removeClass('open')
+            .modal('hide')
+    }
+
     upsert(e) {
 
         e.preventDefault()
@@ -80,6 +86,7 @@ class Menu {
                 success: data => {
                     if (data.saved) {
                         alert('Se ha guardado satisfactoriamente!');
+                        $('#createModal').removeClass('open')
                         location.reload()
                     } else if (data.exists) {
                         $('#create_nombre_menu').parent().addClass('has-error')

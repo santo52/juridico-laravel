@@ -76,8 +76,14 @@ class TipoResultado {
         })
     }
 
+    closeCreateModal() {
+        $('#createModal')
+            .removeClass('open')
+            .modal('hide')
+    }
+
     createEditModal(id = 0) {
-        $('#createModal').modal()
+        $('#createModal').addClass('open').modal()
         $('#createValue').val(id)
         const title = id ? 'Editar tipo de resultado' : 'Nuevo tipo de resultado'
         $('#createTitle').text(title)
@@ -114,6 +120,7 @@ class TipoResultado {
                 success: data => {
                     if (data.saved) {
                         alert('Se ha guardado satisfactoriamente!');
+                        $('#createModal').removeClass('open').modal('hide')
                         location.hash = "#tipos-de-resultado"
                         location.reload()
                     } else if (data.exists) {

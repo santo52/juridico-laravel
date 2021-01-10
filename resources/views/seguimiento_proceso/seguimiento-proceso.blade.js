@@ -81,7 +81,7 @@ class SeguimientoProceso {
     }
 
     addComentarioModal(id) {
-        $('#comentariosModal').modal();
+        $('#comentariosModal').addClass('open').modal();
         $('#idProcesoBitacora').val(id || '')
         $('#comentarioProceso').val('')
         $.ajax({
@@ -93,7 +93,7 @@ class SeguimientoProceso {
     }
 
     closeComentarioModal() {
-        $('#comentariosModal').modal('hide');
+        $('#comentariosModal').removeClass('open').modal('hide');
     }
 
     closeActuacionModal() {

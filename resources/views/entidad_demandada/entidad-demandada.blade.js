@@ -8,11 +8,17 @@ class EntidadDemandada {
         window.open('/entidades-demandadas/excel')
     }
 
+    closeCreateModal() {
+        $('#createModal')
+            .removeClass('open')
+            .modal('hide')
+    }
+
     createEditModal(id) {
 
         const title = id ? 'Editar entidad demandada' : 'Crear entidad demandada'
 
-        $('#createModal').modal()
+        $('#createModal').addClass('open').modal()
         $('#createValue').val(id)
         $('#etapaNombre').val('')
         $('#etapaEstado').prop('checked', true).change()
@@ -47,6 +53,7 @@ class EntidadDemandada {
                 success: data => {
                     if (data.saved) {
                         alert('Se ha guardado satisfactoriamente!');
+                        $('#createModal').removeClass('open').modal('hide')
                         location.reload()
                     } else if (data.exists) {
                         $('#etapaNombre').parent().addClass('has-error')

@@ -584,7 +584,7 @@
 </div>
 
 
-<div class="modal fade" tabindex="-1" role="dialog" id="comentariosModal">
+<div class="modal fade validate" tabindex="-1" role="dialog" id="comentariosModal">
     <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header">

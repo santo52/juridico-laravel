@@ -24,6 +24,12 @@ class Perfil {
          });
     }
 
+    closeCreateModal() {
+        $('#createModal')
+            .removeClass('open')
+            .modal('hide')
+    }
+
     redrawTableModal(id){
         return $.ajax({
             url: '/perfil/get/' + (id || 0),
@@ -46,7 +52,7 @@ class Perfil {
 
     createEditModal(id) {
         const text = id ? 'Editar perfil' : 'Nuevo perfil'
-        $('#createModal').modal()
+        $('#createModal').addClass('open').modal()
         $('#createValue').val(id)
         $('#createTitle').text(text)
         this.redrawTableModal(id).then(data => {
@@ -68,7 +74,7 @@ class Perfil {
             url: '/perfil/create',
             data: new URLSearchParams($formData),
             success: data => {
-                $('#createModal').modal('hide')
+                $('#createModal').removeClass('open').modal('hide')
                 setTimeout(() => {
                     location.reload()
                 }, 500);

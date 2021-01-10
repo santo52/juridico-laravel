@@ -22,11 +22,21 @@ class Usuario {
         })
     }
 
+    closeCreateModal() {
+        $('#createModal')
+            .removeClass('open')
+            .modal('hide')
+    }
+
     createEditModal(id) {
 
         const title = id ? 'Editar usuario' : 'Crear usuario'
 
         $('#createModal').modal()
+        $('#createModal').addClass('open')
+
+
+
         $('#createValue').val(id)
         $('#createTitle').text(title)
         $('#tipoDocumento').val(1).selectpicker('refresh')
@@ -104,6 +114,7 @@ class Usuario {
                 processData: false,
                 success: data => {
                     if (data.saved) {
+                        $('#createModal').removeClass('open')
                         location.reload()
                     } else if(data.documentExists || data.invalidDocument) {
                         $('#numeroDocumento').parent().addClass('has-error')

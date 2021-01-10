@@ -3,15 +3,28 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Entities\EntidadDemandada;
+use App\Exports\EntidadDemandadaExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class EntidadDemandadaController extends Controller
 {
 
     public function index(Request $request) {
-        $entidades = EntidadDemandada::where('eliminado', 0)
-        ->applyFilters('id_entidad_demandada', $request)
+        $entidades = EntidadDemandada::select('id_entidad_demandada', 'nombre_entidad_demandada', 'email_entidad_demandada', 'estado_entidad_demandada')
+        ->where('eliminado', 0)
+        ->applyFilters('id_entidad_demandada', $request, function($query, $search, $searchBy) {
+            if($search && in_array('estado_entidad_demandada', $searchBy)) {
+                $estado = 10000;
+                if(strpos('activo', strtolower($search)) !== false) {
+                    $estado = 1;
+                } else if(strpos('inactivo', strtolower($search)) !== false) {
+                    $estado = 2;
+                }
+
+                $query->orHavingRaw("estado_entidad_demandada = '{$estado}'");
+            }
+        })
         ->paginate(10)
         ->appends(request()->query())
         ->withPath('#entidades-demandadas');
@@ -75,5 +88,15 @@ class EntidadDemandadaController extends Controller
 
         $saved = EntidadDemandada::updateOrCreate(['id_entidad_demandada' => $id], $data);
         return response()->json([ 'saved' => $saved ]);
+    }
+
+    public function createExcel() {
+        return Excel::download(new EntidadDemandadaExport, 'entidades_demandadas.xlsx');
+    }
+
+    public function createPDF() {
+        $entidades = EntidadDemandada::where('eliminado', 0)->get();
+        $pdf = \PDF::loadView('entidad_demandada.pdf', ["entidades" => $entidades])->setPaper('a4', 'landscape');
+        return $pdf->download('entidades_demandadas.pdf');
     }
 }

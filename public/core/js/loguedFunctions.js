@@ -4,7 +4,7 @@ function areYouSure(isConf) {
     // if(allowPrompt){
         if ( $('.validate').hasClass('open') && !localStorage.getItem('cancelhashchange') ) {
             if(isConf && !confirm('¿Está seguro que desea salir sin guardar?')) {
-                const [hash, lasthash] = JSON.parse(localStorage.getItem('referrer') || "['#', '#']")
+                const [hash, lasthash] = JSON.parse(localStorage.getItem('referrer') || '["#", "#"]')
                 location.hash = lasthash
                 areYouSureBool = true
                 localStorage.setItem('cancelhashchange', true)
@@ -20,7 +20,7 @@ function areYouSure(isConf) {
 }
 
 function saveReferrer() {
-    const [hash] = JSON.parse(localStorage.getItem('referrer') || "['#', '#']")
+    const [hash] = JSON.parse(localStorage.getItem('referrer') || '["#", "#"]')
     localStorage.setItem('referrer', JSON.stringify([location.hash, hash]))
 }
 

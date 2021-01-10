@@ -11,7 +11,7 @@
 <div class="row">
     <div class="col-xs-12 flex juridico" id="filter-form-container">
         <div class="pull-left flex" style="padding-right:20px">
-            {{-- <div>
+            <div>
                 <a href="javascript:void(0)" onClick="intermediario.pdf()" class="btn download-file-action">
                     <img style="width: 100%" src="{!! asset('images/pdf.svg') !!}" />
                 </a>
@@ -20,7 +20,7 @@
                 <a href="javascript:void(0)" onClick="intermediario.excel()" class="btn download-file-action">
                     <img style="width: 100%" src="{!! asset('images/xlsx.svg') !!}" />
                 </a>
-            </div> --}}
+            </div>
             <div>
                 <a href="javascript:void(0)" onClick="window.print()" class="btn download-file-action">
                     <img style="width: 100%" src="{!! asset('images/print.svg') !!}" />
@@ -30,23 +30,19 @@
     </div>
 </div>
 
-<table id="tipoProcesoTable" class="table table-hover" data-empty="Sin intermediarios"
-    data-paging-count-format="Mostrando del {PF} al {PL} de {TR} registros"
-    data-filter-container="#filter-form-container" data-sorting="true" data-filtering="true" data-paging="true"
-    data-filter-placeholder="Buscar ..." data-filter-position="left" data-filter-dropdown-title="Buscar por"
-    data-filter-space="OR">
+<table id="tipoProcesoTable" class="table table-hover" data-empty="Sin intermediarios" data-filter-container="#filter-form-container" data-sorting="true" data-filter-active="true">
     <thead>
         <tr class="bg-success">
-            <th>ID</th>
-            <th>Tipo documento</th>
-            <th>Número de documento</th>
-            <th>Nombres Completos</th>
-            <th>Número telefónico</th>
+            <th data-sort-id="id_intermediario">ID</th>
+            <th data-sort-id="nombre_tipo_documento">Tipo documento</th>
+            <th data-sort-id="numero_documento">Número de documento</th>
+            <th data-sort-id="nombre_intermediario">Nombres Completos</th>
+            <th data-sort-id="telefono">Número telefónico</th>
             {{-- <th data-breakpoints="xs sm">Celular</th> --}}
-            <th data-breakpoints="xs">Correo electrónico</th>
-            {{-- <th data-breakpoints="all">País</th>
-            <th data-breakpoints="all">Departamento</th> --}}
-            <th data-breakpoints="all">Municipio</th>
+            <th data-sort-id="correo_electronico" data-breakpoints="xs">Correo electrónico</th>
+            <th data-sort-id="nombre_pais" data-breakpoints="all">País</th>
+            <th data-sort-id="nombre_departamento" data-breakpoints="all">Departamento</th>
+            <th data-sort-id="nombre_municipio" data-breakpoints="all">Municipio</th>
             {{-- <th data-breakpoints="all">Barrio</th>
             <th data-breakpoints="all">Dirección</th> --}}
             {{-- <th data-filterable="false">Retención aplicada</th> --}}
@@ -61,14 +57,14 @@
             <td>{{$intermediario['id_intermediario']}}</td>
             <td>{{$intermediario['abreviatura_tipo_documento']}}</td>
             <td>{{$intermediario['numero_documento']}}</td>
-            <td>{{$intermediario->getNombreCompleto()}}</td>
+            <td>{{$intermediario->nombre_intermediario}}</td>
             <td>
                 @if($intermediario['indicativo'])<span style="margin-right:2px;">(+{{$intermediario['indicativo']}})</span>@endif{{$intermediario['telefono']}}
             </td>
             {{-- <td>{{$intermediario['celular']}}</td> --}}
             <td>{{$intermediario['correo_electronico']}}</td>
-            {{-- <td>{{$intermediario['nombre_pais']}}</td>
-            <td>{{$intermediario['nombre_departamento']}}</td> --}}
+            <td>{{$intermediario['nombre_pais']}}</td>
+            <td>{{$intermediario['nombre_departamento']}}</td>
             <td>{{$intermediario['nombre_municipio']}}</td>
             {{-- <td>{{$intermediario['barrio']}}</td>
             <td>{{$intermediario['direccion']}}</td> --}}

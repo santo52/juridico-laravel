@@ -7,17 +7,34 @@ use App\Entities\Intermediario;
 use App\Entities\TipoDocumento;
 use App\Entities\Persona;
 use App\Entities\Municipio;
-use Illuminate\Support\Facades\Auth;
+use App\Exports\IntermediarioExport;
+use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
+
+// <th data-sort-id="id_intermediario">ID</th>
+//             <th data-sort-id="nombre_tipo_documento">Tipo documento</th>
+//             <th data-sort-id="numero_documento">Número de documento</th>
+//             <th data-sort-id="nombre_intermediario">Nombres Completos</th>
+//             <th data-sort-id="telefono">Número telefónico</th>
+//             {{-- <th data-breakpoints="xs sm">Celular</th> --}}
+//             <th data-sort-id="correo_electronico" data-breakpoints="xs">Correo electrónico</th>
+//             <th data-sort-id="nombre_pais" data-breakpoints="all">País</th>
+//             <th data-sort-id="nombre_departamento" data-breakpoints="all">Departamento</th>
+//             <th data-sort-id="nombre_municipio" data-breakpoints="all">Municipio</th>
 class IntermediarioController extends Controller
 {
     public function index(Request $request) {
-        $intermediarios = Intermediario::
-        leftjoin('persona as p', 'p.id_persona', 'intermediario.id_persona')
+        $intermediarios = Intermediario::select(
+            'id_intermediario', 'nombre_tipo_documento', 'telefono', 'correo_electronico', 'numero_documento',
+            'nombre_pais', 'nombre_departamento', 'nombre_municipio', 'abreviatura_tipo_documento',
+            DB::raw("CONCAT(p.primer_apellido, ' ', p.segundo_apellido, ' ', p.primer_nombre, ' ', p.segundo_nombre) as nombre_intermediario" )
+        )
+        ->leftjoin('persona as p', 'p.id_persona', 'intermediario.id_persona')
         ->leftjoin('tipo_documento as td', 'p.id_tipo_documento', 'td.id_tipo_documento')
         ->leftjoin('municipio as mu', 'mu.id_municipio', 'p.id_municipio')
-        // ->leftjoin('departamento as de', 'de.id_departamento', 'mu.id_departamento')
-        // ->leftjoin('pais as pa', 'pa.id_pais', 'de.id_pais')
+        ->leftjoin('departamento as de', 'de.id_departamento', 'mu.id_departamento')
+        ->leftjoin('pais as pa', 'pa.id_pais', 'de.id_pais')
         ->where('intermediario.eliminado', 0)
         ->applyFilters('id_intermediario', $request)
         ->paginate(10)
@@ -97,5 +114,15 @@ class IntermediarioController extends Controller
         $saved = Intermediario::updateOrCreate(['id_intermediario' => $id], $dataIntermediario);
 
         return response()->json([ 'saved' => $saved ]);
+    }
+
+    public function createExcel() {
+        return Excel::download(new IntermediarioExport, 'intermediarios.xlsx');
+    }
+
+    public function createPDF() {
+        $intermediarios = Intermediario::where('eliminado', 0)->get();
+        $pdf = \PDF::loadView('intermediario.pdf', ["intermediarios" => $intermediarios])->setPaper('a4', 'landscape');
+        return $pdf->download('intermediarios.pdf');
     }
 }

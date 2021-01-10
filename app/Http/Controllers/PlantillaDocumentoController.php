@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Exports\PlantillaDocumentoExport;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Entities\PlantillaDocumento;
 
 class PlantillaDocumentoController extends Controller
@@ -11,7 +12,10 @@ class PlantillaDocumentoController extends Controller
     public function index(Request $request)
     {
 
-        $plantillas = PlantillaDocumento::where('eliminado', 0)
+        $plantillas = PlantillaDocumento::select(
+            'id_plantilla_documento', 'nombre_plantilla_documento', 'estado_plantilla_documento'
+        )
+        ->where('eliminado', 0)
         ->applyFilters('id_plantilla_documento', $request)
         ->paginate(10)
         ->appends(request()->query())
@@ -72,5 +76,15 @@ class PlantillaDocumentoController extends Controller
         $plantilla = PlantillaDocumento::find($id);
         $deleted = $plantilla->update(['eliminado' => 1]);
         return response()->json(['deleted' => $deleted]);
+    }
+
+    public function createExcel() {
+        return Excel::download(new PlantillaDocumentoExport, 'plantillas.xlsx');
+    }
+
+    public function createPDF() {
+        $plantillas = PlantillaDocumento::where('eliminado', 0)->get();
+        $pdf = \PDF::loadView('plantillas.pdf', ["plantillas" => $plantillas])->setPaper('a4', 'landscape');
+        return $pdf->download('plantillas.pdf');
     }
 }

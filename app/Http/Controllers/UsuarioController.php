@@ -25,7 +25,7 @@ class UsuarioController extends Controller
         // ->leftjoin('departamento as de', 'de.id_departamento', 'mu.id_departamento')
         // ->leftjoin('pais as pa', 'pa.id_pais', 'de.id_pais')
         ->where('usuario.eliminado', 0)
-        ->applyFilters('id_usuario', $request)
+        // ->applyFilters('id_usuario', $request)
         ->paginate(10)
         ->appends(request()->query())
         ->withPath('#usuario');

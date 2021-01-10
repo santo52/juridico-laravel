@@ -13,7 +13,7 @@
 <div class="row">
     <div class="col-xs-12 flex juridico" id="filter-form-container">
         <div class="pull-left flex" style="padding-right:20px">
-            {{-- <div>
+            <div>
                 <a href="javascript:void(0)" onClick="plantilla.pdf()" class="btn download-file-action">
                     <img style="width: 100%" src="{!! asset('images/pdf.svg') !!}" />
                 </a>
@@ -22,7 +22,7 @@
                 <a href="javascript:void(0)" onClick="plantilla.excel()" class="btn download-file-action">
                     <img style="width: 100%" src="{!! asset('images/xlsx.svg') !!}" />
                 </a>
-            </div> --}}
+            </div>
             <div>
                 <a href="javascript:void(0)" onClick="window.print()" class="btn download-file-action">
                     <img style="width: 100%" src="{!! asset('images/print.svg') !!}" />
@@ -32,15 +32,11 @@
     </div>
 </div>
 
-<table id="tipoplantillaTable" class="table table-hover" data-empty="Sin plantillas"
-    data-paging-count-format="Mostrando del {PF} al {PL} de {TR} registros"
-    data-filter-container="#filter-form-container" data-sorting="true" data-filtering="true" data-paging="true"
-    data-filter-placeholder="Buscar ..." data-filter-position="left" data-filter-dropdown-title="Buscar por"
-    data-filter-space="OR">
+<table id="tipoplantillaTable" class="table table-hover" data-empty="Sin plantillas" data-filter-container="#filter-form-container" data-sorting="true" data-filter-active="true">
     <thead>
         <tr class="bg-success">
-            <th>ID</th>
-            <th>Nombre plantilla</th>
+            <th data-sort-id="id_plantilla_documento">ID</th>
+            <th data-sort-id="nombre_plantilla_documento">Nombre plantilla</th>
             <th>Estado</th>
             <th data-filterable="false" data-sortable="false"></th>
         </tr>

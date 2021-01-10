@@ -21,20 +21,16 @@
                     <img style="width: 100%" src="{!! asset('images/xlsx.svg') !!}" />
                 </a>
             </div> --}}
-            <div>
+            {{-- <div>
                 <a href="javascript:void(0)" onClick="window.print()" class="btn download-file-action">
                     <img style="width: 100%" src="{!! asset('images/print.svg') !!}" />
                 </a>
-            </div>
+            </div> --}}
         </div>
     </div>
 </div>
 
-<table id="tipoProcesoTable" class="table table-hover" data-empty="Sin tipos de proceso"
-    data-paging-count-format="Mostrando del {PF} al {PL} de {TR} registros"
-    data-filter-container="#filter-form-container" data-sorting="true" data-filtering="true" data-paging="true"
-    data-filter-placeholder="Buscar ..." data-filter-position="left" data-filter-dropdown-title="Buscar por"
-    data-filter-space="OR">
+<table id="tipoProcesoTable" class="table table-hover" data-empty="Sin tipos de proceso">
     <thead>
         <tr class="bg-success">
             <th>ID</th>

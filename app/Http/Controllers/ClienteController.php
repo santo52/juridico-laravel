@@ -26,7 +26,7 @@ class ClienteController extends Controller
                 'cliente.*', 'cliente.id_cliente as id_del_cliente', 'cliente.nombre_persona_recomienda as recomienda',
                 'td.abreviatura_tipo_documento', 'td.nombre_tipo_documento', 'p.numero_documento',
                 'p.telefono', 'p.celular', 'p.correo_electronico', 'mu.nombre_municipio',
-                DB::raw("CONCAT(p.primer_apellido, ' ', p.segundo_apellido, ' ', p.primer_nombre, ' ', p.segundo_nombre) as nombre_cliente" )
+                DB::raw("CONCAT(COALESCE(p.primer_apellido, ''), ' ', COALESCE(p.segundo_apellido, ''), ' ', COALESCE(p.primer_nombre, ''), ' ', COALESCE(p.segundo_nombre, '')) as nombre_cliente" )
                 // ,'pi.numero_documento as numero_documento_intermediario',
                 // 'pi.telefono as telefono_intermediario', 'pi.celular as celular_intermediario',
                 // 'pi.correo_electronico as correo_electronico_intermediario',

@@ -109,8 +109,8 @@ class Proceso extends BaseModel
                 'mc.nombre_municipio',
                 'ejpi.nombre_entidad_justicia as entidad_primera_instancia',
                 'ejsi.nombre_entidad_justicia as entidad_segunda_instancia',
-                DB::raw("CONCAT(p.primer_apellido, ' ', p.segundo_apellido, ' ', p.primer_nombre, ' ', p.segundo_nombre) as nombre_cliente" ),
-                DB::raw("CONCAT(pu.primer_apellido, ' ', pu.segundo_apellido, ' ', pu.primer_nombre, ' ', pu.segundo_nombre) as nombre_responsable" ),
+                DB::raw("CONCAT(COALESCE(p.primer_apellido, ''), ' ', COALESCE(p.segundo_apellido, ''), ' ', COALESCE(p.primer_nombre, ''), ' ', COALESCE(p.segundo_nombre, '')) as nombre_cliente" ),
+                DB::raw("CONCAT(COALESCE(pu.primer_apellido, ''), ' ', COALESCE(pu.segundo_apellido, ''), ' ', COALESCE(pu.primer_nombre, ''), ' ', COALESCE(pu.segundo_nombre, '')) as nombre_responsable" ),
                 DB::raw("(select count(*) from proceso_bitacora pb where pb.id_proceso = proceso.id_proceso ) as totalComentarios"))
             ->leftjoin('cliente as c', 'c.id_cliente', '=', 'proceso.id_cliente')
             ->leftjoin('persona as p', 'c.id_persona', '=', 'p.id_persona')

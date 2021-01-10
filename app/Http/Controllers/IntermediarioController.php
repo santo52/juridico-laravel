@@ -28,7 +28,7 @@ class IntermediarioController extends Controller
         $intermediarios = Intermediario::select(
             'id_intermediario', 'nombre_tipo_documento', 'telefono', 'correo_electronico', 'numero_documento',
             'nombre_pais', 'nombre_departamento', 'nombre_municipio', 'abreviatura_tipo_documento',
-            DB::raw("CONCAT(p.primer_apellido, ' ', p.segundo_apellido, ' ', p.primer_nombre, ' ', p.segundo_nombre) as nombre_intermediario" )
+            DB::raw("CONCAT(COALESCE(p.primer_apellido, ''), ' ', COALESCE(p.segundo_apellido, ''), ' ', COALESCE(p.primer_nombre, ''), ' ', COALESCE(p.segundo_nombre, '')) as nombre_intermediario" )
         )
         ->leftjoin('persona as p', 'p.id_persona', 'intermediario.id_persona')
         ->leftjoin('tipo_documento as td', 'p.id_tipo_documento', 'td.id_tipo_documento')

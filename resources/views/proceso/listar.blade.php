@@ -49,11 +49,13 @@
             {{-- <th data-breakpoints="all" data-filterable="false">Valor del estudio</th> --}}
             <th data-breakpoints="all">Fecha de retiro del servicio</th>
             <th data-breakpoints="all">Última entidad de servicio</th>
-            <th data-sort-id="nombre_municipio" data-breakpoints="all">Municipio</th>
+            <th data-sort-id="nombre_municipio" data-breakpoints="all">Municipio del cliente</th>
             <th data-breakpoints="all">Acto administrativo del retiro</th>
             <th data-sort-id="normatividad_aplicada_caso" data-breakpoints="all">Normatividad aplicada al caso</th>
             <th data-sort-id="entidad_primera_instancia" data-breakpoints="all">Entidad de justicia primera instancia</th>
+            <th data-sort-id="nombre_municipio_primera_instancia" data-breakpoints="all">Municipio entidad de justicia primera instancia</th>
             <th data-sort-id="entidad_segunda_instancia" data-breakpoints="all">Entidad de justicia segunda instancia</th>
+            <th data-sort-id="nombre_municipio_segunda_instancia" data-breakpoints="all">Municipio entidad de justicia segunda instancia</th>
             <th data-breakpoints="all">Observaciones del caso</th>
             @if(!isset($cobros))
                 <th data-sort-id="estado_proceso" data-breakpoints="xs sm">Estado</th>
@@ -83,7 +85,9 @@
             <td>{{$proceso->acto_administrativo}}</td>
             <td>{{$proceso->normatividad_aplicada_caso}}</td>
             <td>{{$proceso->getEntidadJusticiaPrimeraInstancia()}}</td>
+            <td>{{$proceso->getMunicipioEntidadJusticiaPrimeraInstancia()}}</td>
             <td>{{$proceso->getEntidadJusticiaSegundaInstancia()}}</td>
+            <td>{{$proceso->getMunicipioEntidadJusticiaSegundaInstancia()}}</td>
             <td>{{$proceso->observaciones_caso}}</td>
             @if(!isset($cobros))
                 <td>{{$proceso->estado_proceso == 2 ? 'Finalizado' : 'Activo'}}</td>

@@ -72,6 +72,7 @@ class Actuacion {
                         showErrorPopover($('#nombreActuacion'), 'Ya existe una actuación con este nombre', 'top');
                     } else if (data.saved) {
                         alert('Se ha guardado satisfactoriamente!');
+                        $('.validate').removeClass('open')
                         window.history.back();
                     }
                 }

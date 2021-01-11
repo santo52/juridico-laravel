@@ -92,6 +92,7 @@ var Actuacion = /*#__PURE__*/function () {
               showErrorPopover($('#nombreActuacion'), 'Ya existe una actuación con este nombre', 'top');
             } else if (data.saved) {
               alert('Se ha guardado satisfactoriamente!');
+              $('.validate').removeClass('open');
               window.history.back();
             }
           }
@@ -386,6 +387,7 @@ var Cliente = /*#__PURE__*/function () {
               showErrorPopover($('#numero_documento'), text, 'top');
             } else if (data.saved) {
               alert('Se ha guardado satisfactoriamente!');
+              $('.validate').removeClass('open');
               location.hash = 'cliente/listar';
             }
           }
@@ -2518,6 +2520,7 @@ var Plantilla = /*#__PURE__*/function () {
               showErrorPopover($('#nombre_plantilla_documento'), text, 'top');
             } else if (data.saved) {
               alert('Se ha guardado satisfactoriamente!');
+              $('.validate').removeClass('open');
               location.hash = 'plantillas/listar';
             }
           }
@@ -2692,6 +2695,7 @@ var Proceso = /*#__PURE__*/function () {
               showErrorPopover($('#id_carpeta'), _text2, 'top');
             } else if (data.saved) {
               alert('Se ha guardado satisfactoriamente!');
+              $('.validate').removeClass('open');
               location.hash = 'proceso/listar';
             }
           }
@@ -2913,6 +2917,7 @@ var SeguimientoActuacion = /*#__PURE__*/function () {
           $('#cerrarActuacion').modal('hide');
           setTimeout(function () {
             alert('Se ha guardado satisfactoriamente!');
+            $('.validate').removeClass('open');
             location.hash = 'seguimiento-procesos/' + $('#id_proceso').val();
           }, 1000);
         }

@@ -33,6 +33,7 @@ class Plantilla {
                         showErrorPopover($('#nombre_plantilla_documento'), text, 'top')
                     } else if (data.saved) {
                         alert('Se ha guardado satisfactoriamente!');
+                        $('.validate').removeClass('open')
                         location.hash = 'plantillas/listar'
                     }
                 }

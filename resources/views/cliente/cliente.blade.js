@@ -183,6 +183,7 @@ class Cliente {
                         showErrorPopover($('#numero_documento'), text, 'top')
                     } else if (data.saved) {
                         alert('Se ha guardado satisfactoriamente!');
+                        $('.validate').removeClass('open')
                         location.hash = 'cliente/listar'
                     }
                 }

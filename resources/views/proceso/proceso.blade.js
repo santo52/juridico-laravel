@@ -139,6 +139,7 @@ class Proceso {
                         showErrorPopover($('#id_carpeta'), text, 'top')
                     } else if (data.saved) {
                         alert('Se ha guardado satisfactoriamente!');
+                        $('.validate').removeClass('open')
                         location.hash = 'proceso/listar'
                     }
                 }

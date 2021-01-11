@@ -109,6 +109,8 @@ class Proceso extends BaseModel
                 'mc.nombre_municipio',
                 'ejpi.nombre_entidad_justicia as entidad_primera_instancia',
                 'ejsi.nombre_entidad_justicia as entidad_segunda_instancia',
+                'mejpi.nombre_municipio as nombre_municipio_primera_instancia',
+                'mejsi.nombre_municipio as nombre_municipio_segunda_instancia',
                 DB::raw("CONCAT(COALESCE(p.primer_apellido, ''), ' ', COALESCE(p.segundo_apellido, ''), ' ', COALESCE(p.primer_nombre, ''), ' ', COALESCE(p.segundo_nombre, '')) as nombre_cliente" ),
                 DB::raw("CONCAT(COALESCE(pu.primer_apellido, ''), ' ', COALESCE(pu.segundo_apellido, ''), ' ', COALESCE(pu.primer_nombre, ''), ' ', COALESCE(pu.segundo_nombre, '')) as nombre_responsable" ),
                 DB::raw("(select count(*) from proceso_bitacora pb where pb.id_proceso = proceso.id_proceso ) as totalComentarios"))
@@ -122,8 +124,13 @@ class Proceso extends BaseModel
             ->leftjoin('tipo_proceso as tp', 'tp.id_tipo_proceso', '=', 'proceso.id_tipo_proceso')
             ->leftjoin('entidad_demandada as ed', 'ed.id_entidad_demandada', '=', 'proceso.id_entidad_demandada')
             ->leftjoin('etapa_proceso as ep', 'ep.id_etapa_proceso', '=', 'proceso.id_etapa_proceso')
+
             ->leftjoin('entidad_justicia as ejpi', 'ejpi.id_entidad_justicia', '=', 'proceso.entidad_justicia_primera_instancia')
+            ->leftjoin('municipio as mejpi', 'ejpi.id_municipio', '=', 'mejpi.id_municipio')
+
             ->leftjoin('entidad_justicia as ejsi', 'ejsi.id_entidad_justicia', '=', 'proceso.entidad_justicia_segunda_instancia')
+            ->leftjoin('municipio as mejsi', 'ejsi.id_municipio', '=', 'mejsi.id_municipio')
+
             ->where('proceso.eliminado', 0);
 
         //app\builders\Builder.php
@@ -205,9 +212,19 @@ class Proceso extends BaseModel
         return $entidad ? $entidad->nombre_entidad_justicia : '';
     }
 
+    public function getMunicipioEntidadJusticiaPrimeraInstancia() {
+        $entidad = $this->entidadPrimeraInstancia;
+        return $entidad ? $entidad->getMunicipio() : '';
+    }
+
     public function getEntidadJusticiaSegundaInstancia() {
         $entidad = $this->entidadSegundaInstancia;
         return $entidad ? $entidad->nombre_entidad_justicia : '';
+    }
+
+    public function getMunicipioEntidadJusticiaSegundaInstancia() {
+        $entidad = $this->entidadSegundaInstancia;
+        return $entidad ? $entidad->getMunicipio() : '';
     }
 
     public function getFechaRetiroServicioString()

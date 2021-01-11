@@ -73,7 +73,7 @@
     <tfoot>
         <tr class="footable-paging">
             <td colspan="8">
-                <div class="footable-pagination-wrapper">
+                <div class="footable-pagination-wrapper show-registers">
                     {{$documentos}}
                 </div>
             </td>

@@ -102,7 +102,7 @@
     <tfoot>
         <tr class="footable-paging">
             <td colspan="8">
-                <div class="footable-pagination-wrapper">
+                <div class="footable-pagination-wrapper show-registers">
                     {{$clientes}}
                 </div>
                 <span class="label label-default footable-pagination-registers">

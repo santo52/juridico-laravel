@@ -925,7 +925,7 @@ function addShowTotalRegisters() {
   var html = "\n        <span class=\"footable-pagination-select\">\n            <div class=\"form-container\">\n                <label>Registros a mostrar</label>\n                <div class=\"footable-pagination-options\">\n                    <select class=\"form-control input-sm\" onchange=\"submitTotalRegisters(this)\">\n                        ".concat(options.map(function (option) {
     return "<option ".concat(option == paginate ? 'selected' : '', " value=\"").concat(option, "\">").concat(option, "</option>");
   }).join(''), "\n                    </select>\n                </div>\n            </div>\n        </span>\n    ");
-  $('.footable-pagination-wrapper').parent().append(html);
+  $('.footable-pagination-wrapper.show-registers').parent().append(html);
   $('.footable-pagination-options select').selectpicker();
 }
 

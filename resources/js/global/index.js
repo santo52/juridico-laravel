@@ -6,7 +6,6 @@ jQuery.fn.exists = function () {
 
 showLoading();
 jQuery(document).ready(function () {
-
     hideLoading();
 });
 
@@ -52,6 +51,44 @@ function compileLibraries() {
 jQuery(function () {
     compileLibraries()
 });
+
+function addAutosaveClass($item, val = false) {
+    val && $item.val(val)
+    $item.addClass('autosave-input')
+
+    if($item.is('select')) {
+        $item.selectpicker();
+        $item.siblings('button').addClass('autosave-input')
+    }
+}
+
+$.fn.autosaveRemove = function() {
+    const [hash] = location.hash.split('?')
+    sessionStorage.removeItem(hash)
+}
+
+$.fn.autosave = function() {
+
+    const $elems = $(this).find('input,textarea,select')
+    const [hash] = location.hash.split('?')
+    const values = JSON.parse(sessionStorage.getItem(hash) || '{}')
+
+    Object.keys(values).map(key => {
+        const $item = $(this).find('[name=' + key + ']')
+        addAutosaveClass($item, values[key])
+    })
+
+    $elems.on('change keyup', function() {
+        const val = $(this).val()
+        const name = $(this).attr('name')
+        if(name) {
+            const values = JSON.parse(sessionStorage.getItem(hash) || '{}')
+            const newValues = JSON.stringify({ ...values, [name]: val })
+            addAutosaveClass($(this))
+            sessionStorage.setItem(hash, newValues)
+        }
+    })
+}
 
 function isMobile() {
     return ((navigator.userAgent.match(/Android/i)) ||

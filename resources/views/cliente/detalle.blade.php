@@ -27,7 +27,7 @@
 
     <!-- Tab panes -->
 
-    <form class="tab-content validate open" onsubmit="cliente.upsert(event)">
+    <form class="tab-content validate autosave" onsubmit="cliente.upsert(event)">
         @if($cliente)
         <input type="hidden" name="id_contacto" value="{{$cliente->id_contacto}}" />
         <input type="hidden" name="id_cliente" value="{{$cliente->id_cliente}}" />
@@ -376,6 +376,7 @@
 <script>
     $(document).ready(function(){
         cliente.changeBeneficiario($('#id_tipo_documento_beneficiario'))
+        $('.autosave').autosave()
     })
 </script>
 @endsection

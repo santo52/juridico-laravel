@@ -18,7 +18,7 @@
             </a>
         </li> --}}
     </ul>
-    <form class="tab-content validate open" onsubmit="proceso.upsert(event)">
+    <form class="tab-content validate autosave" onsubmit="proceso.upsert(event)">
         @if ($proceso)
         <input type="hidden" name="id_proceso" value="{{$proceso->id_proceso}}" />
         @endif
@@ -303,17 +303,18 @@
 @endsection
 
 @section('javascript')
-{{-- <script>
+<script>
     $(document).ready(function(){
-        proceso.changeCliente('#id_cliente')
-        const id = getId()
-        $('.file-document').fileDocument({
-            url: 'proceso/upload',
-            path: 'uploads/documentos',
-            id
-        })
+        $('.autosave').autosave()
+        // proceso.changeCliente('#id_cliente')
+        // const id = getId()
+        // $('.file-document').fileDocument({
+        //     url: 'proceso/upload',
+        //     path: 'uploads/documentos',
+        //     id
+        // })
 
-        !id && $('#documentos-proceso-tab').hide()
+        // !id && $('#documentos-proceso-tab').hide()
     })
-</script> --}}
+</script>
 @endsection

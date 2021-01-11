@@ -387,6 +387,7 @@ var Cliente = /*#__PURE__*/function () {
               showErrorPopover($('#numero_documento'), text, 'top');
             } else if (data.saved) {
               alert('Se ha guardado satisfactoriamente!');
+              $('.autosave').autosaveRemove();
               $('.validate').removeClass('open');
               location.hash = 'cliente/listar';
             }
@@ -2695,6 +2696,7 @@ var Proceso = /*#__PURE__*/function () {
               showErrorPopover($('#id_carpeta'), _text2, 'top');
             } else if (data.saved) {
               alert('Se ha guardado satisfactoriamente!');
+              $('.autosave').autosaveRemove();
               $('.validate').removeClass('open');
               location.hash = 'proceso/listar';
             }

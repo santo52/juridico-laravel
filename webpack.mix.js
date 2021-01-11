@@ -11,10 +11,13 @@ const mix = require('laravel-mix');
  |
  */
 
+mix.webpackConfig({
+    optimization: {
+        minimize: true
+    }
+})
+
 mix.babel([
-        'resources/js/global/php.js/utf8_encode.js',
-        'resources/js/global/php.js/md5.js',
-        'resources/global/php.js/base64_encode.js',
         'resources/js/global/index.js',
         'resources/js/global/functions.js'
     ], 'public/js/app.js')

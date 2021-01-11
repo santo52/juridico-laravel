@@ -1789,3 +1789,8 @@ h5.title-bordered {
   align-items: center;
 }
 
+.autosave-input {
+  border: 2px solid #00800070;
+  background: #ffffc7;
+}
+

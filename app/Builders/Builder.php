@@ -10,10 +10,15 @@ class Builder extends DefaultBuilder {
         $type = 'desc';
         $search = '';
         $searchBy = [];
+        $rowsByPage = 10;
 
         $request = request()->query();
         $url = $request['url'];
         unset($request['url']);
+
+        if($request && isset($request['paginate'])) {
+            $rowsByPage = intval($request['paginate']);
+        }
 
         if($request && isset($request['order']) && strpos($sql, $request['order']) !== false) {
             $orderBy = $request['order'];
@@ -43,7 +48,7 @@ class Builder extends DefaultBuilder {
 
 
         if($paginate) {
-            return $this->paginate(10)
+            return $this->paginate($rowsByPage)
             ->appends($request)
             ->withPath("#" . $url);
         }

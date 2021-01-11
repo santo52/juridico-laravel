@@ -12,11 +12,7 @@ class CobroController extends Controller
 {
     public function index() {
 
-        $procesos = Proceso::getAll()
-        ->paginate(10)
-        ->appends(request()->query())
-        ->withPath('#cobros-y-pagos');
-
+        $procesos = Proceso::getAll(true);
         return $this->renderSection('proceso.listar', [
             'procesos' => $procesos,
             'cobros' => true

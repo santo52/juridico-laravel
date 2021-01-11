@@ -314,4 +314,41 @@ h5.title-bordered {
         background-color: transparent;
         padding: 15px 5px !important;
     }
+
+    .footable-pagination-select {
+        color: $main-color;
+        label {
+            font-weight: 300;
+        }
+    }
+
+    .footable-pagination-options {
+        width: 110px;
+        margin: auto;
+        select {
+            text-align-last: center;
+            text-align: center;
+        }
+        .filter-option-inner-inner,
+        .dropdown-menu li {
+            text-align: center;
+        }
+
+        .dropdown-menu>.active>a,
+        .dropdown-menu>.active>a:focus,
+        .dropdown-menu>.active>a:hover {
+            background-color: $main-color;
+        }
+
+        button {
+            height: 25px;
+            padding: 0px;
+            font-size: 12px !important;
+            .filter-option {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+    }
 }

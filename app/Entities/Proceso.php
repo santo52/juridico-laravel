@@ -95,10 +95,9 @@ class Proceso extends BaseModel
         return $this->hasOne('App\Entities\Municipio', 'id_municipio', 'id_municipio');
     }
 
-    public static function getAll()
+    public static function getAll($paginate = false)
     {
 
-        $paginate = false;
         $procesos = self::
             with( 'cliente.persona', 'tipoProceso', 'entidadDemandada', 'municipio', 'entidadJusticia', 'responsable', 'etapa', 'procesoEtapa.procesoEtapaActuaciones.cobro.pago')
             ->select(

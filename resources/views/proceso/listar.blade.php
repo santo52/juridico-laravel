@@ -129,6 +129,7 @@
         @endforeach
         @endif
     </tbody>
+    @if(count($procesos))
     <tfoot>
         <tr class="footable-paging">
             <td colspan="8">
@@ -136,11 +137,12 @@
                     {{$procesos}}
                 </div>
                 <span class="label label-default footable-pagination-registers">
-                    Mostrando del {{$listaActuaciones->firstItem()}} al {{$listaActuaciones->lastItem()}} de {{ $listaActuaciones->total()}} registros
+                    Mostrando del {{$procesos->firstItem()}} al {{$procesos->lastItem()}} de {{ $procesos->total()}} registros
                 </span>
             </td>
         </tr>
     </tfoot>
+    @endif
 </table>
 
 <div class="modal fade" tabindex="-1" role="dialog" id="comentariosModal">

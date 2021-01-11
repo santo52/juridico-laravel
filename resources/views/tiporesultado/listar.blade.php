@@ -71,6 +71,7 @@
         @endforeach
         @endif
     </tbody>
+    @if(count($tiposResultado))
     <tfoot>
         <tr class="footable-paging">
             <td colspan="8">
@@ -78,11 +79,12 @@
                     {{$tiposResultado}}
                 </div>
                 <span class="label label-default footable-pagination-registers">
-                    Mostrando del {{$listaActuaciones->firstItem()}} al {{$listaActuaciones->lastItem()}} de {{ $listaActuaciones->total()}} registros
+                    Mostrando del {{$tiposResultado->firstItem()}} al {{$tiposResultado->lastItem()}} de {{ $tiposResultado->total()}} registros
                 </span>
             </td>
         </tr>
     </tfoot>
+    @endif
 </table>
 
 @isset ($permissions->eliminar)

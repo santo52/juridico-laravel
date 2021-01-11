@@ -1747,3 +1747,45 @@ h5.title-bordered {
   padding: 15px 5px !important;
 }
 
+.footable-paging .footable-pagination-select {
+  color: #14aa6b;
+}
+
+.footable-paging .footable-pagination-select label {
+  font-weight: 300;
+}
+
+.footable-paging .footable-pagination-options {
+  width: 110px;
+  margin: auto;
+}
+
+.footable-paging .footable-pagination-options select {
+  -moz-text-align-last: center;
+       text-align-last: center;
+  text-align: center;
+}
+
+.footable-paging .footable-pagination-options .filter-option-inner-inner,
+.footable-paging .footable-pagination-options .dropdown-menu li {
+  text-align: center;
+}
+
+.footable-paging .footable-pagination-options .dropdown-menu > .active > a,
+.footable-paging .footable-pagination-options .dropdown-menu > .active > a:focus,
+.footable-paging .footable-pagination-options .dropdown-menu > .active > a:hover {
+  background-color: #14aa6b;
+}
+
+.footable-paging .footable-pagination-options button {
+  height: 25px;
+  padding: 0px;
+  font-size: 12px !important;
+}
+
+.footable-paging .footable-pagination-options button .filter-option {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+

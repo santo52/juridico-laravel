@@ -590,6 +590,36 @@ function handleClickButtonSearch(self, search) {
     $("#form-sumbit-filter-search").trigger('submit')
 }
 
+function submitTotalRegisters(self) {
+    const val = $(self).val()
+    const jsonParams = hashQueryToJSON();
+    jsonParams.paginate = val
+    location.hash = JSONToHash(jsonParams)
+}
+
+function addShowTotalRegisters() {
+    const { paginate = 10} = hashQueryToJSON();
+    const options = [10, 50, 100]
+    const html = `
+        <span class="footable-pagination-select">
+            <div class="form-container">
+                <label>Registros a mostrar</label>
+                <div class="footable-pagination-options">
+                    <select class="form-control input-sm" onchange="submitTotalRegisters(this)">
+                        ${options.map(option => `<option ${option == paginate ? 'selected' : ''} value="${option}">${option}</option>`).join('')}
+                    </select>
+                </div>
+            </div>
+        </span>
+    `
+
+    $('.footable-pagination-wrapper')
+        .parent()
+        .append(html)
+
+    $('.footable-pagination-options select').selectpicker();
+}
+
 function addFilterActive(self) {
     const filterContainer = $(self).data('filter-container')
 
@@ -640,6 +670,7 @@ function addFilterActive(self) {
 
 $.fn.asyncFootable = function (data) {
     $(this).footable()
+    addShowTotalRegisters()
     const filterActive = $(this).data('filter-active')
     if(filterActive) {
         addFilterActive(this)

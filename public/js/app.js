@@ -909,6 +909,26 @@ function handleClickButtonSearch(self, search) {
   $("#form-sumbit-filter-search").trigger('submit');
 }
 
+function submitTotalRegisters(self) {
+  var val = $(self).val();
+  var jsonParams = hashQueryToJSON();
+  jsonParams.paginate = val;
+  location.hash = JSONToHash(jsonParams);
+}
+
+function addShowTotalRegisters() {
+  var _hashQueryToJSON = hashQueryToJSON(),
+      _hashQueryToJSON$pagi = _hashQueryToJSON.paginate,
+      paginate = _hashQueryToJSON$pagi === void 0 ? 10 : _hashQueryToJSON$pagi;
+
+  var options = [10, 50, 100];
+  var html = "\n        <span class=\"footable-pagination-select\">\n            <div class=\"form-container\">\n                <label>Registros a mostrar</label>\n                <div class=\"footable-pagination-options\">\n                    <select class=\"form-control input-sm\" onchange=\"submitTotalRegisters(this)\">\n                        ".concat(options.map(function (option) {
+    return "<option ".concat(option == paginate ? 'selected' : '', " value=\"").concat(option, "\">").concat(option, "</option>");
+  }).join(''), "\n                    </select>\n                </div>\n            </div>\n        </span>\n    ");
+  $('.footable-pagination-wrapper').parent().append(html);
+  $('.footable-pagination-options select').selectpicker();
+}
+
 function addFilterActive(self) {
   var filterContainer = $(self).data('filter-container');
 
@@ -930,11 +950,11 @@ function addFilterActive(self) {
     }
 
     if (sortIDs.length) {
-      var _hashQueryToJSON = hashQueryToJSON(),
-          _hashQueryToJSON$sear = _hashQueryToJSON.search,
-          search = _hashQueryToJSON$sear === void 0 ? '' : _hashQueryToJSON$sear,
-          _hashQueryToJSON$sear2 = _hashQueryToJSON.searchby,
-          searchby = _hashQueryToJSON$sear2 === void 0 ? '' : _hashQueryToJSON$sear2;
+      var _hashQueryToJSON2 = hashQueryToJSON(),
+          _hashQueryToJSON2$sea = _hashQueryToJSON2.search,
+          search = _hashQueryToJSON2$sea === void 0 ? '' : _hashQueryToJSON2$sea,
+          _hashQueryToJSON2$sea2 = _hashQueryToJSON2.searchby,
+          searchby = _hashQueryToJSON2$sea2 === void 0 ? '' : _hashQueryToJSON2$sea2;
 
       var html = "\n            <form class=\"form-inline\" onsubmit=\"submitFilterSearch(event)\" id=\"form-sumbit-filter-search\">\n                <div class=\"form-group footable-filtering-search\">\n                    <label class=\"sr-only\">Buscar</label>\n                    <div class=\"input-group\">\n                        <input type=\"text\" name=\"search\" class=\"form-control\" placeholder=\"Buscar ...\" value=\"".concat(search, "\">\n                        <div class=\"input-group-btn\">\n                            <button type=\"button\" class=\"btn btn-primary\" onclick=\"handleClickButtonSearch(this, '").concat(search, "')\">\n                                <span class=\"fooicon fooicon-").concat(search ? 'remove' : 'search', "\"></span>\n                            </button>\n                            <button class=\"btn btn-default dropdown-toggle\" type=\"button\" id=\"dropdownMenuFromSubmitFilterSearch\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                                <span class=\"caret\"></span>\n                            </button>\n                            <ul class=\"dropdown-menu dropdown-menu-right\" aria-labelledby=\"dropdownMenuFromSubmitFilterSearch\">\n                                ").concat(sortIDs.map(function (item) {
         return "<li><a onclick=\"event.stopPropagation()\" class=\"flex items-center\"><input type=\"checkbox\" id=\"searchby[".concat(item.field, "]\" name=\"searchby[").concat(item.field, "]\" ").concat(!searchby || searchby.indexOf(item.field) !== -1 ? 'checked="checked"' : '', " value=\"").concat(item.field, "\" ><label for=\"searchby[").concat(item.field, "]\">").concat(item.text, "</label></a></li>");
@@ -946,6 +966,7 @@ function addFilterActive(self) {
 
 $.fn.asyncFootable = function (data) {
   $(this).footable();
+  addShowTotalRegisters();
   var filterActive = $(this).data('filter-active');
 
   if (filterActive) {

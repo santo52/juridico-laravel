@@ -104,6 +104,7 @@
         @endforeach
         @endif
     </tbody>
+    @if(count($listaActuaciones))
     <tfoot>
         <tr class="footable-paging">
             <td colspan="8">
@@ -116,6 +117,7 @@
             </td>
         </tr>
     </tfoot>
+    @endif
 </table>
 
 @isset($permissions->eliminar)

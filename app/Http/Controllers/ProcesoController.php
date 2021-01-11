@@ -26,11 +26,7 @@ class ProcesoController extends Controller
 
     public function index()
     {
-        $procesos = Proceso::getAll()
-        ->paginate(10)
-        ->appends(request()->query())
-        ->withPath('#proceso');
-
+        $procesos = Proceso::getAll(true);
         return $this->renderSection('proceso.listar', [
             'procesos' => $procesos,
             'creacion' => true

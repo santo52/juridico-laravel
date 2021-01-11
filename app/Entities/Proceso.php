@@ -95,9 +95,10 @@ class Proceso extends BaseModel
         return $this->hasOne('App\Entities\Municipio', 'id_municipio', 'id_municipio');
     }
 
-    public static function getAll($request = null)
+    public static function getAll()
     {
 
+        $paginate = false;
         $procesos = self::
             with( 'cliente.persona', 'tipoProceso', 'entidadDemandada', 'municipio', 'entidadJusticia', 'responsable', 'etapa', 'procesoEtapa.procesoEtapaActuaciones.cobro.pago')
             ->select(
@@ -127,7 +128,7 @@ class Proceso extends BaseModel
             ->where('proceso.eliminado', 0);
 
         //app\builders\Builder.php
-        return $procesos->applyFilters('id_proceso', $request, function($query, $search, $searchBy) {
+        return $procesos->applyFilters('id_proceso', function($query, $search, $searchBy) {
             if($search && in_array('estado_proceso', $searchBy)) {
 
                 $estado = false;
@@ -139,7 +140,7 @@ class Proceso extends BaseModel
 
                 $query->orHavingRaw("estado_proceso = '{$estado}'");
             }
-        });
+        }, $paginate);
     }
 
     public static function get($id)

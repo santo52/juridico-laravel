@@ -120,14 +120,13 @@ class ActuacionController extends Controller
 
     }
 
-    public function index(Request $request) {
+    public function index() {
 
         $actuacion = new Actuacion();
         $list = $actuacion
             ->select('id_actuacion', 'nombre_actuacion', 'estado_actuacion')
             ->where('eliminado', 0)
-            ->orderBy('id_actuacion', 'desc')
-            ->applyFilters('id_actuacion', $request, function($query, $search, $searchby) {
+            ->applyFilters('id_actuacion', function($query, $search, $searchby) {
                 if($search && in_array('estado_actuacion', $searchby)) {
                     $estado = false;
                     if(strpos('activo', strtolower($search)) !== false) {
@@ -138,10 +137,8 @@ class ActuacionController extends Controller
 
                     $query->orHavingRaw("estado_actuacion = '{$estado}'");
                 }
-            })
-            ->paginate(10)
-            ->appends(request()->query())
-            ->withPath('#actuacion');
+            });
+
 
         return $this->renderSection('actuacion.listar', [
             'actuaciones' => $list,

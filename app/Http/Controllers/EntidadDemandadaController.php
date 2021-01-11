@@ -10,10 +10,10 @@ use Maatwebsite\Excel\Facades\Excel;
 class EntidadDemandadaController extends Controller
 {
 
-    public function index(Request $request) {
+    public function index() {
         $entidades = EntidadDemandada::select('id_entidad_demandada', 'nombre_entidad_demandada', 'email_entidad_demandada', 'estado_entidad_demandada')
         ->where('eliminado', 0)
-        ->applyFilters('id_entidad_demandada', $request, function($query, $search, $searchBy) {
+        ->applyFilters('id_entidad_demandada', function($query, $search, $searchBy) {
             if($search && in_array('estado_entidad_demandada', $searchBy)) {
                 $estado = 10000;
                 if(strpos('activo', strtolower($search)) !== false) {
@@ -24,10 +24,8 @@ class EntidadDemandadaController extends Controller
 
                 $query->orHavingRaw("estado_entidad_demandada = '{$estado}'");
             }
-        })
-        ->paginate(10)
-        ->appends(request()->query())
-        ->withPath('#entidades-demandadas');
+        });
+
         return $this->renderSection('entidad_demandada.listar', [
             'entidades' => $entidades
         ]);

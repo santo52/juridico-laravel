@@ -13,14 +13,14 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class TipoProcesoController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
         $tiposProceso = TipoProceso::select('id_tipo_proceso', 'nombre_tipo_proceso', 'estado_tipo_proceso')
         ->where([
             'eliminado' => 0,
             'estado_tipo_proceso' => 1
         ])
-        ->applyFilters('id_tipo_proceso', $request, function($query, $search, $searchBy) {
+        ->applyFilters('id_tipo_proceso', function($query, $search, $searchBy) {
             if($search && in_array('estado_tipo_proceso', $searchBy)) {
                 $estado = 10000;
                 if(strpos('activo', strtolower($search)) !== false) {
@@ -31,10 +31,8 @@ class TipoProcesoController extends Controller
 
                 $query->orHavingRaw("estado_tipo_proceso = '{$estado}'");
             }
-        })
-        ->paginate(10)
-        ->appends(request()->query())
-        ->withPath('#tipos-de-proceso');
+        });
+
         return $this->renderSection('tipoproceso.listar', [
             'tiposProceso' => $tiposProceso
         ]);

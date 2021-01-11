@@ -307,3 +307,11 @@ h5.title-bordered {
         width: 100%;
     }
 }
+
+.footable-paging {
+    .footable-pagination-registers {
+        color: $main-color;
+        background-color: transparent;
+        padding: 15px 5px !important;
+    }
+}

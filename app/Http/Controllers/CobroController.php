@@ -10,9 +10,9 @@ use App\Entities\EntidadFinanciera;
 
 class CobroController extends Controller
 {
-    public function index(Request $request) {
+    public function index() {
 
-        $procesos = Proceso::getAll($request)
+        $procesos = Proceso::getAll()
         ->paginate(10)
         ->appends(request()->query())
         ->withPath('#cobros-y-pagos');

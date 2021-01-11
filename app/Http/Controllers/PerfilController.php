@@ -14,16 +14,13 @@ use Illuminate\Support\Facades\Auth;
 
 class PerfilController extends Controller
 {
-    public function index(Request $request) {
+    public function index() {
         $perfil = new Perfil;
         $list = $perfil->where([
             ['id_perfil', '<>', 1],
             ['eliminado', 0]
         ])
-        ->applyFilters('id_perfil', $request)
-        ->paginate(10)
-        ->appends(request()->query())
-        ->withPath('#perfil');
+        ->applyFilters('id_perfil');
 
 
         return $this->renderSection('perfil.listar', [

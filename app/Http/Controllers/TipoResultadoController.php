@@ -9,13 +9,10 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class TipoResultadoController extends Controller
 {
-    public function index(Request $request) {
+    public function index() {
         $tiposResultado = TipoResultado::select('id_tipo_resultado', 'nombre_tipo_resultado', 'unico_tipo_resultado', 'tipo_campo')
         ->where('eliminado', 0)
-        ->applyFilters('id_tipo_resultado', $request)
-        ->paginate(10)
-        ->appends(request()->query())
-        ->withPath('#tipos-de-resultado');
+        ->applyFilters('id_tipo_resultado');
 
         return $this->renderSection('tiporesultado.listar', [
             'tiposResultado' => $tiposResultado

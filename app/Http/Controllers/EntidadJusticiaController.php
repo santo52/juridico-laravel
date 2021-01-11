@@ -13,7 +13,7 @@ use Maatwebsite\Excel\Facades\Excel;
 class EntidadJusticiaController extends Controller
 {
 
-    public function index(Request $request) {
+    public function index() {
         $entidades = EntidadJusticia::select(
             'id_entidad_justicia', 'nombre_entidad_justicia', 'email_entidad_justicia',
             'nombre_pais', 'nombre_departamento', 'nombre_municipio'
@@ -22,10 +22,8 @@ class EntidadJusticiaController extends Controller
         ->leftjoin('departamento as d', 'd.id_departamento', 'm.id_departamento')
         ->leftjoin('pais as p', 'p.id_pais', 'd.id_pais')
         ->where('eliminado', 0)
-        ->applyFilters('id_entidad_justicia', $request)
-        ->paginate(10)
-        ->appends(request()->query())
-        ->withPath('#entidades-de-justicia');
+        ->applyFilters('id_entidad_justicia');
+
         $ciudades = Municipio::all();
         $paises = Pais::all();
         $departamentos = Departamento::all();

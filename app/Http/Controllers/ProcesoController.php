@@ -24,9 +24,9 @@ use App\Entities\TipoResultado;
 class ProcesoController extends Controller
 {
 
-    public function index(Request $request)
+    public function index()
     {
-        $procesos = Proceso::getAll($request)
+        $procesos = Proceso::getAll()
         ->paginate(10)
         ->appends(request()->query())
         ->withPath('#proceso');

@@ -27,7 +27,8 @@ function saveReferrer() {
 function render() {
 
   areYouSureBool = false
-  let [url, paramsString] = location.hash.replace('#', '').toLowerCase().split('?')
+  let [myURL, paramsString] = location.hash.replace('#', '').toLowerCase().split('?')
+  let url = myURL
   const count = url.split('/').filter(section => section.trim()).length
   if(count === 1) {
     url += '/listar'
@@ -35,7 +36,7 @@ function render() {
 
   if (url) {
     $.ajax({
-      url: url + '?' + paramsString,
+      url: url + '?' + paramsString + '&url=' + myURL,
       data: new URLSearchParams({}),
       success: data => {
 

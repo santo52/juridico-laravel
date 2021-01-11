@@ -24,7 +24,7 @@ use Maatwebsite\Excel\Facades\Excel;
 //             <th data-sort-id="nombre_municipio" data-breakpoints="all">Municipio</th>
 class IntermediarioController extends Controller
 {
-    public function index(Request $request) {
+    public function index() {
         $intermediarios = Intermediario::select(
             'id_intermediario', 'nombre_tipo_documento', 'telefono', 'correo_electronico', 'numero_documento',
             'nombre_pais', 'nombre_departamento', 'nombre_municipio', 'abreviatura_tipo_documento',
@@ -36,10 +36,7 @@ class IntermediarioController extends Controller
         ->leftjoin('departamento as de', 'de.id_departamento', 'mu.id_departamento')
         ->leftjoin('pais as pa', 'pa.id_pais', 'de.id_pais')
         ->where('intermediario.eliminado', 0)
-        ->applyFilters('id_intermediario', $request)
-        ->paginate(10)
-        ->appends(request()->query())
-        ->withPath('#intermediario');
+        ->applyFilters('id_intermediario');
 
         $municipios = Municipio::all();
 

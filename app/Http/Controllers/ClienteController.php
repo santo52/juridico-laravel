@@ -19,7 +19,7 @@ use App\Entities\Persona;
 
 class ClienteController extends Controller
 {
-    public function index(Request $request) {
+    public function index() {
         $clientes = Cliente::
             with('intermediario.persona.municipio', 'persona.tipoDocumento', 'persona.municipio')
             ->select(
@@ -42,7 +42,7 @@ class ClienteController extends Controller
 
             ->where([
             'cliente.eliminado' => 0,
-        ])->applyFilters('id_del_cliente', $request, function($query, $search, $searchBy) {
+        ])->applyFilters('id_del_cliente', function($query, $search, $searchBy) {
             if($search && in_array('estado_vital', $searchBy)) {
                 $estado = false;
                 if(strpos('vivo', strtolower($search)) !== false) {
@@ -54,10 +54,6 @@ class ClienteController extends Controller
                 $query->orHavingRaw("estado_vital_cliente = '{$estado}'");
             }
         });
-
-        $clientes = $clientes->paginate(10)
-        ->appends(request()->query())
-        ->withPath('#cliente');
 
         return $this->renderSection('cliente.listar', [
             'clientes' => $clientes,

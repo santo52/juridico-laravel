@@ -5,24 +5,28 @@ namespace App\Builders;
 use Illuminate\Database\Eloquent\Builder as DefaultBuilder;
 
 class Builder extends DefaultBuilder {
-    public function applyFilters($orderBy, $request, $callback = null) {
+    public function applyFilters($orderBy, $callback = null, $paginate = true) {
         $sql = $this->toSql();
         $type = 'desc';
         $search = '';
         $searchBy = [];
 
-        if($request && $request->has('order') && strpos($sql, $request->get('order')) !== false) {
-            $orderBy = $request->get('order');
+        $request = request()->query();
+        $url = $request['url'];
+        unset($request['url']);
+
+        if($request && isset($request['order']) && strpos($sql, $request['order']) !== false) {
+            $orderBy = $request['order'];
         }
 
-        if($request && $request->has('type')) {
-            $type = $request->get('type');
+        if($request && isset($request['type'])) {
+            $type = $request['type'];
         }
 
-        if($request && $request->has('search') && $request->has('searchby')) {
-            $search = trim($request->get('search'));
+        if($request && isset($request['search']) && isset($request['searchby'])) {
+            $search = trim($request['search']);
             $search = !empty($search) ? $search : false;
-            $searchBy = explode(',', trim($request->get('searchby')));
+            $searchBy = explode(',', trim($request['searchby']));
         }
 
         foreach($searchBy as $field) {
@@ -36,6 +40,14 @@ class Builder extends DefaultBuilder {
         }
 
         $this->orderBy($orderBy, $type);
+
+
+        if($paginate) {
+            return $this->paginate(10)
+            ->appends($request)
+            ->withPath("#" . $url);
+        }
+
         return $this;
     }
 }

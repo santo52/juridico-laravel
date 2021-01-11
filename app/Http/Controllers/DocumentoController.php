@@ -9,10 +9,10 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class DocumentoController extends Controller
 {
-    public function index(Request $request) {
+    public function index() {
         $documentos = Documento::select('id_documento', 'nombre_documento', 'estado_documento')
         ->where('eliminado', 0)
-        ->applyFilters('id_documento', $request, function($query, $search, $searchBy) {
+        ->applyFilters('id_documento', function($query, $search, $searchBy) {
             if($search && in_array('estado_documento', $searchBy)) {
                 $estado = 10000;
                 if(strpos('activo', strtolower($search)) !== false) {
@@ -23,10 +23,8 @@ class DocumentoController extends Controller
 
                 $query->orHavingRaw("estado_documento = '{$estado}'");
             }
-        })
-        ->paginate(10)
-        ->appends(request()->query())
-        ->withPath('#documento');
+        });
+
         return $this->renderSection('documento.listar', [
             'documentos' => $documentos
         ]);

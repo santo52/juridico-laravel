@@ -14,11 +14,12 @@ use Maatwebsite\Excel\Facades\Excel;
 class EtapaProcesoController extends Controller
 {
 
-    public function index(Request $request)
-    {
+
+    public function index() {
+
         $etapasProceso = EtapaProceso::select('id_etapa_proceso', 'nombre_etapa_proceso', 'estado_etapa_proceso')
         ->where('eliminado', 0)
-        ->applyFilters('id_etapa_proceso', $request, function($query, $search, $searchBy) {
+        ->applyFilters('id_etapa_proceso', function($query, $search, $searchBy) {
             if($search && in_array('estado_etapa_proceso', $searchBy)) {
 
                 $estado = 10;
@@ -30,10 +31,8 @@ class EtapaProcesoController extends Controller
 
                 $query->orHavingRaw("estado_etapa_proceso = '{$estado}'");
             }
-        })
-        ->paginate(10)
-        ->appends(request()->query())
-        ->withPath('#etapas-de-proceso');
+        });
+
         return $this->renderSection('etapaproceso.listar', [
             'etapas' => $etapasProceso
         ]);

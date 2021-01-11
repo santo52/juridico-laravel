@@ -1741,3 +1741,9 @@ h5.title-bordered {
   width: 100%;
 }
 
+.footable-paging .footable-pagination-registers {
+  color: #14aa6b;
+  background-color: transparent;
+  padding: 15px 5px !important;
+}
+

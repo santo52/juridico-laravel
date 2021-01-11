@@ -206,7 +206,11 @@
                             <input type="text" class="form-control" disabled />
                         @endif
                     @else
-                        <input type="text" class="form-control" value="{{$tipoResultado->value}}" disabled />
+                        @if($tipoResultado->tipo_campo == 5)
+                            <input type="currency" class="form-control" value="{{$tipoResultado->value}}" disabled />
+                        @else
+                            <input type="text" class="form-control" value="{{$tipoResultado->value}}" disabled />
+                        @endif
                     @endif
                 </div>
                 @if($key == 3 || ($c + 1) == count($tiposResultado))

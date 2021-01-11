@@ -15,7 +15,7 @@ class TipoResultado extends BaseModel
 
     protected $fillable = [
         "id_tipo_resultado", "nombre_tipo_resultado", "unico_tipo_resultado", "eliminado",
-        "tipo_campo"
+        "tipo_campo", "privado"
     ];
 
     public function procesoTiposResultado()
@@ -25,6 +25,16 @@ class TipoResultado extends BaseModel
 
     public function newEloquentBuilder($builder) {
         return new Builder($builder, $this);
+    }
+
+    public function getValue() {
+
+        if($this->tipo_campo == 5) {
+            $value = number_format($this->value, 2, ',', '.');
+            return "$ {$value}";
+        }
+
+        return $this->value;
     }
 
     public function getTipoCampo() {

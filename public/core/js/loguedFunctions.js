@@ -57,6 +57,7 @@ function render() {
         $('#breadcrumb').html(html.join(''))
         if (data.javascript) { $('body').append(data.javascript) }
         compileLibraries()
+        compileCurrencyInputs()
       }
     })
   }

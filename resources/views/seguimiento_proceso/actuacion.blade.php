@@ -75,7 +75,7 @@
             <div class="col-xs-12 col-sm-6">
                 <label for="fecha_inicio" class="control-label">Valor del cobro</label>
                 @if($actuacion->actuacion_tiene_cobro == 1)
-                <input type="number" id="valor_pago" name="valor_pago" class="form-control" value="{{$procesoEtapa->valor_pago }}" />
+                <input type="currency" id="valor_pago" name="valor_pago" class="form-control" value="{{$procesoEtapa->valor_pago }}" />
                 @else
                 <input type="text" id="valor_pago" name="valor_pago" class="form-control" value="No genera cobro" disabled />
                 @endif
@@ -96,7 +96,7 @@
                     class="form-control datepicker-here" @if($procesoEtapa)
                     value="{{$procesoEtapa->resultado_actuacion }}" @endif />
                 @elseif($actuacion->tipoResultado->tipo_campo === 5)
-                    <input type="number" name="resultado_actuacion" class="form-control numeric"
+                    <input type="currency" name="resultado_actuacion" class="form-control"
                         value="{{ $procesoEtapa->resultado_actuacion }}" />
                 @elseif($actuacion->tipoResultado->id_tipo_resultado === 7 || $actuacion->tipoResultado->id_tipo_resultado === 8)
                     <select data-live-search="true" class="form-control" id="resultado_actuacion" name="resultado_actuacion" title="Seleccionar">
@@ -328,6 +328,9 @@
         .eq(2)
         .children('a')
         .attr('href', '#seguimiento-procesos/' + idSeguimiento)
+
+
+        compileCurrencyInputs()
 
     })
 </script>

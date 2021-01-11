@@ -39,13 +39,87 @@ function compileLibraries() {
     $('.datepicker-here').datepicker({
         language: 'es',
         autoClose: true
-    })
+    }).attr('readOnly', true).css('background-color', '#fff')
+
+
 
     const requiredFields = $('form').find('.form-control.required').toArray()
     requiredFields.map(item => {
         const $label = $(item).siblings('label')
         $label.html('* ' + $label.html())
     })
+}
+
+function localStringToNumber( s, comma = false ){
+    if(comma) {
+      return Number(String(s).replace(',', '.').replace(/[^0-9.-]+/g,""))
+    }
+    return Number(String(s).replace(/[^0-9,-]+/g,"").replace(',', '.'))
+}
+
+var compileCurrencyInputsBlur = false
+var compileCurrencyInputsFocus = false
+
+function numberToMoney(value) {
+    var options = {
+        maximumFractionDigits : 2,
+        currency              : 'COP',
+        style                 : "currency",
+        currencyDisplay       : "symbol"
+    }
+
+    return (value || value === 0)
+      ? localStringToNumber(value, true).toLocaleString(undefined, options)
+      : ''
+}
+
+function moneyToNumber(value) {
+    return  value ? localStringToNumber(value) : ''
+}
+
+function compileCurrencyInputs() {
+
+    var currencyInput = $('input[type=currency]')
+
+    currencyInput.each((_, target) => {
+        onBlur({ target }, false)
+        const name = $(target).attr('name')
+        if(name) {
+            $(target).parent().append(`<input type="hidden" name="${name}"/>`)
+            $(target).removeAttr('name').attr('data-name', name)
+        }
+    })
+
+
+    // bind event listeners
+    currencyInput.on('focus', onFocus)
+    currencyInput.on('blur', onBlur)
+
+    function onFocus(e){
+      if(compileCurrencyInputsFocus) {
+        return false
+      }
+      e.target.value = moneyToNumber(e.target.value)
+      compileCurrencyInputsFocus = true
+      compileCurrencyInputsBlur = false
+    }
+
+    function onBlur(e, validate = true){
+
+        if(compileCurrencyInputsBlur && validate) {
+            return false
+        }
+
+        e.target.value = numberToMoney(e.target.value)
+        const name = $(e.target).attr('data-name')
+        $('input[name=' + name + ']').eq(0).val(moneyToNumber(e.target.value))
+        console.log($('input[name=' + name + ']'), 'adasdsadsad')
+
+        if(validate) {
+            compileCurrencyInputsFocus = false
+            compileCurrencyInputsBlur = true
+        }
+    }
 }
 
 jQuery(function () {
@@ -72,6 +146,13 @@ $.fn.autosave = function() {
     const $elems = $(this).find('input,textarea,select')
     const [hash] = location.hash.split('?')
     const values = JSON.parse(sessionStorage.getItem(hash) || '{}')
+
+    // $(this).on('submit', function(e) {
+    //     e.preventDefault();
+    //     const [hash] = location.hash.split('?')
+    //     sessionStorage.removeItem(hash)
+    //     $(this).unbind('submit').submit();
+    // })
 
     Object.keys(values).map(key => {
         const $item = $(this).find('[name=' + key + ']')
@@ -631,8 +712,18 @@ function submitTotalRegisters(self) {
     const val = $(self).val()
     const jsonParams = hashQueryToJSON();
     jsonParams.paginate = val
+    jsonParams.page = 1
     location.hash = JSONToHash(jsonParams)
 }
+
+Number.prototype.money = function(n, x) {
+    var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\,' : '$') + ')';
+    return '$ ' + this.toFixed(Math.max(0, ~~n)).replace('.', ',').replace(new RegExp(re, 'g'), '$&.');
+};
+
+String.prototype.number = function() {
+    return Number(this.replace(/[$.]/g, '').replace(',', '.'))
+};
 
 function addShowTotalRegisters() {
     const { paginate = 10} = hashQueryToJSON();

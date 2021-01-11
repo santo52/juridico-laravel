@@ -11,7 +11,10 @@ class TipoResultadoController extends Controller
 {
     public function index() {
         $tiposResultado = TipoResultado::select('id_tipo_resultado', 'nombre_tipo_resultado', 'unico_tipo_resultado', 'tipo_campo')
-        ->where('eliminado', 0)
+        ->where([
+            'eliminado' => 0,
+            'privado' => 0
+        ])
         ->applyFilters('id_tipo_resultado');
 
         return $this->renderSection('tiporesultado.listar', [

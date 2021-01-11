@@ -52,6 +52,8 @@ class SeguimientoActuacion {
             const valorPagoExists = $('#valor_pago').length > 0
             const valorPagoPass = valorPago === 'No genera cobro' || parseInt(valorPago) > 0
 
+
+
             const allFields = allDocs && allSaved && !finalizado && valorPagoExists && valorPagoPass && idProcesoEtapaActuacion != ''
 
             if (allFields) {

@@ -27,5 +27,4 @@ class BaseModel extends Model {
             $this->setRelation($method, $results);
         });
     }
-
 }

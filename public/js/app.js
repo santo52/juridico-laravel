@@ -62,12 +62,85 @@ function compileLibraries() {
   $('.datepicker-here').datepicker({
     language: 'es',
     autoClose: true
-  });
+  }).attr('readOnly', true).css('background-color', '#fff');
   var requiredFields = $('form').find('.form-control.required').toArray();
   requiredFields.map(function (item) {
     var $label = $(item).siblings('label');
     $label.html('* ' + $label.html());
   });
+}
+
+function localStringToNumber(s) {
+  var comma = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+  if (comma) {
+    return Number(String(s).replace(',', '.').replace(/[^0-9.-]+/g, ""));
+  }
+
+  return Number(String(s).replace(/[^0-9,-]+/g, "").replace(',', '.'));
+}
+
+var compileCurrencyInputsBlur = false;
+var compileCurrencyInputsFocus = false;
+
+function numberToMoney(value) {
+  var options = {
+    maximumFractionDigits: 2,
+    currency: 'COP',
+    style: "currency",
+    currencyDisplay: "symbol"
+  };
+  return value || value === 0 ? localStringToNumber(value, true).toLocaleString(undefined, options) : '';
+}
+
+function moneyToNumber(value) {
+  return value ? localStringToNumber(value) : '';
+}
+
+function compileCurrencyInputs() {
+  var currencyInput = $('input[type=currency]');
+  currencyInput.each(function (_, target) {
+    onBlur({
+      target: target
+    }, false);
+    var name = $(target).attr('name');
+
+    if (name) {
+      $(target).parent().append("<input type=\"hidden\" name=\"".concat(name, "\"/>"));
+      $(target).removeAttr('name').attr('data-name', name);
+    }
+  }); // bind event listeners
+
+  currencyInput.on('focus', onFocus);
+  currencyInput.on('blur', onBlur);
+
+  function onFocus(e) {
+    if (compileCurrencyInputsFocus) {
+      return false;
+    }
+
+    e.target.value = moneyToNumber(e.target.value);
+    compileCurrencyInputsFocus = true;
+    compileCurrencyInputsBlur = false;
+  }
+
+  function onBlur(e) {
+    var validate = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+    if (compileCurrencyInputsBlur && validate) {
+      return false;
+    }
+
+    e.target.value = numberToMoney(e.target.value);
+    var name = $(e.target).attr('data-name');
+    $('input[name=' + name + ']').eq(0).val(moneyToNumber(e.target.value));
+    console.log($('input[name=' + name + ']'), 'adasdsadsad');
+
+    if (validate) {
+      compileCurrencyInputsFocus = false;
+      compileCurrencyInputsBlur = true;
+    }
+  }
 }
 
 jQuery(function () {
@@ -102,7 +175,13 @@ $.fn.autosave = function () {
       _location$hash$split4 = _slicedToArray(_location$hash$split3, 1),
       hash = _location$hash$split4[0];
 
-  var values = JSON.parse(sessionStorage.getItem(hash) || '{}');
+  var values = JSON.parse(sessionStorage.getItem(hash) || '{}'); // $(this).on('submit', function(e) {
+  //     e.preventDefault();
+  //     const [hash] = location.hash.split('?')
+  //     sessionStorage.removeItem(hash)
+  //     $(this).unbind('submit').submit();
+  // })
+
   Object.keys(values).map(function (key) {
     var $item = $(_this).find('[name=' + key + ']');
     addAutosaveClass($item, values[key]);
@@ -660,8 +739,18 @@ function submitTotalRegisters(self) {
   var val = $(self).val();
   var jsonParams = hashQueryToJSON();
   jsonParams.paginate = val;
+  jsonParams.page = 1;
   location.hash = JSONToHash(jsonParams);
 }
+
+Number.prototype.money = function (n, x) {
+  var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\,' : '$') + ')';
+  return '$ ' + this.toFixed(Math.max(0, ~~n)).replace('.', ',').replace(new RegExp(re, 'g'), '$&.');
+};
+
+String.prototype.number = function () {
+  return Number(this.replace(/[$.]/g, '').replace(',', '.'));
+};
 
 function addShowTotalRegisters() {
   var _hashQueryToJSON = hashQueryToJSON(),

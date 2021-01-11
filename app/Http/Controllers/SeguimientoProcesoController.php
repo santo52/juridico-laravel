@@ -97,7 +97,7 @@ class SeguimientoProcesoController extends Controller
         ->orderBy('fecha_resultado', 'desc')
         ->get();
 
-        $tiposResultado = TipoResultado::where(['eliminado' => 0, ['id_tipo_resultado', '>', 4]])->get();
+        $tiposResultado = TipoResultado::where(['eliminado' => 0, ['id_tipo_resultado', '>', 5]])->get();
         foreach($tiposResultado as $key => $value) {
             $procesoTipoResultado = ProcesoTipoResultado::where(['id_proceso' => $id, 'id_tipo_resultado' => $value->id_tipo_resultado])->first();
             if($procesoTipoResultado) {

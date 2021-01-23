@@ -183,7 +183,7 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/honorarios/pago/upsert', 'HonorarioController@upsertPago');
     Route::post('/honorarios/pago/get/{id}', 'HonorarioController@getPago');
     Route::post('/honorarios/pagos/get/{id}', 'HonorarioController@getPagos');
-
+    Route::post('/honorarios/pagos/delete/{id}', 'HonorarioController@deletePago');
 
 
 

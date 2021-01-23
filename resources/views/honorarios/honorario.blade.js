@@ -99,13 +99,25 @@ class Honorario {
 
     deletePagoAceptar() {
         const id = $('#deletePagoValue').val()
-        $('#item-pago-' + id).remove()
+        if (id) {
+            $.ajax({
+                url: '/honorarios/pagos/delete/' + id,
+                success: data => {
+                    if (data.saved) {
+                        honorario.rerenderRow(data.id_honorario)
+                        $('#item-pago-' + id).remove()
+                    }
+                }
+            })
+        }
+
         this.deletePagoCancelar()
     }
 
     pagoModalOpen(id) {
 
         $('#pagosModal').modal('show')
+        $('#pagosModalNewButton').data('id', id)
         $('#lista-pagos tbody').html('')
         $('#lista-pagos').footable('refresh')
 
@@ -119,11 +131,12 @@ class Honorario {
                             <td>${this.formatDate(item.fecha_consignacion)}</td>
                             <td>${this.formasPago(item.forma_pago)}</td>
                             <td>${item.numero_cuenta || 'En efectivo'}</td>
-                            <td>${item.valor_pago}</td>
+                            <td>${numberToMoney(item.valor_pago)}</td>
                             <td>
                                 <div class="flex justify-center table-actions">
                                     <a href="javascript:void(0)" title="Editar pago"
-                                        onclick="honorario.registrarPagoModalOpen('${item.id_honorario}', '${item.id_pago_honorario}')" class="btn text-primary" type="button">
+                                        data-id="${item.id_honorario}"
+                                        onclick="honorario.registrarPagoModalOpen(this, '${item.id_pago_honorario}')" class="btn text-primary" type="button">
                                         <span class="glyphicon glyphicon-edit"></span>
                                     </a>
                                     <a href="javascript:void(0)" title="Eliminar pago"
@@ -141,6 +154,22 @@ class Honorario {
                 }
             })
         }
+    }
+
+    rerenderRow(id) {
+        $.ajax({
+            url: '/honorarios/get/' + id,
+            success: data => {
+                console.log(data, 'dataaaa')
+                const $row = $('#honorarioRow' + id)
+                $row.find('.valorAPagar').text(numberToMoney(data.valorAPagar))
+                $row.find('.valorPagado').text(numberToMoney(data.valorPagado))
+                $row.find('.totalHonorarios').text(numberToMoney(data.totalHonorarios))
+                $row.find('.totalComisiones').text(numberToMoney(data.totalComisiones))
+                $row.find('.estadoPagos').text(data.cerrado ? 'Pagado' : 'Pendiente')
+
+            }
+        })
     }
 
     upsertPago(e) {
@@ -161,7 +190,8 @@ class Honorario {
                 success: data => {
                     if (data.saved) {
                         $('#editarPagoModal').removeClass('open').modal('hide')
-                        location.reload()
+                        honorario.pagoModalOpen(data.saved.id_honorario)
+                        honorario.rerenderRow(data.saved.id_honorario)
                     }
                 }
             })
@@ -170,7 +200,8 @@ class Honorario {
         return false
     }
 
-    registrarPagoModalOpen(id, idpago = 0) {
+    registrarPagoModalOpen(self, idpago = 0) {
+        const id = $(self).data('id')
         $('#editarPagoModal').addClass('open').modal('show')
         this.changeFormaPago(1)
         $('#id_entidad_financiera').val(0).selectpicker('refresh')
@@ -186,7 +217,7 @@ class Honorario {
                         $('#id_entidad_financiera').val(data.id_entidad_financiera).selectpicker('refresh')
                         $('#referencia').val(data.numero_cuenta)
                         this.changeFormaPago(data.forma_pago)
-                        $('#valor_pago').val(data.valor_pago)
+                        $('#valor_pago').val(data.valor_pago).currency()
                     }
                 }
             })

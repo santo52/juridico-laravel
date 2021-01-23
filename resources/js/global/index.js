@@ -9,6 +9,11 @@ jQuery(document).ready(function () {
     hideLoading();
 });
 
+$.fn.currency = function() {
+    const val = $(this).val()
+    $(this).val(numberToMoney(val))
+}
+
 jQuery.ajaxSetup({
     headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

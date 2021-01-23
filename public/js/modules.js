@@ -1542,7 +1542,19 @@ var Honorario = /*#__PURE__*/function () {
     key: "deletePagoAceptar",
     value: function deletePagoAceptar() {
       var id = $('#deletePagoValue').val();
-      $('#item-pago-' + id).remove();
+
+      if (id) {
+        $.ajax({
+          url: '/honorarios/pagos/delete/' + id,
+          success: function success(data) {
+            if (data.saved) {
+              honorario.rerenderRow(data.id_honorario);
+              $('#item-pago-' + id).remove();
+            }
+          }
+        });
+      }
+
       this.deletePagoCancelar();
     }
   }, {
@@ -1551,6 +1563,7 @@ var Honorario = /*#__PURE__*/function () {
       var _this6 = this;
 
       $('#pagosModal').modal('show');
+      $('#pagosModalNewButton').data('id', id);
       $('#lista-pagos tbody').html('');
       $('#lista-pagos').footable('refresh');
 
@@ -1560,7 +1573,7 @@ var Honorario = /*#__PURE__*/function () {
           success: function success(data) {
             if (data) {
               var html = data.map(function (item) {
-                return "<tr id=\"item-pago-".concat(item.id_pago_honorario, "\">\n                            <td>").concat(_this6.formatDate(item.fecha_consignacion), "</td>\n                            <td>").concat(_this6.formasPago(item.forma_pago), "</td>\n                            <td>").concat(item.numero_cuenta || 'En efectivo', "</td>\n                            <td>").concat(item.valor_pago, "</td>\n                            <td>\n                                <div class=\"flex justify-center table-actions\">\n                                    <a href=\"javascript:void(0)\" title=\"Editar pago\"\n                                        onclick=\"honorario.registrarPagoModalOpen('").concat(item.id_honorario, "', '").concat(item.id_pago_honorario, "')\" class=\"btn text-primary\" type=\"button\">\n                                        <span class=\"glyphicon glyphicon-edit\"></span>\n                                    </a>\n                                    <a href=\"javascript:void(0)\" title=\"Eliminar pago\"\n                                        onclick=\"honorario.deletePagoModal('").concat(item.id_pago_honorario, "')\" class=\"btn text-danger\" type=\"button\">\n                                        <span class=\"glyphicon glyphicon-trash\"></span>\n                                    </a>\n                                </div>\n\n                            </td>\n                        </tr>");
+                return "<tr id=\"item-pago-".concat(item.id_pago_honorario, "\">\n                            <td>").concat(_this6.formatDate(item.fecha_consignacion), "</td>\n                            <td>").concat(_this6.formasPago(item.forma_pago), "</td>\n                            <td>").concat(item.numero_cuenta || 'En efectivo', "</td>\n                            <td>").concat(numberToMoney(item.valor_pago), "</td>\n                            <td>\n                                <div class=\"flex justify-center table-actions\">\n                                    <a href=\"javascript:void(0)\" title=\"Editar pago\"\n                                        data-id=\"").concat(item.id_honorario, "\"\n                                        onclick=\"honorario.registrarPagoModalOpen(this, '").concat(item.id_pago_honorario, "')\" class=\"btn text-primary\" type=\"button\">\n                                        <span class=\"glyphicon glyphicon-edit\"></span>\n                                    </a>\n                                    <a href=\"javascript:void(0)\" title=\"Eliminar pago\"\n                                        onclick=\"honorario.deletePagoModal('").concat(item.id_pago_honorario, "')\" class=\"btn text-danger\" type=\"button\">\n                                        <span class=\"glyphicon glyphicon-trash\"></span>\n                                    </a>\n                                </div>\n\n                            </td>\n                        </tr>");
               });
               $('#lista-pagos tbody').html(html);
             }
@@ -1569,6 +1582,22 @@ var Honorario = /*#__PURE__*/function () {
           }
         });
       }
+    }
+  }, {
+    key: "rerenderRow",
+    value: function rerenderRow(id) {
+      $.ajax({
+        url: '/honorarios/get/' + id,
+        success: function success(data) {
+          console.log(data, 'dataaaa');
+          var $row = $('#honorarioRow' + id);
+          $row.find('.valorAPagar').text(numberToMoney(data.valorAPagar));
+          $row.find('.valorPagado').text(numberToMoney(data.valorPagado));
+          $row.find('.totalHonorarios').text(numberToMoney(data.totalHonorarios));
+          $row.find('.totalComisiones').text(numberToMoney(data.totalComisiones));
+          $row.find('.estadoPagos').text(data.cerrado ? 'Pagado' : 'Pendiente');
+        }
+      });
     }
   }, {
     key: "upsertPago",
@@ -1588,7 +1617,8 @@ var Honorario = /*#__PURE__*/function () {
           success: function success(data) {
             if (data.saved) {
               $('#editarPagoModal').removeClass('open').modal('hide');
-              location.reload();
+              honorario.pagoModalOpen(data.saved.id_honorario);
+              honorario.rerenderRow(data.saved.id_honorario);
             }
           }
         });
@@ -1598,10 +1628,11 @@ var Honorario = /*#__PURE__*/function () {
     }
   }, {
     key: "registrarPagoModalOpen",
-    value: function registrarPagoModalOpen(id) {
+    value: function registrarPagoModalOpen(self) {
       var _this7 = this;
 
       var idpago = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+      var id = $(self).data('id');
       $('#editarPagoModal').addClass('open').modal('show');
       this.changeFormaPago(1);
       $('#id_entidad_financiera').val(0).selectpicker('refresh');
@@ -1620,7 +1651,7 @@ var Honorario = /*#__PURE__*/function () {
 
               _this7.changeFormaPago(data.forma_pago);
 
-              $('#valor_pago').val(data.valor_pago);
+              $('#valor_pago').val(data.valor_pago).currency();
             }
           }
         });

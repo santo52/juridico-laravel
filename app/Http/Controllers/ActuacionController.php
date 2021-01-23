@@ -66,7 +66,7 @@ class ActuacionController extends Controller
         }
 
         $saved = $this->upsert($request);
-        return response()->json(['savedsss' => $saved]);
+        return response()->json(['saved' => $saved]);
     }
 
     private function upsert(Request $request, $id = false) {

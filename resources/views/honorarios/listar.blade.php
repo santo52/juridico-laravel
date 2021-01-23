@@ -21,7 +21,7 @@
     </div>
 </div>
 
-<table id="tipoProcesoTable" class="table table-hover" data-empty="Sin honorarios"
+<table id="honoratiosTable" class="table table-hover" data-empty="Sin honorarios"
     data-paging-count-format="Mostrando del {PF} al {PL} de {TR} registros"
     data-filter-container="#filter-form-container" data-sorting="true" data-filtering="true" data-paging="true"
     data-filter-placeholder="Buscar ..." data-filter-position="left" data-filter-dropdown-title="Buscar por"
@@ -47,20 +47,20 @@
     <tbody>
         @if (count($honorarios) > 0)
         @foreach ($honorarios as $honorario)
-        <tr id="tipoProcesoRow{{$honorario['id_honorario']}}">
+        <tr id="honorarioRow{{$honorario['id_honorario']}}">
             <td>{{$honorario['id_honorario']}}</td>
             <td>{{$honorario->proceso->cliente->intermediario ? $honorario->proceso->cliente->intermediario->persona->numero_documento : 'Sin Intermediario'}}</td>
             <td>{{$honorario->proceso->cliente->intermediario ? $honorario->proceso->cliente->intermediario->getNombreCompleto() :  'Sin Intermediario'}}</td>
-            <td>$ {{number_format($honorario->getValorAPagar(), 0, ',', '.')}}</td>
-            <td>$ {{number_format($honorario->getValorPagado(), 0, ',', '.')}}</td>
+            <td class="valorAPagar">$ {{number_format($honorario->getValorAPagar(), 0, ',', '.')}}</td>
+            <td class="valorPagado">$ {{number_format($honorario->getValorPagado(), 0, ',', '.')}}</td>
             <td>{{$honorario->proceso->cliente->persona->numero_documento}}</td>
             <td>{{$honorario->proceso->cliente->getNombreCompleto()}}</td>
             <td>$ {{number_format($honorario->proceso->valor_final_sentencia, 0, ',', '.')}}</td>
             <td>{{$honorario->proceso->fecha_pago}}</td>
-            <td>$ {{number_format($honorario->getTotalHonorarios(), 0, ',', '.')}}</td>
-            <td>$ {{number_format($honorario->getTotalComisiones(), 0, ',', '.')}}</td>
+            <td class="totalHonorarios">$ {{number_format($honorario->getTotalHonorarios(), 0, ',', '.')}}</td>
+            <td class="totalComisiones">$ {{number_format($honorario->getTotalComisiones(), 0, ',', '.')}}</td>
             {{-- <td>{{$honorario->observacion}}</td> --}}
-            <td>{{$honorario['pago_honorario'] ? 'Pagado' : 'Pendiente'}}</td>
+            <td class="estadoPagos">{{$honorario['cerrado'] === 1 ? 'Pagado' : 'Pendiente'}}</td>
             <td>
                 <div class="flex justify-center table-actions">
                     @isset ($permissions->editar)
@@ -73,11 +73,11 @@
                         onclick="honorario.pagoModalOpen('{{$honorario['id_honorario']}}')" class="btn text-warning" type="button">
                         <span class="glyphicon glyphicon-usd"></span>
                     </a>
-                    <a href="javascript:void(0)" title="Registrar pago"
+                    {{-- <a href="javascript:void(0)" title="Registrar pago"
                         onclick="honorario.registrarPagoModalOpen('{{$honorario['id_honorario']}}')" class="btn text-success"
                         type="button">
                         <span class="glyphicon glyphicon-plus"></span>
-                    </a>
+                    </a> --}}
                     @isset ($permissions->eliminar)
                     <a href="javascript:void(0)" class="btn text-danger" type="button"
                         onclick="honorario.openDelete('{{$honorario['id_honorario']}}')">
@@ -309,6 +309,9 @@
             </div>
             <form onsubmit="cobro.upsertPago(event)">
                 <div class="modal-body row">
+                    <div class="col-xs-12 right" style="margin-bottom:10px">
+                        <button id="pagosModalNewButton" type="button" class="btn btn-success" data-id="0" onclick="honorario.registrarPagoModalOpen(this)">Nuevo</button>
+                    </div>
                     <div class="col-xs-12">
                         <table id="lista-pagos" class="table" data-empty="Sin pagos">
                             <thead>
@@ -372,7 +375,7 @@
                     </div>
                     <div class="form-group">
                         <label for="valor_pago" class="control-label">Valor pagado</label>
-                        <input name="valor_pago" id="valor_pago" class="form-control numeric required" />
+                        <input type="currency" name="valor_pago" id="valor_pago" class="form-control required" />
                     </div>
                 </div>
                 <div class="modal-footer center">
@@ -400,8 +403,8 @@
             </div>
             <div class="modal-footer center">
                 <input type="hidden" id="deletePagoValue" />
-                <button type="button" onClick="cobro.deletePagoCancelar()" class="btn btn-default">Cancelar</button>
-                <button type="button" onClick="cobro.deletePagoAceptar()" class="btn btn-danger">Eliminar</button>
+                <button type="button" onClick="honorario.deletePagoCancelar()" class="btn btn-default">Cancelar</button>
+                <button type="button" onClick="honorario.deletePagoAceptar()" class="btn btn-danger">Eliminar</button>
             </div>
         </div>
     </div>

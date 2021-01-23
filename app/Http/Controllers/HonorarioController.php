@@ -40,6 +40,13 @@ class HonorarioController extends Controller
 
     public function get($id) {
         $honorario = Honorario::find($id);
+        if($id) {
+            $honorario->proceso->addTiposResultadoToProceso();
+            $honorario['valorAPagar'] = $honorario->getValorAPagar();
+            $honorario['valorPagado'] = $honorario->getValorPagado();
+            $honorario['totalHonorarios'] = $honorario->getTotalHonorarios();
+            $honorario['totalComisiones'] = $honorario->getTotalComisiones();
+        }
         return response()->json($honorario);
     }
 
@@ -65,26 +72,40 @@ class HonorarioController extends Controller
         return response()->json($pago);
     }
 
+    public function deletePago($id) {
+        $pago = PagoHonorario::find($id);
+        if($pago) $pago->delete();
+        $honorario = Honorario::find($pago->id_honorario);
+        $honorario->update(['cerrado' => 0]);
+        return response()->json(['saved' => true, 'id_honorario' => $pago->id_honorario]);
+    }
+
     public function upsertPago(Request $request) {
 
         $id = $request->get('id_pago');
-        // $pagado = $request->get('valor_pago');
+        $pagado = $request->get('valor_pago');
+        $idHonorario = $request->get('id_honorario');
         $data = $request->all();
-        // $honorario = Honorario::find($id);
-        // $valorTotal = $honorario->getValorAPagar();
-        // $closed = 0;
+        $honorario = Honorario::find($idHonorario);
+        $honorario->proceso->addTiposResultadoToProceso();
 
-        // if( floatval($pagado) >= $valorTotal) {
-        //     $data['valor_pago'] = $valorTotal;
-        //     $closed = 1;
-        // }
+        $valorTotal = $honorario->getValorAPagar();
+        $valorPagado = $honorario->getValorPagado();
+
+
+        $closed = 0;
+
+        if( (floatval($pagado) + $valorPagado) > $valorTotal) {
+            $data['valor_pago'] = $valorTotal - $valorPagado;
+            $closed = 1;
+        }
 
         $saved = PagoHonorario::updateOrCreate(['id_pago_honorario' => $id], $data);
-        // if($saved) {
-        //     $honorario->update(['cerrado' => $closed]);
-        // }
+        if($saved) {
+            $honorario->update(['cerrado' => $closed]);
+        }
 
-        return response()->json(['savedsss' => $saved, $request->all()]);
+        return response()->json(['saved' => $saved, $data]);
     }
 
     public function getProceso($id) {

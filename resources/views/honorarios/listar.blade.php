@@ -169,7 +169,7 @@
                         <div class="form-group row">
                             <div class="col-sm-6">
                                 <label for="recipient-name" class="control-label">Valor pagado al cliente</label>
-                                <input id="valor_pagado_cliente" class="form-control" disabled />
+                                <input type="currency" id="valor_pagado_cliente" name="valor_pagado_cliente" class="form-control" disabled />
                             </div>
                             <div class="col-sm-6">
                                 <label for="recipient-name" class="control-label">Fecha de pago</label>
@@ -196,7 +196,7 @@
                             </div>
                             <div class="col-sm-6">
                                 <label for="recipient-name" class="control-label">Valor de los honorarios</label>
-                                <input id="valor_honorarios" class="form-control" disabled />
+                                <input type="text" id="valor_honorarios" class="form-control" disabled />
                             </div>
                         </div>
                         <div class="form-group row">
@@ -206,7 +206,7 @@
                             </div>
                             <div class="col-sm-6">
                                 <label for="valor_factura" class="control-label">Valor factura</label>
-                                <input type="number" id="valor_factura" name="valor_factura" class="form-control numeric" />
+                                <input type="currency"  id="valor_factura" name="valor_factura" class="form-control" />
                             </div>
                         </div>
                         {{-- <div class="form-group row">
@@ -251,35 +251,36 @@
                         <div class="form-group row">
                             <div class="col-sm-4">
                                 <label for="recipient-name" class="control-label">Valor comisión</label>
-                                <input name="valor_comision" id="valor_comision" class="form-control numeric"
-                                    onkeyup="honorario.onChangeComisiones(this)"
-                                    onchange="honorario.onChangeComisiones(this)" />
+                                <input type="currency" name="valor_comision" id="valor_comision" class="form-control"
+                                    onkeyup="honorario.onChangeComisiones(true)"
+                                    onchange="honorario.onChangeComisiones(true)" />
                             </div>
                             <div class="col-sm-4">
                                 <label for="recipient-name" class="control-label">% retefuente</label>
                                 <input type="number" min="0" max="100" name="retefuente" id="retefuente"
-                                    class="form-control numeric" onkeyup="honorario.onChangeComisiones(this)"
-                                    onchange="honorario.onChangeComisiones(this)" />
+                                    class="form-control numeric" onkeyup="honorario.onChangeComisiones()"
+                                    onchange="honorario.onChangeComisiones()" />
                             </div>
                             <div class="col-sm-4">
                                 <label for="recipient-name" class="control-label">% rete-ICA</label>
                                 <input type="number" min="0" max="100" name="reteica" id="reteica"
-                                    class="form-control numeric" onkeyup="honorario.onChangeComisiones(this)"
-                                    onchange="honorario.onChangeComisiones(this)" />
+                                    class="form-control numeric" onkeyup="honorario.onChangeComisiones()"
+                                    onblur="honorario.onChangeComisiones()"
+                                    onchange="honorario.onChangeComisiones()" />
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-sm-4">
                                 <label for="recipient-name" class="control-label">Valor retefuente</label>
-                                <input id="valor_retefuente" class="form-control" disabled />
+                                <input type="text" id="valor_retefuente" class="form-control" disabled />
                             </div>
                             <div class="col-sm-4">
                                 <label for="recipient-name" class="control-label">Valor rete-ICA</label>
-                                <input id="valor_reteica" class="form-control" disabled />
+                                <input type="text" id="valor_reteica" class="form-control" disabled />
                             </div>
                             <div class="col-sm-4">
                                 <label for="recipient-name" class="control-label">Valor comisión</label>
-                                <input id="total_comision" class="form-control" disabled />
+                                <input type="text" id="total_comision" class="form-control" disabled />
                             </div>
                         </div>
                     </div>

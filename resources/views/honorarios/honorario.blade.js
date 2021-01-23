@@ -38,16 +38,13 @@ class Honorario {
                 url: '/honorarios/get/' + id,
                 success: data => {
                     $('#id_proceso').val(data.id_proceso).selectpicker('refresh')
-                    that.onChangeProceso($('#id_proceso'))
-                    .then(() => {
+                    that.onChangeProceso($('#id_proceso'), function() {
                         $('#porcentaje_honorarios').val(data.porcentaje_honorarios)
                         $('#retefuente').val(data.retefuente)
                         $('#reteica').val(data.reteica)
                         $('#valor_comision').val(data.valor_comision)
                         $('#numero_factura').val(data.numero_factura)
                         $('#valor_factura').val(data.valor_factura)
-                        that.onChangeComisiones()
-                        that.onChangePorcentajeHonorarios($('#porcentaje_honorarios'))
                     })
                 }
             })
@@ -196,8 +193,8 @@ class Honorario {
         }
     }
 
-    onChangeComisiones() {
-        const valorComision = parseFloat($('#valor_comision').val()) || 0
+    onChangeComisiones(id = false) {
+        const valorComision = (id ? parseFloat($('#valor_comision').val()) : parseFloat($('[name=valor_comision]').val())) || 0
         const retefuente = parseFloat($('#retefuente').val()) || 0
         const reteica = parseFloat($('#reteica').val()) || 0
 
@@ -205,9 +202,9 @@ class Honorario {
         const totalRetefuente = (valorComision * retefuente / 100).toFixed(2)
         const totalComision = (valorComision - totalReteica - totalRetefuente).toFixed(2)
 
-        $('#valor_retefuente').val(totalRetefuente)
-        $('#valor_reteica').val(totalReteica)
-        $('#total_comision').val(totalComision)
+        $('#valor_retefuente').val(numberToMoney(totalRetefuente))
+        $('#valor_reteica').val(numberToMoney(totalReteica))
+        $('#total_comision').val(numberToMoney(totalComision))
     }
 
     resetForm() {
@@ -223,16 +220,23 @@ class Honorario {
         $('#valor_honorarios').val(0)
     }
 
-    onChangeProceso(self) {
+    onChangeProceso(self, callback) {
         const $self = $(self)
+        const that = this
         const id = $self.val()
+
+        function onChange() {
+            compileCurrencyInputs()
+            that.onChangeComisiones()
+            that.onChangePorcentajeHonorarios($('#porcentaje_honorarios'))
+            compileCurrencyInputs()
+        }
 
         if(id) {
 
             return $.ajax({
                 url: '/honorarios/proceso/' + id,
                 success: data => {
-                    console.log(data)
                     if(data) {
 
                         function getNombreCompleto(data) {
@@ -268,9 +272,15 @@ class Honorario {
                     }
                 }
             })
+            .then(() => callback && callback())
+            .then(() => onChange())
+
         }
 
         return new Promise()
+            .then(() => callback && callback())
+            .then(() => onChange())
+
     }
 
     onChangePorcentajeHonorarios(self) {
@@ -284,8 +294,8 @@ class Honorario {
             $self.val(0)
         }
 
-        const valorPagado = parseFloat($('#valor_pagado_cliente').val() || 0)
-        $('#valor_honorarios').val(valorPagado * value / 100)
+        const valorPagado = parseFloat($('[name=valor_pagado_cliente]').val() || 0)
+        $('#valor_honorarios').val(numberToMoney(valorPagado * value / 100))
     }
 
     onChangeClient(self) {

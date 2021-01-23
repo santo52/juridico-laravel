@@ -1472,15 +1472,13 @@ var Honorario = /*#__PURE__*/function () {
           url: '/honorarios/get/' + id,
           success: function success(data) {
             $('#id_proceso').val(data.id_proceso).selectpicker('refresh');
-            that.onChangeProceso($('#id_proceso')).then(function () {
+            that.onChangeProceso($('#id_proceso'), function () {
               $('#porcentaje_honorarios').val(data.porcentaje_honorarios);
               $('#retefuente').val(data.retefuente);
               $('#reteica').val(data.reteica);
               $('#valor_comision').val(data.valor_comision);
               $('#numero_factura').val(data.numero_factura);
               $('#valor_factura').val(data.valor_factura);
-              that.onChangeComisiones();
-              that.onChangePorcentajeHonorarios($('#porcentaje_honorarios'));
             });
           }
         });
@@ -1631,15 +1629,16 @@ var Honorario = /*#__PURE__*/function () {
   }, {
     key: "onChangeComisiones",
     value: function onChangeComisiones() {
-      var valorComision = parseFloat($('#valor_comision').val()) || 0;
+      var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+      var valorComision = (id ? parseFloat($('#valor_comision').val()) : parseFloat($('[name=valor_comision]').val())) || 0;
       var retefuente = parseFloat($('#retefuente').val()) || 0;
       var reteica = parseFloat($('#reteica').val()) || 0;
       var totalReteica = (valorComision * reteica / 100).toFixed(2);
       var totalRetefuente = (valorComision * retefuente / 100).toFixed(2);
       var totalComision = (valorComision - totalReteica - totalRetefuente).toFixed(2);
-      $('#valor_retefuente').val(totalRetefuente);
-      $('#valor_reteica').val(totalReteica);
-      $('#total_comision').val(totalComision);
+      $('#valor_retefuente').val(numberToMoney(totalRetefuente));
+      $('#valor_reteica').val(numberToMoney(totalReteica));
+      $('#total_comision').val(numberToMoney(totalComision));
     }
   }, {
     key: "resetForm",
@@ -1657,16 +1656,22 @@ var Honorario = /*#__PURE__*/function () {
     }
   }, {
     key: "onChangeProceso",
-    value: function onChangeProceso(self) {
+    value: function onChangeProceso(self, callback) {
       var $self = $(self);
+      var that = this;
       var id = $self.val();
+
+      function onChange() {
+        compileCurrencyInputs();
+        that.onChangeComisiones();
+        that.onChangePorcentajeHonorarios($('#porcentaje_honorarios'));
+        compileCurrencyInputs();
+      }
 
       if (id) {
         return $.ajax({
           url: '/honorarios/proceso/' + id,
           success: function success(data) {
-            console.log(data);
-
             if (data) {
               var getNombreCompleto = function getNombreCompleto(data) {
                 var nombreCliente = [];
@@ -1701,10 +1706,18 @@ var Honorario = /*#__PURE__*/function () {
               $('#nombre_intermediario').val(getNombreCompleto(data.cliente.intermediario.persona));
             }
           }
+        }).then(function () {
+          return callback && callback();
+        }).then(function () {
+          return onChange();
         });
       }
 
-      return new Promise();
+      return new Promise().then(function () {
+        return callback && callback();
+      }).then(function () {
+        return onChange();
+      });
     }
   }, {
     key: "onChangePorcentajeHonorarios",
@@ -1720,8 +1733,8 @@ var Honorario = /*#__PURE__*/function () {
         $self.val(0);
       }
 
-      var valorPagado = parseFloat($('#valor_pagado_cliente').val() || 0);
-      $('#valor_honorarios').val(valorPagado * value / 100);
+      var valorPagado = parseFloat($('[name=valor_pagado_cliente]').val() || 0);
+      $('#valor_honorarios').val(numberToMoney(valorPagado * value / 100));
     }
   }, {
     key: "onChangeClient",

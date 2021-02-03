@@ -4,7 +4,7 @@
     ini_set('display_errors', '1');
 
 
-    require_once '/var/www/html/santiago/juridico-laravel/vendor/autoload.php';
+    require_once $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
     ob_start(); # apertura de bufer
     include( 'honorarios.php' );
     $text = ob_get_contents();

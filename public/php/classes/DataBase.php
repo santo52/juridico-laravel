@@ -1,8 +1,11 @@
  <?php
 
-    $dsn = 'mysql:dbname=juridico;host=localhost';
-    $usuario = 'admin';
-    $contraseña = '123456';
+    $dotenv = \Dotenv\Dotenv::createImmutable(__DIR__ . '/../../../');
+    $dotenv->load();
+
+    $dsn = 'mysql:dbname=' . env('DB_DATABASE') .';host=' . env('DB_HOST');
+    $usuario = env('DB_USERNAME');
+    $contraseña = env('DB_PASSWORD');
 
     DEFINE('dsn',$dsn);
     DEFINE('USER',$usuario);

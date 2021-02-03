@@ -1,7 +1,9 @@
  <?php
 
-    $dotenv = \Dotenv\Dotenv::createImmutable(__DIR__ . '/../../../');
-    $dotenv->load();
+    try{
+        $dotenv = \Dotenv\Dotenv::createImmutable(__DIR__ . '/../../../');
+        $dotenv->load();
+    } catch(Exception $e) {}
 
     $dsn = 'mysql:dbname=' . env('DB_DATABASE') .';host=' . env('DB_HOST');
     $usuario = env('DB_USERNAME');

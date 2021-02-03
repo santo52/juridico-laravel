@@ -185,11 +185,6 @@
         src="{!! asset('lib/bower_components/bootstrap-select/dist/js/bootstrap-select.min.js') !!}"></script>
     <script type="text/javascript" src="{!! asset('lib/bower_components/footable/compiled/footable.min.js') !!}">
     </script>
-    <script type="text/javascript"
-        src="{!! asset('lib/bower_components/datatables/media/js/jquery.dataTables.min.js') !!}"></script>
-    <script type="text/javascript"
-        src="{!! asset('lib/bower_components/datatables-bootstrap/3/dataTables.bootstrap.min.js') !!}">
-    </script>
     <script type="text/javascript" src="{!! asset('lib/jquery-file-upload/js/jquery.uploadfile.min.js') !!}"></script>
     <script type="text/javascript"
         src="{!! asset('lib/bower_components/jquery-validation/dist/jquery.validate.min.js') !!}"></script>

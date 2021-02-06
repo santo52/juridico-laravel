@@ -85,9 +85,13 @@ function moneyToNumber(value) {
 function resetCompiledInputs() {
     $('.currency-clon').each((_, target) => {
         const name = $(target).attr('name')
+        const id = $(target).attr('id')
         const val = $(target).val()
         $(target).remove()
-        $(`[data-name=${name}]`).val(val).attr('name', name).removeAttr('data-name')
+        const $input = $(`[data-name=${name}]`)
+        $input.val(val).attr('name', name).removeAttr('data-name')
+        $input.attr('id', id).removeAttr('data-id')
+
     })
 }
 
@@ -103,10 +107,12 @@ function compileCurrencyInputs() {
 
         onBlur({ target }, false)
         const name = $(target).attr('name')
+        const id = $(target).attr('id')
         if(name) {
             const onchange = $(target).attr('data-onchange')
-            $(target).parent().append(`<input type="hidden" class="currency-clon" name="${name}" />`)
+            $(target).parent().append(`<input type="hidden" class="currency-clon" name="${name}" ${id ? `id="${id}"` : ''} />`)
             $(target).removeAttr('name').attr('data-name', name)
+            $(target).removeAttr('id').attr('data-id', id)
             onchange && $(target).on('keyup', function(){
                 const func = eval(onchange)
                 func(this)

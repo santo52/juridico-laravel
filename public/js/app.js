@@ -106,9 +106,12 @@ function moneyToNumber(value) {
 function resetCompiledInputs() {
   $('.currency-clon').each(function (_, target) {
     var name = $(target).attr('name');
+    var id = $(target).attr('id');
     var val = $(target).val();
     $(target).remove();
-    $("[data-name=".concat(name, "]")).val(val).attr('name', name).removeAttr('data-name');
+    var $input = $("[data-name=".concat(name, "]"));
+    $input.val(val).attr('name', name).removeAttr('data-name');
+    $input.attr('id', id).removeAttr('data-id');
   });
 }
 
@@ -125,11 +128,13 @@ function compileCurrencyInputs() {
       target: target
     }, false);
     var name = $(target).attr('name');
+    var id = $(target).attr('id');
 
     if (name) {
       var onchange = $(target).attr('data-onchange');
-      $(target).parent().append("<input type=\"hidden\" class=\"currency-clon\" name=\"".concat(name, "\" />"));
+      $(target).parent().append("<input type=\"hidden\" class=\"currency-clon\" name=\"".concat(name, "\" ").concat(id ? "id=\"".concat(id, "\"") : '', " />"));
       $(target).removeAttr('name').attr('data-name', name);
+      $(target).removeAttr('id').attr('data-id', id);
       onchange && $(target).on('keyup', function () {
         var func = eval(onchange);
         func(this);
@@ -327,7 +332,7 @@ function confirmacion(mensaje, funcionalidadSI, funcionalidadNO) {
     height: 'auto',
     modal: true,
     buttons: {
-      "S\xED": function S() {
+      "S\xED": function Sí() {
         jQuery(this).dialog("close");
         funcionalidadSI();
       },

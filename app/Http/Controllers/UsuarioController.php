@@ -11,6 +11,7 @@ use App\Entities\Perfil;
 use App\Entities\Persona;
 use App\Entities\Municipio;
 use App\Entities\Area;
+use App\Entities\UsuarioContrato;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
@@ -41,7 +42,8 @@ class UsuarioController extends Controller
             'tiposDocumento' => $tiposDocumento,
             'municipios' => $municipios,
             'perfiles' => $perfiles,
-            'areas' => $areas
+            'areas' => $areas,
+            'tiposContrato' => UsuarioContrato::getTiposContrato()
         ]);
     }
 
@@ -126,7 +128,7 @@ class UsuarioController extends Controller
         $datausuario['estado_usuario'] = !empty($request->get('estado')) ? 1 : 2;
         $saved = Usuario::updateOrCreate(['id_usuario' => $id], $datausuario);
 
-        if($saved && $request->firma) {
+        if($saved && $id && $request->firma) {
             $request->firma->storeAs('firmas', $saved->id_usuario . '.png', 'uploads');
         }
 

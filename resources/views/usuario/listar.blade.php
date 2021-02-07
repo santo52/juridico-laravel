@@ -239,7 +239,27 @@
                                 name="correo_electronico">
                         </div>
                     </div>
-                    <div class="form-group">
+                    <hr class="separator">
+                    <div class="form-group hidden-new-user">
+                        <label for="recipient-name" class="control-label" style="width:100%">
+                            Contratos
+                            <button type="button" onClick="usuario.openEditContract()" class="btn btn-xs btn-success" style="padding: 0 10px;float:right">+</button>
+                        </label>
+                        <div>
+                            <table class="table table-hover" data-empty="Sin contratos"  data-sorting="false" data-filter-active="false" id="table-contracts">
+                                <thead>
+                                    <tr>
+                                        <td>Tipo de contrato</td>
+                                        <td>Fecha de inicio</td>
+                                        <td>Fecha fin</td>
+                                        <td></td>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="form-group hidden-new-user">
                         <label for="recipient-name" class="control-label">Firma</label>
                         <div class="input-firma">
                             <input id="firma" type="file" name="firma" accept="image/*" />
@@ -263,6 +283,72 @@
     </div>
 </div>
 @endif
+
+@if($permissions->crear || $permissions->editar)
+<div class="modal fade validate" tabindex="-1" role="dialog" id="createContractModal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" onclick="usuario.closeCreateContractModal()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Contrato</h4>
+            </div>
+            <form onsubmit="usuario.upsertContract(event)" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <div class="col-xs-12">
+                            <label for="recipient-name" class="control-label">Tipo de contrato</label>
+                            <select class="form-control required" id="id_tipo_contrato" name="tipo_contrato" title="Seleccione" onchange="usuario.changeContractType(this)">
+                                @foreach ($tiposContrato as $key => $tipo)
+                                <option value="{{$key}}">{{$tipo}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-xs-6" id="fecha_inicio_container">
+                            <label for="recipient-name" class="control-label">Fecha de inicio</label>
+                            <input type="text" class="form-control datepicker-here required" data-date-format="yyyy-mm-dd"  id="fecha_inicio" name="fecha_inicio">
+                        </div>
+                        <div class="col-xs-6" id="fecha_fin_container">
+                            <label for="recipient-name" class="control-label">Fecha fin</label>
+                            <input type="text" class="form-control datepicker-here" data-date-format="yyyy-mm-dd" id="fecha_fin" name="fecha_fin">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer center">
+                    <input type="hidden" id="createContractValue" />
+                    <button type="button" class="btn btn-default" onclick="usuario.closeCreateContractModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endif
+
+@isset($permissions->eliminar)
+<div class="modal fade" tabindex="-1" role="dialog" id="deleteContractModal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" onClick="usuario.closeDeleteContract()" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Eliminar contrato</h4>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro que desea eliminar el contrato?</p>
+            </div>
+            <div class="modal-footer center">
+                <input type="hidden" id="deleteContractValue" />
+                <button type="button" class="btn btn-default" onClick="usuario.closeDeleteContract()" >Cancelar</button>
+                <button type="button" onClick="usuario.deleteContract()" class="btn btn-danger">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+@endisset
 
 
 @endsection

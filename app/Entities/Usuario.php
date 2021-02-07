@@ -47,6 +47,10 @@ CanResetPasswordContract
         return $this->hasOne('App\Entities\Area', 'id_area', 'id_area');
     }
 
+    public function usuarioContratos(){
+        return $this->hasMany('App\Entities\UsuarioContrato', 'id_usuario', 'id_usuario');
+    }
+
     public function newEloquentBuilder($builder) {
         return new Builder($builder, $this);
     }

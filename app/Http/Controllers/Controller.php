@@ -22,6 +22,10 @@ class Controller extends BaseController
         });
     }
 
+    protected function getPermissions() {
+        return $this->permissions;
+    }
+
     protected function renderSection($template, $data = []) {
 
         $data['permissions'] = $this->permissions;

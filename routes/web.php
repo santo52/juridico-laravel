@@ -113,6 +113,10 @@ Route::middleware(['auth', 'route'])->group(function () {
     Route::post('/usuario/get/{id}', 'UsuarioController@get');
     Route::post('/usuario/delete/{id}', 'UsuarioController@delete');
     Route::post('/usuario/municipio/{id}', 'UsuarioController@getMunicipio');
+    Route::post('/usuario/contratos/{id}', 'UsuarioContratoController@getAll'); //Contratos por usuario
+    Route::post('/usuario/contrato/upsert', 'UsuarioContratoController@upsert');
+    Route::post('/usuario/contrato/{id}', 'UsuarioContratoController@get');
+    Route::post('/usuario/contrato/delete/{id}', 'UsuarioContratoController@delete');
 
     Route::get('/cliente/pdf', 'ClienteController@createPDF');
     Route::get('/cliente/excel', 'ClienteController@createExcel');

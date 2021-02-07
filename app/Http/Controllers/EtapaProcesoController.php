@@ -38,6 +38,16 @@ class EtapaProcesoController extends Controller
         ]);
     }
 
+    private function getSelectedActuaciones($id_etapa_proceso) {
+        return ActuacionEtapaProceso::leftjoin('actuacion as a', 'a.id_actuacion', 'actuacion_etapa_proceso.id_actuacion')
+            ->where([
+                'id_etapa_proceso' => $id_etapa_proceso,
+                'a.eliminado' => 0
+            ])
+            ->orderBy('actuacion_etapa_proceso.order')
+            ->get();
+    }
+
     public function getActuaciones($id)
     {
         $actuaciones = EtapaProceso::getActuaciones($id)->get();
@@ -48,19 +58,17 @@ class EtapaProcesoController extends Controller
     {
         $etapaProceso = EtapaProceso::find($id);
 
-        $selectedActuaciones = ActuacionEtapaProceso::leftjoin('actuacion as a', 'a.id_actuacion', 'actuacion_etapa_proceso.id_actuacion')
-            ->where(['id_etapa_proceso' => $id])
-            ->orderBy('actuacion_etapa_proceso.order')
-            ->get();
+        $selectedActuaciones = $this->getSelectedActuaciones($id);
 
         $selectedActuacionesID = [];
-
         foreach ($selectedActuaciones as $value) {
             $selectedActuacionesID[] = $value->id_actuacion;
         }
 
-        $actuaciones = Actuacion::whereNotIn('id_actuacion', $selectedActuacionesID)
-            ->where('estado_actuacion', 1)->get();
+        $actuaciones = Actuacion::whereNotIn('id_actuacion', $selectedActuacionesID)->where([
+            'estado_actuacion' => 1,
+            'eliminado' => 0
+        ])->get();
 
         return response()->json([
             'etapaProceso' => $etapaProceso,

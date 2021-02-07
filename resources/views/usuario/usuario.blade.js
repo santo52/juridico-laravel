@@ -70,15 +70,15 @@ class Usuario {
     }
 
     changeContractType(self) {
-        const id = $(self).val()
-        if(id == 1) {
-            $('#fecha_inicio_container').removeClass('col-xs-6').addClass('col-xs-12')
-            $('#fecha_fin_container').hide().children('input').removeClass('required').siblings('label').text('Fecha fin')
-            return
-        }
+        // const id = $(self).val()
+        // if(id == 1) {
+        //     $('#fecha_inicio_container').removeClass('col-xs-6').addClass('col-xs-12')
+        //     $('#fecha_fin_container').hide().children('input').removeClass('required').siblings('label').text('Fecha fin')
+        //     return
+        // }
 
-        $('#fecha_inicio_container').removeClass('col-xs-12').addClass('col-xs-6')
-        $('#fecha_fin_container').show().children('input').addClass('required').siblings('label').text('* Fecha fin')
+        // $('#fecha_inicio_container').removeClass('col-xs-12').addClass('col-xs-6')
+        // $('#fecha_fin_container').show().children('input').addClass('required').siblings('label').text('* Fecha fin')
     }
 
     upsertContract(e) {

@@ -13,8 +13,12 @@ class Builder extends DefaultBuilder {
         $rowsByPage = 10;
 
         $request = request()->query();
-        $url = $request['url'];
-        unset($request['url']);
+        if($request) {
+            $url = $request['url'];
+            if($url) {
+                unset($request['url']);
+            }
+        }
 
         if($request && isset($request['paginate'])) {
             $rowsByPage = intval($request['paginate']);

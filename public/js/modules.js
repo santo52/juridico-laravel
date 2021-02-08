@@ -2725,7 +2725,65 @@ class Proceso {
 
 const proceso = new Proceso();
 
+class EstadoCuentaReporte {
+    generatePDF(e) {
 
+        if (validateForm(e)) {
+
+            const formData = new FormData(e.target);
+            const data = new URLSearchParams(formData).toString()
+            window.open('/estado-de-cuenta-de-procesos/pdf?' + data)
+        }
+    }
+
+    generateExcel(e) {
+
+        if (validateForm(e)) {
+
+            const formData = new FormData(e.target);
+
+            $.ajax({
+                url: '/estado-de-cuenta-de-procesos/excel',
+                data: new URLSearchParams(formData),
+                success: data => {
+                    console.log('data', data)
+                }
+            })
+        }
+    }
+}
+
+const estadoCuentaReporte = new EstadoCuentaReporte()
+
+class GestionOrganizacionalReporte {
+    generatePDF(e) {
+
+        if (validateForm(e)) {
+
+            const formData = new FormData(e.target);
+            const data = new URLSearchParams(formData).toString()
+            window.open('/gestion-organizacional/pdf?' + data)
+        }
+    }
+
+    generateExcel(e) {
+
+        if (validateForm(e)) {
+
+            const formData = new FormData(e.target);
+
+            $.ajax({
+                url: '/gestion-organizacional/excel',
+                data: new URLSearchParams(formData),
+                success: data => {
+                    console.log('data', data)
+                }
+            })
+        }
+    }
+}
+
+const gestionOrganizacionalReporte = new GestionOrganizacionalReporte()
 
 class GestionProcesosActivos {
     generatePDF(e) {
@@ -2757,6 +2815,35 @@ class GestionProcesosActivos {
 
 const gestionProcesosActivos = new GestionProcesosActivos()
 
+class HonorariosReportes {
+    generatePDF(e) {
+
+        if (validateForm(e)) {
+
+            const formData = new FormData(e.target);
+            const data = new URLSearchParams(formData).toString()
+            window.open('/honorarios-y-gastos-procesales/pdf?' + data)
+        }
+    }
+
+    generateExcel(e) {
+
+        if (validateForm(e)) {
+
+            const formData = new FormData(e.target);
+
+            $.ajax({
+                url: '/honorarios-y-gastos-procesales/excel',
+                data: new URLSearchParams(formData),
+                success: data => {
+                    console.log('data', data)
+                }
+            })
+        }
+    }
+}
+
+const honorariosReportes = new HonorariosReportes()
 
 class SeguimientoActuacion {
     openTemplateModal(id = 0) {

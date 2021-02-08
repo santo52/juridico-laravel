@@ -55,9 +55,9 @@ CanResetPasswordContract
         return new Builder($builder, $this);
     }
 
-    public function getNombreCompleto() {
+    public function getNombreCompleto($desc = true) {
         $persona = $this->persona;
-        return $persona ? $persona->getNombreCompleto() : $this->nombre_usuario;
+        return $persona ? $persona->getNombreCompleto($desc) : $this->nombre_usuario;
     }
 
     public function getArea() {

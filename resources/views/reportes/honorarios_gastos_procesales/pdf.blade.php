@@ -65,10 +65,10 @@ table.header td {
 <!-- HEADER -->
 <table class="header">
     <tr>
-        <td rowspan="6"><img src="http://juridico2.local:8081/images/logo.png"/></td>
+        <td rowspan="6"><img src="{{$_SERVER['DOCUMENT_ROOT']}}/images/logo.png"/></td>
     </tr>
     <tr class="text-center bold">
-        <td>MANUEL SANABRIA CHACON</td>
+        <td>{{strtoupper(Auth::user()->getNombreCompleto(false))}}</td>
     </tr>
     <tr class="text-center bold">
         <td>Abogado</td>

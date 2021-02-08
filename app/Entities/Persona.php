@@ -49,14 +49,22 @@ class Persona extends BaseModel
         return $this->hasOne('App\Entities\Municipio', 'id_municipio', 'id_lugar_expedicion');
     }
 
-    public function getNombreCompleto()
+    public function getNombreCompleto($desc = true)
     {
         $nombreCompleto = [];
+        if($desc) {
+            if ($this->primer_apellido) $nombreCompleto[] = ucwords(strtolower($this->primer_apellido));
+            if ($this->segundo_apellido) $nombreCompleto[] = ucwords(strtolower($this->segundo_apellido));
+        }
 
-        if ($this->primer_apellido) $nombreCompleto[] = ucwords(strtolower($this->primer_apellido));
-        if ($this->segundo_apellido) $nombreCompleto[] = ucwords(strtolower($this->segundo_apellido));
         if ($this->primer_nombre) $nombreCompleto[] = ucwords(strtolower($this->primer_nombre));
         if ($this->segundo_nombre) $nombreCompleto[] = ucwords(strtolower($this->segundo_nombre));
+
+        if(!$desc) {
+            if ($this->primer_apellido) $nombreCompleto[] = ucwords(strtolower($this->primer_apellido));
+            if ($this->segundo_apellido) $nombreCompleto[] = ucwords(strtolower($this->segundo_apellido));
+        }
+
         return implode(' ', $nombreCompleto);
     }
 

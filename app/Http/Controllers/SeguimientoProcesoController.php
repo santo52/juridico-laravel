@@ -88,7 +88,7 @@ class SeguimientoProcesoController extends Controller
         foreach ($etapas as $key => $value) {
             $actuaciones = EtapaProceso::getActuaciones($value->id_etapa_proceso)->get();
             $value->actuaciones = $actuaciones;
-            $etapas[$key] = $this->addProcesoEtapa($proceso->id_proceso, $value);
+            $etapas[$key] = self::addProcesoEtapa($proceso->id_proceso, $value);
         }
 
         $comentarios = ProcesoBitacora::where('id_proceso', $id)->orderBy('fecha_creacion', 'desc')->get();
@@ -114,7 +114,7 @@ class SeguimientoProcesoController extends Controller
         ]);
     }
 
-    private function addProcesoEtapa($id_proceso, $etapa)
+    public static function addProcesoEtapa($id_proceso, $etapa)
     {
 
         $procesoEtapa = ProcesoEtapa::where([
@@ -131,7 +131,7 @@ class SeguimientoProcesoController extends Controller
         }
 
         foreach ($actuaciones as $key => $actuacion) {
-            $actuaciones[$key] = $this->addProcesoEtapaActuacion($idProcesoEtapa, $actuacion);
+            $actuaciones[$key] = self::addProcesoEtapaActuacion($idProcesoEtapa, $actuacion);
         }
 
         $etapa->id_proceso_etapa = $idProcesoEtapa;
@@ -139,7 +139,7 @@ class SeguimientoProcesoController extends Controller
         return $etapa;
     }
 
-    private function addProcesoEtapaActuacion($id_proceso_etapa, $actuacion)
+    private static function addProcesoEtapaActuacion($id_proceso_etapa, $actuacion)
     {
         $actuacion->fechaInicio = 'Sin iniciar';
         $actuacion->fechaVencimiento = 'Sin iniciar';

@@ -1,6 +1,5 @@
 <style>
 
-
 table {
     border: 0;
     width: 100%;
@@ -14,6 +13,7 @@ tr {
 td {
     padding:10px;
     padding-left:0;
+    line-height: 1;
 }
 
 table.header td {
@@ -37,13 +37,27 @@ table.header td {
 }
 
 .simple-table {
-    border:1;
+    border-collapse: collapse;
 }
 
 .simple-table th,
 .simple-table td{
     text-align: left;
     padding: 10px 5px;
+    border:1px solid black;
+    border-bottom:0;
+    border-right:0;
+}
+
+.simple-table .br,
+.simple-table td:last-child,
+.simple-table th:last-child{
+    border-right:1px solid black !important;
+}
+
+.simple-table .bb,
+.simple-table tr:last-child{
+    border-bottom:1px solid black !important;
 }
 </style>
 
@@ -74,82 +88,82 @@ table.header td {
 <!-- FIN HEADER -->
 
 <!-- BODY -->
+<div style="margin:30px;">
+    @foreach ($procesos as $proceso)
+        <table style="width:100%">
+            <tr>
+                <td width="40%"><b>Tipo Proceso: <?=$proceso->nombre_tipo_proceso?></b></td>
+            </tr>
+        </table>
 
-<div style="margin:30px">
-    <table style="width:100%">
-        <tr>
-            <td width="30%" class="title">Nombre del cliente</td>
-            <td width="20%" class="border"></td>
-            <td width="30%" class="title">Nombre del beneficiario</td>
-            <td width="20%" class="border"></td>
-        </tr>
-        <tr>
-            <td width="30%" class="title">Cedula del cliente</td>
-            <td width="20%" class="border"></td>
-            <td width="30%" class="title">Cedula del beneficiario</td>
-            <td width="20%" class="border"></td>
-        </tr>
-    </table>
+
+            <br />
+            <table style="width:100%">
+                <tr>
+                    <td>Cliente: {{ $proceso->cliente->getNombreCompleto()}}</td>
+                    <td>Cedula: {{$proceso->cliente->getNumeroDocumento()}}</td>
+                </tr>
+
+                <tr>
+                    <td>Entidad Justicia 1a Inst: {{ $proceso->getEntidadJusticiaPrimeraInstancia() }}</td>
+                    <td>Entidad Justicia 2a Inst: {{ $proceso->getEntidadJusticiaSegundaInstancia() }}</td>
+                    <td>Número radicado: {{ $proceso->getEntidadJusticiaSegundaInstancia() }}</td>
+                </tr>
+
+
+
+                <span style="display:none">{!! $key = 1 !!}</span>
+                @foreach($tiposResultado as $c => $tipoResultado)
+                    @if ( $tipoResultado->id_tipo_resultado > 8)
+                        @if($key == 1)
+                        <tr>
+                        @endif
+                        <td >{{$tipoResultado->nombre_tipo_resultado}}:
+                            @if($tipoResultado->tipo_campo == 5)
+                                $ {{number_format($tipoResultado->value, 0, ',', '.')}}
+                            @else
+                                {{$tipoResultado->value}}
+                            @endif
+                        </td>
+                        @if($key == 3 || ($c + 1) == count($tiposResultado))
+                            </tr>
+                            <span style="display:none">{!! $key = 0 !!}</span>
+                        @endif
+                        <span style="display:none">{!! $key++ !!}</span>
+                    @endif
+                @endforeach
+
+            </table>
+            <br />
+            @foreach ($proceso->etapas as $etapa)
+            <br />
+            <table style="width:100%">
+                <tr>
+                    <td colspan=4>Etapa: {{$etapa->nombre_etapa_proceso}}</td>
+                </tr>
+            </table>
+            <table style="width:100%" class="simple-table" cellspacing=0>
+                <tr>
+                    <th>Tipo Actuación</th>
+                    <th>Actuación</th>
+                    <th>Responsable</th>
+                    <th>Estado</th>
+                </tr>
+                @foreach ($etapa->actuaciones as $actuacion)
+                    <tr>
+                        <td>{{$tiposActuacion[$actuacion->tipo_actuacion]}}</td>
+                        <td>{{$actuacion->nombre_actuacion}}</td>
+                        <td>{{$actuacion->responsable}}</td>
+                        <td>{{$actuacion->estado}}</td>
+                    </tr>
+                @endforeach
+            </table>
+            @endforeach
+
+        <hr />
+    @endforeach
 </div>
 
-<div style="margin:30px">
-    <table style="width:100%;">
-        <tr>
-            <td width="16%" class="subtitle" >Tipo de proceso</td>
-            <td width="16%" class="border"></td>
-            <td width="16%" class="subtitle">Normatividad</td>
-            <td width="16%" class="border"></td>
-        </tr>
-
-        <tr>
-            <td width="16%" class="subtitle">Entidad demandada</td>
-            <td width="16%" class="border"></td>
-            <td width="16%"class="subtitle">Nro Radicado</td>
-            <td width="16%" class="border"></td>
-        </tr>
-
-        <tr>
-            <td width="16%" class="subtitle">Entidad Justicia 1a.Instancia</td>
-            <td width="16%" class="border"></td>
-            <td width="16%" class="subtitle">Entidad Justicia 2a.Instancia</td>
-            <td width="16%" class="border"></td>
-        </tr>
-    </table>
-</div>
-
-<div style="margin:30px">
-    <table style="width:100%" class="simple-table">
-        <thead>
-            <tr>
-                <th>Etapa</th>
-                <th>Actuación</th>
-                <th>Estado</th>
-                <th>Fecha Inicio</th>
-                <th>Fecha Fin</th>
-                <th>Tipo resultado</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>E1</td>
-                <td>A1</td>
-                <td></td>
-                <td>DD-MM-YY</td>
-                <td>DD-MM-YY</td>
-                <td></td>
-            </tr>
-
-            <tr>
-                <td>E1</td>
-                <td>A1</td>
-                <td></td>
-                <td>DD-MM-YY</td>
-                <td>DD-MM-YY</td>
-                <td></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
 
 <!-- FIN BODY -->
 

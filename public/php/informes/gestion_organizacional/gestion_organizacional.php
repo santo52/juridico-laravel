@@ -3,7 +3,7 @@
 
     $bd = new DataBase();
 
-
+    //select * from usuario_contrato uc left join usuario u on u.id_usuario = uc.id_usuario where fecha_fin <= date_add(current_date(), INTERVAL 30 DAY);
 
 ?>
 

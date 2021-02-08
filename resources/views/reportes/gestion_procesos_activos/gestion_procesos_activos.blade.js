@@ -4,14 +4,8 @@ class GestionProcesosActivos {
         if (validateForm(e)) {
 
             const formData = new FormData(e.target);
-
-            $.ajax({
-                url: '/gestion-procesos-activos/pdf',
-                data: new URLSearchParams(formData),
-                success: data => {
-                    console.log('data', data)
-                }
-            })
+            const data = new URLSearchParams(formData).toString()
+            window.open('/gestion-procesos-activos/pdf?' + data)
         }
     }
 

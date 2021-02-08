@@ -11,9 +11,10 @@ class Builder extends DefaultBuilder {
         $search = '';
         $searchBy = [];
         $rowsByPage = 10;
+        $url = '';
 
         $request = request()->query();
-        if($request) {
+        if($request && isset($request['url'])) {
             $url = $request['url'];
             if($url) {
                 unset($request['url']);

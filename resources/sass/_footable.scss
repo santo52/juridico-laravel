@@ -1,0 +1,108 @@
+.footable-filtering,
+.footable-filtering-external  {
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    th {
+        padding: 15px 0;
+    }
+
+    .btn-primary {
+        background-color: $third-color;
+        border-color: lighten($third-color, 5);
+        &:hover,
+        &:active,
+        &:focus,
+        &:active:focus,
+        &:active:hover {
+            background-color: darken($third-color, 5);
+            border-color: $third-color;
+        }
+    }
+
+    input[type=text] {
+        height: 35px;
+    }
+}
+
+.table.footable {
+
+    >tbody {
+        border-left: 1px solid #eee;
+        border-right: 1px solid #eee;
+        .table-actions .btn{
+            padding: 0 5px;
+        }
+
+        > tr.footable-empty > td {
+            font-size: 12px;
+        }
+    }
+
+    .footable-header {
+        background: $main-color;
+        color: #fff;
+
+        th {
+            vertical-align: middle;
+        }
+    }
+
+    .footable-paging {
+        position: relative;
+        .footable-pagination-wrapper {
+            span.label {
+                height: 31px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                // border: 1px solid #ddd;
+                color: $main-color;
+                padding: 0;
+                background-color: white;
+                bottom: 12px;
+                position: absolute;
+                left: 0;
+                z-index: -1;
+            }
+        }
+
+        .pagination {
+            margin:0;
+            margin-top: 5px;
+            >li {
+                >a,
+                >a:focus,
+                >a:hover,
+                >span,
+                >span:hover,
+                >span:focus {
+                    color: $main-color;
+                }
+            }
+
+            >.active {
+
+                >a,
+                >a:focus,
+                >a:hover,
+                >span,
+                >span:hover,
+                >span:focus {
+                    background-color: $main-color;
+                    border-color: $main-color;
+                    color: #fff;
+                }
+            }
+        }
+    }
+}
+
+
+.table {
+    .background-green {
+        background: $light-background-green;
+    }
+}

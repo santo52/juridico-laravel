@@ -1,0 +1,26 @@
+.ui-state-default,
+.ui-widget-content .ui-state-default,
+.ui-widget-header .ui-state-default {
+    border: 1px solid #ccc;
+    background: #f6f6f6;
+    color: black;
+    font-weight: normal;
+}
+
+.ui-state-default {
+    a.text-danger {
+        &,
+        &:link,
+        &:visited {
+            color: #a94442 !important
+        }
+    }
+
+    a.text-primary {
+        &,
+        &:link,
+        &:visited {
+            color: #337ab7 !important
+        }
+    }
+}

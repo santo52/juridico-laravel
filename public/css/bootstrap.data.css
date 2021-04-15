@@ -1,0 +1,1036 @@
+/************** DEFINICIONES **************/
+/*****************************************************************************/
+/***************** GENERAL ****************/
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+  font-family: 'Open Sans', sans-serif, Verdana;
+  font-size: 12px;
+  font-weight: normal;
+}
+
+body div.contenedor-ppal {
+  margin: 0 0 110px;
+}
+
+body div.contenedor-ppal .page-header {
+  color: #00ac6f;
+  margin: 0 0 20px;
+  border-bottom: none;
+}
+
+body div.contenedor-ppal .page-header a {
+  color: #195f30;
+  text-decoration: none;
+}
+
+body div.footer {
+  font-family: 'Open Sans', sans-serif, Verdana;
+  font-size: 12px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: auto;
+  padding: 6px 0;
+  background-color: #ffffff;
+  border-top: 1px solid #808080;
+}
+
+body div.footer>div.logoEmpresa {
+  background: url("../images/logo_proveedor_small.png") no-repeat scroll center;
+  height: 5em;
+}
+
+body div.footer>div.copyright>p {
+  margin-top: 5px;
+  text-align: center;
+}
+
+body div.footer>div.copyright>p>a {
+  color: #195f30;
+  text-decoration: none;
+}
+
+body #dvOpacidad {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #a9a9a9;
+  opacity: 0.3;
+  z-index: 10000;
+}
+
+.horizontal-center {
+  margin: 0 auto !important;
+  float: none !important;
+}
+
+.center {
+  text-align: center;
+}
+
+.negrita {
+  font-weight: bold !important;
+}
+
+.cursiva {
+  font-style: italic;
+}
+
+.left {
+  text-align: left;
+}
+
+.right {
+  text-align: right;
+}
+
+.oculto {
+  display: none;
+}
+
+.label {
+  font-family: 'Open Sans', sans-serif, Verdana;
+  font-size: 12px;
+  padding: 3px 6px;
+  font-weight: normal;
+}
+
+.label span {
+  letter-spacing: 0.08em;
+}
+
+.tblDetalle th,
+.tblDetalle td {
+  text-align: center;
+  vertical-align: middle !important;
+}
+
+.badgeSelected {
+  background-color: #ffffff;
+  color: #00ac6f;
+}
+
+.tab-content {
+  border-top: 0;
+  border-left: 1px solid #808080;
+  border-right: 1px solid #808080;
+  border-bottom: 1px solid #808080;
+  border-radius: 0 0 6px 6px;
+  padding: 25px 10px 10px;
+}
+
+.icono {
+  background-color: transparent;
+}
+
+hr {
+  border-top: 1px solid #808080;
+}
+
+/***************** GENERAL ****************/
+/*****************************************************************************/
+/****************** MENÚ ******************/
+div.navbar-app {
+  border: none;
+  border-radius: 0px;
+  /* background-image: -webkit-linear-gradient(left, #505050 0%, #505050 100%);
+  background-image: -moz-linear-gradient(left, #505050 0%, #505050 100%);
+  background-image: -ms-linear-gradient(left, #505050 0%, #505050 100%);
+  background-image: -o-linear-gradient(left, #505050 0%, #505050 100%);
+  background-image: linear-gradient(to left, #505050 0%, #505050 100%);
+  filter: progid:DXImageTransform.Microsoft.Gradient(gradientType=0, startColorStr=#505050, endColorStr=#505050); */
+  background-color: #3C4742;
+}
+
+div.navbar-app div.navbar-header .navbar-brand {
+  height: 0px !important;
+  color: #4cae4c;
+  font-family: 'Open Sans', sans-serif, Verdana;
+  font-size: 20px !important;
+  font-weight: normal;
+}
+
+div.navbar-app div.navbar-header .navbar-brand:hover,
+div.navbar-app div.navbar-header .navbar-brand:focus {
+  color: #bdbdbd;
+  background-color: transparent;
+}
+
+div.navbar-app div.navbar-header div.logoProducto {
+  height: 0px;
+  margin-left: 0px !important;
+  margin-top: 0px;
+  width: 6em;
+}
+
+div.navbar-app div.navbar-header div.logoCliente {
+  display: block;
+  background: url("../images/logo_cliente_small.png") no-repeat scroll 0 0;
+  height: 7em;
+  position: absolute;
+  right: 10px !important;
+  top: 60px;
+  width: 15em;
+}
+
+div.navbar-app ul.navbar-nav>li>a {
+  text-align: center;
+  color: #c3c3c3;
+  margin: 0 0.5px;
+  font-family: 'Open Sans', sans-serif, Verdana;
+  font-size: 13px;
+  font-weight: normal;
+}
+
+div.navbar-app ul.navbar-nav>li>a:hover,
+div.navbar-app ul.navbar-nav>li>a:focus {
+  text-decoration: none;
+  background-color: #2e3d36;
+}
+
+div.navbar-app ul.dropdown-menu {
+  min-width: 300px;
+  padding: 4px 0;
+  margin-top: 8px !important;
+  border: 1px solid #505050;
+  border-radius: 3px !important;
+  box-shadow: 2px 2px 9px -1px #a9a9a9;
+  background-color: #505050;
+}
+
+div.navbar-app ul.dropdown-menu a {
+  font-family: 'Open Sans', sans-serif, Verdana;
+  font-size: 12px;
+}
+
+div.navbar-app ul.dropdown-menu.to-left {
+  left: auto;
+  right: 0px;
+}
+
+div.navbar-app ul.dropdown-menu>li:first-child:before {
+  border-color: transparent transparent #505050;
+  border-style: solid;
+  border-width: 5px;
+  content: "";
+  margin-left: 30px;
+  position: absolute;
+  top: -11px;
+  width: 10px;
+}
+
+div.navbar-app ul.dropdown-menu li a {
+  padding: 5px 15px;
+}
+
+div.navbar-app ul.dropdown-menu div.row {
+  margin-top: 8px;
+  margin-bottom: 12px;
+}
+
+div.navbar-app ul.dropdown-menu ul.multi-column-dropdown {
+  list-style: none;
+  padding: 0 25px;
+}
+
+div.navbar-app ul.dropdown-menu ul.multi-column-dropdown li {
+  color: #00ac6f;
+}
+
+div.navbar-app ul.dropdown-menu ul.multi-column-dropdown li a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+div.navbar-app ul.dropdown-menu ul.multi-column-dropdown li.active a {
+  color: #195f30;
+}
+
+div.navbar-app ul.dropdown-menu ul.multi-column-dropdown li.divider {
+  background-color: #bdbdbd;
+  margin: 5px 37px 9px 4px;
+}
+
+div.navbar-app ul.dropdown-menu ul.multi-column-dropdown li a:hover {
+  color: #bdbdbd;
+  text-decoration: none;
+}
+
+div.navbar-collapse {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+li.dropdown-header {
+  padding: 13px 6px 0;
+  font-family: 'Open Sans', sans-serif, Verdana;
+  font-size: 13px;
+  font-weight: normal;
+}
+
+ol.breadcrumb {
+  position: relative;
+  margin-top: 10px;
+  font-family: 'Open Sans', sans-serif, Verdana;
+  font-size: 12px;
+}
+
+ol.breadcrumb a {
+  color: #195f30;
+  text-decoration: none;
+}
+
+ol.breadcrumb li {
+  color: #195f30;
+}
+
+ol.breadcrumb li.nombre_ambiente {
+  color: #e27e7a;
+}
+
+ol.breadcrumb li.infoUsuario {
+  position: absolute;
+  top: 0px;
+  right: 25px;
+  line-height: 0;
+}
+
+ol.breadcrumb li.infoUsuario ul {
+  left: auto;
+  right: 0;
+  line-height: 1;
+  background-color: #f0f0f0;
+}
+
+ol.breadcrumb li.infoUsuario ul li:not(.divider) {
+  background-color: #f0f0f0;
+  color: #0e8e03;
+  padding: 4px 10px;
+  width: 260px;
+  font-size: 12px;
+}
+
+ol.breadcrumb li.infoUsuario ul li:not(.divider)>span.glyphicon-log-out>a {
+  padding-left: 7px;
+}
+
+ol.breadcrumb li.infoUsuario:before {
+  content: "";
+}
+
+@media (max-width: 767px) {
+  div.navbar-app div.navbar-header div.logoProducto {
+    margin-left: 15px !important;
+  }
+
+  div.navbar-app div.navbar-header div.logoCliente {
+    top: 60px;
+  }
+
+  div.navbar-app div.navbar-header button.navbar-toggle {
+    border-color: #ffffff;
+  }
+
+  div.navbar-app div.navbar-header button.navbar-toggle span.icon-bar {
+    background-color: #ffffff;
+  }
+
+  div.navbar-app div.navbar-header button.navbar-toggle:hover,
+  div.navbar-app div.navbar-header button.navbar-toggle:focus {
+    background-image: -webkit-linear-gradient(bottom, #505050 0%, #808080 100%);
+    background-image: -moz-linear-gradient(bottom, #505050 0%, #808080 100%);
+    background-image: -ms-linear-gradient(bottom, #505050 0%, #808080 100%);
+    background-image: -o-linear-gradient(bottom, #505050 0%, #808080 100%);
+    background-image: linear-gradient(to bottom, #505050 0%, #808080 100%);
+    filter: progid:DXImageTransform.Microsoft.Gradient(gradientType=1, startColorStr=#505050, endColorStr=#808080);
+    border-color: #000000;
+  }
+
+  div.navbar-app div.navbar-header button.navbar-toggle:hover span.icon-bar,
+  div.navbar-app div.navbar-header button.navbar-toggle:focus span.icon-bar {
+    background-color: #000000;
+  }
+
+  div.navbar-app ul.navbar-nav {
+    margin: 0 !important;
+    position: static;
+  }
+
+  div.navbar-app ul.navbar-nav>li>a {
+    /* border-top: 1px solid #000000; */
+    border-radius: 0px;
+    margin: 0px;
+  }
+
+  div.navbar-app ul.navbar-nav>li>a:hover,
+  div.navbar-app ul.navbar-nav>li>a:focus {
+    border-radius: 0px;
+  }
+
+  div.navbar-app ul.navbar-nav>li.open>a,
+  div.navbar-app ul.navbar-nav>li.active>a {
+    border-radius: 0px;
+  }
+
+  div.navbar-app ul.navbar-nav>li.open>a:hover,
+  div.navbar-app ul.navbar-nav>li.active>a:hover,
+  div.navbar-app ul.navbar-nav>li.open>a:focus,
+  div.navbar-app ul.navbar-nav>li.active>a:focus {
+    border-radius: 0px;
+  }
+
+  div.navbar-app ul.dropdown-menu>li:first-child:before {
+    border-style: none;
+  }
+
+  div.navbar-app ul.dropdown-menu div.row {
+    margin: 0;
+  }
+
+  div.navbar-app ul.dropdown-menu li.dropdown-header {
+    padding: 5px 0 !important;
+  }
+
+  div.navbar-app ul.dropdown-menu li.divider {
+    margin: 3px 0;
+  }
+
+  div.navbar-app ul.dropdown-menu div.icono-dropdown-menu {
+    background: none !important;
+    height: 0 !important;
+  }
+
+  ol.breadcrumb {
+    margin-top: 0;
+  }
+
+  ol.breadcrumb li.infoUsuario {
+    right: 15px;
+  }
+
+  li.dropdown>a {
+    text-align: left !important;
+  }
+
+  .lblForm {
+    margin-top: 7px;
+  }
+}
+
+nav.navbar-submenu {
+  margin-bottom: 0px;
+}
+
+nav.navbar-submenu a {
+  font-family: 'Open Sans', sans-serif, Verdana;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+/****************** MENÚ ******************/
+/*****************************************************************************/
+/***************** jQUERY *****************/
+.ui-widget {
+  font-family: 'Open Sans', sans-serif, Verdana;
+  font-size: 12px;
+  font-weight: normal;
+}
+
+.ui-widget a {
+  color: #195f30;
+  text-decoration: none;
+}
+
+.ui-widget.ui-widget-content {
+  border: 1px solid #e2ece2;
+  background: #ffffff;
+}
+
+.ui-widget.ui-widget-content li.ui-menu-item {
+  border: 1px solid #e2ece2;
+}
+
+.ui-widget .ui-dialog-buttonpane {
+  background: #ffffff;
+}
+
+th.ui-state-default,
+.ui-widget-content .ui-state-default,
+.ui-widget-header .ui-state-default {
+  background-image: -webkit-linear-gradient(bottom, #0e8e03 0%, #195f30 100%);
+  background-image: -moz-linear-gradient(bottom, #0e8e03 0%, #195f30 100%);
+  background-image: -ms-linear-gradient(bottom, #0e8e03 0%, #195f30 100%);
+  background-image: -o-linear-gradient(bottom, #0e8e03 0%, #195f30 100%);
+  background-image: linear-gradient(to bottom, #0e8e03 0%, #195f30 100%);
+  filter: progid:DXImageTransform.Microsoft.Gradient(gradientType=0, startColorStr=#0e8e03, endColorStr=#195f30);
+  font-family: 'Open Sans', sans-serif, Verdana;
+  font-size: 12px;
+  font-weight: normal;
+  text-align: center;
+  cursor: pointer;
+  color: #f0f0f0;
+}
+
+button.ui-dialog-titlebar-close {
+  font-size: 12px;
+  text-align: center;
+}
+
+.ui-autocomplete {
+  height: 100px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+div.ui-datepicker {
+  z-index: 101 !important;
+  font-family: 'Open Sans', sans-serif, Verdana;
+  font-size: 12px;
+  font-weight: normal;
+}
+
+div.ui-datepicker select.ui-datepicker-month,
+div.ui-datepicker select.ui-datepicker-year {
+  color: #000000;
+}
+
+div.ui-datepicker td.ui-datepicker-today a {
+  border: 2px solid #e27e7a;
+}
+
+div.ui-datepicker a.ui-state-default {
+  font-size: 12px !important;
+}
+
+div.ui-datepicker a.ui-state-default.ui-state-active {
+  background: #dbd29b none;
+  color: #000000;
+}
+
+/***************** jQUERY *****************/
+/*****************************************************************************/
+/*************** DATATABLES ***************/
+div.dataTables_wrapper {
+  background-image: -webkit-linear-gradient(bottom, #f0f0f0 0%, #f0f0f0 100%);
+  background-image: -moz-linear-gradient(bottom, #f0f0f0 0%, #f0f0f0 100%);
+  background-image: -ms-linear-gradient(bottom, #f0f0f0 0%, #f0f0f0 100%);
+  background-image: -o-linear-gradient(bottom, #f0f0f0 0%, #f0f0f0 100%);
+  background-image: linear-gradient(to bottom, #f0f0f0 0%, #f0f0f0 100%);
+  filter: progid:DXImageTransform.Microsoft.Gradient(gradientType=0, startColorStr=#f0f0f0, endColorStr=#f0f0f0);
+  border: 1px solid #a9a9a9;
+  border-radius: 5px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 100%;
+  font-family: 'Open Sans', sans-serif, Verdana;
+  font-size: 12px;
+  font-weight: normal;
+  box-shadow: 0px 3px 5px 0px #a9a9a9;
+}
+
+div.dataTables_wrapper div.row {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+div.dataTables_wrapper div.row:nth-child(2)>div {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+div.dataTables_wrapper div.row table.tblInforme,
+div.dataTables_wrapper div.row table.tblInformeAgrupado,
+div.dataTables_wrapper div.row .table {
+  width: 99.99% !important;
+}
+
+div.dataTables_wrapper div.row table.tblInforme td,
+div.dataTables_wrapper div.row table.tblInformeAgrupado td,
+div.dataTables_wrapper div.row .table td {
+  font-size: 12px;
+}
+
+div.dataTables_wrapper div.row table.tblInforme th,
+div.dataTables_wrapper div.row table.tblInformeAgrupado th,
+div.dataTables_wrapper div.row .table th {
+  vertical-align: middle !important;
+  background-image: -webkit-linear-gradient(bottom, #0e8e03 0%, #195f30 100%);
+  background-image: -moz-linear-gradient(bottom, #0e8e03 0%, #195f30 100%);
+  background-image: -ms-linear-gradient(bottom, #0e8e03 0%, #195f30 100%);
+  background-image: -o-linear-gradient(bottom, #0e8e03 0%, #195f30 100%);
+  background-image: linear-gradient(to bottom, #0e8e03 0%, #195f30 100%);
+  filter: progid:DXImageTransform.Microsoft.Gradient(gradientType=0, startColorStr=#0e8e03, endColorStr=#195f30);
+  font-family: 'Open Sans', sans-serif, Verdana;
+  font-size: 12px;
+  font-weight: normal;
+  text-align: center;
+  cursor: pointer;
+  color: #f0f0f0;
+}
+
+div.dataTables_wrapper div.row table.tblInforme td,
+div.dataTables_wrapper div.row table.tblInformeAgrupado td,
+div.dataTables_wrapper div.row .table td {
+  vertical-align: middle !important;
+}
+
+div.dataTables_wrapper div.row table.tblInforme th,
+div.dataTables_wrapper div.row table.tblInformeAgrupado th {
+  vertical-align: middle;
+}
+
+div.dataTables_wrapper div.row td.sorting_1,
+div.dataTables_wrapper div.row td.sorting_2 {
+  background-color: #e9f1f7 !important;
+}
+
+div.dataTables_wrapper div.row div.dataTables_length label {
+  margin: 10px;
+}
+
+div.dataTables_wrapper div.row div.dataTables_length label select {
+  width: 90px !important;
+}
+
+div.dataTables_wrapper div.row div.dataTables_length label select.form-control {
+  display: inline;
+}
+
+div.dataTables_wrapper div.row div.dataTables_length div.input-group {
+  width: 90px !important;
+}
+
+div.dataTables_wrapper div.row div.dataTables_filter label {
+  margin: 10px;
+}
+
+div.dataTables_wrapper div.row div.dataTables_filter input.form-control {
+  display: inline;
+}
+
+div.dataTables_wrapper div.row div.dataTables_info {
+  padding: 10px;
+}
+
+div.dataTables_wrapper div.row div.DTTT_container {
+  margin: 11px;
+}
+
+div.dataTables_wrapper div.row div.dataTables_paginate li {
+  display: inline-block !important;
+}
+
+div.dataTables_wrapper div.row div.dataTables_paginate li.disabled a {
+  background-color: #f0f0f0 !important;
+}
+
+div.dataTables_wrapper div.row div.dataTables_paginate li.ui-button {
+  padding: 0;
+}
+
+div.dataTables_wrapper div.row div.dataTables_paginate li.ui-state-default,
+div.dataTables_wrapper div.row div.dataTables_paginate li .ui-widget-content .ui-state-default,
+div.dataTables_wrapper div.row div.dataTables_paginate li .ui-widget-header .ui-state-default,
+div.dataTables_wrapper div.row div.dataTables_paginate li .ui-button,
+div.dataTables_wrapper div.row div.dataTables_paginate li html .ui-button.ui-state-disabled:hover,
+div.dataTables_wrapper div.row div.dataTables_paginate li html .ui-button.ui-state-disabled:active {
+  background: none;
+  border: none;
+}
+
+div.dataTables_wrapper div.row div.dataTables_paginate li a {
+  margin: -1px !important;
+  padding: 6px 12px;
+  background-color: #f0f0f0;
+  background-image: none;
+  border: 1px solid #808080;
+  color: #195f30;
+  font-family: 'Open Sans', sans-serif, Verdana;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+div.dataTables_wrapper div.row div.dataTables_paginate li a:hover:not(.ui-state-disabled) {
+  background-color: #e9f1f7;
+}
+
+div.dataTables_wrapper div.row div.dataTables_paginate li span>a.ui-state-disabled {
+  background-color: #e9f1f7;
+  color: #000000;
+  opacity: 1 !important;
+}
+
+div.dataTables_wrapper div.row td.dataTables_empty {
+  text-align: center;
+}
+
+div.dataTables_wrapper div.row table.dataTable>tbody>tr>td {
+  vertical-align: middle !important;
+  padding: 3px 7px !important;
+}
+
+div.dataTables_wrapper div.row table.dataTable>tbody>tr>td.group {
+  background-image: -webkit-linear-gradient(bottom, #e2ece2 0%, #e2ece2 100%);
+  background-image: -moz-linear-gradient(bottom, #e2ece2 0%, #e2ece2 100%);
+  background-image: -ms-linear-gradient(bottom, #e2ece2 0%, #e2ece2 100%);
+  background-image: -o-linear-gradient(bottom, #e2ece2 0%, #e2ece2 100%);
+  background-image: linear-gradient(to bottom, #e2ece2 0%, #e2ece2 100%);
+  filter: progid:DXImageTransform.Microsoft.Gradient(gradientType=0, startColorStr=#e2ece2, endColorStr=#e2ece2);
+  color: #000000;
+  font-family: 'Open Sans', sans-serif, Verdana;
+  font-size: 13px;
+  font-weight: bold;
+  padding: 10px 30px !important;
+}
+
+div.dataTables_wrapper div.row table.dataTable>tbody>tr:hover>td {
+  background-color: #e9f1f7;
+}
+
+div.dataTables_wrapper div.row table.dataTable>tfoot>tr>td.ui-state-default {
+  background: none !important;
+}
+
+.badge {
+  margin: -4px;
+}
+
+/*************** DATATABLES ***************/
+/*****************************************************************************/
+/**************** PESTAÑAS ****************/
+ul.nav-tabs>li>a {
+  padding: 10px 7px;
+}
+
+ul.nav-tabs>li:not(.active)>a {
+  background-color: #bdbdbd;
+  color: #505050;
+}
+
+ul.nav-tabs>li:not(.active)>a:hover {
+  color: #428bca;
+}
+
+ul.nav-tabs>li.active>a {
+  color: #428bca;
+  font-weight: bold;
+}
+
+ul.nav-tabs>li.active>a:hover,
+ul.nav-tabs>li.active>a:focus {
+  color: #428bca;
+}
+
+ul.nav-tabs>li.tab-especial:not(.active)>a {
+  background-color: #bdbdbd;
+  color: #e27e7a;
+}
+
+ul.nav-tabs>li.tab-especial:not(.active)>a:hover {
+  color: #5bc0de;
+}
+
+ul.nav-tabs>li.tab-especial.active>a {
+  color: #5bc0de;
+  font-weight: bold;
+}
+
+ul.nav-tabs>li.tab-especial.active>a:hover,
+ul.nav-tabs>li.tab-especial.active>a:focus {
+  color: #5bc0de;
+}
+
+ul.nav-tabs>li>button.icono {
+  background-color: transparent;
+  position: relative;
+  left: 10px;
+  top: 4px;
+}
+
+ul.nav-tabs>li>button.icono:hover {
+  box-shadow: none;
+}
+
+/**************** PESTAÑAS ****************/
+/*****************************************************************************/
+/***************** PANEL ******************/
+.panel-title {
+  font-family: 'Open Sans', sans-serif, Verdana;
+  font-size: 16px;
+}
+
+/***************** PANEL ******************/
+/*****************************************************************************/
+/****************** FORM ******************/
+form h4 {
+  color: #00ac6f;
+  font-family: 'Open Sans', sans-serif, Verdana;
+  font-size: 18px;
+}
+
+form div.jumbotron {
+  padding: 15px 0 !important;
+  margin-bottom: 20px;
+  border-top: 1px solid #0e8e03;
+  background-color: transparent;
+  border-radius: 2px !important;
+}
+
+form div.jumbotron div.digitacion {
+  max-height: 400px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+form div.jumbotron div.bufferDigitaliza {
+  max-height: 100px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+form div.jumbotron div.row {
+  margin-top: 10px;
+}
+
+form div.jumbotron div.row .btn-group {
+  display: block;
+}
+
+form div.jumbotron div.row .input-group-addon {
+  font-weight: bold;
+}
+
+form div.jumbotron div.row .input-group .input-group-btn .btn {
+  line-height: 20px;
+}
+
+form div.jumbotron div.row label.lblForm {
+  margin-top: 7px;
+  color: #195f30;
+  letter-spacing: 0.2px;
+}
+
+form div.jumbotron div.row .icon-caracter {
+  font-family: 'Open Sans', sans-serif, Verdana;
+  font-size: 18px;
+}
+
+form div.jumbotron div.row .btn-ejecutar {
+  padding: 5px 15px !important;
+  box-shadow: 0 1px 2px 0 #a9a9a9;
+  font-family: 'Open Sans', sans-serif, Verdana;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+form div.row {
+  margin-top: 10px;
+}
+
+form small {
+  font-size: 80%;
+}
+
+form .form-control {
+  font-family: 'Open Sans', sans-serif, Verdana;
+  font-size: 14px;
+}
+
+form .form-control:focus {
+  border-color: #0e8e03;
+  box-shadow: inset 0 1px 1px #ffffff, 0 0 9px 4px #e2ece2;
+}
+
+form .error {
+  border: 1px solid #e27e7a;
+  background-color: #f9f2f2;
+}
+
+form option {
+  padding: 2px 14px;
+}
+
+form .slider {
+  margin-top: 10px;
+}
+
+form #dvListado {
+  display: none;
+}
+
+form #dvMensaje {
+  display: none;
+  float: left;
+}
+
+form .alert-success,
+form .alert-info,
+form .alert-warning,
+form .alert-danger {
+  box-shadow: 0 1px 2px 0 #a9a9a9;
+}
+
+/* form .form-control[readonly] {
+  background-color: #ffffff;
+} */
+
+.popover {
+  font-family: 'Open Sans', sans-serif, Verdana;
+  font-size: 12px;
+  font-weight: normal;
+}
+
+.popover.danger {
+    border: 1px solid #e27e7a;
+    background-color: #f9f2f2;
+}
+
+.popover>.arrow:after {
+  border-top-color: #f9f2f2 !important;
+  border-bottom-color: #f9f2f2 !important;
+}
+
+.tiffDigitacion .divControlTiff {
+  width: 100%;
+  height: 530px;
+}
+
+.tiffControlCalidad .divControlTiff {
+  width: 100%;
+  height: 475px;
+}
+
+.tablaData {
+  font-family: 'Open Sans', sans-serif, Verdana;
+  font-size: 12px;
+  font-weight: normal;
+  border: 1px solid #a9a9a9;
+  border-radius: 5px;
+  margin-bottom: 30px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 100%;
+  box-shadow: 0px 3px 5px 0px #a9a9a9;
+}
+
+.tablaData tr:nth-child(even) {
+  background: #e2ece2;
+}
+
+.tablaData tr:nth-child(odd) {
+  background: #f0f0f0;
+}
+
+.tablaData tr th {
+  background-image: -webkit-linear-gradient(bottom, #0e8e03 0%, #195f30 100%);
+  background-image: -moz-linear-gradient(bottom, #0e8e03 0%, #195f30 100%);
+  background-image: -ms-linear-gradient(bottom, #0e8e03 0%, #195f30 100%);
+  background-image: -o-linear-gradient(bottom, #0e8e03 0%, #195f30 100%);
+  background-image: linear-gradient(to bottom, #0e8e03 0%, #195f30 100%);
+  filter: progid:DXImageTransform.Microsoft.Gradient(gradientType=0, startColorStr=#0e8e03, endColorStr=#195f30);
+  font-size: 12px;
+  color: #f0f0f0;
+  cursor: pointer;
+  text-align: center;
+  font-weight: normal !important;
+}
+
+.tablaData tr td {
+  font-size: 12px;
+  color: #333333;
+  font-weight: normal !important;
+}
+
+/*************** FORM ***************/
+/*****************************************************************************/
+/************** DYNAMIC WEB TWAIN **************/
+.divControlScan {
+  width: 100%;
+  height: 475px;
+}
+
+.colCurrentImage,
+.colTotalImage {
+  padding: 0;
+}
+
+.colCurrentImage input,
+.colTotalImage input {
+  height: 30px;
+}
+
+/************** DYNAMIC WEB TWAIN **************/
+/*****************************************************************************/
+/************** BOOTSTRAP **************/
+.btn {
+  font-size: 15px !important;
+}
+
+button.list-group-item {
+  text-align: left;
+  width: 100%;
+}
+
+button.list-group-item:hover {
+  background-color: #f0f0f0;
+  color: #333333;
+  text-decoration: none;
+}
+
+span.label.labelAlarmas {
+  float: right;
+}
+
+span.label.labelAlarmas:hover {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/************** BOOTSTRAP **************/
+/*****************************************************************************/
+/************** JQUERY FILE UPLOAD **************/
+div.ajax-upload-dragdrop {
+  width: 100% !important;
+}
+
+div.ajax-upload-dragdrop div.ajax-file-upload {
+  font-family: 'Open Sans', sans-serif, Verdana;
+  font-size: 14px;
+  font-weight: normal;
+  padding: 5px 15px;
+  box-shadow: 0 1px 2px 0 #a9a9a9;
+  height: auto;
+  background: #0e8e03;
+}
+
+div.ajax-upload-dragdrop div.ajax-file-upload:hover {
+  box-shadow: 0 1px 2px 0 #a9a9a9;
+  background: #195f30;
+}
+
+div.ajax-upload-dragdrop span.spnHereDragDrop {
+  color: #a9a9a9;
+  padding-left: 10px;
+}
+
+div.ajax-file-upload-container div.ajax-file-upload-statusbar {
+  width: 100% !important;
+}
+
+div.ajax-file-upload-container div.ajax-file-upload-statusbar div.ajax-file-upload-progress {
+  width: 80% !important;
+}
+
+div.ajax-file-upload-container div.ajax-file-upload-statusbar div.ajax-file-upload-progress div.ajax-file-upload-bar {
+  background-color: #195f30;
+}
+
+/************** JQUERY FILE UPLOAD **************/

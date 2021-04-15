@@ -1,0 +1,359 @@
+.juridico {
+    &.right-buttons {
+        position: relative;
+        width: 100px;
+        float: right;
+
+        >div {
+            position: absolute;
+            right: 0;
+            top: -55px;
+        }
+    }
+
+    .download-file-action {
+        height: 35px;
+        width: 35px;
+        padding: 5px;
+    }
+}
+
+.file-document-empty,
+.file-document {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 15px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 5px;
+    text-align: center;
+    &.small {
+        padding: 10px;
+        max-height: 33px;
+    }
+}
+
+.file-document-empty {
+    background: #f8f8f8;
+    border: 1px solid #eee;
+    color: #ccc;
+}
+
+.file-document {
+
+    border: 1px dashed #1f9a7e;
+    color: #1f9a7e;
+    background: #fff;
+
+    &.empty {
+        background: #f8f8f8;
+        border: 1px solid #eee;
+        color: #ccc;
+    }
+
+    input[type=file] {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        cursor: pointer;
+        display: block;
+    }
+
+    &:hover {
+        border-style: solid;
+        border-color: #1f9a7e8f;
+        background: #1f9a7e8f;
+        color: white;
+    }
+
+    .no-empty-message {
+        display: none;
+    }
+
+    .empty-message {
+        display: block;
+    }
+
+    &.not-empty {
+        border: 1px solid #1f9a7e3d;
+        background-color: #fff;
+        color: white;
+
+        input[type=file],
+        .empty-message {
+            display: none;
+        }
+
+        .no-empty-message {
+
+            display: flex;
+            align-items: center;
+
+            .file-document-icon {
+                width: 35px;
+                margin-right: 10px;
+
+                img {
+                    width: 100%;
+                }
+            }
+
+            .file-document-content {
+                color: #191919;
+                flex-grow: 1;
+
+                .progress {
+                    margin-bottom: 0;
+                    margin-top: 5px;
+                    height: 10px
+                }
+            }
+
+            .remove-file {
+                color: #ccc;
+                position: absolute;
+                right: 0;
+                padding: 15px;
+                padding-bottom: 6px;
+                cursor: pointer;
+
+                &:hover {
+                    color: gray;
+                }
+            }
+        }
+    }
+
+    &.not-empty.small {
+        .no-empty-message {
+            .remove-file {
+                padding: 5px;
+            }
+
+            .file-document-icon {
+                margin-top: -5px;
+                width: 20px;
+            }
+
+            .file-document-content {
+                margin-top: -5px;
+                .progress {
+                    margin-right: -5px;
+                    margin-top: 0;
+                    height: 6px;
+                }
+            }
+        }
+    }
+}
+
+
+.actuacion-row {
+
+    td.estado span {
+        display: inline-block;
+        padding: 2px 5px;
+        border-width: 2px;
+        border-style: solid;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+
+    &-rojo {
+        td.estado span {
+            border-color: red;
+            color: red;
+        }
+    }
+
+    &-verde {
+        td.estado span {
+            border-color: green;
+            color: green;
+        }
+    }
+
+    &-amarillo {
+        td.estado span {
+            border-color: #f1c40f;
+            color: #f1c40f;
+        }
+    }
+
+    &-gris {
+        td.estado span {
+            border-color: #bdc3c7;
+            color: #bdc3c7;
+        }
+    }
+}
+
+.documents-container {
+    .navbar {
+        width: 50%;
+        @media screen and (max-width: 550px) {
+            width: 100%;
+        }
+    }
+    .navbar-header {
+        margin: auto;
+        position: relative;
+        width: 100%;
+    }
+
+    .button-add {
+        position: absolute;
+        right: 0;
+        position: absolute;
+        right: 0;
+        top: 7px;
+
+        button {
+            height: 25px;
+            width: 25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+        }
+    }
+
+    @media screen and (max-width: 550px) {
+        flex-direction: column;
+    }
+}
+
+.juridico-proceso-destacado {
+    margin-bottom: 20px;
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    padding: 20px 20px 10px;
+}
+
+.datepickers-container {
+    z-index: 2000000000;
+}
+
+
+.contenedor-pendientes {
+    .item-pendientes {
+        border: 1px dashed #ccc;
+        padding: 10px;
+        margin: 10px 0;
+    }
+
+    .pendientes-titulo {
+        display: block;
+        margin: 10px;
+        font-size: 14px;
+    }
+
+    .table.footable .footable-header {
+        background: #0c5235;
+    }
+
+}
+
+.input-firma {
+    position: relative;
+    border: 1px dashed #ccc;
+    height: 100px;
+    cursor: pointer;
+    padding: 10px;
+    img {
+        height: 100%;
+        width: auto;
+    }
+    input[type=file] {
+        position: absolute;
+        top: 0;
+        left:0;
+        opacity: 0;
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.margen-0 {
+    margin: 0;
+}
+
+input {
+    min-height: 35px;
+}
+
+h5.title-bordered {
+    border-bottom: 1px solid #e5e5e5;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.dropdown-menu>li>a.flex {
+    display: flex;
+    input {
+        margin:0;
+        margin-right: 10px;
+        min-height: auto;
+    }
+
+    label {
+        font-weight: 300;
+        margin-bottom: 0;
+        display: block;
+        width: 100%;
+    }
+}
+
+.footable-paging {
+    .footable-pagination-registers {
+        color: $main-color;
+        background-color: transparent;
+        padding: 15px 5px !important;
+    }
+
+    .footable-pagination-select {
+        color: $main-color;
+        label {
+            font-weight: 300;
+        }
+    }
+
+    .footable-pagination-options {
+        width: 110px;
+        margin: auto;
+        select {
+            text-align-last: center;
+            text-align: center;
+        }
+        .filter-option-inner-inner,
+        .dropdown-menu li {
+            text-align: center;
+        }
+
+        .dropdown-menu>.active>a,
+        .dropdown-menu>.active>a:focus,
+        .dropdown-menu>.active>a:hover {
+            background-color: $main-color;
+        }
+
+        button {
+            height: 25px;
+            padding: 0px;
+            font-size: 12px !important;
+            .filter-option {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+    }
+}
+
+.autosave-input {
+    border: 2px solid #00800070;
+    background: #ffffc7;
+}

@@ -1,0 +1,1146 @@
+/************** DEFINICIONES **************/
+.familia () {
+	font-family: 'Open Sans', sans-serif, Verdana;
+}
+
+.fuente-nombre-aplicacion() {
+	.familia;
+	font-size: 20px !important;
+	font-weight: normal;
+}
+
+.fuente-contenido() {
+	.familia;
+	font-size: 12px;
+	font-weight: normal;
+}
+
+.fuente-modulo() {
+	.familia;
+	font-size: 13px;
+	font-weight: normal;
+}
+
+.fuente-submodulo() {
+	.familia;
+	font-size: 13px;
+	font-weight: normal;
+}
+
+.fuente-opcion() {
+	.familia;
+	font-size: 12px;
+}
+
+.fuente-miga-pan() {
+	.familia;
+	font-size: 12px;
+}
+
+.fuente-titulo-form() {
+	.familia;
+	font-size: 18px;
+}
+
+.fuente-titulo-panel() {
+	.familia;
+	font-size: 16px;
+}
+
+.fuente-control-form() {
+	.familia;
+	font-size: 14px;
+}
+
+.fuente-boton-form() {
+	.familia;
+	font-size: 14px;
+	font-weight: normal;
+}
+
+.fuente-footer() {
+	.familia;
+	font-size: 12px;
+}
+
+.fuente-agrupacion() {
+	.familia;
+	font-size: 13px;
+	font-weight: bold;
+}
+
+.fuente-paginacion() {
+	.familia;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.fuente-datepicker() {
+	.familia;
+	font-size: 12px;
+	font-weight: normal;
+}
+
+.fuente-marquesina() {
+	.familia;
+	font-size: 1.3em;
+	font-weight: normal;
+}
+
+@logo-empresa: "../images/logo_proveedor_small.png";
+@logo-producto: "../images/logo-c2-small.png";
+@logo-cliente: "../images/logo_cliente_small.png";
+@color-blanco: #FFFFFF;
+@color-negro: #000000;
+@color-sombra: #A9A9A9;
+@color-gris-claro: #F0F0F0;
+@color-gris-claro-medio: #BDBDBD;
+@color-gris-medio: #808080;
+@color-gris-medio-oscuro: #505050;
+@color-gris-oscuro: #333333;
+@color-azul-light: #E9F1F7;
+@color-azul-light-medio: #5BC0DE;
+@color-azul-claro: #428BCA;
+@color-azul-medio: #006C9E;
+@color-azul-oscuro: #003A57;
+@color-oliva-claro: #DCE0DC;
+@color-oliva-medio: #D0D6D0;
+@color-verde-claro: #E2ECE2;
+@color-verde-medio: #00AC6F;
+@color-verde-oscuro: #0E8E03;
+@color-verde-dark: #195F30;
+@color-amarillo-claro: #F5F3ED;
+@color-amarillo-medio: #EFEBE0;
+@color-amarillo-oscuro: #DBD29B;
+@color-rojo-light: #F9F2F2;
+@color-rojo-medio: #E27E7A;
+
+.linear-gradient (@from, @tipo-IE, @color-ini, @color-fin) {
+	background-image: -webkit-linear-gradient(@from, @color-ini 0%, @color-fin 100%);
+	background-image: -moz-linear-gradient(@from, @color-ini 0%, @color-fin 100%);
+	background-image: -ms-linear-gradient(@from, @color-ini 0%, @color-fin 100%);
+	background-image: -o-linear-gradient(@from, @color-ini 0%, @color-fin 100%);
+	background-image: linear-gradient(to @from, @color-ini 0%, @color-fin 100%);
+	filter: progid:DXImageTransform.Microsoft.Gradient(gradientType=@tipo-IE, startColorStr=@color-ini, endColorStr=@color-fin);
+}
+
+.enlace (@color: @color-verde-dark) {
+	color: @color;
+	text-decoration: none;
+}
+
+.cabecera (@color-ini: @color-gris-medio-oscuro, @color-fin: @color-gris-medio-oscuro) {
+	.linear-gradient(left, 0, @color-ini, @color-fin);
+}
+
+.modulo (@color-fondo-ini: @color-gris-medio-oscuro, @color-fondo-fin: @color-gris-medio, @color-letra: @color-blanco) {
+	color: @color-letra;
+	margin: 0 0.5px;
+	.fuente-modulo;
+}
+
+/*****************************************************************************/
+/***************** GENERAL ****************/
+html {
+	position: relative;
+	min-height: 100%;
+}
+
+body {
+	margin-bottom: 60px;
+	.fuente-contenido;
+
+	& div.contenedor-ppal {
+		margin: 0 0 110px;
+
+		& .page-header {
+			color: @color-verde-medio;
+			margin: 0 0 20px;
+			border-bottom: none;
+
+			& a {
+				.enlace;
+			}
+		}
+	}
+
+	& div.footer {
+		.fuente-footer;
+		position: absolute;
+		bottom: 0;
+		width: 100%;
+		height: auto;
+		padding: 6px 0;
+		background-color: @color-blanco;
+		border-top: 1px solid @color-gris-medio;
+
+		&>div.logoEmpresa {
+			background: url(@logo-empresa) no-repeat scroll center;
+			height: 5em;
+		}
+
+		&>div.copyright>p {
+			margin-top: 5px;
+			text-align: center;
+
+			&>a {
+				.enlace;
+			}
+		}
+	}
+
+	& #dvOpacidad {
+		display: none;
+		position: fixed;
+		top: 0;
+		left: 0;
+		height: 100%;
+		width: 100%;
+		background-color: @color-sombra;
+		opacity: 0.3;
+		z-index: 10000;
+	}
+}
+
+.horizontal-center {
+	margin: 0 auto !important;
+	float: none !important;
+}
+
+.center {
+	text-align: center;
+}
+
+.negrita {
+	font-weight: bold !important;
+}
+
+.cursiva {
+	font-style: italic;
+}
+
+.left {
+	text-align: left;
+}
+
+.right {
+	text-align: right;
+}
+
+.oculto {
+	display: none;
+}
+
+.label {
+	.fuente-miga-pan();
+	padding: 3px 6px;
+	font-weight: normal;
+
+	& span {
+		letter-spacing: 0.08em;
+	}
+}
+
+.tblDetalle th,
+.tblDetalle td {
+	text-align: center;
+	vertical-align: middle !important;
+}
+
+.badgeSelected {
+	background-color: @color-blanco;
+	color: @color-verde-medio;
+}
+
+.tab-content {
+	border-top: 0;
+	border-left: 1px solid @color-gris-medio;
+	border-right: 1px solid @color-gris-medio;
+	border-bottom: 1px solid @color-gris-medio;
+	border-radius: 0 0 6px 6px;
+	padding: 25px 10px 10px;
+}
+
+.icono {
+	background-color: transparent;
+}
+
+hr {
+	border-top: 1px solid @color-gris-medio;
+}
+
+/***************** GENERAL ****************/
+/*****************************************************************************/
+/****************** MENÚ ******************/
+div.navbar-app {
+	border: none;
+	border-radius: 0px;
+	.cabecera;
+
+	& div.navbar-header {
+		& .navbar-brand {
+			height: 0px !important;
+			color: @color-verde-oscuro;
+			.fuente-nombre-aplicacion;
+
+			&:hover,
+			&:focus {
+				color: @color-gris-claro-medio;
+				background-color: transparent;
+			}
+		}
+
+		& div.logoProducto {
+			height: 0px;
+			margin-left: 0px !important;
+			margin-top: 0px;
+			width: 6em;
+		}
+
+		& div.logoCliente {
+			display: block;
+			background: url(@logo-cliente) no-repeat scroll 0 0;
+			height: 7em;
+			position: absolute;
+			right: 10px !important;
+			top: 60px;
+			width: 15em;
+		}
+	}
+
+	& ul.navbar-nav {
+		&>li>a {
+			text-align: center;
+			.modulo;
+
+			&:hover,
+			&:focus {
+				text-decoration: none;
+				background-color: @color-gris-oscuro;
+			}
+		}
+	}
+
+	& ul.dropdown-menu {
+		min-width: 300px;
+		padding: 4px 0;
+		margin-top: 8px !important;
+		border: 1px solid @color-gris-medio-oscuro;
+		border-radius: 3px !important;
+		box-shadow: 2px 2px 9px -1px @color-sombra;
+		background-color: @color-gris-medio-oscuro;
+
+		& a {
+			.fuente-opcion;
+		}
+
+		&.to-left {
+			left: auto;
+			right: 0px;
+		}
+
+		&>li:first-child:before {
+			border-color: transparent transparent @color-gris-medio-oscuro;
+			border-style: solid;
+			border-width: 5px;
+			content: "";
+			margin-left: 30px;
+			position: absolute;
+			top: -11px;
+			width: 10px;
+		}
+
+		& li a {
+			padding: 5px 15px;
+		}
+
+		& div.row {
+			margin-top: 8px;
+			margin-bottom: 12px;
+		}
+
+		& ul.multi-column-dropdown {
+			list-style: none;
+			padding: 0 25px;
+
+			li {
+				color: @color-verde-medio;
+
+				a {
+					.enlace(@color-blanco);
+				}
+
+				&.active a {
+					color: @color-verde-dark;
+				}
+
+				&.divider {
+					background-color: @color-gris-claro-medio;
+					margin: 5px 37px 9px 4px;
+				}
+
+				& a:hover {
+					color: @color-gris-claro-medio;
+					text-decoration: none;
+				}
+			}
+		}
+	}
+}
+
+div.navbar-collapse {
+	padding-left: 0px;
+	padding-right: 0px;
+}
+
+li.dropdown-header {
+	padding: 13px 6px 0;
+	.fuente-submodulo;
+}
+
+ol.breadcrumb {
+	position: relative;
+	margin-top: 10px;
+	.fuente-miga-pan;
+
+	& a {
+		.enlace;
+	}
+
+	& li {
+		color: @color-verde-dark;
+
+		&.nombre_ambiente {
+			color: @color-rojo-medio;
+		}
+
+		&.infoUsuario {
+			position: absolute;
+			top: 0px;
+			right: 25px;
+			line-height: 0;
+
+			& ul {
+				left: auto;
+				right: 0;
+				line-height: 1;
+				background-color: @color-gris-claro;
+
+				& li:not(.divider) {
+					background-color: @color-gris-claro;
+					color: @color-verde-oscuro;
+					padding: 4px 10px;
+					width: 260px;
+					font-size: 12px;
+
+					&>span.glyphicon-log-out>a {
+						padding-left: 7px;
+					}
+				}
+			}
+
+			&:before {
+				content: "";
+			}
+		}
+	}
+}
+
+@media (max-width: 767px) {
+	div.navbar-app {
+		div.navbar-header {
+			div.logoProducto {
+				margin-left: 15px !important;
+			}
+
+			div.logoCliente {
+				top: 60px;
+			}
+
+			button.navbar-toggle {
+				border-color: @color-blanco;
+
+				span.icon-bar {
+					background-color: @color-blanco;
+				}
+
+				&:hover,
+				&:focus {
+					.linear-gradient(bottom, 1, @color-gris-medio-oscuro, @color-gris-medio);
+					border-color: @color-negro;
+
+					span.icon-bar {
+						background-color: @color-negro;
+					}
+				}
+			}
+		}
+
+		ul.navbar-nav {
+			margin: 0 !important;
+			position: static;
+
+			&>li>a {
+				border-top: 1px solid @color-negro;
+				border-radius: 0px;
+				margin: 0px;
+
+				&:hover,
+				&:focus {
+					border-top: 1px solid @color-verde-medio;
+					border-radius: 0px;
+				}
+			}
+
+			&>li.open>a,
+			&>li.active>a {
+				border-top: 1px solid @color-verde-medio;
+				border-radius: 0px;
+
+				&:hover,
+				&:focus {
+					border-top: 1px solid @color-verde-medio;
+					border-radius: 0px;
+				}
+			}
+		}
+
+		& ul.dropdown-menu {
+			&>li:first-child:before {
+				border-style: none;
+			}
+
+			div.row {
+				margin: 0;
+			}
+
+			li.dropdown-header {
+				padding: 5px 0 !important;
+			}
+
+			li.divider {
+				margin: 3px 0;
+			}
+
+			div.icono-dropdown-menu {
+				background: none !important;
+				height: 0 !important;
+			}
+		}
+	}
+
+	ol.breadcrumb {
+		margin-top: 0;
+
+		& li.infoUsuario {
+			right: 15px;
+		}
+	}
+
+	li.dropdown>a {
+		text-align: left !important;
+	}
+
+	.lblForm {
+		margin-top: 7px;
+	}
+}
+
+nav.navbar-submenu {
+	margin-bottom: 0px;
+
+	& a {
+		.fuente-boton-form;
+	}
+}
+
+/****************** MENÚ ******************/
+/*****************************************************************************/
+/***************** jQUERY *****************/
+.ui-widget {
+	.fuente-contenido();
+
+	& a {
+		.enlace;
+	}
+
+	&.ui-widget-content {
+		border: 1px solid @color-verde-claro;
+		background: @color-blanco;
+
+		li.ui-menu-item {
+			border: 1px solid @color-verde-claro;
+		}
+	}
+
+	& .ui-dialog-buttonpane {
+		background: @color-blanco;
+	}
+}
+
+th.ui-state-default,
+.ui-widget-content .ui-state-default,
+.ui-widget-header .ui-state-default {
+	.linear-gradient(bottom, 0, @color-verde-oscuro, @color-verde-dark);
+	.fuente-contenido;
+	text-align: center;
+	cursor: pointer;
+	color: @color-gris-claro;
+}
+
+button.ui-dialog-titlebar-close {
+	font-size: 12px;
+	text-align: center;
+}
+
+.ui-autocomplete {
+	height: 100px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+div.ui-datepicker {
+	z-index: 101 !important;
+	.fuente-datepicker;
+
+	& select.ui-datepicker-month,
+	& select.ui-datepicker-year {
+		color: @color-negro;
+	}
+
+	td.ui-datepicker-today {
+		a {
+			border: 2px solid @color-rojo-medio;
+		}
+	}
+
+	& a.ui-state-default {
+		font-size: 12px !important;
+
+		&.ui-state-active {
+			background: @color-amarillo-oscuro none;
+			color: @color-negro;
+		}
+	}
+}
+
+/***************** jQUERY *****************/
+/*****************************************************************************/
+/*************** DATATABLES ***************/
+div.dataTables_wrapper {
+	.linear-gradient (bottom, 0, @color-gris-claro, @color-gris-claro);
+	border: 1px solid @color-sombra;
+	border-radius: 5px;
+	overflow-x: auto;
+	overflow-y: hidden;
+	width: 100%;
+	.fuente-contenido;
+	box-shadow: 0px 3px 5px 0px @color-sombra;
+
+	& div.row {
+		margin-left: 0;
+		margin-right: 0;
+
+		&:nth-child(2) {
+			&>div {
+				padding-left: 0;
+				padding-right: 0;
+			}
+		}
+
+		& table.tblInforme,
+		& table.tblInformeAgrupado,
+		& .table {
+			width: 99.99% !important;
+
+			& td {
+				font-size: 12px;
+			}
+
+			& th {
+				vertical-align: middle !important;
+				.linear-gradient(bottom, 0, @color-verde-oscuro, @color-verde-dark);
+				.fuente-contenido;
+				text-align: center;
+				cursor: pointer;
+				color: @color-gris-claro;
+			}
+
+			& td {
+				vertical-align: middle !important;
+			}
+		}
+
+		& table.tblInforme th,
+		& table.tblInformeAgrupado th {
+			vertical-align: middle;
+		}
+
+		& td.sorting_1,
+		& td.sorting_2 {
+			background-color: @color-azul-light  !important;
+		}
+
+		& div.dataTables_length {
+			& label {
+				margin: 10px;
+
+				& select {
+					width: 90px !important;
+
+					&.form-control {
+						display: inline;
+					}
+				}
+			}
+
+			& div.input-group {
+				width: 90px !important;
+			}
+		}
+
+		& div.dataTables_filter {
+			& label {
+				margin: 10px;
+			}
+
+			& input.form-control {
+				display: inline;
+			}
+		}
+
+		& div.dataTables_info {
+			padding: 10px;
+		}
+
+		& div.DTTT_container {
+			margin: 11px;
+		}
+
+		& div.dataTables_paginate {
+			& li {
+				display: inline-block !important;
+
+				&.disabled {
+					& a {
+						background-color: @color-gris-claro  !important;
+					}
+				}
+
+				&.ui-button {
+					padding: 0;
+				}
+
+				&.ui-state-default,
+				.ui-widget-content .ui-state-default,
+				.ui-widget-header .ui-state-default,
+				.ui-button,
+				html .ui-button.ui-state-disabled:hover,
+				html .ui-button.ui-state-disabled:active {
+					background: none;
+					border: none;
+				}
+
+				& a {
+					margin: -1px !important;
+					padding: 6px 12px;
+					background-color: @color-gris-claro;
+					background-image: none;
+					border: 1px solid @color-gris-medio;
+					color: @color-verde-dark;
+					.fuente-paginacion;
+
+					&:hover:not(.ui-state-disabled) {
+						background-color: @color-azul-light;
+					}
+				}
+
+				& span>a.ui-state-disabled {
+					background-color: @color-azul-light;
+					color: @color-negro;
+					opacity: 1 !important;
+				}
+			}
+		}
+
+		& td.dataTables_empty {
+			text-align: center;
+		}
+
+		& table.dataTable {
+			&>tbody>tr {
+				&>td {
+					vertical-align: middle !important;
+					padding: 3px 7px !important;
+
+					&.group {
+						.linear-gradient (bottom, 0, @color-verde-claro, @color-verde-claro);
+						color: @color-negro;
+						.fuente-agrupacion;
+						padding: 10px 30px !important;
+					}
+				}
+
+				&:hover>td {
+					background-color: @color-azul-light;
+				}
+			}
+
+			&>tfoot>tr {
+				&>td {
+					&.ui-state-default {
+						background: none !important;
+					}
+				}
+			}
+		}
+	}
+}
+
+.badge {
+	margin: -4px;
+}
+
+/*************** DATATABLES ***************/
+/*****************************************************************************/
+/**************** PESTAÑAS ****************/
+ul.nav-tabs {
+	&>li {
+		&>a {
+			padding: 10px 7px;
+		}
+
+		&:not(.active) {
+			&>a {
+				background-color: @color-gris-claro-medio;
+				color: @color-gris-medio-oscuro;
+
+				&:hover {
+					color: @color-azul-claro;
+				}
+			}
+		}
+
+		&.active {
+			&>a {
+				color: @color-azul-claro;
+				font-weight: bold;
+
+				&:hover,
+				&:focus {
+					color: @color-azul-claro;
+				}
+			}
+		}
+
+		&.tab-especial:not(.active) {
+			&>a {
+				background-color: @color-gris-claro-medio;
+				color: @color-rojo-medio;
+
+				&:hover {
+					color: @color-azul-light-medio;
+				}
+			}
+		}
+
+		&.tab-especial.active {
+			&>a {
+				color: @color-azul-light-medio;
+				font-weight: bold;
+
+				&:hover,
+				&:focus {
+					color: @color-azul-light-medio;
+				}
+			}
+		}
+
+		&>button {
+			&.icono {
+				background-color: transparent;
+				position: relative;
+				left: 10px;
+				top: 4px;
+
+				&:hover {
+					box-shadow: none;
+				}
+			}
+		}
+	}
+}
+
+/**************** PESTAÑAS ****************/
+/*****************************************************************************/
+/***************** PANEL ******************/
+.panel-title {
+	.fuente-titulo-panel;
+}
+
+/***************** PANEL ******************/
+/*****************************************************************************/
+/****************** FORM ******************/
+form {
+	& h4 {
+		color: @color-verde-medio;
+		.fuente-titulo-form;
+	}
+
+	& div.jumbotron {
+		padding: 15px 0 !important;
+		margin-bottom: 20px;
+		border-top: 1px solid @color-verde-oscuro;
+		background-color: transparent;
+		border-radius: 2px !important;
+
+		& div.digitacion {
+			max-height: 400px;
+			overflow-x: hidden;
+			overflow-y: auto;
+		}
+
+		& div.bufferDigitaliza {
+			max-height: 100px;
+			overflow-x: hidden;
+			overflow-y: auto;
+		}
+
+		& div.row {
+			margin-top: 10px;
+
+			& .btn-group {
+				display: block;
+			}
+
+			& .input-group-addon {
+				font-weight: bold;
+			}
+
+			& .input-group {
+				& .input-group-btn {
+					& .btn {
+						line-height: 20px;
+					}
+				}
+			}
+
+			& label {
+				&.lblForm {
+					margin-top: 7px;
+					color: @color-verde-dark;
+					letter-spacing: 0.2px;
+				}
+			}
+
+			& .icon-caracter {
+				.fuente-titulo-form;
+			}
+
+			& .btn-ejecutar {
+				padding: 5px 15px !important;
+				box-shadow: 0 1px 2px 0 @color-sombra;
+				.fuente-boton-form;
+			}
+		}
+	}
+
+	& div.row {
+		margin-top: 10px;
+	}
+
+	& small {
+		font-size: 80%;
+	}
+
+	& .form-control {
+		.fuente-control-form;
+
+		&:focus {
+			border-color: @color-verde-oscuro;
+			box-shadow: inset 0 1px 1px @color-blanco, 0 0 9px 4px @color-verde-claro;
+		}
+	}
+
+	& .error {
+		border: 1px solid @color-rojo-medio;
+		background-color: @color-rojo-light;
+	}
+
+	& option {
+		padding: 2px 14px;
+	}
+
+	& .slider {
+		margin-top: 10px;
+	}
+
+	& #dvListado {
+		display: none;
+	}
+
+	& #dvMensaje {
+		display: none;
+		float: left;
+	}
+
+	& .alert-success,
+	& .alert-info,
+	& .alert-warning,
+	& .alert-danger {
+		box-shadow: 0 1px 2px 0 @color-sombra;
+	}
+
+	// & .form-control[readonly] {
+	// 	background-color: @color-blanco;
+	// }
+}
+
+.popover {
+	.fuente-contenido;
+	border: 1px solid @color-rojo-medio;
+	background-color: @color-rojo-light;
+
+	&>.arrow {
+		&:after {
+			border-top-color: @color-rojo-light  !important;
+			border-bottom-color: @color-rojo-light  !important;
+		}
+	}
+}
+
+.tiffDigitacion {
+	& .divControlTiff {
+		width: 100%;
+		height: 530px;
+	}
+}
+
+.tiffControlCalidad {
+	& .divControlTiff {
+		width: 100%;
+		height: 475px;
+	}
+}
+
+.tablaData {
+	.fuente-contenido;
+	border: 1px solid @color-sombra;
+	border-radius: 5px;
+	margin-bottom: 30px;
+	overflow-x: auto;
+	overflow-y: hidden;
+	width: 100%;
+	box-shadow: 0px 3px 5px 0px @color-sombra;
+
+	& tr {
+		&:nth-child(even) {
+			background: @color-verde-claro;
+		}
+
+		&:nth-child(odd) {
+			background: @color-gris-claro;
+		}
+
+		& th {
+			.linear-gradient(bottom, 0, @color-verde-oscuro, @color-verde-dark);
+			font-size: 12px;
+			color: @color-gris-claro;
+			cursor: pointer;
+			text-align: center;
+			font-weight: normal !important;
+		}
+
+		& td {
+			font-size: 12px;
+			color: @color-gris-oscuro;
+			font-weight: normal !important;
+		}
+	}
+}
+
+/*************** FORM ***************/
+/*****************************************************************************/
+/************** DYNAMIC WEB TWAIN **************/
+.divControlScan {
+	width: 100%;
+	height: 475px;
+}
+
+.colCurrentImage,
+.colTotalImage {
+	padding: 0;
+
+	& input {
+		height: 30px;
+	}
+}
+
+/************** DYNAMIC WEB TWAIN **************/
+/*****************************************************************************/
+/************** BOOTSTRAP **************/
+.btn {
+	font-size: 15px !important;
+}
+
+button.list-group-item {
+	text-align: left;
+	width: 100%;
+
+	&:hover {
+		background-color: @color-gris-claro;
+		color: @color-gris-oscuro;
+		text-decoration: none;
+	}
+}
+
+span.label.labelAlarmas {
+	float: right;
+
+	&:hover {
+		cursor: pointer;
+		font-weight: bold;
+	}
+}
+
+/************** BOOTSTRAP **************/
+/*****************************************************************************/
+/************** JQUERY FILE UPLOAD **************/
+div.ajax-upload-dragdrop {
+	width: 100% !important;
+
+	div.ajax-file-upload {
+		.fuente-control-form;
+		font-weight: normal;
+		padding: 5px 15px;
+		box-shadow: 0 1px 2px 0 @color-sombra;
+		height: auto;
+		background: @color-verde-oscuro;
+
+		&:hover {
+			box-shadow: 0 1px 2px 0 @color-sombra;
+			background: @color-verde-dark;
+		}
+	}
+
+	span.spnHereDragDrop {
+		color: @color-sombra;
+		padding-left: 10px;
+	}
+}
+
+div.ajax-file-upload-container {
+	div.ajax-file-upload-statusbar {
+		width: 100% !important;
+
+		div.ajax-file-upload-progress {
+			width: 80% !important;
+
+			div.ajax-file-upload-bar {
+				background-color: @color-verde-dark;
+			}
+		}
+	}
+}
+
+/************** JQUERY FILE UPLOAD **************/

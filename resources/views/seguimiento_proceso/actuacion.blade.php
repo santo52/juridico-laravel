@@ -173,7 +173,7 @@
                         @else
                         @foreach ($documentos as $item)
                         <div class="file-document" data-filename="{{$item->filename}}" data-id="{{$item->id_documento}}"
-                            data-title="{{$item->nombre_documento}} ({{$item->originalFilename}})" @if($item->obligatoriedad_documento == 1)
+                            data-title="{{$item->nombre_documento}}" data-ofilename="{{$item->originalFilename}}" @if($item->obligatoriedad_documento == 1)
                             data-required="true" @else data-required="true" @endif></div>
                         @endforeach
                         @endif

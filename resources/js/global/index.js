@@ -895,6 +895,7 @@ jQuery.fn.fileDocument = function(data) {
         addFile(self) {
             const $item = $(self)
             const filename = $item.data('filename')
+            const originalFilename = $item.data('ofilename')
             if (filename) {
 
                 let $input = $item.find('input')
@@ -915,7 +916,7 @@ jQuery.fn.fileDocument = function(data) {
                             <img src="/images/${image}" />
                         </div>
                         <div class="file-document-content">
-                            <a target="_blank" href="${filename}" class="file-document-name">${title}</a>
+                            <a target="_blank" href="${filename}" class="file-document-name">${title} (${originalFilename})</a>
                             <div class="progress">
                                 <div class="progress-bar progress-bar-striped" role="progressbar"
                                     aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
@@ -962,6 +963,7 @@ jQuery.fn.fileDocument = function(data) {
 
             $parent.removeClass('not-empty')
                 .data('filename', '')
+                .data('ofilename', '')
             this.removeFile($parent)
             if (this.data && this.data.url) {
                 $.ajax({
@@ -985,7 +987,7 @@ jQuery.fn.fileDocument = function(data) {
 
             $parent.addClass('not-empty')
             $parent.data('filename', file.name)
-
+            $parent.data('ofilename', file.name)
             this.addFile($parent)
             const $progress = $parent.find('.progress-bar')
 

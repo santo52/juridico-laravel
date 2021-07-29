@@ -2,11 +2,11 @@ function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableTo
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
@@ -20,7 +20,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -884,6 +884,7 @@ jQuery.fn.fileDocument = function (data) {
     addFile: function addFile(self) {
       var $item = $(self);
       var filename = $item.data('filename');
+      var originalFilename = $item.data('ofilename');
 
       if (filename) {
         var $input = $item.find('input');
@@ -897,7 +898,7 @@ jQuery.fn.fileDocument = function (data) {
         var ext = filenameSplit[filenameSplit.length - 1];
         var image = this.getImage(ext);
         var title = $item.data('title');
-        var html = "\n                    <span class=\"no-empty-message\">\n                        <span class=\"remove-file glyphicon glyphicon-remove\"></span>\n                        <div class=\"file-document-icon\">\n                            <img src=\"/images/".concat(image, "\" />\n                        </div>\n                        <div class=\"file-document-content\">\n                            <a target=\"_blank\" href=\"").concat(filename, "\" class=\"file-document-name\">").concat(title, "</a>\n                            <div class=\"progress\">\n                                <div class=\"progress-bar progress-bar-striped\" role=\"progressbar\"\n                                    aria-valuenow=\"50\" aria-valuemin=\"0\" aria-valuemax=\"100\"\n                                    style=\"width: 100%;\"></div>\n                            </div>\n                        </div>\n                    </span>");
+        var html = "\n                    <span class=\"no-empty-message\">\n                        <span class=\"remove-file glyphicon glyphicon-remove\"></span>\n                        <div class=\"file-document-icon\">\n                            <img src=\"/images/".concat(image, "\" />\n                        </div>\n                        <div class=\"file-document-content\">\n                            <a target=\"_blank\" href=\"").concat(filename, "\" class=\"file-document-name\">").concat(title, " (").concat(originalFilename, ")</a>\n                            <div class=\"progress\">\n                                <div class=\"progress-bar progress-bar-striped\" role=\"progressbar\"\n                                    aria-valuenow=\"50\" aria-valuemin=\"0\" aria-valuemax=\"100\"\n                                    style=\"width: 100%;\"></div>\n                            </div>\n                        </div>\n                    </span>");
         $item.addClass('not-empty').html($input).append(html).find('.remove-file').on('click', function () {
           return fileDocument.onRemove($item);
         });
@@ -929,7 +930,7 @@ jQuery.fn.fileDocument = function (data) {
         return false;
       }
 
-      $parent.removeClass('not-empty').data('filename', '');
+      $parent.removeClass('not-empty').data('filename', '').data('ofilename', '');
       this.removeFile($parent);
 
       if (this.data && this.data.url) {
@@ -953,6 +954,7 @@ jQuery.fn.fileDocument = function (data) {
 
       $parent.addClass('not-empty');
       $parent.data('filename', file.name);
+      $parent.data('ofilename', file.name);
       this.addFile($parent);
       var $progress = $parent.find('.progress-bar');
 

@@ -86,11 +86,14 @@ class ProcesoEtapaActuacion extends BaseModel
 
     public function getEstadoColor()
     {
+
+        if(!$this->diasVencimiento) return 'verde';
+
         $hoy = date('Y-m-d');
         $vencimiento = strtotime("+{$this->diasVencimiento} days {$this->fecha_inicio}");
 
         if ($this->finalizado == 0) {
-            if ($hoy === date('Y-m-d', $vencimiento)) {
+            if (strtotime('now') > $vencimiento) {
                 return 'rojo';
             } else {
 

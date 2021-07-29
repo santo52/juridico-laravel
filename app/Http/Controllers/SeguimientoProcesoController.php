@@ -47,6 +47,7 @@ class SeguimientoProcesoController extends Controller
                 $ext = $this->getExtention($procesoDocumento->nombre_archivo);
                 $fileRoute = Storage::disk('documentos')->url('proceso/' . $procesoDocumento->id_proceso_etapa_actuacion_documento . $ext);
                 $actuacionDocumentos[$key]['filename'] = $fileRoute;
+                $actuacionDocumentos[$key]['originalFilename'] = $procesoDocumento->nombre_archivo;
             }
         }
 
@@ -378,6 +379,8 @@ class SeguimientoProcesoController extends Controller
                 $data['finalizado'] = 1;
                 $proceso->update(['id_etapa_proceso' => $request->get('id_siguiente_etapa_actuacion')]);
             }
+        } else if($procesoEtapaActuacion->procesoEtapa && $procesoEtapaActuacion->procesoEtapa->id_etapa_proceso) {
+            $proceso->update(['id_etapa_proceso' => $procesoEtapaActuacion->procesoEtapa->id_etapa_proceso]);
         }
 
         $saved = ProcesoEtapaActuacion::updateOrCreate(['id_proceso_etapa_actuacion' => $id], $data);

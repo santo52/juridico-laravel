@@ -49,16 +49,17 @@ class Controller extends BaseController
         }
 
         $currentPosition = 0;
+        $uri = explode('?', $uri)[0];
         foreach(explode('/', $uri) as $value ){
-            $value = trim($value);
+
+            $values = trim($value);
             $regex = '/(\?)([A-Za-z0-9].+)/';
-            $value = preg_replace($regex, '', $value);
+            $value = preg_replace($regex, '', $values);
 
             if(!empty($value)){
-
-                $lastLink = str_replace(['#', '#/'], '', $breadcrumb[$currentPosition]['link']);
-                $breadcrumb[] = ['name' => $value, 'link' => "#{$lastLink}/{$value}"];
-                $currentPosition++;
+                 $lastLink = str_replace(['#', '#/'], '', $breadcrumb[$currentPosition]['link']);
+                 $breadcrumb[] = ['name' => $value, 'link' => "#{$lastLink}/{$value}"];
+                 $currentPosition++;
             }
         }
 

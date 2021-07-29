@@ -251,27 +251,17 @@ class SeguimientoProcesoController extends Controller
         $actuacion = Actuacion::find($id);
         $procesoEtapa = ProcesoEtapa::leftjoin('proceso as p', 'p.id_proceso', 'proceso_etapa.id_proceso')
             ->find($idProcesoEtapa);
-        $plantillas = PlantillaDocumento::where(['eliminado' => 0, 'estado_plantilla_documento' => '1'])->get();
 
-        if (empty($procesoEtapa) || empty($actuacion)) {
-            return response()->json(['redirect' => 'seguimiento-procesos']);
+        $data['id_actuacion'] = $actuacion->id_actuacion;
+        $data['id_proceso_etapa'] = $procesoEtapa->id_proceso_etapa;
+        $procesoEtapaActuacion = ProcesoEtapaActuacion::where($data)->first();
+        if(empty($procesoEtapaActuacion)) {
+            $data['fecha_inicio'] = date('Y-m-d h:i:s');
+            $data['id_tipo_resultado'] = $actuacion->tipo_resultado;
+            $procesoEtapaActuacion = ProcesoEtapaActuacion::create($data);
         }
 
-        $etapas = TipoProceso::getEtapas($procesoEtapa->id_tipo_proceso)->get();
-        $usuarios = Usuario::where([
-            'estado_usuario' => '1',
-            'eliminado' => 0
-        ])->get();
-
-        $entidadesJusticia = $this->getEntidadesJusticia($actuacion->tipoResultado->id_tipo_resultado);
-        return $this->renderSection('seguimiento_proceso.actuacion', [
-            'procesoEtapa' => $procesoEtapa,
-            'actuacion' => $actuacion,
-            'plantillas' => $plantillas,
-            'etapas' => $etapas,
-            'usuarios' => $usuarios,
-            'entidadesJusticia' => $entidadesJusticia
-        ]);
+        return response()->json(['redirect' => 'seguimiento-procesos/actuacion/' . $procesoEtapaActuacion->id_proceso_etapa_actuacion]);
     }
 
     public function actuacionPlantillaUpsert(Request $request)
